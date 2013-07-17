@@ -1,0 +1,101 @@
+::-moz-selection { background: #f16529; color: #fff; text-shadow: none; }
+::selection      { background: #f16529; color: #fff; text-shadow: none; }
+
+/* =============================================================================
+   En-tête
+   ========================================================================== */
+.loggedUserMenu{
+	color:#ffffff;
+	padding-top: 10px;
+}
+.loggedUserMenu span{
+	font-weight:bold;
+}
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+ }
+
+/* =============================================================================
+   Plugins
+   ========================================================================== */
+
+.pluginBloc li,.pluginBloc ul{
+	list-style-type: none;
+	margin: 0px;
+	padding:0px;
+}
+.pluginBloc ul li{
+	padding:5px 0 5px 0;
+	border-bottom: 1px dotted #cecece;
+	margin:0 0 5px 0;
+}
+.pluginBloc ul li ul li{
+	padding: 0;
+	border-bottom: none;
+	margin:0;
+}
+.pluginBloc ul li ul li h4,.pluginBloc ul li ul li code{
+	display:inline;
+}
+.pluginBloc ul li ul li h4{
+	font-size: 14px;
+}
+
+.bs-docs-sidebar .active a,.bs-docs-sidebar .active a:hover{
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1) inset, -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    background-color: #0088CC;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* =============================================================================
+   Outils
+   ========================================================================== */
+
+.hide{
+	display:none;
+}
+.center,[class*="span"].center{
+	margin:auto;
+	display:block;
+	float:none;
+	clear: both;
+}
+.align-center{
+	text-align: center;
+}
+.left{
+	float:left;
+}
+.clear{
+	clear:both;
+}
+.pointer{
+	cursor:pointer;
+}
+
+small {
+  color:#969696;
+  font-style: italic;
+}
+
+
+/* =============================================================================
+   Style d'impression
+   ========================================================================== */
+ 
+@media print {
+  * { background: transparent !important; color: black !important; box-shadow:none !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* Black prints faster: h5bp.com/s */
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  /* Don't show links for images, or javascript/internal links */
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; } /* h5bp.com/t */
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
