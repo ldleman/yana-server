@@ -3,6 +3,13 @@ session_start();
 mb_internal_encoding('UTF-8');
 $start=microtime(true);
 require_once('constant.php');
+if(!file_exists(DB_NAME)){ 
+	header('location:install.php');
+}else{
+	if(file_exists('install.php')) $_GET['error'] = 'Par mesure de sécurité, pensez à supprimer le fichier install.php';
+}
+
+
 require_once('RainTPL.php');
 function __autoload($class_name){
     include 'classes/'.$class_name . '.class.php';

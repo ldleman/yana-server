@@ -10,6 +10,6 @@
 	define('DEFAULT_THEME','default');
 
 	define('VOCAL_ENTITY_NAME','YANA');
-
+	define('DB_NAME','database.db');
 
 ?>

@@ -9,6 +9,7 @@
 */
 
  include('RadioRelay.class.php');
+ 
  define('RADIO_EMITER_PIN',0);
  define('RADIO_SENDER_CODE',8217034);
 
@@ -22,7 +23,8 @@ function radioRelay_plugin_setting_page(){
 		if($myUser!=false){
 			$radioRelayManager = new RadioRelay();
 			$radioRelays = $radioRelayManager->populate();
-
+			$roomManager = new Room();
+			$rooms = $roomManager->populate();
 	?>
 
 		<div class="span9 userBloc">
@@ -37,13 +39,17 @@ function radioRelay_plugin_setting_page(){
 
 		    <div class="left">
 			    <label for="nameRadioRelay">Nom</label>
-			    <input type="text" id="nameRadioRelay" name="nameRadioRelay" placeholder="Cuisine,salon…"/>
+			    <input type="text" id="nameRadioRelay" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
 			    <label for="descriptionRadioRelay">Description</label>
-			    <input type="text" name="descriptionRadioRelay" id="descriptionRadioRelay" />
+			    <input type="text" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 			    <label for="radioCodeRadioRelay">Code radio</label>
-			    <input type="text" name="radioCodeRadioRelay" id="radioCodeRadioRelay" />
+			    <input type="text" name="radioCodeRadioRelay" id="radioCodeRadioRelay" placeholder="0,1,2…" />
 			    <label for="roomRadioRelay">Pièce</label>
-			    <input type="text" name="roomRadioRelay" id="roomRadioRelay" />
+			    <select name="roomRadioRelay" id="roomRadioRelay">
+			    	<?php foreach($rooms as $room){ ?>
+			    	<option value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+			    	<?php } ?>
+			    </select>
 			</div>
 
   			<div class="clear"></div>
