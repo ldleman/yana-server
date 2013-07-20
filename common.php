@@ -1,6 +1,9 @@
 <?php
 session_start();
 mb_internal_encoding('UTF-8');
+error_reporting(E_ALL);
+ini_set('display_errors','On');
+
 $start=microtime(true);
 require_once('constant.php');
 if(!file_exists(DB_NAME)){ 

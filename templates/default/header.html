@@ -33,10 +33,12 @@
             <span class="icon-bar"></span>
           </button>
           <a class="brand" href="#">{#PROGRAM_NAME}</a>
+          
+          {if="$myUser!=false"}
           <div class="nav-collapse collapse">
             <ul class="nav">
              
-             
+              <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               {loop="menuItems"}
               <li>{$value.content}</li>
               {/loop}
@@ -49,6 +51,9 @@
               {/if}
             </ul>
           </div><!--/.nav-collapse -->
+          {/if}
+
+
         </div>
       </div>
     </div>

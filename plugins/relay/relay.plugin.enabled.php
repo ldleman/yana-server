@@ -10,10 +10,6 @@
 
  include('RadioRelay.class.php');
  
- define('RADIO_EMITER_PIN',0);
- define('RADIO_SENDER_CODE',8217034);
-
-
 
 
 function radioRelay_plugin_setting_page(){
@@ -39,7 +35,8 @@ function radioRelay_plugin_setting_page(){
 
 		    <div class="left">
 			    <label for="nameRadioRelay">Nom</label>
-			    <input type="text" id="nameRadioRelay" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
+			    <input type="text" id="nameRadioRelay" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
+			    <small>Commande vocale associée : "YANA, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionRadioRelay">Description</label>
 			    <input type="text" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 			    <label for="radioCodeRadioRelay">Code radio</label>
@@ -68,12 +65,15 @@ function radioRelay_plugin_setting_page(){
 	    </tr>
 	    </thead>
 	    
-	    <?php foreach($radioRelays as $radioRelay){ ?>
+	    <?php foreach($radioRelays as $radioRelay){ 
+
+	    	$room = $roomManager->load(array('id'=>$radioRelay->getRoom())); 
+	    	?>
 	    <tr>
 	    	<td><?php echo $radioRelay->getName(); ?></td>
 		    <td><?php echo $radioRelay->getDescription(); ?></td>
 		    <td><?php echo $radioRelay->getRadioCode(); ?></td>
-		    <td><?php echo $radioRelay->getRoom(); ?></td>
+		    <td><?php echo $room->getName(); ?></td>
 		    <td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-remove"></i></a></td>
 	    </tr>
 	    <?php } ?>
@@ -146,37 +146,43 @@ function radioRelay_vocal_command(&$response,$actionUrl){
 }
 
 function radioRelay_action_radioRelay(){
-	global $_,$conf;
+	global $_,$conf,$myUser;
 
 	switch($_['action']){
 		case 'radioRelay_delete_radioRelay':
-			$radioRelayManager = new RadioRelay();
-			$radioRelayManager->delete(array('id'=>$_['id']));
+			if($myUser->can('radio relais','d')){
+				$radioRelayManager = new RadioRelay();
+				$radioRelayManager->delete(array('id'=>$_['id']));
+			}
 			header('location:setting.php?section=radioRelay');
 		break;
 		case 'radioRelay_plugin_setting':
 			$conf->put('plugin_radioRelay_emitter_pin',$_['emiterPin']);
+			$conf->put('plugin_radioRelay_emitter_code',$_['emiterCode']);
 			header('location: setting.php?section=preference&block=radioRelay');
 		break;
 
 		case 'radioRelay_add_radioRelay':
-
-			$radioRelay = new RadioRelay();
-			$radioRelay->setName($_['nameRadioRelay']);
-			$radioRelay->setDescription($_['descriptionRadioRelay']);
-			$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
-			$radioRelay->setRoom($_['roomRadioRelay']);
-			$radioRelay->save();
+			if($myUser->can('radio relais','c')){
+				$radioRelay = new RadioRelay();
+				$radioRelay->setName($_['nameRadioRelay']);
+				$radioRelay->setDescription($_['descriptionRadioRelay']);
+				$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
+				$radioRelay->setRoom($_['roomRadioRelay']);
+				$radioRelay->save();
+			}
 			header('location:setting.php?section=radioRelay');
 
 		break;
 		case 'radioRelay_change_state':
-			global $_;
+			global $_,$myUser;
 
-			if($myUser!=false){
+			
+			if($myUser->can('radio relais','u')){
 				$radioRelay = new RadioRelay();
 				$radioRelay = $radioRelay->getById($_['engine']);
-				$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.RADIO_SENDER_CODE.' '.$radioRelay->getRadioCode().' '.$_['state'];
+				$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' '.$_['state'];
+				
 				//TODO change bdd state
 				system($cmd,$out);
 				if(!isset($_['webservice'])){
@@ -206,7 +212,7 @@ function radioRelay_action_radioRelay(){
 											array('type'=>'talk','sentence'=>'Je ne vous connais pas, je refuse de faire ça!')
 														)
 									);
-				echo ($json=='[]'?'{}':$json);
+				echo json_encode($response);
 			}
 		break;
 	}
@@ -225,8 +231,13 @@ function radioRelay_plugin_preference_page(){
 
 		<div class="span9 userBloc">
 			<form class="form-inline" action="action.php?action=radioRelay_plugin_setting" method="POST">
+
 			    <p>Pin du raspberry PI branché à l'émetteur radio: </p>
 			    <input type="text" class="input-large" name="emiterPin" value="<?php echo $conf->get('plugin_radioRelay_emitter_pin');?>" placeholder="Pin wiring PI...">
+			    
+			    <p>Code de la télécommande pris par le raspberry pi: </p>
+			    <input type="text" class="input-large" name="emiterCode" value="<?php echo $conf->get('plugin_radioRelay_emitter_code');?>" placeholder="par exemple 8217034...">
+
 			    <button type="submit" class="btn">Enregistrer</button>
 		    </form>
 		</div>
@@ -249,7 +260,6 @@ Plugin::addHook("preference_menu", "radioRelay_plugin_preference_menu");
 Plugin::addHook("preference_content", "radioRelay_plugin_preference_page"); 
 
 Plugin::addCss("/css/style.css"); 
-//Plugin::addJs("/js/main.js"); 
 Plugin::addHook("action_post_case", "radioRelay_action_radioRelay"); 
 
 Plugin::addHook("node_display", "radioRelay_display");   

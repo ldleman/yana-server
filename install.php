@@ -1,4 +1,7 @@
 <?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors','On');
 require_once('constant.php');
 function __autoload($class_name) {
     include 'classes/'.$class_name . '.class.php';
@@ -77,7 +80,12 @@ if(isset($_POST['install'])){
 
 	$s3 = New Section();
 	$s3->setLabel('user');
-	$s3->save();	
+	$s3->save();
+
+
+  $s4 = New Section();
+  $s4->setLabel('vocal');
+  $s4->save();  
 
 	$r1 = New Right();
 	$r1->setSection('1');
@@ -105,6 +113,15 @@ if(isset($_POST['install'])){
 	$r3->setUpdate('1');
 	$r3->setRank('1');
 	$r3->save();
+
+  $r4 = New Right();
+  $r4->setSection('4');
+  $r4->setRead('1');
+  $r4->setDelete('1');
+  $r4->setCreate('1');
+  $r4->setUpdate('1');
+  $r4->setRank('1');
+  $r4->save();
 								
 	$user->setMail($_POST['email']);
 	$user->setName($_POST['name']);
@@ -147,16 +164,16 @@ if(isset($_POST['install'])){
       <input type="text" name="firstname" id="inputFirstName" placeholder="">
     </div>
   </div>
+    <div class="control-group">
+    <label class="control-label" for="inputEmail">Email</label>
+    <div class="controls">
+      <input type="text" name="email" id="inputEmail" placeholder="Email">
+    </div>
+  </div>
   <div class="control-group">
     <label class="control-label" for="inputLogin">Login</label>
     <div class="controls">
       <input type="text" name="login" id="inputLogin" placeholder="Login">
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputEmail">Email</label>
-    <div class="controls">
-      <input type="text" name="email" id="inputEmail" placeholder="Email">
     </div>
   </div>
   <div class="control-group">

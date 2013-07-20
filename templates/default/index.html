@@ -3,6 +3,18 @@
 
 <div class="row">
     {function="Plugin::callHook("home", array($_))"}
+    
+    {if="!isset($_['module']) || $_['module']=='home'"}
+    <div class="span9">
+    <h1>Bienvenue</h1>
+	    <ul>
+	    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
+	    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
+	    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
+	    </ul>
+	</div>
+	{/if}
+
 </div>
 
 {include="footer"}

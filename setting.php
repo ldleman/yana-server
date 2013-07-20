@@ -1,6 +1,7 @@
 <?php
 require_once('header.php');
 
+if(isset($myUser) && $myUser!=false){
 
 switch(@$_['section']){
 	case 'plugin':
@@ -49,6 +50,11 @@ switch(@$_['section']){
 	break;
 }
 
-$view = 'setting';
+$view = 'setting';  
+
+}else{
+	exit('Vous devez être connecté');
+}
+
 require_once('footer.php');
 ?>

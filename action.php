@@ -14,16 +14,20 @@ Plugin::callHook("action_pre_case", array(&$_,$myUser));
 
 
 
-if(!isset($myUser) && isset($_['token'])){
+if(!$myUser && isset($_['token'])){
 	$userManager = new User();
 	$myUser = $userManager->load(array('token'=>$_['token']));
+	if(isset($myUser) && $myUser!=false)
+	$myUser->loadRight();
 }
-
+$myUser = (!$myUser?new User():$myUser);
 
 //Execution du code en fonction de l'action
 switch ($_['action']){
 	case 'login':
+	
 			$user = $userManager->exist($_['login'],$_['password']);
+
 			$error = '';
 			if($user==false){
 				$error = '?error='.urlencode('le compte spécifié est inexistant');
@@ -31,6 +35,12 @@ switch ($_['action']){
 				$_SESSION['currentUser'] = serialize($user);
 			}
 			header('location: ./index.php'.$error);	
+	break;
+
+	case 'GET_TOKEN':
+			$user = $userManager->load(array('login'=>$_['login'],'password'=>sha1(md5($_['password']))));
+			$response['token'] = $user->getToken();
+			echo json_encode($response);
 	break;
 	
 	case 'user_add_user':
@@ -58,12 +68,14 @@ switch ($_['action']){
 
 
 	case 'access_delete_rank':
+		if(!$myUser->can('configuration','d')) exit('ERREUR: Permissions insuffisantes.');
 		$rankManager = new Rank();
 		$rankManager->delete(array('id'=>$_['id']));
 		header('location:setting.php?section=access');
 	break;
 
 	case 'access_add_rank':
+		if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
 		$rank = new Rank();
 		$rank->setLabel($_['labelRank']);
 		$rank->setDescription($_['descriptionRank']);
@@ -73,6 +85,7 @@ switch ($_['action']){
 
 
 	case 'set_rank_access':
+		if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
 		$right = new Right();
 
 		$right = $right->load(array('section'=>$_['section'],'rank'=>$_['rank']));
@@ -102,6 +115,7 @@ switch ($_['action']){
 
 	break;
 
+	if(!$myUser->can('configuration','d')) exit('ERREUR: Permissions insuffisantes.');
 	case 'access_delete_right':
 		$rankManager = new Right();
 		$rankManager->delete(array('id'=>$_['id']));
@@ -114,6 +128,7 @@ switch ($_['action']){
 		session_destroy();
 		header('location: ./index.php');
 	break;
+
 
 	case 'changePluginState':
 		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
@@ -135,7 +150,9 @@ switch ($_['action']){
 		Plugin::callHook("action_post_case", array());
 	break;
 
+
 	case 'GET_SPEECH_COMMAND':
+		if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions"}');
 		$actionUrl = 'http://'.$_SERVER['SERVER_ADDR'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
 		$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
 	
@@ -145,18 +162,11 @@ switch ($_['action']){
 		echo ($json=='[]'?'{}':$json);
 	break;
 
+
 	case 'GET_EVENT':
+	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions"}');
 	$response = array('responses'=>array());
 	Plugin::callHook("get_event", array(&$response));
-		/*$response = array('responses'=>array(
-							//array('type'=>'command','program'=>'"C:\Program Files (x86)\Notepad++\notepad++.exe"'),
-							array('type'=>'talk','sentence'=>'Je lancerais le programme notepade plusse plusse, après la notification sonore.','style'=>'angry'),
-							array('type'=>'talk','sentence'=>'Je lancerais le programme notepade plusse plusse, après la notification sonore.','style'=>'sad'),
-							array('type'=>'talk','sentence'=>'Je lancerais le programme notepade plusse plusse, après la notification sonore.'),
-							//array('type'=>'sound','file'=>'pet.wav')
-						)
-					  );*/
-
 
 		$json = json_encode($response);
 		echo ($json=='[]'?'{}':$json);

@@ -35,10 +35,13 @@
             <span class="icon-bar"></span>
           </button>
           <a class="brand" href="#"><?php  echo PROGRAM_NAME;?></a>
+          
+          <?php if( $myUser!=false ){ ?>
+
           <div class="nav-collapse collapse">
             <ul class="nav">
              
-             
+              <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               <?php $counter1=-1; if( isset($menuItems) && is_array($menuItems) && sizeof($menuItems) ) foreach( $menuItems as $key1 => $value1 ){ $counter1++; ?>
 
               <li><?php echo $value1["content"];?></li>
@@ -57,6 +60,10 @@
 
             </ul>
           </div><!--/.nav-collapse -->
+          <?php } ?>
+
+
+
         </div>
       </div>
     </div>
