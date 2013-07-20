@@ -16,12 +16,11 @@ Installation
 
 Executez les commandes suivantes dans un shell :
 
-`sudo apt-get install git-core` (uniquement si vous n'avez pas git d'installé)
-`git clone https://github.com/ldleman/yana-server.git /var/www/yana-server`
-`sudo chown -R www-data:www-data /var/www/yana-server`
+`sudo apt-get install git-core && cd /var/www/ && git clone https://github.com/ldleman/yana-server.git /var/www/yana-server && sudo chown -R www-data:www-data yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission`
 
 Puis executez l'adresse web de yana dans un navigateur :
 
-`http://votre.rpi/yana-server`
+`http://adresse.de.votre.rpi/yana-server`
 
-Et suivez le formulaire d'installation
+Et suivez le formulaire d'installation.
+
