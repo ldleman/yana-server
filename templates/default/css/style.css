@@ -49,6 +49,26 @@ body {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
+.logo{
+  background: url('../img/logo.png') no-repeat;
+  width: 78px;
+  height:20px;
+  font-size: 11px;
+  margin-top:3px;
+  padding: 15px 3px 7px 3px;
+  color:#ffffff;
+  float:left;
+}
+.logo .badge{
+  padding: 3px;
+   line-height: 9px;
+  font-size: 9px;
+  border-radius: none;
+  margin:0 5px 0px 20px;
+  visibility: hidden;
+  cursor:pointer;
+}
+
 /* =============================================================================
    Outils
    ========================================================================== */

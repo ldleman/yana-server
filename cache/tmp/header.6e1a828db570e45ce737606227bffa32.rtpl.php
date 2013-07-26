@@ -32,7 +32,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#"><?php  echo PROGRAM_NAME;?></a>
+         <div class="logo"><span class="badge badge-warning" title="<?php echo $notifications;?>" onclick="<?php echo $notificationUrl;?>" <?php if( $notificationsCount!=0 ){ ?>style="visibility:visible;"<?php } ?> ><?php echo $notificationsCount;?></span><?php  echo PROGRAM_VERSION;?></div>
           
           <?php if( $myUser!=false ){ ?>
           <div class="nav-collapse collapse">
