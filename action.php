@@ -27,13 +27,18 @@ switch ($_['action']){
 	case 'login':
 	
 			$user = $userManager->exist($_['login'],$_['password']);
-
 			$error = '';
 			if($user==false){
 				$error = '?error='.urlencode('le compte spécifié est inexistant');
 			}else{
 				$_SESSION['currentUser'] = serialize($user);
 			}
+
+			if(isset($_['rememberMe'])){
+				setcookie(COOKIE_NAME, $user->coockie(), mktime(0,0,0, date("d"),date("m"), (date("Y")+1)),'/');
+			}
+
+
 			header('location: ./index.php'.$error);	
 	break;
 

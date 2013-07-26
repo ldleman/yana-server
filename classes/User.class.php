@@ -38,7 +38,7 @@ class User extends SQLiteEntity{
 	    $newUser = false;
 	    $newUser = $userManager->load(array('login'=>$login,'password'=>sha1(md5($password))));
 	    Plugin::callHook("action_pre_login", array(&$newUser));
-	    $newUser->loadRight();
+	   	if(is_object($newUser)) $newUser->loadRight();
 		return $newUser;
 	}
 
