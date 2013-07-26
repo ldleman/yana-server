@@ -58,6 +58,7 @@ switch ($_['action']){
 		$user->setLogin($_['loginUser']);
 		$user->setRank($_['rankUser']);
 		$user->setState(1);
+		$user->setToken(sha1(time().rand(0,1000)));
 		$user->save();
 		header('location:setting.php?section=user');
 	break;
