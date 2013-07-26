@@ -45,16 +45,23 @@ class User extends SQLiteEntity{
 	//Récupère les droits en CRUD de l'utilisateur courant et les charge dans son tableau de droits interne
 	function loadRight(){
 		$rightManager = new Right();
+
 		$rights = $rightManager->loadAll(array('rank'=>$this->getRank()));
+
 		$section= new Section();
 		foreach($rights as $right){
 			$section = $section->getById($right->getSection());
-			$this->rights[$section->getLabel()]['c'] = ($right->getCreate()=='1'?true:false);
-			$this->rights[$section->getLabel()]['r'] = ($right->getRead()=='1'?true:false);
-			$this->rights[$section->getLabel()]['u'] = ($right->getUpdate()=='1'?true:false);
-			$this->rights[$section->getLabel()]['d'] = ($right->getDelete()=='1'?true:false);
+			if(is_object($section)){
+				$this->rights[$section->getLabel()]['c'] = ($right->getCreate()=='1'?true:false);
+				$this->rights[$section->getLabel()]['r'] = ($right->getRead()=='1'?true:false);
+				$this->rights[$section->getLabel()]['u'] = ($right->getUpdate()=='1'?true:false);
+				$this->rights[$section->getLabel()]['d'] = ($right->getDelete()=='1'?true:false);
+			}else{
+				$rightManager->delete(array('section'=>$right->getSection()));
+			}
 		}
 	}
+
 
 	static function getByLogin($login){
 		$returnedUser = new User();
