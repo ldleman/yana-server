@@ -7,7 +7,14 @@ uasort ($menuItems , function($a,$b){return $a['sort']>$b['sort']?1:-1;});
 
 $notifications = array();
 
-$json = @file_get_contents(UPDATE_URL);
+
+$ctx=stream_context_create(array('http'=>
+    array(
+        'timeout' => 1
+    )
+));
+
+$json = @file_get_contents(UPDATE_URL,false,$ctx);
 
 if($json!=false)$json = json_decode( $json ,true);
 $notificationUrl = '#';

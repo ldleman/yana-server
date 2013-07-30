@@ -48,9 +48,9 @@ class User extends SQLiteEntity{
 
 		$rights = $rightManager->loadAll(array('rank'=>$this->getRank()));
 
-		$section= new Section();
+		$sectionManager= new Section();
 		foreach($rights as $right){
-			$section = $section->getById($right->getSection());
+			$section = $sectionManager->getById($right->getSection());
 			if(is_object($section)){
 				$this->rights[$section->getLabel()]['c'] = ($right->getCreate()=='1'?true:false);
 				$this->rights[$section->getLabel()]['r'] = ($right->getRead()=='1'?true:false);
