@@ -20,7 +20,8 @@
   </head>
 
   <body>
-
+    <div class="hidden" id="UPDATE_URL"><?php  echo UPDATE_URL;?></div>
+    <div class="hidden" id="PROGRAM_VERSION"><?php  echo PROGRAM_VERSION;?></div>
     <div class="navbar navbar-inverse navbar-fixed-top" id="header">
       
       <div class="navbar-inner">
@@ -32,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-         <div class="logo"><span class="badge badge-warning" title="<?php echo $notifications;?>" onclick="<?php echo $notificationUrl;?>" <?php if( $notificationsCount!=0 ){ ?>style="visibility:visible;"<?php } ?> ><?php echo $notificationsCount;?></span><?php  echo PROGRAM_VERSION;?></div>
+         <div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span><?php  echo PROGRAM_VERSION;?></div>
           
           <?php if( $myUser!=false ){ ?>
           <div class="nav-collapse collapse">

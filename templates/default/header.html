@@ -20,7 +20,8 @@
   </head>
 
   <body>
-
+    <div class="hidden" id="UPDATE_URL">{#UPDATE_URL}</div>
+    <div class="hidden" id="PROGRAM_VERSION">{#PROGRAM_VERSION}</div>
     <div class="navbar navbar-inverse navbar-fixed-top" id="header">
       
       <div class="navbar-inner">
@@ -32,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-         <div class="logo"><span class="badge badge-warning" title="{$notifications}" onclick="{$notificationUrl}" {if="$notificationsCount!=0"}style="visibility:visible;"{/if} >{$notificationsCount}</span>{#PROGRAM_VERSION}</div>
+         <div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{#PROGRAM_VERSION}</div>
           
           {if="$myUser!=false"}
           <div class="nav-collapse collapse">
