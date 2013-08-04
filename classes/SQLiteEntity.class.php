@@ -85,6 +85,12 @@ class SQLiteEntity extends SQLite3
 		if(!$this->exec($query)) echo $this->lastErrorMsg();
 	}
 
+	public function drop($debug='false'){
+		$query = 'DROP TABLE `'.MYSQL_PREFIX.$this->TABLE_NAME.'`;';
+		if($this->debug)echo '<hr>'.$this->CLASS_NAME.' ('.__METHOD__ .') : Requete --> '.$query;
+		if(!$this->exec($query)) echo $this->lastErrorMsg();
+	}
+
 
 	public function massiveInsert($events){
 		$query = 'INSERT INTO `'.MYSQL_PREFIX.$this->TABLE_NAME.'`(';
