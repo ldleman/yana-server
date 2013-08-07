@@ -181,9 +181,9 @@ function wireRelay_action_wireRelay(){
 			if($myUser->can('relais filaire','u')){
 				$wireRelay = new WireRelay();
 				$wireRelay = $wireRelay->getById($_['engine']);
-				$cmd = '/usr/bin/gpio mode '.$wireRelay->getPin().' out';
+				$cmd = '/usr/local/bin/gpio mode '.$wireRelay->getPin().' out';
 				system($cmd,$out);
-				$cmd = '/usr/bin/gpio write '.$wireRelay->getPin().' '.$_['state'];
+				$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' '.$_['state'];
 				system($cmd,$out);
 				//TODO change bdd state
 				
