@@ -5,7 +5,7 @@
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@description Camera
+@description Plugin permettant de prendres des photos avec la camera PI depuis l'interface web
 */
 
 function camera_plugin_menu(&$menuItems){
