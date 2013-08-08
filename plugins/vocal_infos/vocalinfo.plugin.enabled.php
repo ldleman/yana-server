@@ -41,11 +41,15 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' siffle',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.88'
+		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.9'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' concours de pet',
 		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=pet.wav','confidence'=>'0.88'
+		);
+	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' mode développement',
+		'url'=>$actionUrl.'?action=vocalinfo_devmod','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' concours de rot',
@@ -107,6 +111,18 @@ function vocalinfo_action(){
 			$json = json_encode($response);
 			echo ($json=='[]'?'{}':$json);
 			break;
+
+		case 'vocalinfo_devmod':
+			$response = array('responses'=>array(
+										array('type'=>'command','program'=>'C:\Program Files\Sublime Text 2\sublime_text.exe'),
+										array('type'=>'talk','sentence'=>'Sublim text lancé.')
+													)
+								);
+
+
+			$json = json_encode($response);
+			echo ($json=='[]'?'{}':$json);
+		break;
 
 		case 'vocalinfo_gpio_diag':
 			$sentence = '';
