@@ -63,6 +63,31 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'command'=>VOCAL_ENTITY_NAME.' diagnostique des G.P.I.O',
 		'url'=>$actionUrl.'?action=vocalinfo_gpio_diag','confidence'=>'0.88'
 		);
+
+	/*
+	$dev = array('responses'=>array(
+									array('type'=>'command','program'=>'C:\Program Files\Sublime Text 2\sublime_text.exe'),
+									array('type'=>'command','program'=>'C:\Program Files (x86)\Mozilla Firefox\firefox.exe'),
+									array('type'=>'talk','sentence'=>'Environnement initialisé.')
+									)
+								);
+		
+	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' mode dévlopment',
+		'preAction'=>json_encode($dev),'confidence'=>'0.80'
+		);
+
+	$v = array('responses'=>array(
+								array('type'=>'command','program'=>'C:\Taer\v\V.(2009).1x01.Le.Commencement.FR.LD.HDTV.XviD-JMT.[emule-island.com].avi'),
+
+								)
+				);
+
+	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' lance V',
+		'preAction'=>json_encode($v),'confidence'=>'0.80'
+		);
+	*/
 }
 
 function vocalinfo_action(){
@@ -70,7 +95,9 @@ function vocalinfo_action(){
 
 	switch($_['action']){
 
+		
 
+		
 		case 'vocalinfo_sound':
 			global $_;
 			$response = array('responses'=>array(
