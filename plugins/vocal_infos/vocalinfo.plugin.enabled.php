@@ -5,7 +5,7 @@
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@description Permet la récuperations d'informations locales ou sur le web comme la météeo, les séries TV, l'heure, la date et l'état des GPIO
+@description Permet la récuperations d'informations locales ou sur le web
 */
 
 
@@ -73,7 +73,11 @@ function vocalinfo_action(){
 	global $_,$conf;
 
 	switch($_['action']){
-
+		case 'vocalinfo_plugin_setting':
+			$conf->put('plugin_vocalinfo_place',$_['weather_place']);
+			$conf->put('plugin_vocalinfo_woeid',$_['woeid']);
+			header('location:setting.php?section=preference&block=vocalinfo');
+		break;
 
 		case 'vocalinfo_sound':
 			global $_;
@@ -84,7 +88,7 @@ function vocalinfo_action(){
 			$json = json_encode($response);
 			echo ($json=='[]'?'{}':$json);
 			break;
-
+			
 		case 'vocalinfo_devmod':
 			$response = array('responses'=>array(
 										array('type'=>'command','program'=>'C:\Program Files\Sublime Text 2\sublime_text.exe'),
@@ -143,15 +147,50 @@ function vocalinfo_action(){
 		break;
 		case 'vocalinfo_meteo':
 			global $_;
-				$contents = file_get_contents('http://weather.yahooapis.com/forecastrss?w=12644682&u=c');
+				$contents = file_get_contents('http://weather.yahooapis.com/forecastrss?w='.$conf->get('plugin_vocalinfo_woeid').'&u=c');
 				$xml = simplexml_load_string($contents);
 				$weekdays = $xml->xpath('/rss/channel/item/yweather:forecast');
+				//Codes disponibles ici: http://developer.yahoo.com/weather/#codes
 				$textTranslate = array(
-										'Showers'=>'des averses',
-										'Partly Cloudy'=>'quelques nuages',
-										'Partly Cloudy'=>'quelques eclaircies',
+										'Showers'=>'des averses',										
+										'Tornado' => 'Attention: Tornade!',
+										'Hurricane' => 'Attention: Ouragan!',
+										'Severe thunderstorms' => 'Orages violents',
+										'Mixed rain and snow' => 'Pluie et neiges',
+										'Mixed rain and sleet' => 'Pluie et neige fondue',
+										'Mixed snow and sleet' => 'Neige et neige fondue',
+										'Freezing drizzle' => 'Bruine verglassant',
+										'Drizzle' => 'Bruine',
+										'Freezing rain' => 'Pluie verglassant',
+										'Showers' => 'Averse',
+										'Snow flurries' => 'Bourrasque de neige',
+										'Light snow showers' => 'Averse de neige lègére',
+										'Blowing snow' => 'Chasse neige',
+										'Snow' => 'Neige',
+										'Hail' => 'Grêle',
+										'Sleet' => 'Neige fondue',
+										'Dust' => 'Poussière',
+										'Foggy' => 'Brouillard',
+										'Smoky' => 'Fumée',
+										'Blustery' => 'Froid et venteux',
+										'Windy' => 'Venteux',
+										'Cold' => 'Froid',
+										'Cloudy' => 'Nuageux',
+										'Fair' => 'Ciel dégagé',
+										'Mixed rain and hail' => 'Pluie et grêle',
+										'Hot' => 'Chaud',
+										'Isolated thunderstorms' => 'Orages isolées',
+										'Scattered showers' => 'Averse éparse',
+										'Heavy snow' => 'Fortes chutes de neige',
+										'Scattered snow showers' => 'Averse de neige éparse',
+										'Thunderstorms' => 'Orages',
+										'Thundershowers' => 'Grain sous orage violents',
+										'Isolated thundershowers' => 'Grain sous orage isolées',
+										'Not available' => 'Non disponible',
+										'Scattered Thunderstorms' => 'Orages éparses',
+										'Partly Cloudy'=>'Partiellement nuageux',
 										'Mostly Sunny'=>'plutot ensoleillé',
-										'Mostly Cloudy'=>'plutot nuageux',
+										'Mostly Cloudy'=>'Nuageux',
 										'Clear'=>'Temps clair',
 										'Sunny'=>'ensoleillé'
 										);
@@ -164,7 +203,26 @@ function vocalinfo_action(){
 										'Sun'=>'dimanche');
 				$affirmation = '';
 				foreach($weekdays as $day){
-					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.@$textTranslate[''.$day['text']].', ';
+					if (substr($day['text'],0,2) == "AM")
+					{
+						$sub_condition = substr($day['text'],3);
+						$condition = $textTranslate[''.$sub_condition]." dans la matinée";
+
+					}
+					elseif (substr($day['text'],0,2) == "PM") {
+						$sub_condition = substr($day['text'],3);
+						$condition = @$textTranslate[''.$sub_condition]." dans l'après midi";
+					 } 
+					 elseif (substr($day['text'],-4) == "Late") {
+					 	$sub_condition = substr($day['text'],0,-5);
+					 	$condition = @$textTranslate[''.$sub_condition]." en fin de journée";
+					 }
+					 else
+					 {
+					 	$condition = @$textTranslate[''.$day['text']];
+					 }
+				
+					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
 				}
 				$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$affirmation)
@@ -257,6 +315,46 @@ function vocalinfo_event(&$response){
 		}
 	}
 }
+
+function vocalinfo_plugin_preference_menu(){
+	global $_;
+	echo '<li '.(@$_['block']=='vocalinfo'?'class="active"':'').'><a  href="setting.php?section=preference&block=vocalinfo"><i class="icon-chevron-right"></i>Informations Vocales</a></li>';
+}
+function vocalinfo_plugin_preference_page(){
+	global $myUser,$_,$conf;
+	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='vocalinfo' )  ){
+		if($myUser!=false){
+	Plugin::addjs("/js/woeid.js");
+	?>
+
+		<div class="span9 userBloc">
+			<form class="form-inline" action="action.php?action=vocalinfo_plugin_setting" method="POST">
+			<legend>Météo</legend>
+			    <p>Tapez le nom de votre ville et votre pays</p>
+			    <input type="text" class="input-xxlarge" name="weather_place" value="<?php echo $conf->get('plugin_vocalinfo_place');?>" placeholder="Votre ville">	
+			    <br><span id="weather_query" class="btn">Chercher</span>
+			    <p>Votre Identifiant WOEID</p>
+			    <input type="text" class="input-large" name="woeid" value="<?php echo $conf->get('plugin_vocalinfo_woeid');?>" placeholder="Votre WOEID">					
+			    <button type="submit" class="btn">Sauvegarder</button>
+	    </form>
+		</div>
+
+<?php }else{ ?>
+
+		<div id="main" class="wrapper clearfix">
+			<article>
+					<h3>Vous devez être connecté</h3>
+			</article>
+		</div>
+<?php
+
+		}
+	}
+}
+
+
+Plugin::addHook("preference_menu", "vocalinfo_plugin_preference_menu"); 
+Plugin::addHook("preference_content", "vocalinfo_plugin_preference_page"); 
 
 
 Plugin::addHook("get_event", "vocalinfo_event");    
