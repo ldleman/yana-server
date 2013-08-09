@@ -76,9 +76,11 @@ function camera_plugin_page($_){
 function camera_action_camera(){
 	global $_,$conf;
 
+    
 	switch($_['action']){
 		case 'camera_refresh':
-			system('raspistill -hf -w 400 -h 400  -o /var/www/yana-server/plugins/camera/view.jpg -t 0');
+			$absolute_path = getcwd()."/plugins/camera/";
+			system('raspistill -hf -w 400 -h 400  -o '.$absolute_path.'view.jpg -t 0');
 			header('location:index.php?module=camera');
 		break;
 	}
