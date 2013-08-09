@@ -20,6 +20,10 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'url'=>$actionUrl.'?action=vocalinfo_day','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' quel temps fait-il',
+		'url'=>$actionUrl.'?action=vocalinfo_meteo&today=1','confidence'=>'0.88'
+		);
+	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' météo semaine',
 		'url'=>$actionUrl.'?action=vocalinfo_meteo','confidence'=>'0.88'
 		);
@@ -149,7 +153,14 @@ function vocalinfo_action(){
 			global $_;
 				$contents = file_get_contents('http://weather.yahooapis.com/forecastrss?w='.$conf->get('plugin_vocalinfo_woeid').'&u=c');
 				$xml = simplexml_load_string($contents);
+				if(	(isset($_['today'])))
+				{
+					$weekdays = $xml->xpath('/rss/channel/item/yweather:condition');
+				}
+				else
+				{
 				$weekdays = $xml->xpath('/rss/channel/item/yweather:forecast');
+				}
 				//Codes disponibles ici: http://developer.yahoo.com/weather/#codes
 				$textTranslate = array(
 										'Showers'=>'des averses',										
@@ -221,8 +232,17 @@ function vocalinfo_action(){
 					 {
 					 	$condition = @$textTranslate[''.$day['text']];
 					 }
-				
+					
+					if(	(isset($_['today'])))
+					{
+					$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
+					}
+					else
+					{
 					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
+					}
+
+					
 				}
 				$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$affirmation)
