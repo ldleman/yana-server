@@ -1,3 +1,8 @@
 <?php
-mysql_query('DROP TABLE '.MYSQL_PREFIX.'plugin_radioRelay');
+$table = new RadioRelay();
+$table->drop();
+
+$conf = new Configuration();
+$conf->delete('plugin_radioRelay_emitter_pin');
+$conf->delete('plugin_radioRelay_emitter_code');
 ?>
