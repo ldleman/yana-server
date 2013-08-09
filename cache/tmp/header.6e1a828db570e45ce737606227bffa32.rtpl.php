@@ -13,7 +13,9 @@
     <link href="./templates/default/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
     <link href="./templates/default/css/style.css" rel="stylesheet">
     <?php echo Plugin::callLink(); ?>
+
     <?php echo Plugin::callCss(); ?>
+
 
     <link href="./templates/default/css/bootstrap-responsive.css" rel="stylesheet">
     <link rel="shortcut icon" href="./templates/default/ico/favicon.png">
@@ -36,23 +38,31 @@
          <div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span><?php  echo PROGRAM_VERSION;?></div>
           
           <?php if( $myUser!=false ){ ?>
+
           <div class="nav-collapse collapse">
             <ul class="nav">
              
               <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               <?php $counter1=-1; if( isset($menuItems) && is_array($menuItems) && sizeof($menuItems) ) foreach( $menuItems as $key1 => $value1 ){ $counter1++; ?>
+
               <li><?php echo $value1["content"];?></li>
               <?php } ?>
+
               <?php if( $myUser!=false && $myUser->can('configuration','r') ){ ?>
+
                 <li><a href="setting.php"><i class="icon-wrench"></i> Configuration</a></li>
               <?php } ?>
+
               <?php if( $myUser!=false ){ ?>
+
               <li class="loggedUserMenu">Connecté avec <span><?php echo $myUser->getFullName();?></span> (<?php echo $rank->getLabel();?>)</li>
               <li><a href="action.php?action=logout"><i class="icon-remove-circle"></i> Déconnexion</a></li>
               <?php } ?>
+
             </ul>
           </div><!--/.nav-collapse -->
           <?php } ?>
+
 
 
         </div>
@@ -64,16 +74,22 @@
     <div id="body" class="container">
 
   <?php if( $error!=false ){ ?>
-  <div class="alert alert-error">
+
+  <div class="alert alert-error fade in">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <?php echo $error;?>
+
   </div>
   <?php } ?>
+
   <?php if( $notice!=false ){ ?>
-    <div class="alert alert-info">
+
+    <div class="alert alert-info fade in">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <?php echo $notice;?>
+
   </div>
   <?php } ?>
+
 
   <?php echo Plugin::callHook("header_post_notices", array()); ?>

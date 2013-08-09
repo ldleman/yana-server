@@ -66,10 +66,17 @@ switch ($_['action']){
 	case 'delete_user':
 		if(!$myUser->can('user','d')) exit('ERREUR: Permissions insuffisantes.');
 		$userManager = new User();
-		if(isset($_['id'])){
+		$NbUsers = $userManager->countUsers();
+
+		
+		if(isset($_['id']) && $NbUsers > 1){
 			$userManager->delete(array('id'=>$_['id']));
+			header('location:setting.php?section=user');
 		}
-		header('location:setting.php?section=user');
+		else
+		{
+		header('location:setting.php?section=user&error=Impossible de supprimer le dernier utilisateur.');
+		}
 	break;
 
 
