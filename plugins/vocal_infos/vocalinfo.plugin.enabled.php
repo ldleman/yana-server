@@ -5,7 +5,7 @@
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@description Permet la récuperations d'informations locales ou sur le web
+@description Permet la récuperations d'informations locales ou sur le web comme la météo, les séries TV, l'heure, la date et l'état des GPIO
 */
 
 
@@ -190,7 +190,7 @@ function vocalinfo_action(){
 										'Scattered Thunderstorms' => 'Orages éparses',
 										'Partly Cloudy'=>'Partiellement nuageux',
 										'Mostly Sunny'=>'plutot ensoleillé',
-										'Mostly Cloudy'=>'Nuageux',
+										'Mostly Cloudy'=>'plutot Nuageux',
 										'Clear'=>'Temps clair',
 										'Sunny'=>'ensoleillé'
 										);
