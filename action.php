@@ -66,8 +66,7 @@ switch ($_['action']){
 	case 'delete_user':
 		if(!$myUser->can('user','d')) exit('ERREUR: Permissions insuffisantes.');
 		$userManager = new User();
-		$NbUsers = $userManager->countUsers();
-
+		$NbUsers = $userManager->rowCount();
 		
 		if(isset($_['id']) && $NbUsers > 1){
 			$userManager->delete(array('id'=>$_['id']));

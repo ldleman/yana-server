@@ -82,15 +82,6 @@ class User extends SQLiteEntity{
 		return $users;
 	}
 
-	//Retourne compte le nombre d'utilisateurs
-	//@return  Nombres d'utilisateurs
-	static function countUsers(){
-		$userManager = new User();
-		$users = $userManager->populate();
-		return count($users);
-	}
-
-
 	static function userorder($a, $b)
 	{
 	    return strcmp($a->getName(), $b->getName());
