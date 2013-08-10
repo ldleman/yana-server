@@ -151,6 +151,7 @@ function vocalinfo_action(){
 		break;
 		case 'vocalinfo_meteo':
 			global $_;
+				if($conf->get('plugin_vocalinfo_woeid')!=''){
 				$contents = file_get_contents('http://weather.yahooapis.com/forecastrss?w='.$conf->get('plugin_vocalinfo_woeid').'&u=c');
 				$xml = simplexml_load_string($contents);
 				if(	(isset($_['today'])))
@@ -159,7 +160,7 @@ function vocalinfo_action(){
 				}
 				else
 				{
-				$weekdays = $xml->xpath('/rss/channel/item/yweather:forecast');
+					$weekdays = $xml->xpath('/rss/channel/item/yweather:forecast');
 				}
 				//Codes disponibles ici: http://developer.yahoo.com/weather/#codes
 				$textTranslate = array(
@@ -213,6 +214,7 @@ function vocalinfo_action(){
 										'Fri'=>'vendredi',
 										'Sun'=>'dimanche');
 				$affirmation = '';
+
 				foreach($weekdays as $day){
 					if (substr($day['text'],0,2) == "AM")
 					{
@@ -233,6 +235,7 @@ function vocalinfo_action(){
 					 	$condition = @$textTranslate[''.$day['text']];
 					 }
 					
+
 					if(	(isset($_['today'])))
 					{
 					$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
@@ -240,10 +243,13 @@ function vocalinfo_action(){
 					else
 					{
 					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
-					}
 
-					
+					}
 				}
+			}else{
+				$affirmation = 'Vous devez renseigner votre ville dans les préférences de l\'interface oueb, je ne peux rien vous dire pour le moment.';
+			}
+
 				$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$affirmation)
 													)

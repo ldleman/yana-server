@@ -22,12 +22,15 @@ format: "json"
 if (data["query"]["results"] != null)
 {
 alert("Informations récupérés!");
-woeid = data["query"]["results"]["place"]["woeid"];
-town = data["query"]["results"]["place"]["name"];
-country = data["query"]["results"]["place"]["country"]["content"];
-region = data["query"]["results"]["place"]["admin1"]["content"];
-$("input:text[name=weather_place]").val(town + " " + region + " " + country);
-$("input:text[name=woeid]").val(woeid);
+
+var place = data["query"]["results"]["place"][0];
+woeid = place["woeid"];
+town = place["name"];
+
+country = place["country"]["content"];
+region = place["admin1"]["content"];
+$("input[name=weather_place]").val(town + " " + region + " " + country);
+$("input[name=woeid]").val(woeid);
 }
 else
 {
