@@ -55,7 +55,7 @@ function __autoload($class_name) {
 <?php
 if(isset($_POST['install'])){
 
-  if(is_writable(DB_NAME))
+  if(is_writable("install.php"))
   {
 	$user = new User();
 	$configuration = new Configuration();
