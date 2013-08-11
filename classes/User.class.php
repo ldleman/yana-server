@@ -82,7 +82,6 @@ class User extends SQLiteEntity{
 		return $users;
 	}
 
-
 	static function userorder($a, $b)
 	{
 	    return strcmp($a->getName(), $b->getName());

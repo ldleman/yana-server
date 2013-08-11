@@ -8,13 +8,16 @@
 @description Modele de plugin pour les modules
 */
 
+//Si vous utiliser la base de donnees a ajouter
+include('Modele.class.php');
 
+//Cette fonction va generer un nouveau element dans le menu
 function test_plugin_menu(&$menuItems){
 	global $_;
 	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=test"><i class="icon-th-large"></i> Modele</a>');
 }
 
-
+//Cette fonction va generer une page quand on clique sur Modele dans menu
 function test_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='test'){
 	?>
