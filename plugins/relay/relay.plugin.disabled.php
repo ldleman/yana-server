@@ -21,6 +21,20 @@ function radioRelay_plugin_setting_page(){
 			$radioRelays = $radioRelayManager->populate();
 			$roomManager = new Room();
 			$rooms = $roomManager->populate();
+
+		if (isset($_['id'])){
+			$id_mod = $_['id'];
+			$selected = $radioRelayManager->getById($id_mod);
+			$addormodify_text = $selected->GetName();
+			$action = "action.php?action=radioRelay_mod_radioRelay&id=".$id_mod;
+			$addormodify_buttontext = "Modifier";
+		}
+		else
+		{
+			$addormodify_text =  "Ajout d'un relais";
+			$action = "action.php?action=radioRelay_add_radioRelay";
+			$addormodify_buttontext = "Ajouter";
+		}
 	?>
 
 		<div class="span9 userBloc">
@@ -29,28 +43,33 @@ function radioRelay_plugin_setting_page(){
 		<h1>Relais</h1>
 		<p>Gestion des relais radio</p>  
 
-		<form action="action.php?action=radioRelay_add_radioRelay" method="POST">
+
+		<form action="<? echo "$action" ?>" method="POST">
 		<fieldset>
-		    <legend>Ajout d'un relais</legend>
+		    <legend><? echo $addormodify_text ?></legend>
 
 		    <div class="left">
 			    <label for="nameRadioRelay">Nom</label>
-			    <input type="text" id="nameRadioRelay" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
+			    <input type="text" id="nameRadioRelay" value="<? if(isset($selected)){echo $selected->getName();} ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
 			    <small>Commande vocale associée : "YANA, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionRadioRelay">Description</label>
-			    <input type="text" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
+			    <input type="text" value="<? if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 			    <label for="radioCodeRadioRelay">Code radio</label>
-			    <input type="text" name="radioCodeRadioRelay" id="radioCodeRadioRelay" placeholder="0,1,2…" />
+			    <input type="text" value="<? if(isset($selected)){echo $selected->getRadioCode();} ?>" name="radioCodeRadioRelay" id="radioCodeRadioRelay" placeholder="0,1,2…" />
 			    <label for="roomRadioRelay">Pièce</label>
 			    <select name="roomRadioRelay" id="roomRadioRelay">
-			    	<?php foreach($rooms as $room){ ?>
-			    	<option value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+			    	<?php foreach($rooms as $room){ 
+			    	if (isset($selected)){$selected_room = ($selected->getRoom());}
+			    	else{$selected_room = null;}			    		
+			    	?>
+		    	
+			    	<option <? if ($selected_room == $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 			    	<?php } ?>
 			    </select>
 			</div>
 
   			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
+		    <br/><button type="submit" class="btn"><? echo $addormodify_buttontext; ?></button>
 	  	</fieldset>
 		<br/>
 	</form>
@@ -62,6 +81,7 @@ function radioRelay_plugin_setting_page(){
 		    <th>Description</th>
 		    <th>Code radio</th>
 		    <th>Pièce</th>
+		    <th></th>
 	    </tr>
 	    </thead>
 	    
@@ -74,7 +94,8 @@ function radioRelay_plugin_setting_page(){
 		    <td><?php echo $radioRelay->getDescription(); ?></td>
 		    <td><?php echo $radioRelay->getRadioCode(); ?></td>
 		    <td><?php echo $room->getName(); ?></td>
-		    <td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-remove"></i></a></td>
+		    <td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-remove"></i></a>
+	   		<a class="btn" href="setting.php?section=radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
 	    </tr>
 	    <?php } ?>
 	    </table>
@@ -162,6 +183,22 @@ function radioRelay_action_radioRelay(){
 			header('location: setting.php?section=preference&block=radioRelay');
 		break;
 
+		case 'radioRelay_mod_radioRelay':
+			if($myUser->can('radio relais','c')){
+				$radioRelay = new RadioRelay();
+				$radioRelay->change(array(
+					'name'=> $_['nameRadioRelay'],
+					'description'=> $_['descriptionRadioRelay'],
+					'radiocode'=> $_['radioCodeRadioRelay'],
+					'room'=> $_['roomRadioRelay']
+					),
+					array('id'=>$_['id'])
+					);
+			}
+			header('location:setting.php?section=radioRelay');
+
+		break;
+
 		case 'radioRelay_add_radioRelay':
 			if($myUser->can('radio relais','c')){
 				$radioRelay = new RadioRelay();
@@ -172,8 +209,8 @@ function radioRelay_action_radioRelay(){
 				$radioRelay->save();
 			}
 			header('location:setting.php?section=radioRelay');
-
 		break;
+
 		case 'radioRelay_change_state':
 			global $_,$myUser;
 
