@@ -120,8 +120,8 @@ function access_plugin_right(){
 	    <tr>
 	    	<th>Section</th>
 		    <th>Ajout</th>
-		    <th>Modification</th>
-		    <th>Supression</th>
+			<th>Modification</th>
+			<th>Supression</th>
 		    <th>Consultation</th>
 		    <th></th>
 	    </tr>

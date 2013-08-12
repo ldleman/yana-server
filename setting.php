@@ -3,13 +3,44 @@ require_once('header.php');
 
 if(isset($myUser) && $myUser!=false){
 
-switch(@$_['section']){
-	case 'plugin':
+	switch(@$_['section']){
+		case 'plugin':
 		$plugins = Plugin::getAll();
 		$tpl->assign('plugins',$plugins);
-	break;
+		break;
 
-	case 'user':
+		case 'user':
+
+	//Gestion de la modification des utilisateurs
+		if (isset($_['id_user'])){
+			$usersManager = new User();
+			$id_modusers = $_['id_user'];
+			$selected = $usersManager->getById($id_modusers);
+			$addormodify_text = $selected->GetFirstName()." ".$selected->GetName();
+			$action = "action.php?action=user_mod_user&id_user=".$id_modusers;
+			$addormodify_buttontext = "Modifier";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+
+			$tpl->assign('login',$selected->getLogin());
+			$tpl->assign('firstname',$selected->getFirstName());
+			$tpl->assign('lastname',$selected->getName());
+			$tpl->assign('email',$selected->getMail());
+			$tpl->assign('userrank',$selected->getRank());
+		}
+		else
+		{
+			$addormodify_text =  "Ajout d'un utilisateur";
+			$action = "action.php?action=user_add_user";
+			$addormodify_buttontext = "Ajouter";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+			$tpl->assign('userrank','');
+		}
+
+
 		$users = User::getAllUsers();
 		$ranks = new Rank();
 		$ranks = $ranks->populate();
@@ -21,15 +52,47 @@ switch(@$_['section']){
 		$tpl->assign('ranksLabel',$ranksLabel);
 		$tpl->assign('users',$users);
 		$tpl->assign('ranks',$ranks);
-	break;
+		break;
 
-	case 'access':
+		case 'access':
 		$rankManager = new Rank();
 		$ranks = $rankManager->populate();
-		$tpl->assign('ranks',$ranks);
-	break;
 
-	case 'right':
+//Gestion de la modification des rank
+		if (isset($_['id_rank'])){
+			$id_modrank = $_['id_rank'];
+			$selected = $rankManager->getById($id_modrank);
+			$addormodify_text = $selected->getLabel();
+			$action = "action.php?action=access_mod_rank&id_rank=".$id_modrank;
+			$addormodify_buttontext = "Modifier";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+
+			$tpl->assign('label_rank',$selected->getLabel());
+			$tpl->assign('description_rank',$selected->getDescription());
+		}
+		else
+		{
+			$addormodify_text = "Ajout d'un rang";
+			$action = "action.php?action=access_add_rank";
+			$addormodify_buttontext = "Ajouter";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+		}
+
+
+
+
+
+
+
+
+		$tpl->assign('ranks',$ranks);
+		break;
+
+		case 'right':
 		$rightManager = new Right();
 		$sectionManager = new Section();
 		$rank = new Rank();
@@ -47,10 +110,10 @@ switch(@$_['section']){
 		$tpl->assign('rights',$rightsDictionnary);
 		$tpl->assign('sections',$sectionManager->populate('label'));
 		$tpl->assign('rank',$rank);
-	break;
-}
+		break;
+	}
 
-$view = 'setting';  
+	$view = 'setting';  
 
 }else{
 	exit('Vous devez être connecté');

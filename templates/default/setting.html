@@ -23,16 +23,16 @@
 				<h1>Rangs</h1>
 				<p>Gestion des rangs du programme</p>  
 
-				<form action="action.php?action=access_add_rank" method="POST">
+				<form action="{$action}" method="POST">
 				<fieldset>
-				    <legend>Ajout d'un rang</legend>
+				    <legend>{$addormodify_text}</legend>
 
 					    <label for="labelRank">Libellé</label>
-					    <input type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
+					    <input {if="isset($label_rank)"}value="{$label_rank}"{/if} type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
 					    <label for="descriptionRank">Description</label>
-					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" ></textarea>
+					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
 		  				<div class="clear"></div>
-				    	<br/><button type="submit" class="btn">Ajouter</button>
+				    	<br/><button type="submit" class="btn">{$addormodify_buttontext}</button>
 			  	</fieldset>
 				<br/>
 			</form>
@@ -50,7 +50,8 @@
 			    <tr>
 			    	<td>{$value->getLabel()}</td>
 				    <td>{$value->getDescription()}</td>
-				    <td><a class="btn" href="setting.php?section=right&id={$value->getId()}"><i class="icon-ok-circle"></i></a>
+				    <td><a class="btn btn-warning" href="setting.php?section=right&id={$value->getId()}"><i class="icon-white icon-ok-circle"></i></a>
+				    	<a class="btn btn-danger" href="setting.php?section=access&id_rank={$value->getId()}"><i class="icon-edit icon-white"></i></a>
 				    	<a class="btn btn-danger" href="action.php?action=access_delete_rank&id={$value->getId()}"><i class="icon-remove icon-white"></i></a></td>
 			    </tr>
 			    {/loop}
@@ -78,9 +79,11 @@
 	    <tr>
 	    	<th>Section</th>
 		    <th>Ajout</th>
-		    <th>Modification</th>
-		    <th>Supression</th>
 		    <th>Consultation</th>
+		    <th>Modification</th>  
+		    <th>Suppression</th>
+		    
+		    
 		    <th></th>
 	    </tr>
 	    </thead>
@@ -136,12 +139,12 @@
 		<div class="span9 userBloc">
 		<h1>Utilisateurs</h1>
 		<p>Gestion des utilisateurs du programme</p>  
-		<form action="action.php?action=user_add_user" method="POST">
+		<form action="{$action}" method="POST">
 		<fieldset>
-		    <legend>Ajout d'un utilisateur</legend>
+		    <legend>{$addormodify_text}</legend>
 		    <div class="left">
 			    <label for="loginUser">Identifiant</label>
-			    <input type="text" id="loginUser" name="loginUser"  placeholder="Identifiant utilisateur…"/>
+			    <input {if="isset($login)"}value="{$login}"{/if} type="text" id="loginUser" name="loginUser"  placeholder="Identifiant utilisateur…"/>
 			    <label for="passwordUser">Mot de passe</label>
 			    <input type="password" name="passwordUser" id="passwordUser" />
 
@@ -149,30 +152,31 @@
 		    
 		    <div class="left marginLeftMedium">
 			    <label for="nameUser">Nom</label>
-			    <input type="text" id="nameUser" name="nameUser"  placeholder="Nom"/>
+			    <input {if="isset($lastname)"}value="{$lastname}"{/if} type="text" id="nameUser" name="nameUser"  placeholder="Nom"/>
 			    <label for="firstNameUser">Prenom</label>
-			    <input type="text" id="firstNameUser" name="firstNameUser"  placeholder="Prenom"/>
+			    <input {if="isset($firstname)"}value="{$firstname}"{/if} type="text" id="firstNameUser" name="firstNameUser"  placeholder="Prenom"/>
   			</div>
 
   			 <div class="left marginLeftMedium">
   			 	<label for="mailUser">E-mail</label>
-			    <input type="text" id="mailUser" name="mailUser"  placeholder="Email"/>
+			    <input {if="isset($email)"}value="{$email}"{/if} type="text" id="mailUser" name="mailUser"  placeholder="Email"/>
 			    <label for="rankUser">Rang</label>
 			    <select type="text" id="rankUser" name="rankUser">
 			    	{loop="ranks"}
-			    	<option value="{$value->getId()}">{$value->getLabel()}</option>
+			    	<option {if="($userrank==$value->getId())"}selected{/if} value="{$value->getId()}">{$value->getLabel()}</option>
 			    	{/loop}
 			    </select>
   			</div>
 
   			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
+		    <br/><button type="submit" class="btn">{$addormodify_buttontext}</button>
 	  	</fieldset>
 		<br/>
 	</form>
 		<table class="table table-striped table-bordered table-hover">
 	    <thead>
 	    <tr>
+	    	<th>Login</th>
 	    	<th>Utilisateur</th>
 		    <th>Email</th>
 		    <th>Rang</th>
@@ -182,12 +186,14 @@
 	    
 	    {loop="$users"}
 	    <tr>
+	    	<td>{$value->getLogin()}</td>
 	    	<td style="width:100px">{function="Functions::truncate($value->getFullName(),20)"}</td>
 		    <td><a href="mailto:{$value->getMail()}">{$value->getMail()}</a></td>
 		    <td>{$ranksLabel[$value->getRank()]}</td>
 		    <td>
 		    	{if="$value->getId()!='' && $myUser->can('user','d')"}
 					<a href="action.php?action=delete_user&amp;id={$value->getId()}" class="btn btn-danger"><i class="icon-remove icon-white"></i></a>
+					<a class="btn btn-danger" href="setting.php?section=user&id_user={$value->getId()}"><i class="icon-edit icon-white"></i></a></td>
 		    	{/if}
 		    </td>
 	    </tr>

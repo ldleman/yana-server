@@ -1,2 +1,2 @@
 database.db
-cache/tmp
+*.rtpl.php

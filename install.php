@@ -54,6 +54,9 @@ function __autoload($class_name) {
 
 <?php
 if(isset($_POST['install'])){
+
+  if(is_writable("install.php"))
+  {
 	$user = new User();
 	$configuration = new Configuration();
 	$right = new Right();
@@ -136,6 +139,19 @@ if(isset($_POST['install'])){
 	Plugin::enabled('relay-relay');
 	Plugin::enabled('vocal_infos-vocal_infos');
 	Plugin::enabled('room-room');
+  }
+  else
+  {
+    ?>
+    <div id="body" class="container">
+    <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Echec de l'Installation : </strong>Vous n'avez pas la permission d'écrire sur le serveur web! (avez vous fait <code>chown -R www-data:www-data /var/www/yana-server </code>?) <a class="brand" href="install.php">Réessayer</a>.
+  </div>
+    <?
+    exit();
+
+  }
 	?>
 	 <div id="body" class="container">
     <div class="alert alert-info">
