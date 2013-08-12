@@ -10,6 +10,37 @@ switch(@$_['section']){
 	break;
 
 	case 'user':
+
+	//Gestion de la modification des utilisateurs
+		if (isset($_['id_user'])){
+			$usersManager = new User();
+			$id_mod = $_['id_user'];
+			$selected = $usersManager->getById($id_mod);
+			$addormodify_text = $selected->GetFirstName()." ".$selected->GetName();
+			$action = "action.php?action=user_mod_user&id_user=".$id_mod;
+			$addormodify_buttontext = "Modifier";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+
+			$tpl->assign('login',$selected->getLogin());
+			$tpl->assign('firstname',$selected->getFirstName());
+			$tpl->assign('lastname',$selected->getName());
+			$tpl->assign('email',$selected->getMail());
+			$tpl->assign('userrank',$selected->getRank());
+		}
+		else
+		{
+			$addormodify_text =  "Ajout d'un utilisateur";
+			$action = "action.php?action=user_add_user";
+			$addormodify_buttontext = "Ajouter";
+			$tpl->assign('addormodify_text',$addormodify_text);
+			$tpl->assign('action',$action);
+			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+			$tpl->assign('userrank','');
+		}
+
+
 		$users = User::getAllUsers();
 		$ranks = new Rank();
 		$ranks = $ranks->populate();

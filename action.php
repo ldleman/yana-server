@@ -63,6 +63,23 @@ switch ($_['action']){
 		header('location:setting.php?section=user');
 	break;
 
+	case 'user_mod_user':
+		if(!$myUser->can('user','u')) exit('ERREUR: Permissions insuffisantes.');
+
+				$user = new User();
+				$user->change(array(
+					'login'=> $_['loginUser'],
+					'password'=> sha1(md5($_['passwordUser'])),
+					'name'=> $_['nameUser'],
+					'firstname'=> $_['firstNameUser'],
+					'mail'=> $_['mailUser'],
+					'rank'=> $_['rankUser']
+					),
+					array('id'=>$_['id_user'])
+					);
+		header('location:setting.php?section=user');
+	break;
+
 	case 'delete_user':
 		if(!$myUser->can('user','d')) exit('ERREUR: Permissions insuffisantes.');
 		$userManager = new User();

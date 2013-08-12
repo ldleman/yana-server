@@ -138,12 +138,12 @@
 		<div class="span9 userBloc">
 		<h1>Utilisateurs</h1>
 		<p>Gestion des utilisateurs du programme</p>  
-		<form action="action.php?action=user_add_user" method="POST">
+		<form action="{$action}" method="POST">
 		<fieldset>
-		    <legend>Ajout d'un utilisateur</legend>
+		    <legend>{$addormodify_text}</legend>
 		    <div class="left">
 			    <label for="loginUser">Identifiant</label>
-			    <input type="text" id="loginUser" name="loginUser"  placeholder="Identifiant utilisateur…"/>
+			    <input {if="isset($login)"}value="{$login}"{/if} type="text" id="loginUser" name="loginUser"  placeholder="Identifiant utilisateur…"/>
 			    <label for="passwordUser">Mot de passe</label>
 			    <input type="password" name="passwordUser" id="passwordUser" />
 
@@ -151,30 +151,31 @@
 		    
 		    <div class="left marginLeftMedium">
 			    <label for="nameUser">Nom</label>
-			    <input type="text" id="nameUser" name="nameUser"  placeholder="Nom"/>
+			    <input {if="isset($lastname)"}value="{$lastname}"{/if} type="text" id="nameUser" name="nameUser"  placeholder="Nom"/>
 			    <label for="firstNameUser">Prenom</label>
-			    <input type="text" id="firstNameUser" name="firstNameUser"  placeholder="Prenom"/>
+			    <input {if="isset($firstname)"}value="{$firstname}"{/if} type="text" id="firstNameUser" name="firstNameUser"  placeholder="Prenom"/>
   			</div>
 
   			 <div class="left marginLeftMedium">
   			 	<label for="mailUser">E-mail</label>
-			    <input type="text" id="mailUser" name="mailUser"  placeholder="Email"/>
+			    <input {if="isset($email)"}value="{$email}"{/if} type="text" id="mailUser" name="mailUser"  placeholder="Email"/>
 			    <label for="rankUser">Rang</label>
 			    <select type="text" id="rankUser" name="rankUser">
 			    	{loop="ranks"}
-			    	<option value="{$value->getId()}">{$value->getLabel()}</option>
+			    	<option {if="($userrank==$value->getId())"}selected{/if} value="{$value->getId()}">{$value->getLabel()}</option>
 			    	{/loop}
 			    </select>
   			</div>
 
   			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
+		    <br/><button type="submit" class="btn">{$addormodify_buttontext}</button>
 	  	</fieldset>
 		<br/>
 	</form>
 		<table class="table table-striped table-bordered table-hover">
 	    <thead>
 	    <tr>
+	    	<th>Login</th>
 	    	<th>Utilisateur</th>
 		    <th>Email</th>
 		    <th>Rang</th>
@@ -184,12 +185,14 @@
 	    
 	    {loop="$users"}
 	    <tr>
+	    	<td>{$value->getLogin()}</td>
 	    	<td style="width:100px">{function="Functions::truncate($value->getFullName(),20)"}</td>
 		    <td><a href="mailto:{$value->getMail()}">{$value->getMail()}</a></td>
 		    <td>{$ranksLabel[$value->getRank()]}</td>
 		    <td>
 		    	{if="$value->getId()!='' && $myUser->can('user','d')"}
 					<a href="action.php?action=delete_user&amp;id={$value->getId()}" class="btn btn-danger"><i class="icon-remove icon-white"></i></a>
+					<a class="btn btn-danger" href="setting.php?section=user&id_user={$value->getId()}"><i class="icon-edit icon-white"></i></a></td>
 		    	{/if}
 		    </td>
 	    </tr>
