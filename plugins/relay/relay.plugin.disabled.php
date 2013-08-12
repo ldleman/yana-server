@@ -175,7 +175,6 @@ function radioRelay_action_radioRelay(){
 	switch($_['action']){
 		case 'radioRelay_delete_radioRelay':
 			if($myUser->can('radio relais','d')){
-				print_r($myUser);
 				$radioRelayManager = new RadioRelay();
 				$radioRelayManager->delete(array('id'=>$_['id']));
 				header('location:setting.php?section=radioRelay');
