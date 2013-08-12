@@ -23,16 +23,16 @@
 				<h1>Rangs</h1>
 				<p>Gestion des rangs du programme</p>  
 
-				<form action="action.php?action=access_add_rank" method="POST">
+				<form action="{$action}" method="POST">
 				<fieldset>
-				    <legend>Ajout d'un rang</legend>
+				    <legend>{$addormodify_text}</legend>
 
 					    <label for="labelRank">Libellé</label>
-					    <input type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
+					    <input {if="isset($label_rank)"}value="{$label_rank}"{/if} type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
 					    <label for="descriptionRank">Description</label>
-					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" ></textarea>
+					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
 		  				<div class="clear"></div>
-				    	<br/><button type="submit" class="btn">Ajouter</button>
+				    	<br/><button type="submit" class="btn">{$addormodify_buttontext}</button>
 			  	</fieldset>
 				<br/>
 			</form>
@@ -50,7 +50,8 @@
 			    <tr>
 			    	<td>{$value->getLabel()}</td>
 				    <td>{$value->getDescription()}</td>
-				    <td><a class="btn" href="setting.php?section=right&id={$value->getId()}"><i class="icon-ok-circle"></i></a>
+				    <td><a class="btn btn-warning" href="setting.php?section=right&id={$value->getId()}"><i class="icon-white icon-ok-circle"></i></a>
+				    	<a class="btn btn-danger" href="setting.php?section=access&id_rank={$value->getId()}"><i class="icon-edit icon-white"></i></a>
 				    	<a class="btn btn-danger" href="action.php?action=access_delete_rank&id={$value->getId()}"><i class="icon-remove icon-white"></i></a></td>
 			    </tr>
 			    {/loop}
