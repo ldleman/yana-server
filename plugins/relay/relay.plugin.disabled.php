@@ -168,14 +168,23 @@ function radioRelay_vocal_command(&$response,$actionUrl){
 
 function radioRelay_action_radioRelay(){
 	global $_,$conf,$myUser;
+	
+	//Erreur dans les droits sinon!
+	$myUser->loadRight();
 
 	switch($_['action']){
 		case 'radioRelay_delete_radioRelay':
 			if($myUser->can('radio relais','d')){
+				print_r($myUser);
 				$radioRelayManager = new RadioRelay();
 				$radioRelayManager->delete(array('id'=>$_['id']));
+				header('location:setting.php?section=radioRelay');
 			}
-			header('location:setting.php?section=radioRelay');
+			else
+			{
+				header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
+			}
+			
 		break;
 		case 'radioRelay_plugin_setting':
 			$conf->put('plugin_radioRelay_emitter_pin',$_['emiterPin']);
@@ -184,7 +193,7 @@ function radioRelay_action_radioRelay(){
 		break;
 
 		case 'radioRelay_mod_radioRelay':
-			if($myUser->can('radio relais','c')){
+			if($myUser->can('radio relais','u')){
 				$radioRelay = new RadioRelay();
 				$radioRelay->change(array(
 					'name'=> $_['nameRadioRelay'],
@@ -194,8 +203,12 @@ function radioRelay_action_radioRelay(){
 					),
 					array('id'=>$_['id'])
 					);
+				header('location:setting.php?section=radioRelay');
 			}
-			header('location:setting.php?section=radioRelay');
+			else
+			{
+				header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
+			}
 
 		break;
 
@@ -207,8 +220,14 @@ function radioRelay_action_radioRelay(){
 				$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
 				$radioRelay->setRoom($_['roomRadioRelay']);
 				$radioRelay->save();
+				header('location:setting.php?section=radioRelay');
 			}
-			header('location:setting.php?section=radioRelay');
+			else
+			{
+				header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
+			}
+
+			
 		break;
 
 		case 'radioRelay_change_state':

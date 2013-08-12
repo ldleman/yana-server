@@ -9,7 +9,7 @@
 @description Modele de plugin pour les modules
 */
 
- include('Room.class.php');
+include('Room.class.php');
 
 function room_plugin_menu(&$menuItems){
 	global $_;
@@ -21,36 +21,36 @@ function room_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='room'){
 		$roomManager = new Room();
 		$rooms = $roomManager->populate();
-	?>
-
-
-<div class="row">
-	<div class="span12">
-	<ul class="nav nav-tabs">
-		<?php foreach($rooms as $room){ ?>
-	      <li <?php echo (isset($_['id']) && $room->getId()==$_['id']?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
-	      <?php } ?>
-	</ul>
-
-	</div>
-	</div>
-	<div class="row">
-
-	<div class="span12">
-	
-		<?php 
-
-		if(isset($_['id'])){
-			$room = $roomManager->getById($_['id']);
-			Plugin::callHook("node_display", array($room));
-		}
 		?>
-	
-	</div>
-</div>
 
 
-<?php
+		<div class="row">
+			<div class="span12">
+				<ul class="nav nav-tabs">
+					<?php foreach($rooms as $room){ ?>
+					<li <?php echo (isset($_['id']) && $room->getId()==$_['id']?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
+					<?php } ?>
+				</ul>
+
+			</div>
+		</div>
+		<div class="row">
+
+			<div class="span12">
+
+				<?php 
+
+				if(isset($_['id'])){
+					$room = $roomManager->getById($_['id']);
+					Plugin::callHook("node_display", array($room));
+				}
+				?>
+
+			</div>
+		</div>
+
+
+		<?php
 	}
 }
 
@@ -69,96 +69,142 @@ function room_plugin_setting_page(){
 		if($myUser!=false){
 			$roomManager = new Room();
 			$rooms = $roomManager->populate();
-	?>
 
-		<div class="span9 userBloc">
+			if (isset($_['id'])){
+				$id_mod = $_['id'];
+				$selected = $roomManager->getById($id_mod);
+				$addormodify_text = $selected->GetName();
+				$action = "action.php?action=room_mod_room&id=".$id_mod;
+				$addormodify_buttontext = "Modifier";
+			}
+			else
+			{
+				$addormodify_text =  "Ajout d'une pièce";
+				$action = "action.php?action=room_add_room";
+				$addormodify_buttontext = "Ajouter";
+			} 
+
+			?>
+
+			<div class="span9 userBloc">
 
 
-		<h1>Pièces</h1>
-		<p>Gestion des pièces</p>  
+				<h1>Pièces</h1>
+				<p>Gestion des pièces</p>  
 
-		<form action="action.php?action=room_add_room" method="POST">
-		<fieldset>
-		    <legend>Ajout d'une pièce</legend>
+				<form action="<? echo "$action" ?>" method="POST"> 
+					<fieldset>
+						<legend><? echo $addormodify_text ?></legend>
 
-		    <div class="left">
-			    <label for="nameRoom">Nom</label>
-			    <input type="text" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
-			    <label for="descriptionRoom">Description</label>
-			    <input type="text" name="descriptionRoom" id="descriptionRoom" />
-			</div>
+						<div class="left">
+							<label for="nameRoom">Nom</label>
+							<input type="text" value="<? if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
+							<label for="descriptionRoom">Description</label>
+							<input type="text" value="<? if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
+						</div>
 
-  			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
-	  	</fieldset>
-		<br/>
-	</form>
+						<div class="clear"></div>
+						<br/><button type="submit" class="btn"><? echo $addormodify_buttontext; ?></button
+					</fieldset>
+					<br/>
+				</form>
 
-		<table class="table table-striped table-bordered table-hover">
-	    <thead>
-	    <tr>
-	    	<th>Nom</th>
-		    <th>Description</th>
-	    </tr>
-	    </thead>
-	    
-	    <?php foreach($rooms as $room){ ?>
-	    <tr>
-	    	<td><?php echo $room->getName(); ?></td>
-		    <td><?php echo $room->getDescription(); ?></td>
-		    <td><a class="btn" href="action.php?action=room_delete_room&id=<?php echo $room->getId(); ?>"><i class="icon-remove"></i></a></td>
-	    </tr>
-	    <?php } ?>
-	    </table>
-		</div>
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Description</th>
+							<th></th> 
+						</tr>
+					</thead>
 
-<?php }else{ ?>
+					<?php foreach($rooms as $room){ ?>
+					<tr>
+						<td><?php echo $room->getName(); ?></td>
+						<td><?php echo $room->getDescription(); ?></td>
+						<td><a class="btn" href="action.php?action=room_delete_room&id=<?php echo $room->getId(); ?>"><i class="icon-remove"></i></a>
+							<a class="btn" href="setting.php?section=room&id=<?php echo $room->getId(); ?>"><i class="icon-edit"></i></a></td>
+						</tr>
+						<?php } ?>
+					</table>
+				</div>
 
-		<div id="main" class="wrapper clearfix">
-			<article>
-					<h3>Vous devez être connecté</h3>
-			</article>
-		</div>
-<?php
+				<?php }else{ ?>
+
+				<div id="main" class="wrapper clearfix">
+					<article>
+						<h3>Vous devez être connecté</h3>
+					</article>
+				</div>
+				<?php
+			}
+		}
+
+	}
+
+	function room_action_room(){
+		global $_,$myUser;
+
+		//Erreur dans les droits sinon!
+		$myUser->loadRight();
+
+		switch($_['action']){
+			case 'room_mod_room':
+			if($myUser->can('room','u')){
+				$room = new Room();
+				$room->change(array(
+					'name'=> $_['nameRoom'],
+					'description'=> $_['descriptionRoom']
+					),
+				array('id'=>$_['id'])
+				);
+				header('location:setting.php?section=room');
+			}
+						else
+			{
+				header('location:setting.php?section=room&error=Vous n\'avez pas le droit de faire ça!');
+			}
+			
+			break;
+
+			case 'room_add_room':
+			if($myUser->can('room','c')){
+				$room = new Room();
+				$room->setName($_['nameRoom']);
+				$room->setDescription($_['descriptionRoom']);
+				$room->save();
+			header('location:setting.php?section=room');	
+			}
+						else
+			{
+				header('location:setting.php?section=room&error=Vous n\'avez pas le droit de faire ça!');
+			}
+			
+			break;
+
+			case 'room_delete_room':
+			if($myUser->can('room','d')){
+				$roomManager = new Room();
+				$roomManager->delete(array('id'=>$_['id']));
+				header('location:setting.php?section=room');
+			}
+			else
+			{
+				header('location:setting.php?section=room&error=Vous n\'avez pas le droit de faire ça!');
+			}
+
+			break;
+
 		}
 	}
 
 
+		Plugin::addCss("/css/style.css"); 
 
+		Plugin::addHook("setting_menu", "room_plugin_setting_menu");  
+		Plugin::addHook("setting_bloc", "room_plugin_setting_page"); 
+		Plugin::addHook("action_post_case", "room_action_room"); 
 
-
-}
-
-
-
-
-function room_delete_room(){
-	global $_;
-	if($_['action']=='room_delete_room'){
-		$roomManager = new Room();
-		$roomManager->delete(array('id'=>$_['id']));
-		header('location:setting.php?section=room');
-	}
-}
-function room_add_room(){
-	global $_;
-	if($_['action']=='room_add_room'){
-		$room = new Room();
-		$room->setName($_['nameRoom']);
-		$room->setDescription($_['descriptionRoom']);
-		$room->save();
-		header('location:setting.php?section=room');
-	}
-}
-
-Plugin::addCss("/css/style.css"); 
-//Plugin::addJs("/js/main.js"); 
-
-Plugin::addHook("setting_menu", "room_plugin_setting_menu");  
-Plugin::addHook("setting_bloc", "room_plugin_setting_page"); 
-Plugin::addHook("action_post_case", "room_delete_room"); 
-Plugin::addHook("action_post_case", "room_add_room"); 
-
-Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
-Plugin::addHook("home", "room_plugin_page");  
-?>
+		Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
+		Plugin::addHook("home", "room_plugin_page");  
+		?>
