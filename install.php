@@ -54,8 +54,10 @@ function __autoload($class_name) {
 
 <?php
 if(isset($_POST['install'])){
+  //On récupère le chemin de yana
+  $path_yana =  substr($_SERVER['SCRIPT_FILENAME'],0,-11);
 
-  if(is_writable("install.php"))
+  if(is_writable($path_yana))
   {
 	$user = new User();
 	$configuration = new Configuration();
@@ -146,7 +148,7 @@ if(isset($_POST['install'])){
     <div id="body" class="container">
     <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Echec de l'Installation : </strong>Vous n'avez pas la permission d'écrire sur le serveur web! (avez vous fait <code>chown -R www-data:www-data /var/www/yana-server </code>?) <a class="brand" href="install.php">Réessayer</a>.
+    <strong>Echec de l'Installation : </strong>Vous n'avez pas la permission d'écrire sur le serveur web! (avez vous fait <code>chown -R www-data:www-data <?echo $path_yana;?></code>?) <a class="brand" href="install.php">Réessayer</a>.
   </div>
     <?
     exit();
@@ -157,7 +159,7 @@ if(isset($_POST['install'])){
     <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Installation terminée: </strong> L'installation est terminée, vous pouvez supprimer ce fichier, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
-  </div>
+  </div> 
 	<?php
 }else{
 	?>
