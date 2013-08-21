@@ -70,18 +70,17 @@ function room_plugin_setting_page(){
 			$roomManager = new Room();
 			$rooms = $roomManager->populate();
 
+	//Gestion des modifications
 			if (isset($_['id'])){
 				$id_mod = $_['id'];
 				$selected = $roomManager->getById($id_mod);
-				$addormodify_text = $selected->GetName();
-				$action = "action.php?action=room_mod_room&id=".$id_mod;
-				$addormodify_buttontext = "Modifier";
+				$description = $selected->GetName();
+				$button = "Modifier";
 			}
 			else
 			{
-				$addormodify_text =  "Ajout d'une pièce";
-				$action = "action.php?action=room_add_room";
-				$addormodify_buttontext = "Ajouter";
+				$description =  "Ajout d'une pièce";
+				$button = "Ajouter";
 			} 
 
 			?>
@@ -92,19 +91,20 @@ function room_plugin_setting_page(){
 				<h1>Pièces</h1>
 				<p>Gestion des pièces</p>  
 
-				<form action="<? echo "$action" ?>" method="POST"> 
+				<form action="action.php?action=room_add_room" method="POST"> 
 					<fieldset>
-						<legend><? echo $addormodify_text ?></legend>
+						<legend><? echo $description ?></legend>
 
 						<div class="left">
 							<label for="nameRoom">Nom</label>
+							<? if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" value="<? if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
 							<label for="descriptionRoom">Description</label>
 							<input type="text" value="<? if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
 						</div>
 
 						<div class="clear"></div>
-						<br/><button type="submit" class="btn"><? echo $addormodify_buttontext; ?></button
+						<br/><button type="submit" class="btn"><? echo $button; ?></button>
 					</fieldset>
 					<br/>
 				</form>
@@ -149,27 +149,12 @@ function room_plugin_setting_page(){
 		$myUser->loadRight();
 
 		switch($_['action']){
-			case 'room_mod_room':
-			if($myUser->can('room','u')){
-				$room = new Room();
-				$room->change(array(
-					'name'=> $_['nameRoom'],
-					'description'=> $_['descriptionRoom']
-					),
-				array('id'=>$_['id'])
-				);
-				header('location:setting.php?section=room');
-			}
-						else
-			{
-				header('location:setting.php?section=room&error=Vous n\'avez pas le droit de faire ça!');
-			}
-			
-			break;
 
 			case 'room_add_room':
-			if($myUser->can('room','c')){
+			$right_toverify = isset($_['id']) ? 'u' : 'c';
+			if($myUser->can('room',$right_toverify)){
 				$room = new Room();
+				if ($right_toverify == "u"){$room = $room->load(array("id"=>$_['id']));}
 				$room->setName($_['nameRoom']);
 				$room->setDescription($_['descriptionRoom']);
 				$room->save();
