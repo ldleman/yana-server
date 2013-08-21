@@ -8,7 +8,7 @@
 
 class User extends SQLiteEntity{
 
-	protected $id,$login,$password,$name,$firstname,$mail,$state,$groups,$rank,$rights,$phone,$token;
+	protected $id,$login,$password,$name,$firstname,$mail,$state,$groups,$rank,$rights,$phone,$token,$cookie;
 	protected $TABLE_NAME = 'user';
 	protected $CLASS_NAME = 'User';
 	protected $object_fields = 
@@ -21,7 +21,8 @@ class User extends SQLiteEntity{
 		'mail'=>'string',
 		'rank'=>'int',
 		'token'=>'string',
-		'state'=>'int'
+		'state'=>'int',
+		'cookie'=>'string'
 	);
 
 	function __construct(){
@@ -179,6 +180,14 @@ class User extends SQLiteEntity{
 
 	function getToken(){
 		return $this->token;
+	}
+
+	function setCookie($cookie){
+		$this->cookie = $cookie;
+	}
+
+	function getCookie(){
+		return $this->cookie;
 	}
 
 

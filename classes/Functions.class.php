@@ -110,19 +110,12 @@ class Functions
 		return $return;
 	}
 
-	public static function makeCookie($name, $value, $expire='') {
-		if($expire == '') {
-			setcookie($name, $value, mktime(0,0,0, date("d"),
-			date("m"), (date("Y")+1)),'/');
-		}else {
-			setcookie($name, '', mktime(0,0,0, date("d"),
-			date("m"), (date("Y")-1)),'/');
-		}
+	public static function makeCookie($name, $value,$expire) {
+			setcookie($name,$value,$expire,'/');
 	}
 
 	public static function destroyCookie($name){
-		Fonction::makeCookie($name,'',time()-3600);
-		unset($_COOKIE[$name]);
+		setcookie(COOKIE_NAME, "", time()-3600,"/");
 	}
 
 	public static function convertFileSize($bytes)

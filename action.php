@@ -25,7 +25,6 @@ $myUser = (!$myUser?new User():$myUser);
 //Execution du code en fonction de l'action
 switch ($_['action']){
 	case 'login':
-	
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '';
 	if($user==false){
@@ -34,11 +33,14 @@ switch ($_['action']){
 		$_SESSION['currentUser'] = serialize($user);
 	}
 
-	if(isset($_['rememberMe'])){
-		setcookie(COOKIE_NAME, $user->coockie(), mktime(0,0,0, date("d"),date("m"), (date("Y")+1)),'/');
+	if(isset($_['rememberMe'])){	
+		$expire_time = time() + COOKIE_LIFETIME*86400; //Jour en secondes
+		$cookie_token = sha1(time().rand(0,1000));
+		$user->setCookie($cookie_token);
+		$user->save();
+		Functions::makeCookie(COOKIE_NAME,$cookie_token,$expire_time);
 	}
-
-
+	
 	header('location: ./index.php'.$error);	
 	break;
 
@@ -173,9 +175,14 @@ switch ($_['action']){
 	break;
 
 	case 'logout':
+	$user = new User();
+	$user = $userManager->load(array("id"=>$myUser->getId()));
+	$user->setCookie("");
+	$user->save();
 	$_SESSION = array();
 	session_unset();
 	session_destroy();
+	Functions::destroyCookie(COOKIE_NAME);
 	header('location: ./index.php');
 	break;
 
