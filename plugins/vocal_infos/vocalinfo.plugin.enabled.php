@@ -71,6 +71,23 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'command'=>VOCAL_ENTITY_NAME.' diagnostique des G.P.I.O',
 		'url'=>$actionUrl.'?action=vocalinfo_gpio_diag','confidence'=>'0.88'
 		);
+
+
+	/*
+
+	$preAction =  array('responses'=>array(
+										array('type'=>'talk','sentence'=>'Emails en cours de traitement, merci de patienter')
+											)
+								);
+
+	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' check mes mails',
+		'preAction'=>$preAction,
+		'url'=>$actionUrl.'?action=check_mail_read','confidence'=>'0.88'
+		);
+	*/
+
+
 }
 
 function vocalinfo_action(){
