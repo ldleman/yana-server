@@ -55,77 +55,52 @@ function __autoload($class_name) {
 <?php
 if(isset($_POST['install'])){
 
+
+
   if(is_writable("install.php"))
   {
+
+  //Instanciation des managers d'entités
 	$user = new User();
 	$configuration = new Configuration();
 	$right = new Right();
 	$rank = new Rank();
 	$section = new Section();
+  $event = new Event();
 
+  //Création des tables SQL
 	$configuration->create();
 	$user->create();
 	$right->create();
 	$rank->create();
 	$section->create();
+  $event->create();
 
+  //Création du rang admin
 	$rank = new Rank();
 	$rank->setLabel('admin');
 	$rank->save();
 
-	$s1 = New Section();
-	$s1->setLabel('configuration');
-	$s1->save();	
+  //Déclaration des sections du programme
+  $sections = array('event','vocal','user','plugin','configuration','admin');
 
-	$s2 = New Section();
-	$s2->setLabel('plugin');
-	$s2->save();	
+  //Création des sections déclarées et attribution de tous les droits sur toutes ces sections pour l'admin
+  foreach($sections as $sectionName){
+    $s = New Section();
+    $s->setLabel($sectionName);
+    $s->save();  
 
-	$s3 = New Section();
-	$s3->setLabel('user');
-	$s3->save();
-
-
-  $s4 = New Section();
-  $s4->setLabel('vocal');
-  $s4->save();  
-
-	$r1 = New Right();
-	$r1->setSection('1');
-	$r1->setRead('1');
-	$r1->setDelete('1');
-	$r1->setCreate('1');
-	$r1->setUpdate('1');
-	$r1->setRank('1');
-	$r1->save();
-
-	$r2 = New Right();
-	$r2->setSection('2');
-	$r2->setRead('1');
-	$r2->setDelete('1');
-	$r2->setCreate('1');
-	$r2->setUpdate('1');
-	$r2->setRank('1');
-	$r2->save();
-
-	$r3 = New Right();
-	$r3->setSection('3');
-	$r3->setRead('1');
-	$r3->setDelete('1');
-	$r3->setCreate('1');
-	$r3->setUpdate('1');
-	$r3->setRank('1');
-	$r3->save();
-
-  $r4 = New Right();
-  $r4->setSection('4');
-  $r4->setRead('1');
-  $r4->setDelete('1');
-  $r4->setCreate('1');
-  $r4->setUpdate('1');
-  $r4->setRank('1');
-  $r4->save();
-								
+  	$r = New Right();
+  	$r->setSection($s->getId());
+  	$r->setRead('1');
+  	$r->setDelete('1');
+  	$r->setCreate('1');
+  	$r->setUpdate('1');
+  	$r->setRank($rank->getId());
+  	$r->save();
+  }
+	
+  //Creation du premier compte et assignation en admin
 	$user->setMail($_POST['email']);
 	$user->setName($_POST['name']);
 	$user->setFirstName($_POST['firstname']);
@@ -133,7 +108,7 @@ if(isset($_POST['install'])){
 	$user->setLogin($_POST['login']);
 	$user->setToken(sha1(time().rand(0,1000)));
 	$user->setState(1);
-	$user->setRank(1);
+	$user->setRank($rank->getId());
 	$user->save();
 
 	Plugin::enabled('relay-relay');
@@ -233,7 +208,7 @@ if(isset($_POST['install'])){
     <script src="templates/default/js/jquery.min.js"></script>
     <script src="templates/default/js/bootstrap.min.js"></script>
     <script src="templates/default/js/jquery.ui.custom.min.js"></script>
-    <script src="templates/default/js/jquery.sys1.js"></script>
+    <script src="templates/default/js/jquery.yana.js"></script>
 	<script src="templates/default/js/script.js"></script>
   </body>
 </html>
