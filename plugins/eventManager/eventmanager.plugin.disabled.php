@@ -48,7 +48,7 @@ function eventmanager_action(){
 					break;
 				}
 
-				$event->setContent($content);
+				$event->setContent($content[0]);
 				$event->setRecipients('all'); //@TODO
 
 				$event->save();
@@ -110,13 +110,13 @@ function eventmanager_plugin_page($_){
 				    	<span class="span6">
 						 
 							    <label for="eventName">Nom</label>
-							    <input class="input-xxlarge" type="text" id="eventName" value="<? echo $currentEvent->getName(); ?>"  name="eventName" placeholder="Signale un aniverssaire…"/>
+							    <input class="input-xxlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="Signale un aniverssaire…"/>
 						
 						</span>
 						<span class="span2">
 						<?php 
 								$content = $currentEvent->getContent();
-								$action = $content[0];
+								$action = $content;
 							?>
 						    <label for="eventType">Action</label>
 						    <select class="input-medium" name="eventType">
@@ -171,7 +171,7 @@ function eventmanager_plugin_page($_){
 
 						<span class="span3">
 							<label for="eventYear">Année (taper * pour toutes)</label>
-						    <input class="input-medium" type="text" value="<? echo $currentEvent->getYear(); ?>" name="eventYear" id="eventYear" placeholder="1988" />
+						    <input class="input-medium" type="text" value="<?php echo $currentEvent->getYear(); ?>" name="eventYear" id="eventYear" placeholder="1988" />
 						</span>
 						
 						
@@ -194,7 +194,7 @@ function eventmanager_plugin_page($_){
 						    }
 						    ?></textarea>
 							
-							<input  type="hidden" name="eventId" value="<? echo $currentEvent->getId(); ?>" >
+							<input  type="hidden" name="eventId" value="<?php echo $currentEvent->getId(); ?>" >
 						</span>
 					</span>
 
@@ -221,7 +221,7 @@ function eventmanager_plugin_page($_){
 			    	$events = $eventManager->populate();
 			    	foreach($events as $event){ 
 			    		$action = $event->getContent();
-			    		$action = $action[0];
+			    		//$action = $action[0];
 			    	?>
 			    <tr>
 			    	<td><?php echo $event->getName(); ?></td>
