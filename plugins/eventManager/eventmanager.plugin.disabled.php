@@ -110,7 +110,7 @@ function eventmanager_plugin_page($_){
 				    	<span class="span6">
 						 
 							    <label for="eventName">Nom</label>
-							    <input class="input-xxlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="Signale un aniverssaire…"/>
+							    <input class="input-xxlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="ex : Signale un anniversaire"/>
 						
 						</span>
 						<span class="span2">
