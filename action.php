@@ -213,7 +213,8 @@ else
 
 
 	case 'GET_SPEECH_COMMAND':
-	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions"}');
+	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
+	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
 	$actionUrl = 'http://'.$_SERVER['SERVER_ADDR'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
 	$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
 	
@@ -225,9 +226,39 @@ else
 
 
 	case 'GET_EVENT':
-	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions"}');
+	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
+	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
 	$response = array('responses'=>array());
 	Plugin::callHook("get_event", array(&$response));
+
+	$eventManager = new Event();
+	$events = $eventManager->loadAll(array(),'id');
+	
+
+	$time = date('i-H-d-m-Y');
+	list($minut,$hour,$day,$month,$year) = explode('-',$time);
+
+	foreach ($events as $event) {
+
+		if( 
+		($event->getMinut() == '*' || in_array($minut,explode(',',$event->getMinut())) ) &&
+		($event->getHour() == '*' || in_array($hour,explode(',',$event->getHour())) ) &&
+		($event->getDay()== '*' || in_array($day,explode(',',$event->getDay())) ) &&
+		($event->getMonth() == '*' || in_array($month,explode(',',$event->getMonth())) ) &&
+		($event->getYear() == '*' || in_array($year,explode(',',$event->getYear())) ) 
+		){
+			
+			if($event->getRepeat()!=$time){
+				$event->setRepeat($time);
+				$response['responses'][]= $event->getContent();
+				$event->save();
+			}
+		}
+
+
+	}
+	
+		
 
 	$json = json_encode($response);
 	echo ($json=='[]'?'{}':$json);

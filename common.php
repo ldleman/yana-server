@@ -9,16 +9,21 @@ $start=microtime(true);
 global $myUser,$conf,$_;
 //Récuperation et sécurisation de toutes les variables POST et GET
 $_ = array_map('Functions::secure',array_merge($_POST,$_GET));
-
+$error = '';
 require_once('constant.php');
-require_once('RainTPL.php');
-$error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
-$message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
-if(!file_exists(DB_NAME)){ 
+
+
+if(!file_exists(DB_NAME)){
 	header('location:install.php');
 }else{
 	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
 }
+
+
+require_once('RainTPL.php');
+$error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
+$message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
+
 
 function __autoload($class_name){
     include 'classes/'.$class_name . '.class.php';

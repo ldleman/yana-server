@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 
-	
+	$('.date').date();
 
 	$.getJSON($("#UPDATE_URL").html(),function(data){
     	
