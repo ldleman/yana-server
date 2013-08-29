@@ -78,11 +78,11 @@ switch ($_['action']){
 	$user->setState(1);
 	$user->setToken(sha1(time().rand(0,1000)));
 	$user->save();
-	header('location:setting.php?section=user');
+	Functions::goback("setting","user");
 }
 else
 {
-		header('location:setting.php?section=user&error=Vous n\'avez pas le droit de faire ça!');
+	Functions::goback("setting","user","&error=Vous n'avez pas le droit de faire ça!");
 }
 	break;
 
@@ -93,11 +93,11 @@ else
 
 	if(isset($_['id']) && $NbUsers > 1){
 		$userManager->delete(array('id'=>$_['id']));
-		header('location:setting.php?section=user');
+		Functions::goback("setting","user");
 	}
 	else
 	{
-		header('location:setting.php?section=user&error=Impossible de supprimer le dernier utilisateur.');
+		Functions::goback("setting","user","&error=Impossible de supprimer le dernier utilisateur.");
 	}
 	break;
 
@@ -110,11 +110,12 @@ else
 
 	if(isset($_['id']) && $Nbrank > 1){
 		$rankManager->delete(array('id'=>$_['id']));
+		Functions::goback("setting","access");
 		header('location:setting.php?section=access');
 	}
 	else
 	{
-		header('location:setting.php?section=access&error=Impossible de supprimer le dernier rang.');
+		Functions::goback("setting","access","&error=Impossible de supprimer le dernier rang.");
 	}
 	break;
 
@@ -126,7 +127,7 @@ else
 	$rank->setLabel($_['labelRank']);
 	$rank->setDescription($_['descriptionRank']);
 	$rank->save();
-	header('location:setting.php?section=access');
+	Functions::goback("setting","access");
 	break;
 
 	case 'set_rank_access':
@@ -164,7 +165,7 @@ else
 	case 'access_delete_right':
 	$rankManager = new Right();
 	$rankManager->delete(array('id'=>$_['id']));
-	header('location:setting.php?section=right&id='.$_['rankRight']);
+	Functions::goback("setting","right","&id=".$_['rankRight']);
 	break;
 
 	case 'logout':
@@ -185,7 +186,7 @@ else
 	
 
 
-	header('location: ./index.php');
+	Functions::goback(" ./index.php");
 	break;
 
 
@@ -198,7 +199,7 @@ else
 	}else{
 		Plugin::disabled($_['plugin']);
 	}
-	header('location: ./setting.php?section=plugin');
+	Functions::goback("setting","plugin");
 	break;
 
 	case 'crontab':

@@ -30,7 +30,7 @@ class Functions
 				$ip = $_SERVER['HTTP_CLIENT_IP'];}
 				else{ $ip = $_SERVER['REMOTE_ADDR'];}
 				return $ip;
-	}
+			}
 
 	/**
 	 * Retourne une version tronquée au bout de $limit caracteres de la chaine fournie
@@ -111,7 +111,7 @@ class Functions
 	}
 
 	public static function makeCookie($name, $value,$expire) {
-			setcookie($name,$value,$expire,'/');
+		setcookie($name,$value,$expire,'/');
 	}
 
 	public static function destroyCookie($name){
@@ -120,15 +120,15 @@ class Functions
 
 	public static function convertFileSize($bytes)
 	{
-		 if($bytes<1024){
-		 	return round(($bytes / 1024), 2).' o';
-		 }elseif(1024<$bytes && $bytes<1048576){
-		 	return round(($bytes / 1024), 2).' ko';
-		 }elseif(1048576<$bytes && $bytes<1073741824){
-		 	return round(($bytes / 1024)/1024, 2).' Mo';
-		 }elseif(1073741824<$bytes){
-		 	return round(($bytes / 1024)/1024/1024, 2).' Go';
-		 }
+		if($bytes<1024){
+			return round(($bytes / 1024), 2).' o';
+		}elseif(1024<$bytes && $bytes<1048576){
+			return round(($bytes / 1024), 2).' ko';
+		}elseif(1048576<$bytes && $bytes<1073741824){
+			return round(($bytes / 1024)/1024, 2).' Mo';
+		}elseif(1073741824<$bytes){
+			return round(($bytes / 1024)/1024/1024, 2).' Go';
+		}
 	}
 
 	//Calcul une adresse relative en fonction de deux adresse absolues
@@ -150,6 +150,19 @@ class Functions
 		return strtotime($explode[1].'/'.$explode[0].'/'.$explode[2]);
 
 
+	}
+
+	public static function goback($page,$section="",$param="")
+	{
+		if ($section == "")
+		{
+			header('location:'.$page.'.php '.$param);
+		}
+		else
+		{
+			header('location:'.$page.'.php?section='.$section.$param);
+		}
+		
 	}
 }
 ?>
