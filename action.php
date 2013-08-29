@@ -45,12 +45,10 @@ switch ($_['action']){
 		$cookie_token = sha1(time().rand(0,1000));
 		$user->setCookie($cookie_token);
 		$user->save();
-		echo "cookie not existed";
 		}
 		else
 		{
 			$cookie_token = $actual_cookie;
-			echo "cookie exists";
 		}	
 		Functions::makeCookie(COOKIE_NAME,$cookie_token,$expire_time);
 	}
