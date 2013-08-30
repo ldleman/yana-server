@@ -25,20 +25,35 @@ $myUser = (!$myUser?new User():$myUser);
 //Execution du code en fonction de l'action
 switch ($_['action']){
 	case 'login':
-	
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '';
 	if($user==false){
 		$error = '?error='.urlencode('le compte spécifié est inexistant');
 	}else{
 		$_SESSION['currentUser'] = serialize($user);
+	
+
+	if(isset($_['rememberMe'])){	
+		$expire_time = time() + COOKIE_LIFETIME*86400; //Jour en secondes
+		
+		//On crée un cookie dans la bd uniquement si aucun autre cookie n'existe sinon
+		//On rend inutilisable le cookie utilisé par un autre navigateur
+		//On ne veut que cela soit le cas uniquement si on clique sur déconnexion (et que l'on a demandé Se souvenir de moi)
+		$actual_cookie = $user->getCookie();
+		if ($actual_cookie == "")
+		{
+		$cookie_token = sha1(time().rand(0,1000));
+		$user->setCookie($cookie_token);
+		$user->save();
+		}
+		else
+		{
+			$cookie_token = $actual_cookie;
+		}	
+		Functions::makeCookie(COOKIE_NAME,$cookie_token,$expire_time);
 	}
-
-	if(isset($_['rememberMe'])){
-		setcookie(COOKIE_NAME, $user->coockie(), mktime(0,0,0, date("d"),date("m"), (date("Y")+1)),'/');
 	}
-
-
+	
 	header('location: ./index.php'.$error);	
 	break;
 
@@ -49,8 +64,11 @@ switch ($_['action']){
 	break;
 	
 	case 'user_add_user':
-	if(!$myUser->can('user','c')) exit('ERREUR: Permissions insuffisantes.');
+	$right_toverify = isset($_['id']) ? 'u' : 'c';
+	if($myUser->can('user',$right_toverify)){
 	$user = new User();
+	//Si modification on charge la ligne au lieu de la créer
+	if ($right_toverify == "u"){$user = $user->load(array("id"=>$_['id']));}
 	$user->setMail($_['mailUser']);
 	$user->setName($_['nameUser']);
 	$user->setFirstName($_['firstNameUser']);
@@ -60,24 +78,12 @@ switch ($_['action']){
 	$user->setState(1);
 	$user->setToken(sha1(time().rand(0,1000)));
 	$user->save();
-	header('location:setting.php?section=user');
-	break;
-
-	case 'user_mod_user':
-	if(!$myUser->can('user','u')) exit('ERREUR: Permissions insuffisantes.');
-
-	$user = new User();
-	$user->change(array(
-		'login'=> $_['loginUser'],
-		'password'=> sha1(md5($_['passwordUser'])),
-		'name'=> $_['nameUser'],
-		'firstname'=> $_['firstNameUser'],
-		'mail'=> $_['mailUser'],
-		'rank'=> $_['rankUser']
-		),
-	array('id'=>$_['id_user'])
-	);
-	header('location:setting.php?section=user');
+	Functions::goback("setting","user");
+}
+else
+{
+	Functions::goback("setting","user","&error=Vous n'avez pas le droit de faire ça!");
+}
 	break;
 
 	case 'delete_user':
@@ -87,11 +93,11 @@ switch ($_['action']){
 
 	if(isset($_['id']) && $NbUsers > 1){
 		$userManager->delete(array('id'=>$_['id']));
-		header('location:setting.php?section=user');
+		Functions::goback("setting","user");
 	}
 	else
 	{
-		header('location:setting.php?section=user&error=Impossible de supprimer le dernier utilisateur.');
+		Functions::goback("setting","user","&error=Impossible de supprimer le dernier utilisateur.");
 	}
 	break;
 
@@ -104,35 +110,25 @@ switch ($_['action']){
 
 	if(isset($_['id']) && $Nbrank > 1){
 		$rankManager->delete(array('id'=>$_['id']));
+		Functions::goback("setting","access");
 		header('location:setting.php?section=access');
 	}
 	else
 	{
-		header('location:setting.php?section=access&error=Impossible de supprimer le dernier rang.');
+		Functions::goback("setting","access","&error=Impossible de supprimer le dernier rang.");
 	}
 	break;
 
 	case 'access_add_rank':
-	if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
+	$right_toverify = isset($_['id']) ? 'u' : 'c';
+	if(!$myUser->can('configuration',$right_toverify)) exit('ERREUR: Permissions insuffisantes.');
 	$rank = new Rank();
+	if ($right_toverify == "u"){$rank = $rank->load(array("id"=>$_['id']));}
 	$rank->setLabel($_['labelRank']);
 	$rank->setDescription($_['descriptionRank']);
 	$rank->save();
-	header('location:setting.php?section=access');
+	Functions::goback("setting","access");
 	break;
-
-	case 'access_mod_rank':
-	if(!$myUser->can('configuration','u')) exit('ERREUR: Permissions insuffisantes.');
-	$rank = new Rank();
-	$rank->change(array(
-		'label'=> $_['labelRank'],
-		'description'=> $_['descriptionRank']
-		),
-	array('id'=>$_['id_rank'])
-	);
-	header('location:setting.php?section=access');
-	break;
-
 
 	case 'set_rank_access':
 	if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
@@ -169,14 +165,28 @@ switch ($_['action']){
 	case 'access_delete_right':
 	$rankManager = new Right();
 	$rankManager->delete(array('id'=>$_['id']));
-	header('location:setting.php?section=right&id='.$_['rankRight']);
+	Functions::goback("setting","right","&id=".$_['rankRight']);
 	break;
 
 	case 'logout':
+
+	//Détruire le cookie uniquement s'il existe sur cette ordinateur
+	//Afin de le garder dans la BD pour les autres ordinateurs/navigateurs
+	if(isset($_COOKIE[COOKIE_NAME])){
+	$user = new User();
+	$user = $userManager->load(array("id"=>$myUser->getId()));
+	$user->setCookie("");
+	$user->save();
+	Functions::destroyCookie(COOKIE_NAME);
+	}
+
 	$_SESSION = array();
 	session_unset();
 	session_destroy();
-	header('location: ./index.php');
+	
+
+
+	Functions::goback(" ./index.php");
 	break;
 
 
@@ -189,7 +199,7 @@ switch ($_['action']){
 	}else{
 		Plugin::disabled($_['plugin']);
 	}
-	header('location: ./setting.php?section=plugin');
+	Functions::goback("setting","plugin");
 	break;
 
 	case 'crontab':

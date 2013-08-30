@@ -21,6 +21,22 @@ function wireRelay_plugin_setting_page(){
 			$wireRelays = $wireRelayManager->populate();
 			$roomManager = new Room();
 			$rooms = $roomManager->populate();
+
+			//Si on est en mode modification
+			if (isset($_['id'])){
+				$id_mod = $_['id'];
+				$selected = $wireRelayManager->getById($id_mod);
+				$description = $selected->GetName();
+				$button = "Modifier";
+			}
+			//Si on est en mode ajout
+			else
+			{
+				$description =  "Ajout d'un relais filaire";
+				$button = "Ajouter";
+			}
+			?>
+
 	?>
 
 		<div class="span9 userBloc">
@@ -31,26 +47,30 @@ function wireRelay_plugin_setting_page(){
 
 		<form action="action.php?action=wireRelay_add_wireRelay" method="POST">
 		<fieldset>
-		    <legend>Ajout d'un relais</legend>
+		    <legend><?echo $description?></legend>
 
 		    <div class="left">
 			    <label for="nameWireRelay">Nom</label>
-			    <input type="text" id="nameWireRelay" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
+			    <? if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
+			    <input type="text" id="nameWireRelay" value="<? if(isset($selected)){echo $selected->getName();} ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
 			    <small>Commande vocale associée : "YANA, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionWireRelay">Description</label>
-			    <input type="text" name="descriptionWireRelay" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
+			    <input type="text" name="descriptionWireRelay" value="<? if(isset($selected)){echo $selected->getDescription();} ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
 			    <label for="pinWireRelay">Pin GPIO</label>
-			    <input type="text" name="pinWireRelay" id="pinWireRelay" placeholder="0,1,2…" />
+			    <input type="text" name="pinWireRelay" value="<? if(isset($selected)){echo $selected->getPin();} ?>" id="pinWireRelay" placeholder="0,1,2…" />
 			    <label for="roomWireRelay">Pièce</label>
 			    <select name="roomWireRelay" id="roomWireRelay">
-			    	<?php foreach($rooms as $room){ ?>
-			    	<option value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+			    	<?php foreach($rooms as $room){ 
+						if (isset($selected)){$selected_room = ($selected->getRoom());}
+						else{$selected_room = null;}		
+			    		?>
+			    	<option <? if ($selected_room == $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 			    	<?php } ?>
 			    </select>
 			</div>
 
   			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
+		    <br/><button type="submit" class="btn"><?echo $button;?></button>
 	  	</fieldset>
 		<br/>
 	</form>
@@ -62,6 +82,7 @@ function wireRelay_plugin_setting_page(){
 		    <th>Description</th>
 		    <th>Pin GPIO</th>
 		    <th>Pièce</th>
+		    <th></th>
 	    </tr>
 	    </thead>
 	    
@@ -74,7 +95,9 @@ function wireRelay_plugin_setting_page(){
 		    <td><?php echo $wireRelay->getDescription(); ?></td>
 		    <td><?php echo $wireRelay->getPin(); ?></td>
 		    <td><?php echo $room->getName(); ?></td>
-		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-remove"></i></a></td>
+		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-remove"></i></a>
+		    <a class="btn" href="setting.php?section=wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
+		    </td>
 	    </tr>
 	    <?php } ?>
 	    </table>
@@ -163,8 +186,10 @@ function wireRelay_action_wireRelay(){
 		break;
 
 		case 'wireRelay_add_wireRelay':
-			if($myUser->can('relais filaire','c')){
+			$right_toverify = isset($_['id']) ? 'u' : 'c';
+			if($myUser->can('relais filaire',$right_toverify)){
 				$wireRelay = new WireRelay();
+				if ($right_toverify == "u"){$wireRelay = $wireRelay->load(array("id"=>$_['id']));}
 				$wireRelay->setName($_['nameWireRelay']);
 				$wireRelay->setDescription($_['descriptionWireRelay']);
 				$wireRelay->setPin($_['pinWireRelay']);
