@@ -186,7 +186,7 @@ else
 	
 
 
-	Functions::goback(" ./index.php");
+	Functions::goback(" ./index");
 	break;
 
 
