@@ -16,13 +16,11 @@ if(isset($myUser) && $myUser!=false){
 			$usersManager = new User();
 			$id_modusers = $_['id_user'];
 			$selected = $usersManager->getById($id_modusers);
-			$addormodify_text = $selected->GetFirstName()." ".$selected->GetName();
-			$action = "action.php?action=user_mod_user&id_user=".$id_modusers;
-			$addormodify_buttontext = "Modifier";
-			$tpl->assign('addormodify_text',$addormodify_text);
-			$tpl->assign('action',$action);
-			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+		
+			$description = $selected->GetFirstName()." ".$selected->GetName();
+			$button = "Modifier";
 
+			$tpl->assign('id_modusers',$id_modusers);
 			$tpl->assign('login',$selected->getLogin());
 			$tpl->assign('firstname',$selected->getFirstName());
 			$tpl->assign('lastname',$selected->getName());
@@ -31,14 +29,13 @@ if(isset($myUser) && $myUser!=false){
 		}
 		else
 		{
-			$addormodify_text =  "Ajout d'un utilisateur";
-			$action = "action.php?action=user_add_user";
-			$addormodify_buttontext = "Ajouter";
-			$tpl->assign('addormodify_text',$addormodify_text);
-			$tpl->assign('action',$action);
-			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+			$description =  "Ajout d'un utilisateur";
+			$button = "Ajouter";
 			$tpl->assign('userrank','');
 		}
+
+		$tpl->assign('button',$button);
+		$tpl->assign('description',$description);
 
 
 		$users = User::getAllUsers();
@@ -62,32 +59,21 @@ if(isset($myUser) && $myUser!=false){
 		if (isset($_['id_rank'])){
 			$id_modrank = $_['id_rank'];
 			$selected = $rankManager->getById($id_modrank);
-			$addormodify_text = $selected->getLabel();
-			$action = "action.php?action=access_mod_rank&id_rank=".$id_modrank;
-			$addormodify_buttontext = "Modifier";
-			$tpl->assign('addormodify_text',$addormodify_text);
-			$tpl->assign('action',$action);
-			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
-
+			
+			$description = $selected->getLabel();
+			$button = "Modifier";
+			$tpl->assign('id_modrank',$id_modrank);
 			$tpl->assign('label_rank',$selected->getLabel());
 			$tpl->assign('description_rank',$selected->getDescription());
 		}
 		else
 		{
-			$addormodify_text = "Ajout d'un rang";
-			$action = "action.php?action=access_add_rank";
-			$addormodify_buttontext = "Ajouter";
-			$tpl->assign('addormodify_text',$addormodify_text);
-			$tpl->assign('action',$action);
-			$tpl->assign('addormodify_buttontext',$addormodify_buttontext);
+			$description = "Ajout d'un rang";
+			$button = "Ajouter";
 		}
 
-
-
-
-
-
-
+			$tpl->assign('description',$description);
+			$tpl->assign('button',$button);
 
 		$tpl->assign('ranks',$ranks);
 		break;

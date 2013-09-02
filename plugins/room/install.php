@@ -17,7 +17,7 @@ $r1->setRank('1');
 $r1->save();
 
 $room->setName('Cuisine');
-$room->setDescription('L\'endroit oû l\'on dégomme les coockies');
+$room->setDescription('L\'endroit oû l\'on dégomme les cookies');
 $room->save();
 
 $room = new Room();

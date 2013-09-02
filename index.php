@@ -13,6 +13,5 @@ $tpl->assign('heat',Monitoring::heat());
 $tpl->assign('disks',Monitoring::disks());
 
 $view = (!$myUser?'login':'index');
-
 require_once('footer.php');
 ?>

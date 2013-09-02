@@ -12,6 +12,7 @@
 	define('VOCAL_ENTITY_NAME','YANA');
 	define('DB_NAME','db/database.db');
 	define('COOKIE_NAME','yana');
+	define('COOKIE_LIFETIME','7'); //Exprimé en jours
 	define('UPDATE_URL','http://projet.idleman.fr/yana/maj.php?callback=?');
 
 ?>
