@@ -59,10 +59,10 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'command'=>VOCAL_ENTITY_NAME.' concours de rot',
 		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=rot.wav','confidence'=>'0.88'
 		);
-	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' fait la poule',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=poule.wav','confidence'=>'0.88'
-		);
+	// $response['commands'][] = array(
+	// 	'command'=>VOCAL_ENTITY_NAME.' fait la poule',
+	// 	'url'=>$actionUrl.'?action=vocalinfo_sound&sound=poule.wav','confidence'=>'0.88'
+	// 	);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' liste des commandes',
 		'url'=>$actionUrl.'?action=vocalinfo_commands','confidence'=>'0.88'
@@ -73,20 +73,20 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		);
 
 
-	/*
-
-	$preAction =  array('responses'=>array(
+	
+/*
+	$preAction =  array(
 										array('type'=>'talk','sentence'=>'Emails en cours de traitement, merci de patienter')
-											)
+											
 								);
 
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' check mes mails',
+		'command'=>VOCAL_ENTITY_NAME.' fait la poule',
 		'preAction'=>$preAction,
-		'url'=>$actionUrl.'?action=check_mail_read','confidence'=>'0.88'
+		'url'=>$actionUrl.'','confidence'=>'0.88'
 		);
-	*/
-
+	
+*/
 
 }
 
