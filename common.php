@@ -44,7 +44,11 @@ if(isset($_SESSION['currentUser'])){
 if(!$myUser && isset($_COOKIE[COOKIE_NAME])){
 	$users = User::getAllUsers();
 	foreach ($users as $user) {
-		if($user->coockie() == $_COOKIE[COOKIE_NAME]) $myUser = $user;
+		if($user->getCookie() == $_COOKIE[COOKIE_NAME]) 
+			{
+				$myUser = $user;
+				$myUser->loadRight();
+			}
 	}
 }
 
