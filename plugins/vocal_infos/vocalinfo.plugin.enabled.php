@@ -220,6 +220,7 @@ function vocalinfo_action(){
 										'Partly Cloudy'=>'Partiellement nuageux',
 										'Mostly Sunny'=>'plutot ensoleillé',
 										'Mostly Cloudy'=>'plutot Nuageux',
+										'Ligth Rain'=>'Pluie fine',
 										'Clear'=>'Temps clair',
 										'Sunny'=>'ensoleillé'
 										);
