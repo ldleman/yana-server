@@ -299,37 +299,45 @@ else
 			    </ul>';
 			break;
 			case 'dash_user':
-			echo '<ul>';
-			$users = Monitoring::users();
-		    foreach ($users as $value) {
-				echo '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
-		    }
-		    echo '</ul>';
+				echo '<ul>';
+				$users = Monitoring::users();
+			    foreach ($users as $value) {
+					echo '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
+			    }
+			    echo '</ul>';
 			break;
 			case 'dash_hdd':
-			$hdds = Monitoring::hdd();
-			echo '<ul>';
+				$hdds = Monitoring::hdd();
+				echo '<ul>';
 
-			foreach ($hdds as $value) {
-				'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
-			}
-			echo '</ul>';
+				foreach ($hdds as $value) {
+					'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
+				}
+				echo '</ul>';
 			break;
 			case 'dash_disk':
-			$disks = Monitoring::disks();
-			echo '<ul>';
-		    foreach ($disks as $value) {
-		    	echo '<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
-		    }
-		    echo '</ul>';
+				$disks = Monitoring::disks();
+				echo '<ul>';
+			    foreach ($disks as $value) {
+			    	echo '<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
+			    }
+			    echo '</ul>';
 			break;
 			case 'dash_services':
-			$services = Monitoring::services();
-			echo '<ul>';
-		    foreach ($services as $value) {
-		    	echo '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
-		    }
-		    echo '</ul>';
+				$services = Monitoring::services();
+				echo '<ul>';
+			    foreach ($services as $value) {
+			    	echo '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
+			    }
+			    echo '</ul>';
+			break;
+			case 'dash_gpio':
+				$gpios = Monitoring::gpio();
+				echo '<ul>';
+			    foreach ($gpios as $key=>$value) {
+			    	echo '<li><strong>'.$key.'</strong>- '.($value?'on':'off').'</li>';
+			    }
+			    echo '</ul>';
 			break;
 		}
 	break;
