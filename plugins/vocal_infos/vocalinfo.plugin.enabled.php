@@ -342,14 +342,16 @@ function vocalinfo_action(){
 }
 
 function vocalinfo_event(&$response){
-	if(date('H:i')=='21:00'){
+	
+	if(date('d/m H:i')=='24/01 18:00'){
 		if(date('s')<45){
 		$response['responses']= array(
 								array('type'=>'sound','file'=>'sifflement.wav'),
-								array('type'=>'talk','sentence'=>'C\'est l\'heure de la pilule!')
+								array('type'=>'talk','sentence'=>'C\'est l\'anniversaire de mon créateur, pensez à lui offrir une bière!')
 							);
 		}
 	}
+	/*
 	if(date('H:i')=='10:00'){
 		if(date('s')<45){
 		$response['responses']= array(
@@ -358,6 +360,7 @@ function vocalinfo_event(&$response){
 							);
 		}
 	}
+	*/
 }
 
 function vocalinfo_plugin_preference_menu(){

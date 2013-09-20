@@ -24,7 +24,6 @@ require_once('RainTPL.php');
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
 
-
 function __autoload($class_name){
     include 'classes/'.$class_name . '.class.php';
 }
@@ -37,7 +36,6 @@ $conf->getAll();
 //Inclusion des plugins  
 Plugin::includeAll();
 
-	
 if(isset($_SESSION['currentUser'])){
 	$myUser =unserialize($_SESSION['currentUser']);
 }
@@ -67,10 +65,6 @@ $rank = new Rank();
 if($myUser!=false && $myUser->getRank()!=false){
 	$rank = $rank->getById($myUser->getRank());
 }
-
-
-
-
 
 
 $tpl->assign('myUser',$myUser);

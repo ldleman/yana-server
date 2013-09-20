@@ -264,7 +264,75 @@ else
 	break;
 
 
+	case 'GET_DASH_INFO':
+		switch($_['type']){
 
+			/*$tpl->assign('users',Monitoring::users());
+		$tpl->assign('hdds',Monitoring::hdd());
+		$tpl->assign('services',Monitoring::services());
+		$tpl->assign('ethernet',Monitoring::ethernet());
+		$tpl->assign('ram',Monitoring::ram());
+		$tpl->assign('cpu',Monitoring::cpu());
+		$tpl->assign('heat',Monitoring::heat());
+		$tpl->assign('disks',Monitoring::disks());
+*/
+			case 'dash_system':
+				$heat = Monitoring::heat();
+				$cpu = Monitoring::cpu();
+				echo '<ul>
+				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
+				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
+				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
+				    	<li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>
+				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
+				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
+				    </ul>';
+			break;
+			case 'dash_network':
+			$ethernet = Monitoring::ethernet();
+			echo '<ul>
+			    	<li><strong>IP LAN :</strong> <code>'.Monitoring::internalIp().'</code></li>
+			    	<li><strong>IP WAN :</strong> <code>'.Monitoring::externalIp().'</code></li>
+			    	<li><strong>Serveur HTTP :</strong> '.Monitoring::webServer().'</li>
+			    	<li><strong>Ethernet :</strong> '.$ethernet['up'].' Montant / '.$ethernet['down'].' Descendant</li>
+			    	<li><strong>Connexions :</strong>  <span class="label label-info">'.Monitoring::connections().'</span></li>
+			    </ul>';
+			break;
+			case 'dash_user':
+			echo '<ul>';
+			$users = Monitoring::users();
+		    foreach ($users as $value) {
+				echo '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
+		    }
+		    echo '</ul>';
+			break;
+			case 'dash_hdd':
+			$hdds = Monitoring::hdd();
+			echo '<ul>';
+
+			foreach ($hdds as $value) {
+				'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
+			}
+			echo '</ul>';
+			break;
+			case 'dash_disk':
+			$disks = Monitoring::disks();
+			echo '<ul>';
+		    foreach ($disks as $value) {
+		    	echo '<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
+		    }
+		    echo '</ul>';
+			break;
+			case 'dash_services':
+			$services = Monitoring::services();
+			echo '<ul>';
+		    foreach ($services as $value) {
+		    	echo '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
+		    }
+		    echo '</ul>';
+			break;
+		}
+	break;
 	
 	default:
 	Plugin::callHook("action_post_case", array());
