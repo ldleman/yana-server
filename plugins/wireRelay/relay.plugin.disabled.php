@@ -32,12 +32,12 @@ function wireRelay_plugin_setting_page(){
 			//Si on est en mode ajout
 			else
 			{
-				$description =  "Ajout d'un relais filaire";
+				$description =  "Ajout d'un relai filaire";
 				$button = "Ajouter";
 			}
 			?>
 
-	?>
+
 
 		<div class="span9 userBloc">
 
@@ -118,7 +118,7 @@ function wireRelay_plugin_setting_page(){
 
 function wireRelay_plugin_setting_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='wireRelay'?'class="active"':'').'><a href="setting.php?section=wireRelay"><i class="icon-chevron-right"></i> Relais filaire</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='wireRelay'?'class="active"':'').'><a href="setting.php?section=wireRelay"><i class="icon-chevron-right"></i> Relais filaires</a></li>';
 }
 
 
