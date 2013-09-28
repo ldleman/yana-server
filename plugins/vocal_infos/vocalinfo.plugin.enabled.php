@@ -316,8 +316,8 @@ function vocalinfo_action(){
 						$emission = $emission[0];
 						$affirmation = array();
 						$affirmation['type'] = 'talk';
-						$affirmation['style'] = 'slow';
-						$affirmation['sentence'] = ($nb>1?$nb.' ':'').ucfirst($emission['category']).' '.$emission['title'].' à '.$emission['hour'].' sur '.$emission['canal'];
+						//$affirmation['style'] = 'slow';
+						$affirmation['sentence'] = ($nb>1?$nb.' ':'').ucfirst($emission['category']).', '.$emission['title'].' à '.$emission['hour'].' sur '.$emission['canal'];
 						$response['responses'][] = $affirmation;
 				}
 				
