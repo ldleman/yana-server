@@ -241,34 +241,34 @@ function vocalinfo_action(){
 				$affirmation = '';
 
 				foreach($weekdays as $day){
+
 					if (substr($day['text'],0,2) == "AM")
 					{
 						$sub_condition = substr($day['text'],3);
-						$condition = $textTranslate[''.$sub_condition]." dans la matinée";
+						$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." dans la matinée";
 
 					}
 					elseif (substr($day['text'],0,2) == "PM") {
 						$sub_condition = substr($day['text'],3);
-						$condition = @$textTranslate[''.$sub_condition]." dans l'après midi";
+						$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." dans l'après midi";
 					 } 
 					 elseif (substr($day['text'],-4) == "Late") {
 					 	$sub_condition = substr($day['text'],0,-5);
-					 	$condition = @$textTranslate[''.$sub_condition]." en fin de journée";
+					 	$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." en fin de journée";
 					 }
 					 else
 					 {
-					 	$condition = @$textTranslate[''.$day['text']];
+					 	$condition = isset($textTranslate[''.$day['text']])?$textTranslate[''.$day['text']]:$day['text'];
 					 }
 					
 
 					if(	(isset($_['today'])))
 					{
-					$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
+						$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
 					}
 					else
 					{
-					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
-
+						$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
 					}
 				}
 			}else{
