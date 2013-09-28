@@ -2,8 +2,9 @@
 session_start();
 
 ini_set('display_errors','1');
-error_reporting(E_ALL);
-//error_reporting(E_ALL & ~E_NOTICE );
+
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL); //TODO enlever en prod
 
 mb_internal_encoding('UTF-8');
 $start=microtime(true);
@@ -50,6 +51,9 @@ if(!$myUser && isset($_COOKIE[COOKIE_NAME])){
 			}
 	}
 }
+
+
+
 
 
 $userManager = new User();

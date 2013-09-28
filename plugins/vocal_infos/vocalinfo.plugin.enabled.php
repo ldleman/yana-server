@@ -13,7 +13,7 @@
 function vocalinfo_vocal_command(&$response,$actionUrl){
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' quelle heure est il',
-		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>'0.88'
+		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>'0.90'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' on est le combien',
@@ -45,7 +45,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' siffle',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.9'
+		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.94'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' concours de pet',
