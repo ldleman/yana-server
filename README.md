@@ -39,4 +39,7 @@ Et faites un git pull pour récuperer la dernière version
 Attention, si vous aviez fait des modifs sur le code entre temps il est possible que le git pull ne fonctionne pas, dans ce cas faites un git checkout pour reprendre la copie exacte du dépot officiel en ecransant vos modifications
 ```git reset --hard origin/master```
 
+Puis remettez les permission en ecriture sur le dossier plugins
+```sudo chown -R www-data:www-data /var/www/yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission```
+
 Une fois l'update terminé, allez en section plugin de yana-server et désactivez/réactivez chaques plugins utilisés afin de mettre à jour leurs tables.
