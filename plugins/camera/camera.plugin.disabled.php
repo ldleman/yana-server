@@ -58,7 +58,7 @@ function camera_plugin_page($_){
 		  	</code><br/>
 		  	Et enfin<br/>
 		  	<code>
-		  		chown -R www-data:www-data /var/www/yana-server/plugins
+		  		sudo chown -R www-data:www-data /var/www/yana-server/plugins/camera
 		  	</code><br/>
 		  		Redémarrez et c'est ok :)
 		  	
