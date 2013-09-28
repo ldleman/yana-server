@@ -37,6 +37,6 @@ Et faites un git pull pour récuperer la dernière version
 ```git pull```
 
 Attention, si vous aviez fait des modifs sur le code entre temps il est possible que le git pull ne fonctionne pas, dans ce cas faites un git checkout pour reprendre la copie exacte du dépot officiel en ecransant vos modifications
-```git checkout origin```
+```git reset --hard origin/master```
 
 Une fois l'update terminé, allez en section plugin de yana-server et désactivez/réactivez chaques plugins utilisés afin de mettre à jour leurs tables.
