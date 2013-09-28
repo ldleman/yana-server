@@ -23,7 +23,8 @@ function room_plugin_page($_){
 		$rooms = $roomManager->populate();
 		?>
 
-
+		<input type="text" class="date"/>
+		<input type="text" class="input_completion"/>
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
