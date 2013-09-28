@@ -4,7 +4,10 @@ session_start();
 ini_set('display_errors','1');
 
 error_reporting(E_ALL & ~E_NOTICE);
-error_reporting(E_ALL); //TODO enlever en prod
+
+//Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
+//car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
+if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
 
 mb_internal_encoding('UTF-8');
 $start=microtime(true);

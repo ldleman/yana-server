@@ -27,3 +27,16 @@ Et suivez le formulaire d'installation.
 A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
 configuration --> plugins
 
+Mise à jour
+============
+
+Pour mettre a jour yana-server, il faut utiliser git, placez vous dans le répertoire de yana
+```cd /var/www/yana-server```
+
+Et faites un git pull pour récuperer la dernière version
+```git pull```
+
+Attention, si vous aviez fait des modifs sur le code entre temps il est possible que le git pull ne fonctionne pas, dans ce cas faites un git checkout pour reprendre la copie exacte du dépot officiel en ecransant vos modifications
+```git checkout origin```
+
+Une fois l'update terminé, allez en section plugin de yana-server et désactivez/réactivez chaques plugins utilisés afin de mettre à jour leurs tables.
