@@ -160,6 +160,8 @@
 				});
             });
 	   },
+
+
 	   
 		date: function (){
             return this.each(function() {
