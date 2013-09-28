@@ -125,7 +125,7 @@ function vocalinfo_action(){
 		case 'vocalinfo_gpio_diag':
 			$sentence = '';
 	
-		
+			$gpio = array('actif'=>array(),'inactif'=>array());
 			for ($i=0;$i<26;$i++) {
 				$commands = array();
 				exec("/usr/local/bin/gpio read ".$i,$commands,$return);
@@ -135,7 +135,14 @@ function vocalinfo_action(){
 					$gpio['inactif'][] = $i;
 				}
 			}
-			$sentence .= 'GPIO actifs: '.implode(', ', $gpio['actif']).'. GPIO inactifs: '.implode(', ', $gpio['inactif']).'.';
+			if(count($gpio['actif'])==0){
+				$sentence .= 'Tous les GPIO sont inactifs.';
+			}else if(count($gpio['inactif'])==0){
+				$sentence .= 'Tous les GPIO sont actifs.';
+			}else{
+				$sentence .= 'GPIO actifs: '.implode(', ', $gpio['actif']).'. GPIO inactifs: '.implode(', ', $gpio['inactif']).'.';
+			}
+			
 
 			$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$sentence)
