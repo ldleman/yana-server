@@ -274,23 +274,21 @@ else
 		$tpl->assign('ram',Monitoring::ram());
 		$tpl->assign('cpu',Monitoring::cpu());
 		$tpl->assign('heat',Monitoring::heat());
-		$tpl->assign('disks',Monitoring::disks());
-Temperature: pour garder une trace,et pour ne pas que le commentaire s'affiche
-<li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>
-*/
+		$tpl->assign('disks',Monitoring::disks());*/
 			case 'dash_system':
-				//$heat = Monitoring::heat(); Commande temperature initiale
+				//$heat = Monitoring::heat();
 				$heat = $output = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
 				$cpu = Monitoring::cpu();
 				echo '<ul>
 				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
 				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
 				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
-				    	<li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>
-					<li><strong>Temperature Origin :</strong>  <span class="label label-warning">'.$heat.'</span></li>
+				    	<li><strong>Temperature :</strong>  <span class="label label-warning">'.$heat.'</span></li>
 				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
 				    </ul>';
+					/* <li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>  // Au cas ou 
+					   <li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>*/
 			break;
 			case 'dash_network':
 			$ethernet = Monitoring::ethernet();
