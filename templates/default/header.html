@@ -47,7 +47,8 @@
               {/if}
               {if="$myUser!=false"}
 
-              <li><a title="Connecté avec {$myUser->getFullName()} ({$rank->getLabel()})" href="action.php?action=logout"><i class="icon-remove-circle"></i> Déconnexion</a></li>
+            
+              <li class="infobulle"  title="Connecté avec {$myUser->getFullName()} ({$rank->getLabel()})"><a href="action.php?action=logout"><i class="icon-remove-circle"></i> Déconnexion</a></li>
               {/if}
           {/if}
            </ul>

@@ -1,23 +1,9 @@
 $(document).ready(function(){
 	$('.date').date();
+	$('.infobulle').tooltip({placement:'bottom'});
 	$.getJSON($("#UPDATE_URL").html(),function(data){
 	});
 	get_dash_infos();
-
-
-	
-
-
-// $('.typeahead').typeahead({
-//     source: function (query, process) {
-//         return $.get('/typeahead', { query: query }, function (data) {
-//             return process(data.options);
-//         });
-//     }
-// });
-
-
-
 });
 
 function get_dash_infos(){
