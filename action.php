@@ -277,7 +277,7 @@ else
 		$tpl->assign('disks',Monitoring::disks());*/
 			case 'dash_system':
 				//$heat = Monitoring::heat();
-				$heat = $output = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
+				$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
 				$cpu = Monitoring::cpu();
 				echo '<ul>
 				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
@@ -335,15 +335,17 @@ else
 			break;
 			case 'dash_gpio':
 				$gpios = Monitoring::gpio();
-				echo '<ul>';
-			    foreach ($gpios as $key=>$value) {
-			    	echo '<li><strong>'.$key.'</strong>- '.($value?'on':'off').'</li>';
+				$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
+				echo '<pre><ul>';
+			    for ($i = 0; $i <= 21; $i+=2) {
+			    	echo '     <strong>'.$pin[$i].'</strong>-> '.($gpios[$i]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').'  '.($gpios[($i+1)]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').' <-<strong>'.$pin[($i+1)].'</strong><br/>';
 			    }
-			    echo '</ul>';
+
+			    echo '</ul></pre>';
 			break;
 		}
 	break;
-	
+
 	default:
 	Plugin::callHook("action_post_case", array());
 	break;
