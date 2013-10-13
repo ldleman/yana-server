@@ -1,17 +1,27 @@
 $(document).ready(function(){
-
-
 	$('.date').date();
-
+	$('.infobulle').tooltip({placement:'bottom'});
 	$.getJSON($("#UPDATE_URL").html(),function(data){
-    	
 	});
-
-	
-
-
-
+	get_dash_infos();
 });
+
+function get_dash_infos(){
+	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').html('Chargement...')
+
+
+
+	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').each(function(i,elem){
+		refresh_dash(elem);
+		setInterval(function(){
+			refresh_dash(elem);
+		},10000);
+	});
+}
+
+function refresh_dash(elem){
+	$(elem).load('action.php?action=GET_DASH_INFO&type='+$(elem).attr('id'));
+}
 
 function maj(data){
  	server = data.maj["yana-server"];

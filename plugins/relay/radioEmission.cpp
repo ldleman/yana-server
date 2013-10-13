@@ -12,7 +12,7 @@ Par Idleman (idleman@idleman.fr - http://blog.idleman.fr)
 Licence : CC by sa
 Toutes question sur le blog ou par mail, possibilité de m'envoyer des bières via le blog
 */
-
+//g++ radioEmission.cpp -o radioEmission -lwiringPi pour recompiler
 using namespace std;
 
 

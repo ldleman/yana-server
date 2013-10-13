@@ -21,7 +21,14 @@ function wireRelay_plugin_setting_page(){
 			$wireRelays = $wireRelayManager->populate();
 			$roomManager = new Room();
 			$rooms = $roomManager->populate();
-	?>
+			$selected =  new WireRelay();
+			$selected->setPulse(0);
+
+			//Si on est en mode modification
+			if (isset($_['id']))
+				$selected = $wireRelayManager->getById($_['id']);
+			
+			?>
 
 		<div class="span9 userBloc">
 
@@ -31,26 +38,30 @@ function wireRelay_plugin_setting_page(){
 
 		<form action="action.php?action=wireRelay_add_wireRelay" method="POST">
 		<fieldset>
-		    <legend>Ajout d'un relais</legend>
+		    <legend>Formulaire du relais filaire</legend>
 
 		    <div class="left">
 			    <label for="nameWireRelay">Nom</label>
-			    <input type="text" id="nameWireRelay" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
+			    <input type="hidden" name="id" value="<?php echo $selected->getId(); ?>">
+			    <input type="text" id="nameWireRelay" value="<? echo $selected->getName(); ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
 			    <small>Commande vocale associée : "YANA, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionWireRelay">Description</label>
-			    <input type="text" name="descriptionWireRelay" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
-			    <label for="pinWireRelay">Pin GPIO</label>
-			    <input type="text" name="pinWireRelay" id="pinWireRelay" placeholder="0,1,2…" />
+			    <input type="text" name="descriptionWireRelay" value="<?echo $selected->getDescription(); ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
+			    <label for="pinWireRelay">Pin GPIO (Numéro Wiring PI)</label>
+			    <input type="text" name="pinWireRelay" value="<? echo $selected->getPin(); ?>" id="pinWireRelay" placeholder="0,1,2…" />
 			    <label for="roomWireRelay">Pièce</label>
 			    <select name="roomWireRelay" id="roomWireRelay">
 			    	<?php foreach($rooms as $room){ ?>
-			    	<option value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+			    	<option <? if ($selected->getRoom()== $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 			    	<?php } ?>
 			    </select>
+			   <label for="pinWireRelay">Mode impulsion (laisser à zero pour desactiver le mode impulsion ou definir un temps d'impulsion en micro-seconde)</label>
+			   <input type="text" name="pulseWireRelay" value="<? echo $selected->getPulse(); ?>" id="pulseWireRelay" placeholder="0" />
+			     
 			</div>
 
   			<div class="clear"></div>
-		    <br/><button type="submit" class="btn">Ajouter</button>
+		    <br/><button type="submit" class="btn">Enregistrer</button>
 	  	</fieldset>
 		<br/>
 	</form>
@@ -62,6 +73,8 @@ function wireRelay_plugin_setting_page(){
 		    <th>Description</th>
 		    <th>Pin GPIO</th>
 		    <th>Pièce</th>
+		    <th>Impulsion</th>
+		    <th></th>
 	    </tr>
 	    </thead>
 	    
@@ -74,7 +87,10 @@ function wireRelay_plugin_setting_page(){
 		    <td><?php echo $wireRelay->getDescription(); ?></td>
 		    <td><?php echo $wireRelay->getPin(); ?></td>
 		    <td><?php echo $room->getName(); ?></td>
-		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-remove"></i></a></td>
+		    <td><?php echo $wireRelay->getPulse(); ?></td>
+		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-remove"></i></a>
+		    <a class="btn" href="setting.php?section=wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
+		    </td>
 	    </tr>
 	    <?php } ?>
 	    </table>
@@ -124,8 +140,11 @@ function wireRelay_display($room){
 		  <p></p>
 		  	 <div class="btn-toolbar">
 				<div class="btn-group">
+
 				<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
-				<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+				<?php if($wireRelay->getPulse()==0){ ?>
+					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+				<?php } ?>
 				</div>
 			</div>
         </div>
@@ -163,12 +182,15 @@ function wireRelay_action_wireRelay(){
 		break;
 
 		case 'wireRelay_add_wireRelay':
-			if($myUser->can('relais filaire','c')){
-				$wireRelay = new WireRelay();
+			if($myUser->can('relais filaire',$_['id']!=''? 'u' : 'c')){
+				$wireRelayManager = new WireRelay();
+				$wireRelay = $_['id']!=''?$wireRelayManager->getById($_['id']): new WireRelay();
+				
 				$wireRelay->setName($_['nameWireRelay']);
 				$wireRelay->setDescription($_['descriptionWireRelay']);
 				$wireRelay->setPin($_['pinWireRelay']);
 				$wireRelay->setRoom($_['roomWireRelay']);
+				$wireRelay->setPulse($_['pulseWireRelay']);
 				$wireRelay->save();
 			}
 			header('location:setting.php?section=wireRelay');
@@ -183,8 +205,18 @@ function wireRelay_action_wireRelay(){
 				$wireRelay = $wireRelay->getById($_['engine']);
 				$cmd = '/usr/local/bin/gpio mode '.$wireRelay->getPin().' out';
 				system($cmd,$out);
-				$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' '.$_['state'];
-				system($cmd,$out);
+
+				if($wireRelay->getPulse()==0){
+					$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' '.$_['state'];
+					system($cmd,$out);
+				}else{
+					$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' 1';
+					system($cmd,$out);
+					usleep($wireRelay->getPulse());
+					$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' 0';
+					system($cmd,$out);
+				}
+
 				//TODO change bdd state
 				
 				if(!isset($_['webservice'])){
@@ -221,12 +253,8 @@ function wireRelay_action_wireRelay(){
 }
 
 
-
-
-
 Plugin::addCss("/css/style.css"); 
 Plugin::addHook("action_post_case", "wireRelay_action_wireRelay"); 
-
 Plugin::addHook("node_display", "wireRelay_display");   
 Plugin::addHook("setting_bloc", "wireRelay_plugin_setting_page");
 Plugin::addHook("setting_menu", "wireRelay_plugin_setting_menu");  

@@ -13,7 +13,7 @@
 function vocalinfo_vocal_command(&$response,$actionUrl){
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' quelle heure est il',
-		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>'0.88'
+		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>'0.90'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' on est le combien',
@@ -45,7 +45,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' siffle',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.9'
+		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.94'
 		);
 	$response['commands'][] = array(
 		'command'=>VOCAL_ENTITY_NAME.' concours de pet',
@@ -125,7 +125,7 @@ function vocalinfo_action(){
 		case 'vocalinfo_gpio_diag':
 			$sentence = '';
 	
-		
+			$gpio = array('actif'=>array(),'inactif'=>array());
 			for ($i=0;$i<26;$i++) {
 				$commands = array();
 				exec("/usr/local/bin/gpio read ".$i,$commands,$return);
@@ -135,7 +135,14 @@ function vocalinfo_action(){
 					$gpio['inactif'][] = $i;
 				}
 			}
-			$sentence .= 'GPIO actifs: '.implode(', ', $gpio['actif']).'. GPIO inactifs: '.implode(', ', $gpio['inactif']).'.';
+			if(count($gpio['actif'])==0){
+				$sentence .= 'Tous les GPIO sont inactifs.';
+			}else if(count($gpio['inactif'])==0){
+				$sentence .= 'Tous les GPIO sont actifs.';
+			}else{
+				$sentence .= 'GPIO actifs: '.implode(', ', $gpio['actif']).'. GPIO inactifs: '.implode(', ', $gpio['inactif']).'.';
+			}
+			
 
 			$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$sentence)
@@ -220,6 +227,7 @@ function vocalinfo_action(){
 										'Partly Cloudy'=>'Partiellement nuageux',
 										'Mostly Sunny'=>'plutot ensoleillé',
 										'Mostly Cloudy'=>'plutot Nuageux',
+										'Light Rain'=>'Pluie fine',
 										'Clear'=>'Temps clair',
 										'Sunny'=>'ensoleillé'
 										);
@@ -233,34 +241,34 @@ function vocalinfo_action(){
 				$affirmation = '';
 
 				foreach($weekdays as $day){
+
 					if (substr($day['text'],0,2) == "AM")
 					{
 						$sub_condition = substr($day['text'],3);
-						$condition = $textTranslate[''.$sub_condition]." dans la matinée";
+						$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." dans la matinée";
 
 					}
 					elseif (substr($day['text'],0,2) == "PM") {
 						$sub_condition = substr($day['text'],3);
-						$condition = @$textTranslate[''.$sub_condition]." dans l'après midi";
+						$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." dans l'après midi";
 					 } 
 					 elseif (substr($day['text'],-4) == "Late") {
 					 	$sub_condition = substr($day['text'],0,-5);
-					 	$condition = @$textTranslate[''.$sub_condition]." en fin de journée";
+					 	$condition = (isset($textTranslate[''.$sub_condition])?$textTranslate[''.$sub_condition]:$sub_condition)." en fin de journée";
 					 }
 					 else
 					 {
-					 	$condition = @$textTranslate[''.$day['text']];
+					 	$condition = isset($textTranslate[''.$day['text']])?$textTranslate[''.$day['text']]:$day['text'];
 					 }
 					
 
 					if(	(isset($_['today'])))
 					{
-					$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
+						$affirmation .= 'Aujourd\'hui '.$day['temp'].' degrés, '.$condition.', ';
 					}
 					else
 					{
-					$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
-
+						$affirmation .= $dayTranslate[''.$day['day']].' de '.$day['low'].' à '.$day['high'].' degrés, '.$condition.', ';
 					}
 				}
 			}else{
@@ -308,8 +316,8 @@ function vocalinfo_action(){
 						$emission = $emission[0];
 						$affirmation = array();
 						$affirmation['type'] = 'talk';
-						$affirmation['style'] = 'slow';
-						$affirmation['sentence'] = ($nb>1?$nb.' ':'').ucfirst($emission['category']).' '.$emission['title'].' à '.$emission['hour'].' sur '.$emission['canal'];
+						//$affirmation['style'] = 'slow';
+						$affirmation['sentence'] = ($nb>1?$nb.' ':'').ucfirst($emission['category']).', '.$emission['title'].' à '.$emission['hour'].' sur '.$emission['canal'];
 						$response['responses'][] = $affirmation;
 				}
 				
@@ -341,14 +349,16 @@ function vocalinfo_action(){
 }
 
 function vocalinfo_event(&$response){
-	if(date('H:i')=='21:00'){
+	
+	if(date('d/m H:i')=='24/01 18:00'){
 		if(date('s')<45){
 		$response['responses']= array(
 								array('type'=>'sound','file'=>'sifflement.wav'),
-								array('type'=>'talk','sentence'=>'C\'est l\'heure de la pilule!')
+								array('type'=>'talk','sentence'=>'C\'est l\'anniversaire de mon créateur, pensez à lui offrir une bière!')
 							);
 		}
 	}
+	/*
 	if(date('H:i')=='10:00'){
 		if(date('s')<45){
 		$response['responses']= array(
@@ -357,6 +367,7 @@ function vocalinfo_event(&$response){
 							);
 		}
 	}
+	*/
 }
 
 function vocalinfo_plugin_preference_menu(){

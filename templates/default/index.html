@@ -5,14 +5,53 @@
     {function="Plugin::callHook("home", array($_))"}
     
     {if="!isset($_['module']) || $_['module']=='home'"}
-    <div class="span9">
-    <h1>Bienvenue</h1>
-	    <ul>
-	    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
-	    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
-	    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
-	    </ul>
-	</div>
+
+    
+    	<div class="span4">
+    		<strong>nb : rafraichissement toutes les 10 secondes</strong>
+    		<h4>Application</h4>
+			    <ul>
+			    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
+			    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
+			    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
+			    </ul>
+
+		    <hr/>
+		    <h4>Système</h4>
+		    <div id="dash_system"></div>
+
+		    <hr/>
+			<h4>Réseau</h4>
+		    <div id="dash_network"></div>
+		</div>
+
+
+	    <div class="span4">
+	    	
+	    <h4>Utilisateurs</h4>
+	    <div id="dash_user"></div>
+	    
+	    <hr/>
+	    <h4>HDD</h4>
+	    <div id="dash_hdd"></div>
+
+	    <hr/>
+	    <h4>Disques</h4>
+	    <div id="dash_disk"></div>
+		<hr/>
+	    <h4>GPIO</h4>
+	    <div id="dash_gpio"></div>
+	    
+	    </div>
+
+
+	    <div class="span4">
+	    	<h4>Services</h4>
+	    	<div id="dash_services"></div>
+
+	    </div>
+
+	
 	{/if}
 
 </div>

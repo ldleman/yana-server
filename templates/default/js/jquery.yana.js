@@ -160,6 +160,8 @@
 				});
             });
 	   },
+
+
 	   
 		date: function (){
             return this.each(function() {
@@ -172,6 +174,18 @@
 					monthNames: ["Janvier","Février","Mars","Avril","Mai","Juin","Jullet","Aout","Septembre","Octobre","Novembre","Décembre"],
 					firstDay: 1
 				});
+            });
+	   },
+
+	   autocomplete: function (options){
+	   		var defaults = {
+                    source: []
+                }
+            var options = $.extend(defaults, options);
+            return this.each(function() {
+            	var o = options;
+				var obj = $(this);
+				obj.typeahead(o);
             });
 	   },
 	   

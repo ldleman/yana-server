@@ -33,12 +33,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-         <div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{#PROGRAM_VERSION}</div>
-          
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+           
+           <li><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{#PROGRAM_VERSION}</div></li>
           {if="$myUser!=false"}
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-             
               <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               {loop="menuItems"}
               <li>{$value.content}</li>
@@ -47,13 +46,13 @@
                 <li><a href="setting.php"><i class="icon-wrench"></i> Configuration</a></li>
               {/if}
               {if="$myUser!=false"}
-              <li class="loggedUserMenu">Connecté avec <span>{$myUser->getFullName()}</span> ({$rank->getLabel()})</li>
-              <li><a href="action.php?action=logout"><i class="icon-remove-circle"></i> Déconnexion</a></li>
-              {/if}
-            </ul>
-          </div><!--/.nav-collapse -->
-          {/if}
 
+            
+              <li class="infobulle"  title="Connecté avec {$myUser->getFullName()} ({$rank->getLabel()})"><a href="action.php?action=logout"><i class="icon-remove-circle"></i> Déconnexion</a></li>
+              {/if}
+          {/if}
+           </ul>
+      </div><!--/.nav-collapse -->
 
         </div>
       </div>

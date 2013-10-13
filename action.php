@@ -25,20 +25,35 @@ $myUser = (!$myUser?new User():$myUser);
 //Execution du code en fonction de l'action
 switch ($_['action']){
 	case 'login':
-	
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '';
 	if($user==false){
 		$error = '?error='.urlencode('le compte spécifié est inexistant');
 	}else{
 		$_SESSION['currentUser'] = serialize($user);
+	
+
+	if(isset($_['rememberMe'])){	
+		$expire_time = time() + COOKIE_LIFETIME*86400; //Jour en secondes
+		
+		//On crée un cookie dans la bd uniquement si aucun autre cookie n'existe sinon
+		//On rend inutilisable le cookie utilisé par un autre navigateur
+		//On ne veut que cela soit le cas uniquement si on clique sur déconnexion (et que l'on a demandé Se souvenir de moi)
+		$actual_cookie = $user->getCookie();
+		if ($actual_cookie == "")
+		{
+		$cookie_token = sha1(time().rand(0,1000));
+		$user->setCookie($cookie_token);
+		$user->save();
+		}
+		else
+		{
+			$cookie_token = $actual_cookie;
+		}	
+		Functions::makeCookie(COOKIE_NAME,$cookie_token,$expire_time);
 	}
-
-	if(isset($_['rememberMe'])){
-		setcookie(COOKIE_NAME, $user->coockie(), mktime(0,0,0, date("d"),date("m"), (date("Y")+1)),'/');
 	}
-
-
+	
 	header('location: ./index.php'.$error);	
 	break;
 
@@ -49,8 +64,11 @@ switch ($_['action']){
 	break;
 	
 	case 'user_add_user':
-	if(!$myUser->can('user','c')) exit('ERREUR: Permissions insuffisantes.');
+	$right_toverify = isset($_['id']) ? 'u' : 'c';
+	if($myUser->can('user',$right_toverify)){
 	$user = new User();
+	//Si modification on charge la ligne au lieu de la créer
+	if ($right_toverify == "u"){$user = $user->load(array("id"=>$_['id']));}
 	$user->setMail($_['mailUser']);
 	$user->setName($_['nameUser']);
 	$user->setFirstName($_['firstNameUser']);
@@ -60,24 +78,12 @@ switch ($_['action']){
 	$user->setState(1);
 	$user->setToken(sha1(time().rand(0,1000)));
 	$user->save();
-	header('location:setting.php?section=user');
-	break;
-
-	case 'user_mod_user':
-	if(!$myUser->can('user','u')) exit('ERREUR: Permissions insuffisantes.');
-
-	$user = new User();
-	$user->change(array(
-		'login'=> $_['loginUser'],
-		'password'=> sha1(md5($_['passwordUser'])),
-		'name'=> $_['nameUser'],
-		'firstname'=> $_['firstNameUser'],
-		'mail'=> $_['mailUser'],
-		'rank'=> $_['rankUser']
-		),
-	array('id'=>$_['id_user'])
-	);
-	header('location:setting.php?section=user');
+	Functions::goback("setting","user");
+}
+else
+{
+	Functions::goback("setting","user","&error=Vous n'avez pas le droit de faire ça!");
+}
 	break;
 
 	case 'delete_user':
@@ -87,11 +93,11 @@ switch ($_['action']){
 
 	if(isset($_['id']) && $NbUsers > 1){
 		$userManager->delete(array('id'=>$_['id']));
-		header('location:setting.php?section=user');
+		Functions::goback("setting","user");
 	}
 	else
 	{
-		header('location:setting.php?section=user&error=Impossible de supprimer le dernier utilisateur.');
+		Functions::goback("setting","user","&error=Impossible de supprimer le dernier utilisateur.");
 	}
 	break;
 
@@ -104,35 +110,25 @@ switch ($_['action']){
 
 	if(isset($_['id']) && $Nbrank > 1){
 		$rankManager->delete(array('id'=>$_['id']));
+		Functions::goback("setting","access");
 		header('location:setting.php?section=access');
 	}
 	else
 	{
-		header('location:setting.php?section=access&error=Impossible de supprimer le dernier rang.');
+		Functions::goback("setting","access","&error=Impossible de supprimer le dernier rang.");
 	}
 	break;
 
 	case 'access_add_rank':
-	if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
+	$right_toverify = isset($_['id']) ? 'u' : 'c';
+	if(!$myUser->can('configuration',$right_toverify)) exit('ERREUR: Permissions insuffisantes.');
 	$rank = new Rank();
+	if ($right_toverify == "u"){$rank = $rank->load(array("id"=>$_['id']));}
 	$rank->setLabel($_['labelRank']);
 	$rank->setDescription($_['descriptionRank']);
 	$rank->save();
-	header('location:setting.php?section=access');
+	Functions::goback("setting","access");
 	break;
-
-	case 'access_mod_rank':
-	if(!$myUser->can('configuration','u')) exit('ERREUR: Permissions insuffisantes.');
-	$rank = new Rank();
-	$rank->change(array(
-		'label'=> $_['labelRank'],
-		'description'=> $_['descriptionRank']
-		),
-	array('id'=>$_['id_rank'])
-	);
-	header('location:setting.php?section=access');
-	break;
-
 
 	case 'set_rank_access':
 	if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
@@ -169,14 +165,28 @@ switch ($_['action']){
 	case 'access_delete_right':
 	$rankManager = new Right();
 	$rankManager->delete(array('id'=>$_['id']));
-	header('location:setting.php?section=right&id='.$_['rankRight']);
+	Functions::goback("setting","right","&id=".$_['rankRight']);
 	break;
 
 	case 'logout':
+
+	//Détruire le cookie uniquement s'il existe sur cette ordinateur
+	//Afin de le garder dans la BD pour les autres ordinateurs/navigateurs
+	if(isset($_COOKIE[COOKIE_NAME])){
+	$user = new User();
+	$user = $userManager->load(array("id"=>$myUser->getId()));
+	$user->setCookie("");
+	$user->save();
+	Functions::destroyCookie(COOKIE_NAME);
+	}
+
 	$_SESSION = array();
 	session_unset();
 	session_destroy();
-	header('location: ./index.php');
+	
+
+
+	Functions::goback(" ./index");
 	break;
 
 
@@ -189,7 +199,7 @@ switch ($_['action']){
 	}else{
 		Plugin::disabled($_['plugin']);
 	}
-	header('location: ./setting.php?section=plugin');
+	Functions::goback("setting","plugin");
 	break;
 
 	case 'crontab':
@@ -254,8 +264,88 @@ switch ($_['action']){
 	break;
 
 
+	case 'GET_DASH_INFO':
+		switch($_['type']){
 
-	
+			/*$tpl->assign('users',Monitoring::users());
+		$tpl->assign('hdds',Monitoring::hdd());
+		$tpl->assign('services',Monitoring::services());
+		$tpl->assign('ethernet',Monitoring::ethernet());
+		$tpl->assign('ram',Monitoring::ram());
+		$tpl->assign('cpu',Monitoring::cpu());
+		$tpl->assign('heat',Monitoring::heat());
+		$tpl->assign('disks',Monitoring::disks());*/
+			case 'dash_system':
+				//$heat = Monitoring::heat();
+				$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
+				$cpu = Monitoring::cpu();
+				echo '<ul>
+				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
+				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
+				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
+				    	<li><strong>Temperature :</strong>  <span class="label label-warning">'.$heat.'</span></li>
+				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
+				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
+				    </ul>';
+					/* <li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>  // Au cas ou 
+					   <li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>*/
+			break;
+			case 'dash_network':
+			$ethernet = Monitoring::ethernet();
+			echo '<ul>
+			    	<li><strong>IP LAN :</strong> <code>'.Monitoring::internalIp().'</code></li>
+			    	<li><strong>IP WAN :</strong> <code>'.Monitoring::externalIp().'</code></li>
+			    	<li><strong>Serveur HTTP :</strong> '.Monitoring::webServer().'</li>
+			    	<li><strong>Ethernet :</strong> '.$ethernet['up'].' Montant / '.$ethernet['down'].' Descendant</li>
+			    	<li><strong>Connexions :</strong>  <span class="label label-info">'.Monitoring::connections().'</span></li>
+			    </ul>';
+			break;
+			case 'dash_user':
+				echo '<ul>';
+				$users = Monitoring::users();
+			    foreach ($users as $value) {
+					echo '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
+			    }
+			    echo '</ul>';
+			break;
+			case 'dash_hdd':
+				$hdds = Monitoring::hdd();
+				echo '<ul>';
+
+				foreach ($hdds as $value) {
+					'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
+				}
+				echo '</ul>';
+			break;
+			case 'dash_disk':
+				$disks = Monitoring::disks();
+				echo '<ul>';
+			    foreach ($disks as $value) {
+			    	echo '<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
+			    }
+			    echo '</ul>';
+			break;
+			case 'dash_services':
+				$services = Monitoring::services();
+				echo '<ul>';
+			    foreach ($services as $value) {
+			    	echo '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
+			    }
+			    echo '</ul>';
+			break;
+			case 'dash_gpio':
+				$gpios = Monitoring::gpio();
+				$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
+				echo '<pre><ul>';
+			    for ($i = 0; $i <= 21; $i+=2) {
+			    	echo '     <strong>'.$pin[$i].'</strong>-> '.($gpios[$i]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').'  '.($gpios[($i+1)]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').' <-<strong>'.$pin[($i+1)].'</strong><br/>';
+			    }
+
+			    echo '</ul></pre>';
+			break;
+		}
+	break;
+
 	default:
 	Plugin::callHook("action_post_case", array());
 	break;
