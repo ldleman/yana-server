@@ -24,6 +24,13 @@ body {
 	margin: 0px;
 	padding:0px;
 }
+
+.pluginBloc ul.nav li{
+	padding:0 0 0 0;
+	border-bottom: none;
+	margin:0 0 0 0;
+}
+
 .pluginBloc ul li{
 	padding:5px 0 5px 0;
 	border-bottom: 1px dotted #cecece;

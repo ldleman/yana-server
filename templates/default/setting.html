@@ -110,27 +110,31 @@
 		<div class="span9 pluginBloc">
 			<h1>Plugins</h1>
 			<p>Voici la liste des plugins installés :</p> 
-			<ul class="pluginList">
-				{if="count($plugins)==0"}
-			    	Aucun plugin n'est installé pour le moment.
-			    {else}
-			         {loop="plugins"}
-			                   	{if="$value->getType()!='component'"}
-			                    <li>
-			                        <ul>
-			                            <li><h4>Nom: </h4>{$value->getName()}</li>
-			                            <li><h4>Auteur: </h4><a href="mailto:{$value->getMail()}">{$value->getAuthor()}</a></li>
-			                            <li><h4>Licence: </h4>{$value->getLicence()}</li>
-			                            <li><h4>Version: </h4><code>{$value->getVersion()}</code></li>
-			                            <li><h4>Site web: </h4><a href="{$value->getLink()}">{$value->getLink()}</a></li>
-			                            <li>{$value->getDescription()}</li>
-			                            <li><a href="action.php?action=changePluginState&plugin={$value->getUid()}&state={$value->getState()}" class="button">{$value->getState()=="0"?"Activer":"Désactiver"}</a></li>
-			                        </ul>
-			                    </li>
-			                  {/if}
-			    	{/loop}
-			    {/if}
+			<ul class="nav nav-tabs">
+					<li  {if="@$_['block']!='inactif'"}class="active"{/if}><a  href="setting.php?section=plugin&block=actif"><i class="icon-chevron-right"></i> Actif</a></li>
+					<li {if="@$_['block']=='inactif'"}class="active"{/if}><a  href="setting.php?section=plugin&block=inactif"><i class="icon-chevron-right"></i> Inactif</a></li>
 			</ul>
+				<ul class="pluginList">
+					{if="count($plugins)==0"}
+						Aucun plugin n'est installé pour le moment.
+					{else}
+						 {loop="plugins"}
+									{if="$value->getType()!='component' && $value->getState() == (@$_['block']=='inactif' ?0:1)"}
+									<li>
+										<ul>
+											<li><h4>Nom: </h4>{$value->getName()}</li>
+											<li><h4>Auteur: </h4><a href="mailto:{$value->getMail()}">{$value->getAuthor()}</a></li>
+											<li><h4>Licence: </h4>{$value->getLicence()}</li>
+											<li><h4>Version: </h4><code>{$value->getVersion()}</code></li>
+											<li><h4>Site web: </h4><a href="{$value->getLink()}">{$value->getLink()}</a></li>
+											<li>{$value->getDescription()}</li>
+											<li><a href="action.php?action=changePluginState&plugin={$value->getUid()}&state={$value->getState()}" class="button">{$value->getState()=="0"?"Activer":"Désactiver"}</a></li>
+										</ul>
+									</li>
+								  {/if}
+						{/loop}
+					{/if}
+				</ul>
 		</div>
 	{/if}
 
