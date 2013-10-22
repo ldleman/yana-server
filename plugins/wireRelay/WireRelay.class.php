@@ -8,7 +8,7 @@
 
 class WireRelay extends SQLiteEntity{
 
-	protected $id,$name,$description,$pin,$room;
+	protected $id,$name,$description,$pin,$room,$pulse;
 	protected $TABLE_NAME = 'plugin_wireRelay';
 	protected $CLASS_NAME = 'WireRelay';
 	protected $object_fields = 
@@ -17,7 +17,8 @@ class WireRelay extends SQLiteEntity{
 		'name'=>'string',
 		'description'=>'string',
 		'pin'=>'int',
-		'room'=>'int'
+		'room'=>'int',
+		'pulse'=>'int'
 	);
 
 	function __construct(){
@@ -62,6 +63,14 @@ class WireRelay extends SQLiteEntity{
 
 	function setRoom($room){
 		$this->room = $room;
+	}
+
+	function getPulse(){
+		return $this->pulse;
+	}
+
+	function setPulse($pulse){
+		$this->pulse = $pulse;
 	}
 
 }

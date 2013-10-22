@@ -2,7 +2,12 @@
 session_start();
 
 ini_set('display_errors','1');
-error_reporting(E_ALL);
+
+error_reporting(E_ALL & ~E_NOTICE);
+
+//Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
+//car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
+if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
 
 mb_internal_encoding('UTF-8');
 $start=microtime(true);
@@ -24,7 +29,6 @@ require_once('RainTPL.php');
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
 
-
 function __autoload($class_name){
     include 'classes/'.$class_name . '.class.php';
 }
@@ -37,7 +41,6 @@ $conf->getAll();
 //Inclusion des plugins  
 Plugin::includeAll();
 
-	
 if(isset($_SESSION['currentUser'])){
 	$myUser =unserialize($_SESSION['currentUser']);
 }
@@ -51,6 +54,9 @@ if(!$myUser && isset($_COOKIE[COOKIE_NAME])){
 			}
 	}
 }
+
+
+
 
 
 $userManager = new User();
@@ -67,10 +73,6 @@ $rank = new Rank();
 if($myUser!=false && $myUser->getRank()!=false){
 	$rank = $rank->getById($myUser->getRank());
 }
-
-
-
-
 
 
 $tpl->assign('myUser',$myUser);

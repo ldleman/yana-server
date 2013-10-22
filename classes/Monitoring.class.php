@@ -73,6 +73,16 @@ class Monitoring {
 			'total' => $total
 		);
   }
+
+  public static function gpio() {
+    $gpios = array();
+    for($i=0;$i<25;$i++){
+      $gpios[$i] = exec("/usr/local/bin/gpio read ".$i, $out);
+ 
+    }
+    return $gpios;
+  }
+
   public static function connections() {
 		//$connections >= 50 = 'warning'
 		$connections = shell_exec("netstat -nta --inet | wc -l");
@@ -183,7 +193,8 @@ class Monitoring {
       $line = preg_replace("/ +/", " ", $line);
       if (strlen($line)>0) {
         $line = explode(" ", $line);
-        $temp[] = $line[5];
+     
+        $temp[] = @$line[5];
       }
     }
 
@@ -195,7 +206,7 @@ class Monitoring {
         $line = explode(" ", $line);
         $result[] = array(
           'user' => $line[0],
-          'ip' => $line[5],
+          'ip' => @$line[5],
           'dns' => $temp[$i],
           'date' => $line[2] .' '. $line[3],
           'hour' => $line[4]

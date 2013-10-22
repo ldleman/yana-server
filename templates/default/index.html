@@ -8,78 +8,50 @@
 
     
     	<div class="span4">
+    		<strong>nb : rafraichissement toutes les 10 secondes</strong>
     		<h4>Application</h4>
+			    <ul>
+			    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
+			    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
+			    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
+			    </ul>
 
-	    <ul>
-	    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
-	    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
-	    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
-	    </ul>
+		    <hr/>
+		    <h4>Système</h4>
+		    <div id="dash_system"></div>
 
-	      <hr/>
-	    <h4>Système</h4>
-	  
-	     <ul>
-	    	<li><strong>Distribution :</strong> {function="Monitoring::distribution();"}</li>
-	    	<li><strong>Kernel :</strong> {function="Monitoring::kernel();"}</li>
-	    	<li><strong>HostName :</strong> {function="Monitoring::hostname();"}</li>
-	    	<li><strong>Temperature :</strong> <span class="label label-warning">{$heat.degree}</span></li>
-	    	<li><strong>Temps de marche :</strong> {function="Monitoring::uptime();"}</li>
-	    	<li><strong>CPU :</strong>  <span class="label label-info">{$cpu.current_frequency} Mhz</span> (Max {$cpu.maximum_frequency}  Mhz/ Min {$cpu.minimum_frequency}  Mhz)</li>
-	    	
-	    </ul>
-	      <hr/>
-	    <h4>Réseau</h4>
-
-	    <ul>
-	    	<li><strong>IP LAN :</strong> <code>{function="Monitoring::internalIp();"}</code></li>
-	    	<li><strong>IP WAN :</strong> <code>{function="Monitoring::externalIp();"}</code></li>
-	    	<li><strong>Serveur HTTP :</strong> {function="Monitoring::webServer();"}</li>
-	    	<li><strong>Ethernet :</strong> {$ethernet.up} Montant / {$ethernet.down} Descendant</li>
-	    	<li><strong>Connexions :</strong>  <span class="label label-info">{function="Monitoring::connections();"}</span></li>
-	    </ul>
+		    <hr/>
+			<h4>Réseau</h4>
+		    <div id="dash_network"></div>
 		</div>
 
 
 	    <div class="span4">
 	    	
-	    	 <h4>Utilisateurs</h4>
-	    	
-	    <ul>
-	    	{loop="users"}
-	    	<li>Utilisateur <strong class="badge">{$value.user}</strong> IP : <code>{$value.ip}</code>, Connexion : {$value.hour} </li>
-	    	{/loop}
-	    </ul>
-	      <hr/>
-	     <h4>HDD</h4>
+	    <h4>Utilisateurs</h4>
+	    <div id="dash_user"></div>
+	    
+	    <hr/>
+	    <h4>HDD</h4>
+	    <div id="dash_hdd"></div>
 
-	    <ul>
-	    	{loop="hdds"}
-	    	<li><strong class="badge">{$value.name}</strong> Espace : {$value.used}/{$value.total} Format : {$value.format} </li>
-	    	{/loop}
-	    </ul>
-	      <hr/>
+	    <hr/>
 	    <h4>Disques</h4>
-
-	    <ul>
-	    	{loop="disks"}
-	    	<li><strong class="badge">{$value.name}</strong> Statut : {$value.size} Type : {$value.type} Chemin : {$value.mountpoint}  </li>
-	    	{/loop}
-	    </ul>
+	    <div id="dash_disk"></div>
+		<hr/>
+	    <h4>GPIO</h4>
+	    <div id="dash_gpio"></div>
+	    
 	    </div>
 
 
 	    <div class="span4">
 	    	<h4>Services</h4>
-	    	
-	    <ul>
-	    	{loop="services"}
-	    	<li {if="$value['status']"}class="service-active"{/if}>- {$value.name}</li>
-	    	{/loop}
-	    </ul>
+	    	<div id="dash_services"></div>
+
 	    </div>
 
-
+	
 	{/if}
 
 </div>
