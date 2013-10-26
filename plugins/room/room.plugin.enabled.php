@@ -21,15 +21,14 @@ function room_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='room'){
 		$roomManager = new Room();
 		$rooms = $roomManager->populate();
+		if (!isset($_['id']) && count($rooms)>0)  $_['id'] = $rooms[0]->getId();
 		?>
 
-		<input type="text" class="date"/>
-		<input type="text" class="input_completion"/>
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
 					<?php foreach($rooms as $room){ ?>
-					<li <?php echo (isset($_['id']) && $room->getId()==$_['id']?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
+					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
 					<?php } ?>
 				</ul>
 
