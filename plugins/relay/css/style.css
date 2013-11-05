@@ -1,0 +1,36 @@
+.relayBloc{
+	border: 1px solid #cecece;
+	padding:5px 5px 0 5px;
+	border-radius:5px;
+	margin-bottom:10px;
+}
+.relayBloc h5{
+	font-size:20px;
+	padding:5px 1% 5px 1%;
+	margin:0;
+	width: 98%;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+
+.relayBloc ul li{
+	border-bottom: 1px dotted #cecece;
+	padding:5px;
+}
+
+.relayBloc p{
+	border: 1px solid #cecece;
+	border-radius:5px;
+	padding:5px 1% 5px 1%;
+	margin:5px 0 5px 0;
+	background-color: #F4F4F4;
+	color:#7E7E7E;
+	width: 98%;
+	text-align: justify;
+}
+.relayBloc img{
+	margin:auto;
+	opacity:0.3;
+	display:block;
+}

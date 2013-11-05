@@ -132,16 +132,16 @@ function radioRelay_plugin_setting_page(){
 
 					?>
 
-					<div class="span3">
-						<h5><?php echo $radioRelay->getName() ?></h5>
-
+					<div class="span3 relayBloc">
+						<h5 class="label label-info"><?php echo $radioRelay->getName() ?></h5>	
 						<p><?php echo $radioRelay->getDescription() ?>
 						</p><ul>
-						<li>Code radio : <code><?php echo $radioRelay->getRadioCode() ?></code></li>
-						<li>Type : <code>Interrupteur radio</code></li>
-						<li>Emplacement : <code><?php echo $room->getName() ?></code></li>
+						<li>Code radio : <span class="label label-warning"><?php echo $radioRelay->getRadioCode() ?></span></li>
+						<li>Type : <span>Interrupteur radio</span></li>
+						<li>Emplacement : <span><?php echo $room->getName() ?></span></li>
 					</ul>
-					<p></p>
+				<?php  if(fileperms(Plugin::path().'radioEmission')!='36333'){ ?><span style="width:98%" class="label label-important">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href='https://github.com/ldleman/yana-server#installation';">la doc</span> pour les régler</span><?php } ?>
+					
 					<div class="btn-toolbar">
 						<div class="btn-group">
 							<a class="btn btn-success" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
