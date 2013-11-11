@@ -16,7 +16,7 @@ Installation
 
 Executez les commandes suivantes dans un shell :
 
-`sudo apt-get install git-core && sudo apt-get install sqlite3 && sudo apt-get install php5-sqlite && cd /var/www/ && sudo git clone https://github.com/ldleman/yana-server.git /var/www/yana-server && sudo chown -R www-data:www-data yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission`
+> sudo apt-get install git-core && sudo apt-get install sqlite3 && sudo apt-get install php5-sqlite && cd /var/www/ && sudo git clone https://github.com/ldleman/yana-server.git /var/www/yana-server && sudo chown -R www-data:www-data yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission
 
 Puis executez l'adresse web de yana dans un navigateur :
 
@@ -40,6 +40,6 @@ Attention, si vous aviez fait des modifs sur le code entre temps il est possible
 ```git reset --hard origin/master```
 
 Puis remettez les permission en ecriture sur le dossier plugins
-```sudo chown -R www-data:www-data /var/www/yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission```
+> sudo chown -R www-data:www-data /var/www/yana-server && sudo chown root:www-data /var/www/yana-server/plugins/relay/radioEmission && sudo chmod +s /var/www/yana-server/plugins/relay/radioEmission
 
 Une fois l'update terminé, allez en section plugin de yana-server et désactivez/réactivez chaques plugins utilisés afin de mettre à jour leurs tables.
