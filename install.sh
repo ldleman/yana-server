@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#sudo wget https://raw.github.com/ldleman/yana-server/master/install.sh && sudo chmod +x install.sh && sudo ./install.sh
 ## Description: Script d'installation pour YANA
 ## Author:Sarrailh Remi
 ## Email:maditnerd@gmail.com

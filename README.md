@@ -24,8 +24,8 @@ Puis executez l'adresse web de yana dans un navigateur :
 
 Et suivez le formulaire d'installation.
 
-A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
-configuration --> plugins
+nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
+configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
 
 Mise à jour
 ============
