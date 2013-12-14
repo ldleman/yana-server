@@ -50,15 +50,15 @@ function camera_plugin_page($_){
 		  	</code><br/>
 		  	Puis allez dans "camera" et sélectionnez "enable", redemarrez et tapez<br/>
 		  	<code>
-		  		usermod -a -G video www-data
+		  		sudo usermod -a -G video www-data
 		  	</code><br/>
 		  	Puis<br/>
 		  	<code>
-		  		echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > /etc/udev/rules.d/10-vchiq-permissions.rules
+		  		sudo echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > /etc/udev/rules.d/10-vchiq-permissions.rules
 		  	</code><br/>
 		  	Et enfin<br/>
 		  	<code>
-		  		chown -R www-data:www-data /var/www/yana-server/plugins
+		  		sudo chown -R www-data:www-data /var/www/yana-server/plugins
 		  	</code><br/>
 		  		Redémarrez et c'est ok :)
 		  	
