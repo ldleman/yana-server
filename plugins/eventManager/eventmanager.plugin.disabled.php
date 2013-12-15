@@ -106,6 +106,9 @@ function eventmanager_plugin_page($_){
 				<form action="action.php?action=eventmanager_save_event" method="POST">
 				<fieldset>
 				    <legend>Gestion des evenements</legend>
+				    <p>Ce module vous permet de créer un évenement en fonction d'une date que le client (yana windows ou yana for android) pourra retranscrire.
+				    	<br/> L'évenement peut être une action parole (le client yana prononce une phrase), commande (une commande est lancée sur
+				    	le poste qui execute yana client), ou encore  un son à joeur (le son doit être un .wav situé dans le repertoire son de yana-windows)</p>
 				    <span class="row">
 				    	<span class="span6">
 						 

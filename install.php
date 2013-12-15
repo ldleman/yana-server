@@ -124,7 +124,7 @@ if(isset($_POST['install'])){
 	 <div id="body" class="container">
     <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Installation terminée: </strong> L'installation est terminée, vous pouvez supprimer ce fichier, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
+    <strong>Installation terminée: </strong> L'installation est terminée, vous devez supprimer le fichier <code>yana-server/install.php</code> par mesure de sécurité, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
   </div>
 <?php }else{ ?>
       <div id="body" class="container">
