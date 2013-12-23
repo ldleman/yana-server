@@ -112,7 +112,8 @@ if(isset($_POST['install'])){
     	Plugin::enabled('relay-relay');
     	Plugin::enabled('vocal_infos-vocal_infos');
     	Plugin::enabled('room-room');
-  
+      Plugin::enabled('eventManager-eventManager');
+      
   }else{
     ?>
         <div id="body" class="container">

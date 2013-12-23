@@ -9,7 +9,7 @@ class Monitoring {
   
   public static function cpu() {
 	// $loads[0] > 1 == 'danger'
-	$loads = sys_getloadavg();
+	$loads = @sys_getloadavg();
     return array
 	(
 		'current_frequency' => round(file_get_contents("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq") / 1000), //Mhz
