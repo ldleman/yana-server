@@ -34,6 +34,7 @@ function eventmanager_action(){
 
 				$content = array();
 				//Todo, prendre en compte le multi action ([1],[2]...)
+				$event->addRecipient($_['eventTarget']);
 				$content[0]['type'] = $_['eventType'];
 
 				switch($content[0]['type']){
@@ -49,8 +50,8 @@ function eventmanager_action(){
 				}
 
 				$event->setContent($content[0]);
-				$event->setRecipients('all'); //@TODO
-
+				//$event->setRecipients('all'); //@TODO
+				
 				$event->save();
 				header('location:index.php?module=eventmanager');
 			}else{
@@ -116,11 +117,23 @@ function eventmanager_plugin_page($_){
 							    <input class="input-xxlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="ex : Signale un anniversaire"/>
 						
 						</span>
+
+
 						<span class="span2">
 						<?php 
+								$recipients = $currentEvent->getRecipients();
 								$content = $currentEvent->getContent();
 								$action = $content;
 							?>
+						    <label for="eventType">Cible</label>
+						    <select class="input-medium" name="eventTarget" onchange="setActionTypeList(this);">
+						    	<option <?php echo ($recipients[0]=='client'?'selected="selected"':''); ?> value="client">Client</option>
+						    	<option <?php echo ($recipients[0]=='server'?'selected="selected"':''); ?> value="server">Serveur</option>
+						    </select>
+						</span>
+
+						<span class="span2">
+						
 						    <label for="eventType">Action</label>
 						    <select class="input-medium" name="eventType">
 						    	<option <?php echo ($action['type']=='talk'?'selected="selected"':''); ?> value="talk">Parler</option>
@@ -214,7 +227,7 @@ function eventmanager_plugin_page($_){
 				    <th>Type</th>
 				    <th>Contenu</th>
 				    <th>Dernier lancement</th>
-				    <th>Destinataires</th>
+				    <th>Cibles</th>
 				    <th></th>
 			    </tr>
 			    </thead>
@@ -222,8 +235,11 @@ function eventmanager_plugin_page($_){
 			    <?php 
 			    	$eventManager = new Event();
 			    	$events = $eventManager->populate();
+			    	;
 			    	foreach($events as $event){ 
+
 			    		$action = $event->getContent();
+			    		$recipients = $event->getRecipients();
 			    		//$action = $action[0];
 			    	?>
 			    <tr>
@@ -242,10 +258,9 @@ function eventmanager_plugin_page($_){
 						    	break;
 						    }; ?></td>
 				    <td><?php echo $event->getRepeat(); ?></td>
-				    <td><?php echo $event->getRecipients(); ?></td>
+				    <td><?php  echo implode(',',$recipients) ?></td>
 				    <td>
-	<a class="btn" href="index.php?module=eventmanager&id=<?php echo $event->getId(); ?>"><i class="icon-edit"></i></a>
-			   
+						<a class="btn" href="index.php?module=eventmanager&id=<?php echo $event->getId(); ?>"><i class="icon-edit"></i></a>
 				    	<a class="btn" href="action.php?action=eventmanager_delete_event&id=<?php echo $event->getId(); ?>"><i class="icon-remove"></i></a></td>
 			   	 </tr>
 			    <?php } ?>
@@ -258,7 +273,7 @@ function eventmanager_plugin_page($_){
 
 
 
-
+Plugin::addJs('/js/main.js');
 Plugin::addHook("action_post_case", "eventmanager_action");    
 Plugin::addHook("menubar_pre_home", "eventmanager_plugin_menu");  
 Plugin::addHook("home", "eventmanager_plugin_page");  

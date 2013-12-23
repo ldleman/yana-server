@@ -230,6 +230,8 @@ else
 	$response = array('responses'=>array());
 	Plugin::callHook("get_event", array(&$response));
 
+	$checker = (isset($_['checker'])?'server':'client');
+
 	$eventManager = new Event();
 	$events = $eventManager->loadAll(array(),'id');
 	
@@ -239,20 +241,24 @@ else
 
 	foreach ($events as $event) {
 
-		if( 
-		($event->getMinut() == '*' || in_array($minut,explode(',',$event->getMinut())) ) &&
-		($event->getHour() == '*' || in_array($hour,explode(',',$event->getHour())) ) &&
-		($event->getDay()== '*' || in_array($day,explode(',',$event->getDay())) ) &&
-		($event->getMonth() == '*' || in_array($month,explode(',',$event->getMonth())) ) &&
-		($event->getYear() == '*' || in_array($year,explode(',',$event->getYear())) ) 
-		){
-			
-			if($event->getRepeat()!=$time){
-				$event->setRepeat($time);
-				$response['responses'][]= $event->getContent();
-				$event->save();
+		if(in_array($checker,$event->getRecipients())){
+			if( 
+			($event->getMinut() == '*' || in_array($minut,explode(',',$event->getMinut())) ) &&
+			($event->getHour() == '*' || in_array($hour,explode(',',$event->getHour())) ) &&
+			($event->getDay()== '*' || in_array($day,explode(',',$event->getDay())) ) &&
+			($event->getMonth() == '*' || in_array($month,explode(',',$event->getMonth())) ) &&
+			($event->getYear() == '*' || in_array($year,explode(',',$event->getYear())) ) 
+			){
+				
+				if($event->getRepeat()!=$time){
+					$event->setRepeat($time);
+					$response['responses'][]= $event->getContent();
+					$event->save();
+				}
 			}
 		}
+
+
 
 
 	}
