@@ -265,8 +265,23 @@ function eventmanager_plugin_page($_){
 			   	 </tr>
 			    <?php } ?>
 			    </table>
+			    
+			     <strong>Important: </strong>Pour profiter du gestionnaire d'évenement de yana <code>coté serveur</code>, vous devez ajouter une tâche
+			     planifiée sur le raspberry PI, pour cela tapez :
+			     <code>sudo crontab -e</code>
+			     puis ajoutez la ligne
+			    <?php
+			     $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+				 $url = str_replace('//','/',$protocol.$_SERVER['SERVER_ADDR'].'/'.str_replace('index.php','',$_SERVER['PHP_SELF']).'/action.php?action=GET_EVENT&checker=server');
+
+			     echo '<code>*/1 * * * * wget '.$url.' -O /dev/null 2>&1</code>'; ?>
+			     puis sauvegardez (<code>ctrl</code>+<code>x</code> puis <code>O</code> puis <code>Entrée</code>) 
+			     <br/><br/>
+  
 			</div>
 
+			
+   
 		<?php
 	}
 }

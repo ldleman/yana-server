@@ -1,7 +1,7 @@
 <?php
 
 	define('PROGRAM_NAME','Yana Server');
-	define('PROGRAM_VERSION','3.0.3');
+	define('PROGRAM_VERSION','3.0.4');
 	define('PROGRAM_AUTHOR','Valentin CARRUESCO');
 
 	//Prefix des noms des tables leed pour les bases de données uniques

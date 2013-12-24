@@ -230,7 +230,7 @@ else
 	$response = array('responses'=>array());
 	Plugin::callHook("get_event", array(&$response));
 
-	$checker = (isset($_['checker'])?'server':'client');
+	$checker = (isset($_['checker'])?$_['checker']:'client');
 
 	$eventManager = new Event();
 	$events = $eventManager->loadAll(array(),'id');
@@ -251,9 +251,15 @@ else
 			){
 				
 				if($event->getRepeat()!=$time){
-					$event->setRepeat($time);
-					$response['responses'][]= $event->getContent();
-					$event->save();
+					if(in_array($checker, $event->getRecipients())){
+						$event->setRepeat($time);
+						$response['responses'][]= $event->getContent();
+
+						//Le serveur ne peux qu'executer des commandes programme
+						if($checker=='server') exec($event->getContent()['program']);
+
+						$event->save();
+					}
 				}
 			}
 		}
