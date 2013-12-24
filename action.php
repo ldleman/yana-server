@@ -256,7 +256,24 @@ else
 						$response['responses'][]= $event->getContent();
 
 						//Le serveur ne peux qu'executer des commandes programme
-						if($checker=='server') exec($event->getContent()['program']);
+						if($checker=='server'){
+							$content = $event->getContent();
+							switch($content['type']){
+								case 'command':
+									exec($content['program']);
+								break;
+						
+								case 'gpio':
+									foreach(explode(',',$content['gpios']) as $info){
+										list($gpio,$state) = explode(':',$info);
+										exec('gpio mode '.$gpio.' out');
+										exec('gpio write '.$gpio.' '.$state);
+
+									}
+								break;
+								
+							}
+						}
 
 						$event->save();
 					}

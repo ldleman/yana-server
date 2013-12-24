@@ -1,13 +1,20 @@
 $(document).ready(function(){
-	setActionTypeList();
+	setActionTypeList($('select[name="eventType"]').attr('value'));
 });
 
 
-function setActionTypeList(){
+function setActionTypeList(type){
 	if($('select[name="eventTarget"]').val()=='server'){
-		$('select[name="eventType"] option[value="talk"],select[name="eventType"] option[value="sound"]').hide();
-		$('select[name="eventType"] option:eq(0)').focus();
+
+		$('select[name="eventType"]').html(
+		'<option '+(type=='command'?'selected="selected"':'')+'value="command">Executer une commande</option>'+
+		'<option '+(type=='gpio'?'selected="selected"':'')+'value="gpio">Changer un etat GPIO</option>'
+		);
 	}else{
-		$('select[name="eventType"] option[value="talk"],select[name="eventType"] option').show();
+		$('select[name="eventType"]').html(
+		'<option '+(type=='talk'?'selected="selected"':'')+'value="talk">Parler</option>'+
+		'<option '+(type=='command'?'selected="selected"':'')+'value="command">Executer une commande</option>'+
+		'<option '+(type=='sound'?'selected="selected"':'')+'value="sound">Jouer un son</option>'
+		);
 	}
 }

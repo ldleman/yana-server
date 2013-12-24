@@ -34,6 +34,7 @@ function eventmanager_action(){
 
 				$content = array();
 				//Todo, prendre en compte le multi action ([1],[2]...)
+				$event->setRecipients(array());
 				$event->addRecipient($_['eventTarget']);
 				$content[0]['type'] = $_['eventType'];
 
@@ -46,6 +47,9 @@ function eventmanager_action(){
 					break;
 					case 'command':
 						$content[0]['program'] = $_['eventContent'];
+					break;
+					case 'gpio':
+						$content[0]['gpios'] = $_['eventContent'];
 					break;
 				}
 
@@ -107,9 +111,11 @@ function eventmanager_plugin_page($_){
 				<form action="action.php?action=eventmanager_save_event" method="POST">
 				<fieldset>
 				    <legend>Gestion des evenements</legend>
-				    <p>Ce module vous permet de créer un évenement en fonction d'une date que le client (yana windows ou yana for android) pourra retranscrire.
-				    	<br/> L'évenement peut être une action parole (le client yana prononce une phrase), commande (une commande est lancée sur
-				    	le poste qui execute yana client), ou encore  un son à joeur (le son doit être un .wav situé dans le repertoire son de yana-windows)</p>
+				    <p>Ce module vous permet de créer un évenement en fonction d'une date que le client (yana windows ou yana for android) 
+				    	ou le serveur (yana-server sur le rapsberry PI) pourra retranscrire.
+				    	<br/>Pour le client, l'évenement peut être une action parole (prononce une phrase), une commande (une commande est lancée sur
+				    	le poste qui execute yana client), ou encore  un son à jouer (le son doit être un .wav situé dans le repertoire son de yana-windows)
+				    	<br/><br/>Pour le serveur, l'évenement peut être une commande (lancée sur le rapsberry PI), ou un changement d'état GPIO.</p>
 				    <span class="row">
 				    	<span class="span6">
 						 
@@ -126,20 +132,16 @@ function eventmanager_plugin_page($_){
 								$action = $content;
 							?>
 						    <label for="eventType">Cible</label>
-						    <select class="input-medium" name="eventTarget" onchange="setActionTypeList(this);">
+						    <select class="input-medium" name="eventTarget" onready="setActionTypeList('<?php echo $action['type']; ?>');" onchange="setActionTypeList('<?php echo $action['type']; ?>');">
 						    	<option <?php echo ($recipients[0]=='client'?'selected="selected"':''); ?> value="client">Client</option>
 						    	<option <?php echo ($recipients[0]=='server'?'selected="selected"':''); ?> value="server">Serveur</option>
 						    </select>
+					
 						</span>
 
 						<span class="span2">
-						
 						    <label for="eventType">Action</label>
-						    <select class="input-medium" name="eventType">
-						    	<option <?php echo ($action['type']=='talk'?'selected="selected"':''); ?> value="talk">Parler</option>
-						    	<option <?php echo ($action['type']=='command'?'selected="selected"':''); ?> value="command">Executer une commande</option>
-						    	<option <?php echo ($action['type']=='sound'?'selected="selected"':''); ?> value="sound">Jouer un son</option>
-						    </select>
+						    <select class="input-medium" name="eventType" value="<?php echo $action['type']; ?>"></select>
 						</span>
 		
 						</span>
@@ -149,7 +151,7 @@ function eventmanager_plugin_page($_){
 						    <select class="input-medium" name="eventMinut" id="eventMinut">
 						    		<option <?php  if($currentEvent->getMinut()=='*') echo 'selected="selected"';  ?> value="*">Toutes</option>
 						    	<?php for($i=0;$i<60;$i++){ ?>
-						    		<option <?php  if($currentEvent->getMinut()==$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
+						    		<option <?php  if($currentEvent->getMinut()==''.$i)  echo 'selected="selected"';  ?>><?php echo $i; ?></option>
 						    	<?php } ?>
 						    </select>
 						</span>
@@ -160,7 +162,7 @@ function eventmanager_plugin_page($_){
 						    <select class="input-medium" name="eventHour" id="eventHour">
 						    		<option <?php  if($currentEvent->getHour()=='*'){  echo 'selected="selected"'; } ?> value="*">Toutes</option>
 						    	<?php for($i=0;$i<24;$i++){ ?>
-						    		<option <?php  if($currentEvent->getHour()==$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
+						    		<option <?php  if($currentEvent->getHour()==''.$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
 						    	<?php } ?>
 						    </select>
 						</span>
@@ -170,7 +172,7 @@ function eventmanager_plugin_page($_){
 						    <select class="input-medium" name="eventDay" id="eventDay">
 						    		<option <?php  if($currentEvent->getDay()=='*') echo 'selected="selected"';  ?> value="*">Tous</option>
 						    	<?php for($i=1;$i<32;$i++){ ?>
-						    		<option <?php  if($currentEvent->getDay()==$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
+						    		<option <?php  if($currentEvent->getDay()==''.$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
 						    	<?php } ?>
 						    </select>
 						</span>
@@ -180,7 +182,7 @@ function eventmanager_plugin_page($_){
 						    <select class="input-medium" name="eventMonth" id="eventMonth">
 						    		<option <?php  if($currentEvent->getMonth()=='*') echo 'selected="selected"';  ?> value="*">Tous</option>
 						    	<?php for($i=1;$i<13;$i++){ ?>
-						    		<option <?php  if($currentEvent->getMonth()==$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
+						    		<option <?php  if($currentEvent->getMonth()==''.$i) echo 'selected="selected"';  ?>><?php echo $i; ?></option>
 						    	<?php } ?>
 						    </select>
 						</span>
@@ -206,6 +208,9 @@ function eventmanager_plugin_page($_){
 						    	break;
 						    	case 'command':
 						    		echo $action['program'];
+						    	break;
+						    	case 'gpio':
+						    		echo $action['gpios'];
 						    	break;
 						    }
 						    ?></textarea>
@@ -255,6 +260,9 @@ function eventmanager_plugin_page($_){
 						    	break;
 						    	case 'command':
 						    		echo $action['program'];
+						    	break;
+						    	case 'gpio':
+						    		echo $action['gpios'];
 						    	break;
 						    }; ?></td>
 				    <td><?php echo $event->getRepeat(); ?></td>
