@@ -102,7 +102,8 @@
             $this->recipients= json_encode($recipients);
         }
         function getRecipients(){
-            return json_decode($this->recipients,true);
+            $rec = json_decode($this->recipients,true);
+            return is_array($rec)?$rec:array();
         }
      }
      ?>

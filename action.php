@@ -24,6 +24,7 @@ $myUser = (!$myUser?new User():$myUser);
 
 //Execution du code en fonction de l'action
 switch ($_['action']){
+
 	case 'login':
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '';
