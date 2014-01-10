@@ -10,6 +10,7 @@ Pré-requis
 - Apache 2 ou Lighttpd
 - PHP 5
 - SQLite 3
+- [Librairie Wiring PI](https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/)
 
 Installation
 ============
