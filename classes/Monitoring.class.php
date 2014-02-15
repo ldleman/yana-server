@@ -26,7 +26,7 @@ class Monitoring {
   	$result = array(
 		'degrees' => round(file_get_contents("/sys/class/thermal/thermal_zone0/temp") / 1000)
     );
-    return round($result['degrees'] / 85 * 100);
+    return $result['degrees'];
   }
   
   public static function disks() {
@@ -76,7 +76,7 @@ class Monitoring {
 
   public static function gpio() {
     $gpios = array();
-    for($i=0;$i<25;$i++){
+    for($i=0;$i<=20;$i++){
       $gpios[$i] = exec("/usr/local/bin/gpio read ".$i, $out);
  
     }

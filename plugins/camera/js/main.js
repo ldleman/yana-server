@@ -1,13 +1,19 @@
 
-function snapshot(){
+function ajax_snapshot(){
+	$("#camera_btn").prop('disabled', true);
 	$.ajax({
 	  type: "POST",
 	  url: "action.php",
 	  data: { action: "camera_refresh"},
-	  success:function(){
-
-	  	 setTimeout(function(){$('#cameraPI').attr('src','plugins/camera/view.jpg?'+Math.random())},1000);
-	  	
+	  success:function(data){
+	  	if(data){
+	  	alert(data);
 	  }
-	});
+	  else
+	  {
+	  	$('#cameraPI').attr('src','plugins/camera/view.jpg?'+Math.random());
+	  }
+	  $("#camera_btn").prop('disabled', false);
+	  }
+	  });
 }
