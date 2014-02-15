@@ -143,8 +143,8 @@ class Monitoring {
       if(filter_var($ip, FILTER_VALIDATE_IP) === false)
           $ip = self::loadUrl('http://ipecho.net/plain');
       if(filter_var($ip, FILTER_VALIDATE_IP) === false)
-          return 'Unavailable';
-      return $ip;
+          return 'Non disponible';
+       return $ip;
   }
 
   public static function webServer() {
@@ -292,7 +292,7 @@ class Monitoring {
           curl_close($curl);
           return trim($content);
       }elseif(function_exists('file_get_contents')){
-          return trim(file_get_contents($url));
+          return trim(@file_get_contents($url));
       }else{
           return false;
       }
