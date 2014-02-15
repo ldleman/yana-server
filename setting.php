@@ -1,7 +1,7 @@
 <?php
 require_once('header.php');
 
-if(isset($myUser) && $myUser!=false){
+if(isset($myUser) && $myUser!=false && $myUser->can('configuration', 'r')){
 
 	switch(@$_['section']){
 		case 'plugin':
