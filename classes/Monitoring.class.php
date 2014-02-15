@@ -23,10 +23,27 @@ class Monitoring {
   }
 
   public static function heat() {
-  	$result = array(
-		'degrees' => round(file_get_contents("/sys/class/thermal/thermal_zone0/temp") / 1000)
+    $heat = round(file_get_contents("/sys/class/thermal/thermal_zone0/temp") / 1000,1);
+    //OK
+    if ($heat < 55){
+      $label = "label-success";
+    }
+    
+    //WARNING
+    if (($heat >= 55) && ($heat < 70)) {
+      $label = "label-warning";
+    }
+    
+    //DANGER
+    if ($heat >= 70) {
+      $label = "label-important";
+    }
+
+    $result = array(
+    'degrees' => $heat,
+    'label' => $label
     );
-    return $result['degrees'];
+    return $result;
   }
   
   public static function disks() {

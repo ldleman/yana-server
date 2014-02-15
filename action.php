@@ -307,14 +307,14 @@ else
 		$tpl->assign('disks',Monitoring::disks());*/
 			case 'dash_system':
 				$heat = Monitoring::heat();
-				echo "heat".$heat;
+				//echo "heat".$heat;
 				//$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
 				$cpu = Monitoring::cpu();
 				echo '<ul>
 				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
 				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
 				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
-				    	<li><strong>Temperature :</strong>  <span class="label label-warning">test'.$heat.'</span></li>
+				    	<li><strong>Temperature :</strong>  <span class="label '.$heat["label"].'">'.$heat["degrees"].'°C</span></li>
 				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
 				    </ul>';
