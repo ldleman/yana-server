@@ -234,7 +234,7 @@ else
 	$checker = (isset($_['checker'])?$_['checker']:'client');
 
 	$eventManager = new Event();
-	$events = $eventManager->loadAll(array(),'id');
+	$events = $eventManager->loadAll(array('state'=>1),'id');
 	
 
 	$time = date('i-H-d-m-Y');

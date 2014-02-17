@@ -8,7 +8,7 @@
 
     class Event extends SQLiteEntity{
 
-	    protected $id,$name,$content,$year,$month,$day,$hour,$minut,$repeat,$recipients;
+	    protected $id,$name,$content,$year,$month,$day,$hour,$minut,$repeat,$recipients,$state;
 	    protected $TABLE_NAME = 'event';
 	    protected $CLASS_NAME = 'Event';
 	    protected $object_fields = 
@@ -22,7 +22,8 @@
             'hour'=>'string',
             'minut'=>'string',
 		    'repeat'=>'string',
-            'recipients'=>'longstring'
+            'recipients'=>'longstring',
+            'state'=>'state'
 	    );
      
          function __construct(){
@@ -104,6 +105,13 @@
         function getRecipients(){
             $rec = json_decode($this->recipients,true);
             return is_array($rec)?$rec:array();
+        }
+        function setState($state){
+            $this->state=$state;
+
+        }
+        function getState(){
+            return $this->state;
         }
      }
      ?>
