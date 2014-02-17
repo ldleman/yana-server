@@ -80,7 +80,7 @@ function camera_action_camera(){
 	switch($_['action']){
 		case 'camera_refresh':
 			$absolute_path = getcwd()."/plugins/camera/";
-			system('raspistill -hf -w 400 -h 400  -o '.$absolute_path.'view.jpg -t 0');
+			system('raspistill -hf -w 400 -h 400  -o '.$absolute_path.'view.jpg');
 			header('location:index.php?module=camera');
 		break;
 	}
