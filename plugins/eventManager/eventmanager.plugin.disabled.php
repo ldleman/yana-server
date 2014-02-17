@@ -38,6 +38,9 @@ function eventmanager_action(){
 				$event->addRecipient($_['eventTarget']);
 				$content[0]['type'] = $_['eventType'];
 
+				$event->setState($_['eventState']);
+				
+
 				switch($content[0]['type']){
 					case 'talk':
 						$content[0]['sentence'] = $_['eventContent'];
@@ -117,10 +120,10 @@ function eventmanager_plugin_page($_){
 				    	le poste qui execute yana client), ou encore  un son à jouer (le son doit être un .wav situé dans le repertoire son de yana-windows)
 				    	<br/><br/>Pour le serveur, l'évenement peut être une commande (lancée sur le rapsberry PI), ou un changement d'état GPIO.</p>
 				    <span class="row">
-				    	<span class="span6">
+				    	<span class="span4">
 						 
 							    <label for="eventName">Nom</label>
-							    <input class="input-xxlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="ex : Signale un anniversaire"/>
+							    <input class="input-xlarge" type="text" id="eventName" value="<?php echo $currentEvent->getName(); ?>"  name="eventName" placeholder="ex : Signale un anniversaire"/>
 						
 						</span>
 
@@ -131,8 +134,8 @@ function eventmanager_plugin_page($_){
 								$content = $currentEvent->getContent();
 								$action = $content;
 							?>
-						    <label for="eventType">Cible</label>
-						    <select class="input-medium" name="eventTarget" onready="setActionTypeList('<?php echo $action['type']; ?>');" onchange="setActionTypeList('<?php echo $action['type']; ?>');">
+						    <label for="eventTarget">Cible</label>
+						    <select class="input-medium" name="eventTarget" id="eventTarget" onready="setActionTypeList('<?php echo $action['type']; ?>');" onchange="setActionTypeList('<?php echo $action['type']; ?>');">
 						    	<option <?php echo ($recipients[0]=='client'?'selected="selected"':''); ?> value="client">Client</option>
 						    	<option <?php echo ($recipients[0]=='server'?'selected="selected"':''); ?> value="server">Serveur</option>
 						    </select>
@@ -141,7 +144,14 @@ function eventmanager_plugin_page($_){
 
 						<span class="span2">
 						    <label for="eventType">Action</label>
-						    <select class="input-medium" name="eventType" value="<?php echo $action['type']; ?>"></select>
+						    <select class="input-medium" id="eventType" name="eventType" value="<?php echo $action['type']; ?>"></select>
+						</span>
+						<span class="span2">
+						    <label for="eventState">Etat</label>
+						    <select class="input-medium" id="eventState" name="eventState">
+						    	<option value="1" <?php echo ($action['state']=='1'?'selected="selected"':''); ?>>Actif</option>
+						    	<option value="0"  <?php echo ($action['state']=='0'?'selected="selected"':''); ?>>Inactif</option>
+						    </select>
 						</span>
 		
 						</span>
@@ -233,6 +243,7 @@ function eventmanager_plugin_page($_){
 				    <th>Contenu</th>
 				    <th>Dernier lancement</th>
 				    <th>Cibles</th>
+				    <th>Etat</th>
 				    <th></th>
 			    </tr>
 			    </thead>
@@ -267,6 +278,7 @@ function eventmanager_plugin_page($_){
 						    }; ?></td>
 				    <td><?php echo $event->getRepeat(); ?></td>
 				    <td><?php  echo implode(',',$recipients) ?></td>
+				    <td><?php  echo ($event->getState()=='1'?'Actif':'Inactif');?></td>
 				    <td>
 						<a class="btn" href="index.php?module=eventmanager&id=<?php echo $event->getId(); ?>"><i class="icon-edit"></i></a>
 				    	<a class="btn" href="action.php?action=eventmanager_delete_event&id=<?php echo $event->getId(); ?>"><i class="icon-remove"></i></a></td>

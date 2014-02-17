@@ -242,7 +242,7 @@ else
 
 	foreach ($events as $event) {
 
-		if(in_array($checker,$event->getRecipients())){
+		if(in_array($checker,$event->getRecipients()) && $event->getState()=='1'){
 			if( 
 			($event->getMinut() == '*' || in_array($minut,explode(',',$event->getMinut())) ) &&
 			($event->getHour() == '*' || in_array($hour,explode(',',$event->getHour())) ) &&
