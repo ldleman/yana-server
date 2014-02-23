@@ -13,7 +13,7 @@ include('Room.class.php');
 
 function room_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-th-large"></i> Pieces</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-login"></i> Pieces</a>');
 }
 
 

@@ -13,8 +13,14 @@
 }
 body {
     padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    font-family: 'Open Sans';
  }
 
+h1,h2,h3,h4{
+  font-family: 'Open Sans Light',sans-serif;
+  font-weight: normal;
+  line-height: 100%;
+}
 /* =============================================================================
    Plugins
    ========================================================================== */
@@ -56,13 +62,16 @@ body {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
+.logoBox{
+  background-color:#01A5ED;
+  padding:5px;
+}
+
 .logo{
   background: url('../img/logo.png') no-repeat;
   width: 78px;
-  height:20px;
+  height:29px;
   font-size: 11px;
-  margin-top:3px;
-  padding: 15px 3px 7px 3px;
   color:#ffffff;
   
 }
@@ -71,7 +80,7 @@ body {
    line-height: 9px;
   font-size: 9px;
   border-radius: none;
-  margin:0 5px 0px 20px;
+  margin:15px 5px 0px 20px;
   visibility: hidden;
   cursor:pointer;
 }
@@ -79,6 +88,123 @@ body {
 .service-active{
   color:green;
   font-weight: bold;
+}
+
+.flatBloc{
+  padding:10px;
+  margin:5px 0 5px 0;
+  color:#ffffff;
+}
+.flatBloc ul{
+  margin:0px;
+  padding:0px;
+  }
+.flatBloc li{
+  list-style-type: none;
+  margin:7px;
+}
+.flatBloc a{
+  color:#ffffff;
+
+  }
+  .flatBloc h3 i{
+    margin-right:15px;
+    line-height: 30px;
+  }
+.flatBloc li:before{
+  content:'\e831  ';
+  font-family: "fontello";
+}
+.violet-color{
+  background-color:#A200FF;
+}
+.red-color{
+  background-color:#E51400;
+}
+.blue-color{
+  background-color:#1BA1E2;
+}
+.green-color{
+  background-color:#339933;
+}
+.orange-color{
+  background-color:#FF2E12;
+}
+.black-color{
+  background-color:#373737;
+}
+.pink-color{
+  background-color:#C1004F;
+}
+.brown-color{
+  background-color:#632F00;
+}
+.apple-color{
+  background-color:##00C13F;
+}
+
+.btn{
+  background-color: none;
+  background-image: none;
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+#footer{
+  color:#ffffff;
+  text-align: center;
+}
+#footer .navbar-inner{
+
+line-height: 40px;
+  }
+
+code, pre {
+   border-radius: 0px;
+   background-color: #373737;
+   color:#ffffff;
+   border:none;
+  }
+
+
+@font-face {
+    font-family: "Open Sans Light";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../font/OpenSans-Light-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-Light-webfont.woff?2013") format("woff"), url("../font/OpenSans-Light-webfont.ttf?2013") format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans Light";
+    font-style: normal;
+    font-weight: bold;
+    src: url("../font/OpenSans-Semibold-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-Semibold-webfont.woff?2013") format("woff"), url("../font/OpenSans-Semibold-webfont.ttf?2013") format("truetype");
+}
+@font-face {
+    font-family: "Open Sans Light";
+    font-style: italic;
+    font-weight: normal;
+    src: url("../font/OpenSans-LightItalic-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-LightItalic-webfont.woff?2013") format("woff"), url("../font/OpenSans-LightItalic-webfont.ttf?2013") format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../font/OpenSans-Regular-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-Regular-webfont.woff?2013") format("woff"), url("../font/OpenSans-Regular-webfont.ttf?2013") format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: bold;
+    src: url("../font/OpenSans-Bold-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-Bold-webfont.woff?2013") format("woff"), url("../font/OpenSans-Bold-webfont.ttf?2013") format("truetype");
+}
+@font-face {
+    font-family: "Open Sans";
+    font-style: italic;
+    font-weight: normal;
+    src: url("../font/OpenSans-Italic-webfont.eot?#iefix2013") format("embedded-opentype"), url("../font/OpenSans-Italic-webfont.woff?2013") format("woff"), url("../font/OpenSans-Italic-webfont.ttf?2013") format("truetype");
 }
 
 
@@ -114,6 +240,15 @@ small {
   font-style: italic;
 }
 
+
+.navbar .nav > li > a {
+ font-size:16px;
+ font-weight: normal;
+ color:#ffffff;
+}
+.navbar .nav > li > a > i {
+  margin-right: 5px;
+  }
 
 /* =============================================================================
    Style d'impression

@@ -86,7 +86,7 @@ function eventmanager_action(){
 
 function eventmanager_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="icon-time"></i> Evenements</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="icon-back-in-time"></i> Evenements</a>');
 }
 
 
