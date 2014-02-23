@@ -312,4 +312,12 @@ Plugin::addJs('/js/main.js');
 Plugin::addHook("action_post_case", "eventmanager_action");    
 Plugin::addHook("menubar_pre_home", "eventmanager_plugin_menu");  
 Plugin::addHook("home", "eventmanager_plugin_page");  
+
+
+//Exemple vide d'interception d'évenement sur un plugin tiers (plugin radiorelay, changement d'etat)
+Event::on('relay_change_state',function($data,$state){
+	// $data = classe RadioRelay correspondante à la machine
+	// $state = etat de la machine
+});
+
 ?>

@@ -2,3 +2,4 @@ database.db
 *.rtpl.php
 /plugins/plugins.states.json
 /templates/save-default
+/db/.database.db

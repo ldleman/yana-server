@@ -113,5 +113,22 @@
             $rec = json_decode($this->recipients,true);
             return is_array($rec)?$rec:array();
         }
+
+
+        public static function emit($event, $data) {  
+            if(isset($GLOBALS['events'][$event])) { 
+                foreach($GLOBALS['events'][$event] as $functionName) {  
+                    call_user_func_array($functionName, $data);  
+                }  
+            }  
+        } 
+
+        public static function on($event, $functionName) {  
+            $GLOBALS['events'][$event][] = $functionName;  
+        } 
+
+
+
+
      }
      ?>
