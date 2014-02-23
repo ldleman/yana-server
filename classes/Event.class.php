@@ -128,7 +128,14 @@
         } 
 
 
+        public static function announce($event, $comment,$dataDescription) {  
+            $GLOBALS['eventsDictionnary'][$event]['comment'] = $comment;  
+            $GLOBALS['eventsDictionnary'][$event]['data'] = $dataDescription; 
+        } 
 
+        public static function availables($event, $comment) {  
+            return $GLOBALS['eventsDictionnary'];  
+        }
 
      }
      ?>

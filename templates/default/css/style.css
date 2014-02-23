@@ -150,6 +150,10 @@ h1,h2,h3,h4{
   box-shadow: none;
 }
 
+.btn i{
+  color:#222222;
+  }
+
 #footer{
   color:#ffffff;
   text-align: center;
@@ -158,6 +162,8 @@ h1,h2,h3,h4{
 
 line-height: 40px;
   }
+
+
 
 code, pre {
    border-radius: 0px;
