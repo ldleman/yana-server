@@ -376,6 +376,37 @@ else
 		}
 	break;
 
+
+	case 'installPlugin':
+	$tempZipName = md5(microtime());
+	echo '<br/>Téléchargement du plugin...';
+	file_put_contents($tempZipName,file_get_contents(urldecode($_['zip'])));
+	if(file_exists($tempZipName)){
+		echo '<br/>Plugin téléchargé';
+		echo '<br/>Extraction du plugin...';
+		$zip = new ZipArchive;
+		$res = $zip->open($tempZipName);
+		if ($res === TRUE) {
+		  $zip->extractTo('plugins/'.$tempZipName);
+		  $zip->close();
+		  echo '<br/>Plugin extrait';
+		  $pluginName = glob('plugins/'.$tempZipName.'/*.plugin*.php');
+		  $pluginName = str_replace(array('plugins/'.$tempZipName.'/','.enabled','.disabled','.plugin','.php'),'',$pluginName[0]);
+		  echo '<br/>Renommage...';
+		  rename('plugins/'.$tempZipName,'plugins/'.$pluginName);
+		  echo '<br/>Plugin renommé';
+		  echo '<br/>Nettoyage...';
+		  unlink($tempZipName);
+		  echo '<br/>Répértoire nettoyé';
+		  echo '<br/>Plugin installé, pensez à l\'activer';
+		} else {
+		  echo '<br/>Echec de l\'extraction';
+		}
+		}else{
+			echo '<br/>Echec du téléchargement';
+		}
+	break;
+
 	default:
 	Plugin::callHook("action_post_case", array());
 	break;

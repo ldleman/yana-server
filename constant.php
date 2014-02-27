@@ -1,7 +1,7 @@
 <?php
 
 	define('PROGRAM_NAME','Yana Server');
-	define('PROGRAM_VERSION','3.0.4');
+	define('PROGRAM_VERSION','3.0.5');
 	define('PROGRAM_AUTHOR','Valentin CARRUESCO');
 
 	//Prefix des noms des tables leed pour les bases de données uniques
@@ -14,6 +14,6 @@
 	define('COOKIE_NAME','yana');
 	define('COOKIE_LIFETIME','7'); //Exprimé en jours
 	
-	define('UPDATE_URL','http://projet.idleman.fr/yana/maj.php?callback=?');
+	define('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
 
 ?>
