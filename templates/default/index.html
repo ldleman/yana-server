@@ -7,49 +7,55 @@
     {if="!isset($_['module']) || $_['module']=='home'"}
 
     
-    	<div class="span4">
-    		<strong>nb : rafraichissement toutes les 10 secondes</strong>
-    		<h4>Application</h4>
+    	<div class="span4 ">
+    		<div class="flatBloc blue-color">
+    		<h3><i class="icon-globe"></i> Application</h3>
 			    <ul>
 			    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
 			    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
 			    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
 			    	<li><a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a></li>
 			    </ul>
+			</div>
 
-		    <hr/>
-		    <h4>Système</h4>
-		    <div id="dash_system"></div>
-
-		    <hr/>
-			<h4>Réseau</h4>
-		    <div id="dash_network"></div>
+		    <div class="flatBloc green-color">
+			    <h3><i class="icon-monitor"></i> Système</h3>
+			    <div id="dash_system"></div>
+			</div>
+		    <div class="flatBloc violet-color">
+				<h3><i class="icon-switch"></i> Réseau</h3>
+			    <div id="dash_network"></div>
+			</div>
 		</div>
 
 
 	    <div class="span4">
-	    	
-	    <h4>Utilisateurs</h4>
-	    <div id="dash_user"></div>
-	    
-	    <hr/>
-	    <h4>HDD</h4>
-	    <div id="dash_hdd"></div>
+		    <div class="flatBloc red-color">
+			    <h3><i class="icon-vcard"></i> Utilisateurs</h3>
+			    <div id="dash_user"></div>
+		    </div>
 
-	    <hr/>
-	    <h4>Disques</h4>
-	    <div id="dash_disk"></div>
-		<hr/>
-	    <h4>GPIO</h4>
-	    <div id="dash_gpio"></div>
-	    
-	    </div>
+		    <div class="flatBloc orange-color">
+			    <h3><i class="icon-monitor"></i> HDD</h3>
+			    <div id="dash_hdd"></div>
+			</div>
 
+			<div class="flatBloc pink-color">
+			    <h3><i class="icon-install"></i> Disques</h3>
+			    <div id="dash_disk"></div>
+			</div>
+
+			<div class="flatBloc black-color">
+			    <h3><i class="icon-flow-cascade"></i> GPIO</h3>
+			    <div id="dash_gpio"></div>
+		    </div>
+		</div>
 
 	    <div class="span4">
-	    	<h4>Services</h4>
-	    	<div id="dash_services"></div>
-
+	    	<div class="flatBloc brown-color">
+		    	<h3><i class="icon-book"></i> Services</h3>
+		    	<div id="dash_services"></div>
+	    	</div>
 	    </div>
 
 	

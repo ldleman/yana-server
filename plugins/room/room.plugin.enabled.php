@@ -13,7 +13,7 @@ include('Room.class.php');
 
 function room_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-th-large"></i> Pieces</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-login"></i> Pieces</a>');
 }
 
 
@@ -192,4 +192,12 @@ function room_plugin_setting_page(){
 
 		Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
 		Plugin::addHook("home", "room_plugin_page");  
+
+
+
+		Event::on('relay_change_state',function($data,$state){
+			// $data = classe RadioRelay correspondante à la machine
+			// $state = etat de la machine
+		});
+
 		?>

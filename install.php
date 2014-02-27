@@ -110,9 +110,10 @@ if(isset($_POST['install'])){
     	$user->save();
 
     	Plugin::enabled('relay-relay');
-    	Plugin::enabled('vocal_infos-vocal_infos');
+      Plugin::enabled('wireRelay-relay');
+    	Plugin::enabled('vocal_infos-vocalinfo');
     	Plugin::enabled('room-room');
-      Plugin::enabled('eventManager-eventManager');
+      Plugin::enabled('eventManager-eventmanager');
       
   }else{
     ?>

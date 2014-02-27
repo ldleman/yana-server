@@ -113,5 +113,29 @@
             $rec = json_decode($this->recipients,true);
             return is_array($rec)?$rec:array();
         }
+
+
+        public static function emit($event, $data) {  
+            if(isset($GLOBALS['events'][$event])) { 
+                foreach($GLOBALS['events'][$event] as $functionName) {  
+                    call_user_func_array($functionName, $data);  
+                }  
+            }  
+        } 
+
+        public static function on($event, $functionName) {  
+            $GLOBALS['events'][$event][] = $functionName;  
+        } 
+
+
+        public static function announce($event, $comment,$dataDescription) {  
+            $GLOBALS['eventsDictionnary'][$event]['comment'] = $comment;  
+            $GLOBALS['eventsDictionnary'][$event]['data'] = $dataDescription; 
+        } 
+
+        public static function availables($event, $comment) {  
+            return $GLOBALS['eventsDictionnary'];  
+        }
+
      }
      ?>
