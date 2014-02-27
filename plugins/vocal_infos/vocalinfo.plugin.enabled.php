@@ -71,6 +71,10 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'command'=>VOCAL_ENTITY_NAME.' diagnostique des G.P.I.O',
 		'url'=>$actionUrl.'?action=vocalinfo_gpio_diag','confidence'=>'0.88'
 		);
+	$response['commands'][] = array(
+		'command'=>VOCAL_ENTITY_NAME.' wikipedia exemple',
+		'url'=>$actionUrl.'?action=vocalinfo_wikipedia&word=exemple','confidence'=>'0.70'
+		);
 
 
 	
@@ -229,7 +233,11 @@ function vocalinfo_action(){
 										'Mostly Cloudy'=>'plutot Nuageux',
 										'Light Rain'=>'Pluie fine',
 										'Clear'=>'Temps clair',
-										'Sunny'=>'ensoleillé'
+										'Sunny'=>'ensoleillé',
+										'Rain/Wind'=>'Pluie et vent',
+										'Rain'=>'Pluie',
+										'Wind'=>'Vent',
+										'Partly Cloudy/Wind'=>'Partiellement nuageux avec du vent'
 										);
 				$dayTranslate = array('Wed'=>'mercredi',
 										'Sat'=>'samedi',
@@ -340,6 +348,28 @@ function vocalinfo_action(){
 				$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$affirmation)
 													)
+								);
+				$json = json_encode($response);
+				echo ($json=='[]'?'{}':$json);
+		break;
+		case 'vocalinfo_wikipedia':
+			global $_;
+			
+				$url = 'http://fr.wikipedia.org/w/api.php?action=parse&page='.$_['word'].'&format=json&prop=text&section=0';
+				$ch = curl_init($url);
+				curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt ($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr-FR; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1" ); // required by wikipedia.org server; use YOUR user agent with YOUR contact information. (otherwise your IP might get blocked)
+				$c = curl_exec($ch);
+
+				$json = json_decode($c);
+
+				$content = $json->{'parse'}->{'text'}->{'*'}; // get the main text content of the query (it's parsed HTML)
+
+				$affirmation = strip_tags(str_replace('&#160;', ' ', $content)); // '&#160;' is a space, but is not recognized by yana trying to read "160"
+				
+				$response = array('responses'=>array(
+									array('type'=>'talk','sentence'=>$affirmation)
+												)
 								);
 				$json = json_encode($response);
 				echo ($json=='[]'?'{}':$json);
