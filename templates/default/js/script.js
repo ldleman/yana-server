@@ -94,5 +94,5 @@ function jsonp(data){
 }
 
 function installPlugin(url){
-	$('#resultsPlugin').load('action.php?action=installPlugin&zip='+encodeURIComponent('http://market.idleman.fr/'+url));
+	$('#resultsPlugin').load('action.php?action=installPlugin&zip='+encodeURIComponent(url));
 }
