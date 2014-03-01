@@ -79,7 +79,7 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_NAME','yana');
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME',(isset($_POST['entityName'])?$_POST['entityName']:'YANA'));
-      $configuration->put('PROGRAM_VERSION','3.0.5');
+      $configuration->put('PROGRAM_VERSION','3.0.6');
 
 
       //Création du rang admin
