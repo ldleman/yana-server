@@ -18,11 +18,11 @@ function __autoload($class_name) {
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
 
     <!-- Le styles -->
-    <link href="templates/default/css/bootstrap.css" rel="stylesheet">
+    <link href="templates/default/css/bootstrap.min.css" rel="stylesheet">
     <link href="templates/default/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
     <link href="templates/default/css/style.css" rel="stylesheet">
 
-    <link href="templates/default/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="templates/default/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="ico/favicon.png">
   </head>
 
@@ -73,6 +73,14 @@ if(isset($_POST['install'])){
     	$rank->create();
     	$section->create();
       $event->create();
+
+      $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
+      $configuration->put('DEFAULT_THEME','default');
+      $configuration->put('COOKIE_NAME','yana');
+      $configuration->put('COOKIE_LIFETIME','7');
+      $configuration->put('VOCAL_ENTITY_NAME',(isset($_POST['entityName'])?$_POST['entityName']:'YANA'));
+      $configuration->put('PROGRAM_VERSION','3.0.5');
+
 
       //Création du rang admin
     	$rank = new Rank();
@@ -166,6 +174,17 @@ if(isset($_POST['install'])){
             <input type="password" name="password" name="inputPassword" placeholder="Password">
           </div>
         </div>
+
+         <div class="control-group">
+          <label class="control-label" for="inputPassword">Nom de l'entité vocale</label>
+          <div class="controls">
+            <input type="text" name="entityName" value="Yana">
+          </div>
+        </div>
+
+
+        
+
         <div class="control-group">
           <div class="controls">
             <button type="submit" name="install" class="btn">Installer</button>
@@ -175,7 +194,7 @@ if(isset($_POST['install'])){
 	<?php } ?>
   
 
- <div class="well well-small" id="footer">Copyright <?php echo PROGRAM_NAME.' '.PROGRAM_VERSION; ?>
+ <div class="well well-small" id="footer">CC by nc sa <?php echo PROGRAM_NAME ?>
 
  </div>
  </div> <!-- /container -->

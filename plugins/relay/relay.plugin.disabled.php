@@ -13,7 +13,7 @@ include('RadioRelay.class.php');
 
 
 function radioRelay_plugin_setting_page(){
-	global $_,$myUser;
+	global $_,$myUser,$conf;
 	if(isset($_['section']) && $_['section']=='radioRelay' ){
 
 		if($myUser!=false){
@@ -50,7 +50,7 @@ function radioRelay_plugin_setting_page(){
 							<label for="nameRadioRelay">Nom</label>
 							<?php  if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" id="nameRadioRelay" value="<?php  if(isset($selected)){echo $selected->getName();} ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
-							<small>Commande vocale associée : "<?php echo VOCAL_ENTITY_NAME; ?>, allume <span id="vocalCommand"></span>"</small>
+							<small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME'); ?>, allume <span id="vocalCommand"></span>"</small>
 							<label for="descriptionRadioRelay">Description</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 							<label for="radioCodeRadioRelay">Code radio</label>
@@ -166,12 +166,13 @@ function radioRelay_plugin_setting_page(){
 		}
 
 		function radioRelay_vocal_command(&$response,$actionUrl){
+			global $conf;
 			$radioRelayManager = new RadioRelay();
 
 			$radioRelays = $radioRelayManager->populate();
 			foreach($radioRelays as $radioRelay){
-				$response['commands'][] = array('command'=>VOCAL_ENTITY_NAME.', allume '.$radioRelay->getName(),'url'=>$actionUrl.'?action=radioRelay_change_state&engine='.$radioRelay->getId().'&state=on&webservice=true','confidence'=>'0.9');
-				$response['commands'][] = array('command'=>VOCAL_ENTITY_NAME.', eteint '.$radioRelay->getName(),'url'=>$actionUrl.'?action=radioRelay_change_state&engine='.$radioRelay->getId().'&state=off&webservice=true','confidence'=>'0.9');
+				$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', allume '.$radioRelay->getName(),'url'=>$actionUrl.'?action=radioRelay_change_state&engine='.$radioRelay->getId().'&state=on&webservice=true','confidence'=>'0.9');
+				$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', eteint '.$radioRelay->getName(),'url'=>$actionUrl.'?action=radioRelay_change_state&engine='.$radioRelay->getId().'&state=off&webservice=true','confidence'=>'0.9');
 			}
 		}
 

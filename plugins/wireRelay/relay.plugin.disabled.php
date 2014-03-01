@@ -13,7 +13,7 @@
 
 
 function wireRelay_plugin_setting_page(){
-	global $_,$myUser;
+	global $_,$myUser,$conf;
 	if(isset($_['section']) && $_['section']=='wireRelay' ){
 
 		if($myUser!=false){
@@ -44,7 +44,7 @@ function wireRelay_plugin_setting_page(){
 			    <label for="nameWireRelay">Nom</label>
 			    <input type="hidden" name="id" value="<?php echo $selected->getId(); ?>">
 			    <input type="text" id="nameWireRelay" value="<? echo $selected->getName(); ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
-			    <small>Commande vocale associée : "YANA, allume <span id="vocalCommand"></span>"</small>
+			    <small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionWireRelay">Description</label>
 			    <input type="text" name="descriptionWireRelay" value="<?echo $selected->getDescription(); ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
 			    <label for="pinWireRelay">Pin GPIO (Numéro Wiring PI)</label>
@@ -155,12 +155,13 @@ function wireRelay_display($room){
 }
 
 function wireRelay_vocal_command(&$response,$actionUrl){
+	global $conf;
 	$wireRelayManager = new WireRelay();
 
 	$wireRelays = $wireRelayManager->populate();
 	foreach($wireRelays as $wireRelay){
-		$response['commands'][] = array('command'=>VOCAL_ENTITY_NAME.', allume '.$wireRelay->getName(),'url'=>$actionUrl.'?action=wireRelay_change_state&engine='.$wireRelay->getId().'&state=1&webservice=true','confidence'=>'0.9');
-		$response['commands'][] = array('command'=>VOCAL_ENTITY_NAME.', eteint '.$wireRelay->getName(),'url'=>$actionUrl.'?action=wireRelay_change_state&engine='.$wireRelay->getId().'&state=0&webservice=true','confidence'=>'0.9');
+		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', allume '.$wireRelay->getName(),'url'=>$actionUrl.'?action=wireRelay_change_state&engine='.$wireRelay->getId().'&state=1&webservice=true','confidence'=>'0.9');
+		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', eteint '.$wireRelay->getName(),'url'=>$actionUrl.'?action=wireRelay_change_state&engine='.$wireRelay->getId().'&state=0&webservice=true','confidence'=>'0.9');
 	}
 }
 
