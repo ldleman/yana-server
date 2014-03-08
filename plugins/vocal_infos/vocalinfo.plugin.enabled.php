@@ -76,7 +76,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'url'=>$actionUrl.'?action=vocalinfo_wikipedia&word=exemple','confidence'=>'0.70'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' comment vas-tu ?',
+		'command'=>VOCAL_ENTITY_NAME.' comment vas-tu',
 		'url'=>$actionUrl.'?action=vocalinfo_blabla','confidence'=>'0.88'
 		);
 
@@ -388,7 +388,7 @@ function vocalinfo_action(){
 					,'pourquoi cette question ?'
 				);
 				
-				$affirmation = $possible_answers[rand(0,count($possible_answers-1))];
+				$affirmation = $possible_answers[rand(0,count($possible_answers)-1)];
 				$response = array('responses'=>array(
 										array('type'=>'talk','sentence'=>$affirmation)
 													)
