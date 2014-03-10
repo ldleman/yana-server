@@ -93,18 +93,18 @@ function room_plugin_setting_page(){
 
 				<form action="action.php?action=room_add_room" method="POST"> 
 					<fieldset>
-						<legend><? echo $description ?></legend>
+						<legend><?php echo $description ?></legend>
 
 						<div class="left">
 							<label for="nameRoom">Nom</label>
-							<? if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
-							<input type="text" value="<? if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
+							<?php if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
+							<input type="text" value="<?php if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
 							<label for="descriptionRoom">Description</label>
-							<input type="text" value="<? if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
+							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
 						</div>
 
 						<div class="clear"></div>
-						<br/><button type="submit" class="btn"><? echo $button; ?></button>
+						<br/><button type="submit" class="btn"><?php echo $button; ?></button>
 					</fieldset>
 					<br/>
 				</form>
