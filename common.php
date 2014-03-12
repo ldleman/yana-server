@@ -39,7 +39,7 @@ $myUser = false;
 $conf = new Configuration();
 $conf->getAll();
 //Inclusion des plugins  
-Plugin::includeAll();
+Plugin::includeAll($conf->get("DEFAULT_THEME"));
 
 if(isset($_SESSION['currentUser'])){
 	$myUser =unserialize($_SESSION['currentUser']);

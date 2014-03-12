@@ -13,14 +13,14 @@ class Plugin{
 	function __construct(){
 	}
 
-	public static function includeAll(){
+	public static function includeAll($default_theme){
 		$pluginFiles = Plugin::getFiles(true);
 		if(is_array($pluginFiles)) {   
 			foreach($pluginFiles as $pluginFile) {  
 				//Inclusion du coeur de plugin
 				include $pluginFile;  
 				//Gestion des css du plugin en fonction du thème actif
-				$cssTheme = glob('../'.dirname($pluginFile).'/*/'.DEFAULT_THEME.'.css');
+				$cssTheme = glob('../'.dirname($pluginFile).'/*/'.$default_theme.'.css');
 				$cssDefault = glob('../'.dirname($pluginFile).'/*/default.css');
 				if(isset($cssTheme[0])){
 					$GLOBALS['hooks']['css_files'][] = Functions::relativePath(str_replace('\\','/',dirname(__FILE__)),str_replace('\\','/',$cssTheme[0])); 
