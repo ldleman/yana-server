@@ -26,6 +26,7 @@ $myUser = (!$myUser?new User():$myUser);
 switch ($_['action']){
 
 	case 'login':
+	global $conf;
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '';
 	if($user==false){
@@ -35,7 +36,7 @@ switch ($_['action']){
 	
 
 	if(isset($_['rememberMe'])){	
-		$expire_time = time() + COOKIE_LIFETIME*86400; //Jour en secondes
+		$expire_time = time() + $conf->get('COOKIE_LIFETIME')*86400; //Jour en secondes
 		
 		//On crée un cookie dans la bd uniquement si aucun autre cookie n'existe sinon
 		//On rend inutilisable le cookie utilisé par un autre navigateur
@@ -51,7 +52,7 @@ switch ($_['action']){
 		{
 			$cookie_token = $actual_cookie;
 		}	
-		Functions::makeCookie(COOKIE_NAME,$cookie_token,$expire_time);
+		Functions::makeCookie($conf->get('COOKIE_NAME'),$cookie_token,$expire_time);
 	}
 	}
 	
@@ -170,15 +171,16 @@ else
 	break;
 
 	case 'logout':
-
+	global $conf;
+	
 	//Détruire le cookie uniquement s'il existe sur cette ordinateur
 	//Afin de le garder dans la BD pour les autres ordinateurs/navigateurs
-	if(isset($_COOKIE[COOKIE_NAME])){
+	if(isset($_COOKIE[$conf->get('COOKIE_NAME')])){
 	$user = new User();
 	$user = $userManager->load(array("id"=>$myUser->getId()));
 	$user->setCookie("");
 	$user->save();
-	Functions::destroyCookie(COOKIE_NAME);
+	Functions::destroyCookie($conf->get('COOKIE_NAME'));
 	}
 
 	$_SESSION = array();
@@ -200,7 +202,7 @@ else
 	}else{
 		Plugin::disabled($_['plugin']);
 	}
-	Functions::goback("setting","plugin");
+	Functions::goback("setting","plugin","&block=".$_['block']);
 	break;
 
 	case 'crontab':
@@ -373,6 +375,48 @@ else
 
 			    echo '</ul></pre>';
 			break;
+		}
+	break;
+
+
+	case 'installPlugin':
+	$tempZipName = 'plugins/'.md5(microtime());
+	echo '<br/>Téléchargement du plugin...';
+	file_put_contents($tempZipName,file_get_contents(urldecode($_['zip'])));
+	if(file_exists($tempZipName)){
+		echo '<br/>Plugin téléchargé <span class="label label-success">OK</span>';
+		echo '<br/>Extraction du plugin...';
+		$zip = new ZipArchive;
+		$res = $zip->open($tempZipName);
+		if ($res === TRUE) {
+			$tempZipFolder = $tempZipName.'_';
+			$zip->extractTo($tempZipFolder);
+			$zip->close();
+			echo '<br/>Plugin extrait <span class="label label-success">OK</span>';
+			$pluginName = glob($tempZipFolder.'/*.plugin*.php');
+			if(count($pluginName)>0){
+			$pluginName = str_replace(array($tempZipFolder.'/','.enabled','.disabled','.plugin','.php'),'',$pluginName[0]);
+				if(!file_exists('plugins/'.$pluginName)){
+					echo '<br/>Renommage...';
+					if(rename($tempZipFolder,'plugins/'.$pluginName)){
+						echo '<br/>Plugin installé, <span class="label label-info">pensez à l\'activer</span>';
+					}else{
+						Functions::rmFullDir($tempZipFolder);
+						echo '<br/>Impossible de renommer le plugin <span class="label label-error">Erreur</span>';
+					}
+				}else{
+					echo '<br/>Plugin déjà installé <span class="label label-info">OK</span>';
+				}
+			}else{
+				echo '<br/>Plugin invalide, fichier principal manquant <span class="label label-error">Erreur</span>';
+			}
+
+		} else {
+		  echo '<br/>Echec de l\'extraction <span class="label label-error">Erreur</span>';
+		}
+		 unlink($tempZipName);
+		}else{
+			echo '<br/>Echec du téléchargement <span class="label label-error">Erreur</span>';
 		}
 	break;
 

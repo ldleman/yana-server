@@ -21,12 +21,14 @@ function room_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='room'){
 		$roomManager = new Room();
 		$rooms = $roomManager->populate();
-		if (!isset($_['id']) && count($rooms)>0)  $_['id'] = $rooms[0]->getId();
+		//if (!isset($_['id']) && count($rooms)>0)  $_['id'] = $rooms[0]->getId();
+
 		?>
 
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
+				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="icon-chevron-right"></i>Toutes les pièces</a></li>
 					<?php foreach($rooms as $room){ ?>
 					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
 					<?php } ?>
@@ -43,6 +45,13 @@ function room_plugin_page($_){
 				if(isset($_['id'])){
 					$room = $roomManager->getById($_['id']);
 					Plugin::callHook("node_display", array($room));
+				}
+				else
+				{
+					foreach($rooms as $room){
+					//$room = $roomManager->getById($_['id']);
+					Plugin::callHook("node_display", array($room));
+					}
 				}
 				?>
 
@@ -194,10 +203,6 @@ function room_plugin_setting_page(){
 		Plugin::addHook("home", "room_plugin_page");  
 
 
-
-		Event::on('relay_change_state',function($data,$state){
-			// $data = classe RadioRelay correspondante à la machine
-			// $state = etat de la machine
-		});
+		
 
 		?>

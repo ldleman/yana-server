@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{#PROGRAM_NAME} {#PROGRAM_VERSION}</title>
+    <title>{#PROGRAM_NAME} {$configurationManager->get('PROGRAM_VERSION')}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -21,8 +21,8 @@
   </head>
 
   <body>
-    <div class="hidden" id="UPDATE_URL">{#UPDATE_URL}</div>
-    <div class="hidden" id="PROGRAM_VERSION">{#PROGRAM_VERSION}</div>
+    <div class="hidden" id="UPDATE_URL">{$configurationManager->get('UPDATE_URL')}</div>
+    <div class="hidden" id="PROGRAM_VERSION">{$configurationManager->get('PROGRAM_VERSION')}</div>
     <div class="navbar navbar-inverse navbar-fixed-top" id="header">
       
       <div class="navbar-inner">
@@ -37,7 +37,7 @@
         <div class="nav-collapse collapse">
           <ul class="nav">
            
-           <li class="logoBox"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{#PROGRAM_VERSION}</div></li>
+           <li class="logoBox"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></li>
           {if="$myUser!=false"}
               <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               {loop="menuItems"}

@@ -164,5 +164,13 @@ class Functions
 		}
 		
 	}
+
+	public static function rmFullDir($path){
+		$files = array_diff(scandir($path), array('.','..'));
+	    foreach ($files as $file) {
+	      (is_dir("$path/$file")) ? Functions::rmFullDir("$path/$file") : unlink("$path/$file");
+	    }
+	    return rmdir($path); 
+	}
 }
 ?>

@@ -39,15 +39,15 @@ $myUser = false;
 $conf = new Configuration();
 $conf->getAll();
 //Inclusion des plugins  
-Plugin::includeAll();
+Plugin::includeAll($conf->get("DEFAULT_THEME"));
 
 if(isset($_SESSION['currentUser'])){
 	$myUser =unserialize($_SESSION['currentUser']);
 }
-if(!$myUser && isset($_COOKIE[COOKIE_NAME])){
+if(!$myUser && isset($_COOKIE[$conf->get('COOKIE_NAME')])){
 	$users = User::getAllUsers();
 	foreach ($users as $user) {
-		if($user->getCookie() == $_COOKIE[COOKIE_NAME]) 
+		if($user->getCookie() == $_COOKIE[$conf->get('COOKIE_NAME')]) 
 			{
 				$myUser = $user;
 				$myUser->loadRight();
@@ -65,7 +65,7 @@ $userManager = new User();
 $tpl = new RainTPL();
 //Definition des dossiers de template
 raintpl::configure("base_url", null );
-raintpl::configure("tpl_dir", './templates/'.DEFAULT_THEME.'/' );
+raintpl::configure("tpl_dir", './templates/'.$conf->get('DEFAULT_THEME').'/' );
 raintpl::configure("cache_dir", "./cache/tmp/" );
 $view = '';
 

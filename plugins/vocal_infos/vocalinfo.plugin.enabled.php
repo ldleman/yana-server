@@ -11,68 +11,69 @@
 
 
 function vocalinfo_vocal_command(&$response,$actionUrl){
+	global $conf;
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' quelle heure est il',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' quelle heure est il',
 		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>'0.90'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' on est le combien',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' on est le combien',
 		'url'=>$actionUrl.'?action=vocalinfo_day','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' quel temps fait-il',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' quel temps fait-il',
 		'url'=>$actionUrl.'?action=vocalinfo_meteo&today=1','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' météo semaine',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' météo semaine',
 		'url'=>$actionUrl.'?action=vocalinfo_meteo','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' ya quoi a la télé',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi a la télé',
 		'url'=>$actionUrl.'?action=vocalinfo_tv','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' ya quoi comme série a la télée',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme série a la télée',
 		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Série','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' ya quoi comme documentaire a la télée',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme documentaire a la télée',
 		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Documentaire','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' ya quoi comme comédie a la télée',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme comédie a la télée',
 		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Comédie','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' siffle',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' siffle',
 		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>'0.94'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' concours de pet',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' concours de pet',
 		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=pet.wav','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' mode développement',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' mode développement',
 		'url'=>$actionUrl.'?action=vocalinfo_devmod','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' concours de rot',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' concours de rot',
 		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=rot.wav','confidence'=>'0.88'
 		);
-	// $response['commands'][] = array(
-	// 	'command'=>VOCAL_ENTITY_NAME.' fait la poule',
-	// 	'url'=>$actionUrl.'?action=vocalinfo_sound&sound=poule.wav','confidence'=>'0.88'
-	// 	);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' liste des commandes',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
+		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=poule.wav','confidence'=>'0.88'
+		);
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' liste des commandes',
 		'url'=>$actionUrl.'?action=vocalinfo_commands','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' diagnostique des G.P.I.O',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' diagnostique des G.P.I.O',
 		'url'=>$actionUrl.'?action=vocalinfo_gpio_diag','confidence'=>'0.88'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' wikipedia exemple',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' wikipedia exemple',
 		'url'=>$actionUrl.'?action=vocalinfo_wikipedia&word=exemple','confidence'=>'0.70'
 		);
 	$response['commands'][] = array(
@@ -84,12 +85,11 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 	
 /*
 	$preAction =  array(
-										array('type'=>'talk','sentence'=>'Emails en cours de traitement, merci de patienter')
-											
-								);
+						array('type'=>'talk','sentence'=>'Emails en cours de traitement, merci de patienter')					
+				);
 
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' fait la poule',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
 		'preAction'=>$preAction,
 		'url'=>$actionUrl.'','confidence'=>'0.88'
 		);
