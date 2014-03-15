@@ -123,6 +123,7 @@ function wireRelay_display($room){
 
 	$wireRelayManager = new WireRelay();
 	$wireRelays = $wireRelayManager->loadAll(array('room'=>$room->getId()));
+	$gpios = Monitoring::gpio();
 	
 	foreach ($wireRelays as $wireRelay) {
 			
@@ -140,10 +141,10 @@ function wireRelay_display($room){
 		  <p></p>
 		  	 <div class="btn-toolbar">
 				<div class="btn-group">
-
-				<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
-				<?php if($wireRelay->getPulse()==0){ ?>
-					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+				<?php if($gpios[$wireRelay->getPin()]){ ?>
+					<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
+				<?php } else { ?>
+					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
 				<?php } ?>
 				</div>
 			</div>
