@@ -59,7 +59,8 @@ function setRankAccess(rank,section,access,elem){
 
 function searchPlugin(keyword){
 	$('#resultsPlugin').html('Chargement en cours...');
-	$.getJSON("http://market.idleman.fr/api.php?s=yana-server&m=search&k="+keyword+"&callback=?");
+	var baseUrl = (location.protocol == 'https:'?"https://market.idleman.fr:666":"http://market.idleman.fr")
+	$.getJSON(baseUrl+"/api.php?s=yana-server&m=search&k="+keyword+"&callback=?");
 }
 function jsonp(data){
 	
