@@ -121,10 +121,11 @@
 			{if="@$_['block']=='market'"}
 				<br/><p>Recherchez et ajoutez les plugins proposés par la communauté<br/>en utilisant le formulaire ci dessous ! (<a href="http://market.idleman.fr/index.php?software=yana-server&amp;page=submit">Proposer un nouveau plugin</a>)</p>
 				<form class="form-inline">
-				<input type="text" id="keywordPlugin"> <button class="btn" onclick="searchPlugin($('#keywordPlugin').val());return false;">Rechercher</button>
+				<input type="text" id="keywordPlugin"> <button class="btn" id="btnSearchPlugin" onclick="searchPlugin($('#keywordPlugin').val());return false;">Rechercher</button>
 				</form>
 				<ul id="resultsPlugin"></ul>
 				<br/><br/>
+				
 			{else}
 				<ul class="pluginList">
 					{if="count($plugins)==0"}

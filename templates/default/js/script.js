@@ -4,6 +4,7 @@ $(document).ready(function(){
 	$.getJSON($("#UPDATE_URL").html(),function(data){
 	});
 	get_dash_infos();
+	$('#btnSearchPlugin').trigger("click");
 
 });
 
@@ -65,6 +66,8 @@ function setRankAccess(rank,section,access,elem){
 		  type: "POST",
 		  data: data
 		});
+
+
 }
 
 
