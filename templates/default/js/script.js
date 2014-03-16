@@ -10,14 +10,27 @@ $(document).ready(function(){
 function get_dash_infos(){
 	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').html('Chargement...')
 
-
-
-	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').each(function(i,elem){
+	$('#dash_network,#dash_gpio').each(function(i,elem){
 		refresh_dash(elem);
 		setInterval(function(){
 			refresh_dash(elem);
-		},10000);
+		},7000);
 	});
+
+	$('#dash_user,#dash_hdd,#dash_disk').each(function(i,elem){
+		refresh_dash(elem);
+		setInterval(function(){
+			refresh_dash(elem);
+		},60000);
+	});
+
+	$('#dash_system,#dash_services').each(function(i,elem){
+		refresh_dash(elem);
+		setInterval(function(){
+			refresh_dash(elem);
+		},120000);
+	});
+
 }
 
 function refresh_dash(elem){

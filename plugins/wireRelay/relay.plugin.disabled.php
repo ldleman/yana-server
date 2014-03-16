@@ -43,20 +43,20 @@ function wireRelay_plugin_setting_page(){
 		    <div class="left">
 			    <label for="nameWireRelay">Nom</label>
 			    <input type="hidden" name="id" value="<?php echo $selected->getId(); ?>">
-			    <input type="text" id="nameWireRelay" value="<? echo $selected->getName(); ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
+			    <input type="text" id="nameWireRelay" value="<?php echo $selected->getName(); ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
 			    <small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, allume <span id="vocalCommand"></span>"</small>
 			    <label for="descriptionWireRelay">Description</label>
-			    <input type="text" name="descriptionWireRelay" value="<?echo $selected->getDescription(); ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
+			    <input type="text" name="descriptionWireRelay" value="<?php echo $selected->getDescription(); ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
 			    <label for="pinWireRelay">Pin GPIO (Numéro Wiring PI)</label>
-			    <input type="text" name="pinWireRelay" value="<? echo $selected->getPin(); ?>" id="pinWireRelay" placeholder="0,1,2…" />
+			    <input type="text" name="pinWireRelay" value="<?php echo $selected->getPin(); ?>" id="pinWireRelay" placeholder="0,1,2…" />
 			    <label for="roomWireRelay">Pièce</label>
 			    <select name="roomWireRelay" id="roomWireRelay">
 			    	<?php foreach($rooms as $room){ ?>
-			    	<option <? if ($selected->getRoom()== $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+			    	<option <?php if ($selected->getRoom()== $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 			    	<?php } ?>
 			    </select>
 			   <label for="pinWireRelay">Mode impulsion (laisser à zero pour desactiver le mode impulsion ou definir un temps d'impulsion en micro-seconde)</label>
-			   <input type="text" name="pulseWireRelay" value="<? echo $selected->getPulse(); ?>" id="pulseWireRelay" placeholder="0" />
+			   <input type="text" name="pulseWireRelay" value="<?php echo $selected->getPulse(); ?>" id="pulseWireRelay" placeholder="0" />
 			     
 			</div>
 
@@ -123,6 +123,7 @@ function wireRelay_display($room){
 
 	$wireRelayManager = new WireRelay();
 	$wireRelays = $wireRelayManager->loadAll(array('room'=>$room->getId()));
+	$gpios = Monitoring::gpio();
 	
 	foreach ($wireRelays as $wireRelay) {
 			
@@ -140,10 +141,10 @@ function wireRelay_display($room){
 		  <p></p>
 		  	 <div class="btn-toolbar">
 				<div class="btn-group">
-
-				<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
-				<?php if($wireRelay->getPulse()==0){ ?>
-					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+				<?php if($gpios[$wireRelay->getPin()]){ ?>
+					<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
+				<?php } else { ?>
+					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
 				<?php } ?>
 				</div>
 			</div>
