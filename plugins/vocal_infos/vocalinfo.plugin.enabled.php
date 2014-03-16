@@ -77,8 +77,8 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'url'=>$actionUrl.'?action=vocalinfo_wikipedia&word=exemple','confidence'=>'0.70'
 		);
 	$response['commands'][] = array(
-		'command'=>VOCAL_ENTITY_NAME.' comment vas-tu',
-		'url'=>$actionUrl.'?action=vocalinfo_blabla','confidence'=>'0.88'
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' comment vas-tu',
+		'url'=>$actionUrl.'?action=vocalinfo_mood','confidence'=>'0.88'
 		);
 
 
@@ -378,7 +378,7 @@ function vocalinfo_action(){
 				$json = json_encode($response);
 				echo ($json=='[]'?'{}':$json);
 		break;
-		case 'vocalinfo_blabla':
+		case 'vocalinfo_mood':
 			global $_;
 				$possible_answers = array(
 					'parfaitement'

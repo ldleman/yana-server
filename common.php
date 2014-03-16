@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+$start=microtime(true);
 ini_set('display_errors','1');
 
 error_reporting(E_ALL & ~E_NOTICE);
@@ -10,7 +10,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
 
 mb_internal_encoding('UTF-8');
-$start=microtime(true);
+
 global $myUser,$conf,$_;
 //Récuperation et sécurisation de toutes les variables POST et GET
 $_ = array_map('Functions::secure',array_merge($_POST,$_GET));
