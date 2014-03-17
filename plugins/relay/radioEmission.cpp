@@ -22,6 +22,7 @@ bool bit2Interruptor[4]={};
 int interruptor;
 int sender;
 string onoff;
+int pulse=0;
 
 void log(string a){
 	//Décommenter pour avoir les logs
@@ -169,8 +170,19 @@ void transmit(int blnOn)
 
 }
 
-
-
+void action (bool b) {
+	if (b) {
+		system("/etc/lcd/screen -p \"Radio signal ON...\"");
+		log("envois du signal ON");
+	} else {
+		system("/etc/lcd/screen -p \"Radio signal OFF...\"");
+                log("envois du signal OFF");
+	}
+	for(int i=0;i<5;i++){
+		transmit(b);              // envoyer
+		delay(10);                // attendre 10 ms (sinon le socket nous ignore)
+	}
+}
 
 int main (int argc, char** argv)
 {
@@ -191,6 +203,9 @@ int main (int argc, char** argv)
 	sender = atoi(argv[2]);
 	interruptor = atoi(argv[3]);
 	onoff = argv[4];
+	if (argc==6) {
+		pulse = atoi(argv[5]);
+	}
 	//Si on ne trouve pas la librairie wiringPI, on arrête l'execution
     if(wiringPiSetup() == -1)
     {
@@ -206,20 +221,16 @@ int main (int argc, char** argv)
 	
 	
 	if(onoff=="on"){
-	 system("/etc/lcd/screen -p \"Radio signal ON...\"");
-	 log("envois du signal ON");
-	 for(int i=0;i<5;i++){
-		 transmit(true);            // envoyer ON
-		 delay(10);                 // attendre 10 ms (sinon le socket nous ignore)
-	 }
+	 action(true);
 
+	}else if (onoff=="off"){
+	 action(false);
+	 
 	}else{
-	 system("/etc/lcd/screen -p \"Radio signal OFF...\"");
-	 log("envois du signal OFF");
-	 for(int i=0;i<5;i++){
-		 transmit(false);           // envoyer OFF
-		 delay(10);                // attendre 10 ms (sinon le socket nous ignore)
-	 }
+	 action(true);
+	 delay(pulse);
+	 action(false);
+	 
 	}
 
 	 log("fin du programme");    // execution terminée.
@@ -227,4 +238,3 @@ int main (int argc, char** argv)
 
 	scheduler_standard();
 }
-

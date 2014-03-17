@@ -8,7 +8,7 @@
 
 class RadioRelay extends SQLiteEntity{
 
-	protected $id,$name,$description,$radioCode,$room;
+	protected $id,$name,$description,$radioCode,$room,$pulse;
 	protected $TABLE_NAME = 'plugin_radioRelay';
 	protected $CLASS_NAME = 'RadioRelay';
 	protected $object_fields = 
@@ -17,7 +17,8 @@ class RadioRelay extends SQLiteEntity{
 		'name'=>'string',
 		'description'=>'string',
 		'radioCode'=>'int',
-		'room'=>'int'
+		'room'=>'int',
+		'pulse'=>'int'
 	);
 
 	function __construct(){
@@ -64,6 +65,13 @@ class RadioRelay extends SQLiteEntity{
 		$this->room = $room;
 	}
 
+	function getPulse(){
+		return $this->pulse;
+	}
+
+	function setPulse($pulse){
+		$this->pulse = $pulse;
+	}
 }
 
 ?>

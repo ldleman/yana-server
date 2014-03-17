@@ -69,6 +69,9 @@ function radioRelay_plugin_setting_page(){
 									<option <?php  if ($selected_room == $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 									<?php } ?>
 								</select>
+							<label for="pulseRadioRelay">Mode impulsion (laisser à zero pour desactiver le mode impulsion ou definir un temps d'impulsion en milli-seconde)</label>
+							<input type="text" name="pulseRadioRelay" value="<? if(isset($selected))echo $selected->getPulse(); else echo "0";?>" id="pulseWireRelay" placeholder="0" />
+			    
 							</div>
 
 							<div class="clear"></div>
@@ -84,6 +87,7 @@ function radioRelay_plugin_setting_page(){
 								<th>Description</th>
 								<th>Code radio</th>
 								<th>Pièce</th>
+								<th>Impulsion</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -97,6 +101,7 @@ function radioRelay_plugin_setting_page(){
 								<td><?php echo $radioRelay->getDescription(); ?></td>
 								<td><?php echo $radioRelay->getRadioCode(); ?></td>
 								<td><?php echo $room->getName(); ?></td>
+								<td><?php echo $radioRelay->getPulse(); ?></td>
 								<td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-remove"></i></a>
 									<a class="btn" href="setting.php?section=radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
 								</tr>
@@ -149,8 +154,9 @@ function radioRelay_plugin_setting_page(){
 				<?php  if(fileperms(Plugin::path().'radioEmission')!='36333'){ ?><div class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href='https://github.com/ldleman/yana-server#installation';">la doc</span> pour les régler</div><?php } ?>
 					
 					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="icon-thumbs-up"></i></a>
-					<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
-					
+					<?php if($radioRelay->getPulse()==0){ ?>
+						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+					<?php } ?>
 					
 				</div>
 			
@@ -214,6 +220,7 @@ function radioRelay_plugin_setting_page(){
 					$radioRelay->setDescription($_['descriptionRadioRelay']);
 					$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
 					$radioRelay->setRoom($_['roomRadioRelay']);
+					$radioRelay->setPulse($_['pulseRadioRelay']);
 					$radioRelay->save();
 					header('location:setting.php?section=radioRelay');
 				}
@@ -235,8 +242,11 @@ function radioRelay_plugin_setting_page(){
 					$radioRelay = $radioRelay->getById($_['engine']);
 					Event::emit('relay_change_state',array('relay'=>$radioRelay,'state'=>$_['state']));
 
-					$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' '.$_['state'];
-
+					if($radioRelay->getPulse()==0){
+						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' '.$_['state'];
+					}else{
+						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' pulse '.$radioRelay->getPulse();
+					}
 				//TODO change bdd state
 					system($cmd,$out);
 					if(!isset($_['webservice'])){
