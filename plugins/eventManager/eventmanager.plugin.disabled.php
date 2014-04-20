@@ -208,10 +208,11 @@ function eventmanager_plugin_page($_){
 						    <select class="input-medium" id="eventType" name="eventType" value="<?php echo $action['type']; ?>"></select>
 						</div>
 						<div class="span2">
+							
 						    <label for="eventState">Etat</label>
 						    <select class="input-medium" id="eventState" name="eventState">
-						    	<option value="1" <?php echo ($action['state']=='1'?'selected="selected"':''); ?>>Actif</option>
-						    	<option value="0"  <?php echo ($action['state']=='0'?'selected="selected"':''); ?>>Inactif</option>
+						    	<option value="1" <?php echo ($currentEvent->getState()=='1'?'selected="selected"':''); ?>>Actif</option>
+						    	<option value="0"  <?php echo ($currentEvent->getState()=='0'?'selected="selected"':''); ?>>Inactif</option>
 						    </select>
 						</div>
 
