@@ -297,7 +297,14 @@ function vocalinfo_action(){
 
 		case 'vocalinfo_tv':
 			global $_;
-				$contents = file_get_contents('http://www.webnext.fr/epg_cache/programme-tv-xml_'.date('Y-m-d').'.xml');
+
+				libxml_use_internal_errors(true);
+
+			
+				
+				$contents = file_get_contents('http://webnext.fr/epg_cache/programme-tv-rss_'.date('Y-m-d').'.xml');
+				
+
 				$xml = simplexml_load_string($contents);
 				$emissions = $xml->xpath('/rss/channel/item');
 
@@ -335,6 +342,8 @@ function vocalinfo_action(){
 				
 				$json = json_encode($response);
 				echo ($json=='[]'?'{}':$json);
+
+
 		break;
 		case 'vocalinfo_hour':
 			global $_;
