@@ -49,8 +49,7 @@ function room_plugin_page($_){
 				else
 				{
 					foreach($rooms as $room){
-					//$room = $roomManager->getById($_['id']);
-					Plugin::callHook("node_display", array($room));
+						Plugin::callHook("node_display", array($room));
 					}
 				}
 				?>

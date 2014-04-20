@@ -36,8 +36,8 @@
           </button>
         <div class="nav-collapse collapse">
           <ul class="nav">
-           
-           <li class="logoBox"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></li>
+          <li class="logoBox" title="Revenir à l'accueil"><a id="aLogoBox" href="index.php"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></a></li>
+          <!-- <li class="logoBox"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></li>-->
           {if="$myUser!=false"}
               <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
               {loop="menuItems"}

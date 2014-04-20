@@ -12,10 +12,28 @@
 	font-weight:bold;
 }
 body {
-    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+
     font-family: 'Open Sans';
  }
 
+#header {
+  margin-bottom:10px;
+  position:relative;
+}
+
+#body {
+  font-family: 'Open Sans';
+  position:relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+#aLogoBox {
+  padding:1px;
+  margin:0px;
+
+ }
 h1,h2,h3,h4{
   font-family: 'Open Sans Light',sans-serif;
   font-weight: normal;
