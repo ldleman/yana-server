@@ -28,9 +28,9 @@ switch ($_['action']){
 	case 'login':
 	global $conf;
 	$user = $userManager->exist($_['login'],$_['password']);
-	$error = '';
+	$error = '?init=1';
 	if($user==false){
-		$error = '?error='.urlencode('le compte spécifié est inexistant');
+		$error = '&error='.urlencode('le compte spécifié est inexistant');
 	}else{
 		$_SESSION['currentUser'] = serialize($user);
 	

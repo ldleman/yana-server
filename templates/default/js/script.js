@@ -1,8 +1,12 @@
 $(document).ready(function(){
 	$('.date').date();
 	$('.infobulle').tooltip({placement:'bottom'});
-	$.getJSON($("#UPDATE_URL").html(),function(data){
-	});
+
+	if($.urlParam('init')=='1'){
+		$.getJSON($("#UPDATE_URL").html(),function(data){
+		});
+	}
+
 	get_dash_infos();
 	$('#btnSearchPlugin').trigger("click");
 
