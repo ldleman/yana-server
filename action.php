@@ -345,7 +345,7 @@ else
 				echo '<ul>';
 
 				foreach ($hdds as $value) {
-					'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
+					echo '<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
 				}
 				echo '</ul>';
 			break;
