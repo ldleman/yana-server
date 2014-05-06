@@ -129,27 +129,22 @@ function wireRelay_display($room){
 			
 	?>
 
-	<div class="span3">
-          <h5><?php echo $wireRelay->getName() ?></h5>
-		   
-		   <p><?php echo $wireRelay->getDescription() ?>
-		  	</p><ul>
+	<div class="flatBloc green-color" style="max-width:30%;display:inline-block;vertical-align:top;">
+          <h3><?php echo $wireRelay->getName() ?></h3>
+		   <p><?php echo $wireRelay->getDescription() ?></p>
+		   <ul>
 		  		<li>PIN GPIO : <code><?php echo $wireRelay->getPin() ?></code></li>
-		  		<li>Type : <code>Interrupteur filaire</code></li>
-		  		<li>Emplacement : <code><?php echo $room->getName() ?></code></li>
+		  		<li>Type : <span>Interrupteur filaire</span></li>
+		  		<li>Emplacement : <span><?php echo $room->getName() ?></span></li>
 		  	</ul>
-		  <p></p>
-		  	 <div class="btn-toolbar">
-				<div class="btn-group">
+		 
 				<?php if($gpios[$wireRelay->getPin()]){ ?>
-					<a class="btn btn-success" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
+					<a class="flatBloc" title="Activer le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
 				<?php } else { ?>
-					<a class="btn" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
+					<a class="flatBloc" title="Désactiver le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
 				<?php } ?>
-				</div>
-			</div>
-        </div>
-
+    </div>
+       
 
 	<?php
 	}
