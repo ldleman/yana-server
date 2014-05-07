@@ -4,7 +4,7 @@
 	  <ul class="nav nav-tabs nav-stacked">
 	  	<li {if="isset($_['section']) && $_['section']=='plugin'"}class="active"{/if}><a href="setting.php?section=plugin"><i class="icon-chevron-right"></i> Plugins</a></li>
 	  	<li {if="isset($_['section']) && $_['section']=='user'"}class="active"{/if}><a href="setting.php?section=user"><i class="icon-chevron-right"></i> Utilisateurs</a></li>
-	  	<li {if="isset($_['section']) && $_['section']=='access'"}class="active"{/if}><a href="setting.php?section=access"><i class="icon-chevron-right"></i> Acces</a></li>
+	  	<li {if="isset($_['section']) && $_['section']=='access'"}class="active"{/if}><a href="setting.php?section=access"><i class="icon-chevron-right"></i> Accès</a></li>
 	    {function="Plugin::callHook("setting_menu", array())"}
 	  </ul>
 	</div>
@@ -30,8 +30,8 @@
 					    <label for="labelRank">Libellé</label>
 					    {if="isset($id_modrank)"}<input type="hidden" name="id" value="{$id_modrank}">{/if}
 					    <input {if="isset($label_rank)"}value="{$label_rank}"{/if} type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
-					    <label for="descriptionRank">Description</label>
-					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
+					    <label for="descriptionRank">Déscription</label>
+					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Déscription courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
 		  				<div class="clear"></div>
 				    	<br/><button type="submit" class="btn">{$button}</button>
 			  	</fieldset>
@@ -42,7 +42,7 @@
 			    <thead>
 			    <tr>
 			    	<th>Libellé</th>
-				    <th>Description</th>
+				    <th>Déscription</th>
 				    <th></th>
 			    </tr>
 			    </thead>

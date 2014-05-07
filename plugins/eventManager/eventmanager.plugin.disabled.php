@@ -86,7 +86,7 @@ function eventmanager_action(){
 
 function eventmanager_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="icon-back-in-time"></i> Evenements</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="icon-back-in-time"></i> Événements</a>');
 }
 
 
@@ -109,22 +109,22 @@ function eventmanager_plugin_page($_){
 			<div class="span12">
 
 
-				<h1>Evenements</h1>
+				<h1>Événements</h1>
 				
 				<form action="action.php?action=eventmanager_save_event" method="POST">
 				<fieldset>
-				    <legend>Gestion des evenements</legend>
-				    <p>Ce module vous permet de créer un évenement en fonction d'une date que le client (yana windows ou yana for android) 
+				    <legend>Gestion des événements</legend>
+				    <p>Ce module vous permet de créer un événement en fonction d'une date que le client (yana windows ou yana for android) 
 				    	ou le serveur (yana-server sur le rapsberry PI) pourra retranscrire.
-				    	<br/>Pour le client, l'évenement peut être une action parole (prononce une phrase), une commande (une commande est lancée sur
+				    	<br/>Pour le client, l'événement peut être une action parole (prononce une phrase), une commande (une commande est lancée sur
 				    	le poste qui execute yana client), ou encore  un son à jouer (le son doit être un .wav situé dans le repertoire son de yana-windows)
-				    	<br/><br/>Pour le serveur, l'évenement peut être une commande (lancée sur le rapsberry PI), ou un changement d'état GPIO.</p>
+				    	<br/><br/>Pour le serveur, l'événement peut être une commande (lancée sur le rapsberry PI), ou un changement d'état GPIO.</p>
 				   
 
 
 						<div class="row">
 							<div class="flatBloc blue-color">
-								<h3><i class="icon-clock"></i> Evenement : heure/date</h3>
+								<h3><i class="icon-clock"></i> Événement : heure/date</h3>
 								<div class="span2">
 									<label for="eventMinut">Minute</label>
 								    <select class="input-medium" name="eventMinut" id="eventMinut">
@@ -209,7 +209,7 @@ function eventmanager_plugin_page($_){
 						</div>
 						<div class="span2">
 							
-						    <label for="eventState">Etat</label>
+						    <label for="eventState">État</label>
 						    <select class="input-medium" id="eventState" name="eventState">
 						    	<option value="1" <?php echo ($currentEvent->getState()=='1'?'selected="selected"':''); ?>>Actif</option>
 						    	<option value="0"  <?php echo ($currentEvent->getState()=='0'?'selected="selected"':''); ?>>Inactif</option>
@@ -311,7 +311,7 @@ function eventmanager_plugin_page($_){
 			    <?php } ?>
 			    </table>
 			    
-			     <strong>Important: </strong>Pour profiter du gestionnaire d'évenement de yana <code>coté serveur</code>, vous devez ajouter une tâche
+			     <strong>Important: </strong>Pour profiter du gestionnaire d'événements de yana <code>coté serveur</code>, vous devez ajouter une tâche
 			     planifiée sur le raspberry PI, pour cela tapez :
 			     <code>sudo crontab -e</code>
 			     puis ajoutez la ligne
