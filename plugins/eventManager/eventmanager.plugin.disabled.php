@@ -317,7 +317,7 @@ function eventmanager_plugin_page($_){
 			     puis ajoutez la ligne
 			    <?php
 			     $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-				 $url = str_replace('//','/',$protocol.$_SERVER['SERVER_ADDR'].'/'.str_replace('index.php','',$_SERVER['PHP_SELF']).'/action.php?action=GET_EVENT&checker=server');
+				 $url = $protocol.str_replace('//','/','localhost/'.str_replace('index.php','',$_SERVER['PHP_SELF']).'/action.php?action=GET_EVENT&checker=server');
 
 			     echo '<code>*/1 * * * * wget '.$url.' -O /dev/null 2>&1</code>'; ?>
 			     puis sauvegardez (<code>ctrl</code>+<code>x</code> puis <code>O</code> puis <code>Entrée</code>) 
