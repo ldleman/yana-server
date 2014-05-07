@@ -192,6 +192,9 @@ else
 	Functions::goback(" ./index");
 	break;
 
+	case 'KNOCK_KNOCK_YANA':
+		exit('1');
+	break;
 
 	case 'changePluginState':
 	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
