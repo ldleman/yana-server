@@ -192,6 +192,9 @@ else
 	Functions::goback(" ./index");
 	break;
 
+	case 'KNOCK_KNOCK_YANA':
+		exit('1');
+	break;
 
 	case 'changePluginState':
 	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
@@ -308,14 +311,14 @@ else
 		$tpl->assign('heat',Monitoring::heat());
 		$tpl->assign('disks',Monitoring::disks());*/
 			case 'dash_system':
-				//$heat = Monitoring::heat();
-				$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
+				$heat = Monitoring::heat();
+				//$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
 				$cpu = Monitoring::cpu();
 				echo '<ul>
 				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
 				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
 				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
-				    	<li><strong>Temperature :</strong>  <span class="label label-warning">'.$heat.'</span></li>
+				    	<li><strong>Température :</strong>  <span class="label label-warning">'.$heat.'°C</span></li>
 				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
 				    </ul>';
@@ -345,7 +348,7 @@ else
 				echo '<ul>';
 
 				foreach ($hdds as $value) {
-					'<li><strong class="badge">'.$value['name'].'</strong> Espace : '.$value['used'].'/'.$value['total'].' Format : '.$value['format'].' </li>';
+					echo '<li><strong class="badge">'.$value['name'].'</strong><br><strong> Espace :</strong> '.$value['used'].'/'.$value['total'].'<strong> Format :</strong> '.$value['format'].' </li>';
 				}
 				echo '</ul>';
 			break;

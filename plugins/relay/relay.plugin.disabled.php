@@ -51,7 +51,7 @@ function radioRelay_plugin_setting_page(){
 							<?php  if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" id="nameRadioRelay" value="<?php  if(isset($selected)){echo $selected->getName();} ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
 							<small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME'); ?>, allume <span id="vocalCommand"></span>"</small>
-							<label for="descriptionRadioRelay">Description</label>
+							<label for="descriptionRadioRelay">Déscription</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 							<label for="radioCodeRadioRelay">Code radio</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getRadioCode();} ?>" name="radioCodeRadioRelay" id="radioCodeRadioRelay" placeholder="0,1,2…" />
@@ -69,7 +69,7 @@ function radioRelay_plugin_setting_page(){
 									<option <?php  if ($selected_room == $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 									<?php } ?>
 								</select>
-							<label for="pulseRadioRelay">Mode impulsion (laisser à zero pour desactiver le mode impulsion ou definir un temps d'impulsion en milli-seconde)</label>
+							<label for="pulseRadioRelay">Mode impulsion (laisser à zéro pour désactiver le mode impulsion ou definir un temps d'impulsion en milli-seconde)</label>
 							<input type="text" name="pulseRadioRelay" value="<? if(isset($selected))echo $selected->getPulse(); else echo "0";?>" id="pulseWireRelay" placeholder="0" />
 			    
 							</div>
@@ -84,7 +84,7 @@ function radioRelay_plugin_setting_page(){
 						<thead>
 							<tr>
 								<th>Nom</th>
-								<th>Description</th>
+								<th>Déscription</th>
 								<th>Code radio</th>
 								<th>Pièce</th>
 								<th>Impulsion</th>
@@ -143,7 +143,7 @@ function radioRelay_plugin_setting_page(){
 					?>
 
 					
-					<div class="flatBloc blue-color" style="max-width:30%;">
+					<div class="flatBloc blue-color" style="max-width:30%;display:inline-block;vertical-align:top;">
 						<h3><?php echo $radioRelay->getName() ?></h3>	
 						<p><?php echo $radioRelay->getDescription() ?>
 						</p><ul>
@@ -153,20 +153,18 @@ function radioRelay_plugin_setting_page(){
 					</ul>
 				<?php  if(fileperms(Plugin::path().'radioEmission')!='36333'){ ?><div class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href='https://github.com/ldleman/yana-server#installation';">la doc</span> pour les régler</div><?php } ?>
 					
-					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="icon-thumbs-up"></i></a>
+					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
 					<?php if($radioRelay->getPulse()==0){ ?>
-						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down "></i></a>
+						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down icon-white"></i></a>
 					<?php } ?>
 					
 				</div>
-			
-
-
 				<?php
 			}
-}else{
-	?>Aucun relais radio ajouté dans la piece <code><?php echo $room->getName() ?></code>, <a href="setting.php?section=radioRelay&amp;room=<?php echo $room->getId(); ?>">ajouter un relais radio ?</a><?php
-}
+			}else{
+				if(isset($_['id']))
+					echo '<div>Aucun relais radio ajouté dans la pièce <code>'.$room->getName().'</code>, <a href="setting.php?section=radioRelay&amp;room='.$room->getId().'">ajouter un relais radio ?</a></div>';
+			}
 
 
 		}

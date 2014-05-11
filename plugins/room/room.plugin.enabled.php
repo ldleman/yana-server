@@ -13,7 +13,7 @@ include('Room.class.php');
 
 function room_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-login"></i> Pieces</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-login"></i> Pièces</a>');
 }
 
 
@@ -107,7 +107,7 @@ function room_plugin_setting_page(){
 							<label for="nameRoom">Nom</label>
 							<?php if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
-							<label for="descriptionRoom">Description</label>
+							<label for="descriptionRoom">Déscription</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
 						</div>
 
@@ -121,7 +121,7 @@ function room_plugin_setting_page(){
 					<thead>
 						<tr>
 							<th>Nom</th>
-							<th>Description</th>
+							<th>Déscription</th>
 							<th></th> 
 						</tr>
 					</thead>
