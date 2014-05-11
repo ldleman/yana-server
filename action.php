@@ -220,7 +220,9 @@ else
 	case 'GET_SPEECH_COMMAND':
 	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
 	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
-	$actionUrl = 'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+	
+	list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
+	$actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
 	$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
 	
 	Plugin::callHook("vocal_command", array(&$response,$actionUrl));
