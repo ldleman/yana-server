@@ -1,0 +1,19 @@
+<?php
+/* 
+	Le code contenu dans cette page ne sera éxecuté qu'à la désactivation du plugin 
+	Vous pouvez donc l'utiliser pour supprimer des tables SQLite, des dossiers, ou executer une action
+	qui ne doit se lancer qu'à la désinstallation ex :
+*/
+
+
+	require_once('Story.class.php');
+	require_once('Cause.class.php');
+	require_once('Effect.class.php');
+	
+	$current = new Cause();
+	$current->drop();
+	$current = new Effect();
+	$current->drop();
+	$current = new Story();
+	$current->drop();
+?>
