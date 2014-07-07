@@ -14,7 +14,14 @@ class Functions
 	 */
 
 	public static function secure($var){
-		return addslashes(htmlspecialchars($var, ENT_QUOTES, "UTF-8"));
+		$response = '';
+		if(is_array($var)){
+			foreach($var as $key=>$value)
+				$response[Functions::secure($key)] = Functions::secure($value);
+		}else{
+			$response = addslashes(htmlspecialchars($var, ENT_QUOTES, "UTF-8"));
+		}
+		return $response;
 	}
 
 	/**
