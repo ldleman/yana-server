@@ -119,16 +119,11 @@ function wireRelay_plugin_setting_menu(){
 
 function wireRelay_display($room){
 	global $_;
-
-
 	$wireRelayManager = new WireRelay();
 	$wireRelays = $wireRelayManager->loadAll(array('room'=>$room->getId()));
-	$gpios = Monitoring::gpio();
-	
-	foreach ($wireRelays as $wireRelay) {
-			
-	?>
 
+	foreach ($wireRelays as $wireRelay) {
+	?>
 	<div class="flatBloc green-color" style="max-width:30%;display:inline-block;vertical-align:top;">
           <h3><?php echo $wireRelay->getName() ?></h3>
 		   <p><?php echo $wireRelay->getDescription() ?></p>
@@ -138,11 +133,10 @@ function wireRelay_display($room){
 		  		<li>Emplacement : <span><?php echo $room->getName() ?></span></li>
 		  	</ul>
 		 
-				<?php if($gpios[$wireRelay->getPin()]){ ?>
-					<a class="flatBloc" title="Activer le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
-				<?php } else { ?>
-					<a class="flatBloc" title="Désactiver le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
-				<?php } ?>
+		
+			<a class="flatBloc" title="Activer le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
+			<a class="flatBloc" title="Désactiver le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
+
     </div>
        
 

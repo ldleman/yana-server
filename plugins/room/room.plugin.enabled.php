@@ -22,14 +22,16 @@ function room_plugin_page($_){
 		$roomManager = new Room();
 		$rooms = $roomManager->populate();
 		//if (!isset($_['id']) && count($rooms)>0)  $_['id'] = $rooms[0]->getId();
-
+		$currentRoom  = new Room();
 		?>
 
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
 				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="icon-chevron-right"></i>Toutes les pièces</a></li>
-					<?php foreach($rooms as $room){ ?>
+					<?php foreach($rooms as $room){ 
+						if(isset($_['id']) && $room->getId()==$_['id']) $currentRoom = $room;
+					?>
 					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
 					<?php } ?>
 				</ul>
@@ -42,9 +44,8 @@ function room_plugin_page($_){
 
 				<?php 
 
-				if(isset($_['id'])){
-					$room = $roomManager->getById($_['id']);
-					Plugin::callHook("node_display", array($room));
+				if($currentRoom->getId()!=0){
+					Plugin::callHook("node_display", array($currentRoom));
 				}
 				else
 				{
