@@ -57,7 +57,7 @@ function __autoload($class_name) {
 if(isset($_POST['install'])){
  
  
-    if(is_writable($path_yana)) {
+    if(isset($_POST['password']) && trim($_POST['password'])!='' && isset($_POST['login']) && trim($_POST['login'])!='' ) {
 	  //Supression de l'ancienne base si elle existe
 	  if(file_exists(DB_NAME)) unlink(DB_NAME);
       //Instanciation des managers d'entités
@@ -82,7 +82,7 @@ if(isset($_POST['install'])){
       $configuration->put('DEFAULT_THEME','default');
       $configuration->put('COOKIE_NAME','yana');
       $configuration->put('COOKIE_LIFETIME','7');
-      $configuration->put('VOCAL_ENTITY_NAME',(isset($_POST['entityName'])?$_POST['entityName']:'YANA'));
+      $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
 	  $configuration->put('HOME_PAGE','index.php');
 
@@ -112,8 +112,6 @@ if(isset($_POST['install'])){
     	
       //Creation du premier compte et assignation en admin
     	$user->setMail($_POST['email']);
-    	$user->setName($_POST['name']);
-    	$user->setFirstName($_POST['firstname']);
     	$user->setPassword($_POST['password']);
     	$user->setLogin($_POST['login']);
     	$user->setToken(sha1(time().rand(0,1000)));
@@ -132,7 +130,7 @@ if(isset($_POST['install'])){
         <div id="body" class="container">
         <div class="alert alert-error">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Echec de l'Installation : </strong>Vous n'avez pas la permission d'écrire sur le serveur web! (avez vous fait <code>chown -R www-data:www-data <?echo $path_yana;?> </code>?) <a class="brand" href="install.php">Réessayer</a>.
+        <strong>Echec de l'Installation : </strong> L'identifiant et le mot de passe ne peuvent être vides <a class="brand" href="install.php">Réessayer</a>.
       </div>
 <?php exit(); } ?>
 	 <div id="body" class="container">
@@ -189,24 +187,7 @@ if(isset($_POST['install'])){
         </div>
 
         <form class="form-horizontal" action="install.php" method="POST">
-      	<div class="control-group">
-          <label class="control-label" for="inputName">Nom</label>
-          <div class="controls">
-            <input type="text" name="name" id="inputName" placeholder="">
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="inputFirstName">Prenom</label>
-          <div class="controls">
-            <input type="text" name="firstname" id="inputFirstName" placeholder="">
-          </div>
-        </div>
-          <div class="control-group">
-          <label class="control-label" for="inputEmail">Email</label>
-          <div class="controls">
-            <input type="text" name="email" id="inputEmail" placeholder="Email">
-          </div>
-        </div>
+          
         <div class="control-group">
           <label class="control-label" for="inputLogin">Login</label>
           <div class="controls">
@@ -219,16 +200,12 @@ if(isset($_POST['install'])){
             <input type="password" name="password" name="inputPassword" placeholder="Password">
           </div>
         </div>
-
-         <div class="control-group">
-          <label class="control-label" for="inputPassword">Nom de l'entité vocale</label>
+		<div class="control-group">
+          <label class="control-label" for="inputEmail">Email</label>
           <div class="controls">
-            <input type="text" name="entityName" value="Yana">
+            <input type="text" name="email" id="inputEmail" placeholder="Email">
           </div>
         </div>
-
-
-        
 
         <div class="control-group">
           <div class="controls">
@@ -239,7 +216,7 @@ if(isset($_POST['install'])){
 	<?php }} ?>
   
 
- <div class="well well-small" id="footer">CC by nc sa <?php echo PROGRAM_NAME ?>
+ <div class="navbar navbar-inverse navbar-fixed-bottom" id="footer">CC by nc sa <?php echo PROGRAM_NAME ?>
 
  </div>
  </div> <!-- /container -->
