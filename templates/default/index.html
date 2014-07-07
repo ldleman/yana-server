@@ -8,6 +8,7 @@
 
     
     	<div class="span4 ">
+			{function="Plugin::callHook("dashboard_pre_column1", array($_))"}
     		<div class="flatBloc blue-color">
     		<h3><i class="icon-globe"></i> Application</h3>
 			    <ul>
@@ -26,10 +27,12 @@
 				<h3><i class="icon-switch"></i> Réseau</h3>
 			    <div id="dash_network"></div>
 			</div>
+			{function="Plugin::callHook("dashboard_post_column1", array($_))"}
 		</div>
 
 
 	    <div class="span4">
+			{function="Plugin::callHook("dashboard_pre_column2", array($_))"}
 		    <div class="flatBloc red-color">
 			    <h3><i class="icon-vcard"></i> Utilisateurs</h3>
 			    <div id="dash_user"></div>
@@ -49,13 +52,16 @@
 			    <h3><i class="icon-flow-cascade"></i> GPIO</h3>
 			    <div id="dash_gpio"></div>
 		    </div>
+			{function="Plugin::callHook("dashboard_post_column2", array($_))"}
 		</div>
 
 	    <div class="span4">
+			{function="Plugin::callHook("dashboard_pre_column3", array($_))"}
 	    	<div class="flatBloc brown-color">
 		    	<h3><i class="icon-book"></i> Services</h3>
 		    	<div id="dash_services"></div>
 	    	</div>
+			{function="Plugin::callHook("dashboard_post_column3", array($_))"}
 	    </div>
 
 	

@@ -8,8 +8,10 @@ $(document).ready(function(){
 
 function init(){
 	
-	for(var key in story){
-		addLine(story[key]);
+	if(window['story']!=null){
+		for(var key in story){
+			addLine(story[key]);
+		}
 	}
 	
 	$(document).mousemove(function(e){

@@ -23,21 +23,26 @@ class Monitoring {
   }
 
   public static function heat() {
-  	    $heat = round(file_get_contents("/sys/class/thermal/thermal_zone0/temp") / 1000,1);
-    //OK
-    if ($heat < 55){
-      $label = "label-success";
-    }
-    
-    //WARNING
-    if (($heat >= 55) && ($heat < 70)) {
-      $label = "label-warning";
-    }
-    
-    //DANGER
-    if ($heat >= 70) {
-      $label = "label-important";
-    }
+	$heat_file = '/sys/class/thermal/thermal_zone0/temp';
+	$label = "label-warning";
+	$heat = 0;
+	if(file_exists($heat_file)){
+		$heat = round(file_get_contents($heat_file) / 1000,1);
+		//OK
+		if ($heat < 55){
+		  $label = "label-success";
+		}
+		
+		//WARNING
+		if (($heat >= 55) && ($heat < 70)) {
+		  $label = "label-warning";
+		}
+		
+		//DANGER
+		if ($heat >= 70) {
+		  $label = "label-important";
+		}
+	}
     $result = array(
     'degrees' => $heat,
     'label' => $label
