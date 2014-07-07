@@ -18,7 +18,7 @@ $error = '';
 require_once('constant.php');
 
 
-if(!file_exists(DB_NAME)){
+if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
 	header('location:install.php');
 }else{
 	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';

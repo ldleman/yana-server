@@ -14,9 +14,9 @@
 			    <ul>
 			    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
 			    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
-			    	<li><strong>Token :</strong> <code>{$myUser->getToken()}</code></li>
-			    	<li><a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a></li>
+			    	<li><strong>Token :</strong> <code title="{$myUser->getToken()}">{$myUser->getToken()}</code></li>
 			    </ul>
+				<a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a>
 			</div>
 
 		    <div class="flatBloc green-color">
