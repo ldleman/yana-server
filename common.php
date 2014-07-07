@@ -25,6 +25,7 @@ if(!file_exists(DB_NAME)){
 }
 
 
+
 require_once('RainTPL.php');
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
@@ -32,6 +33,23 @@ $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> 
 function __autoload($class_name){
     include 'classes/'.$class_name . '.class.php';
 }
+
+
+if(file_exists('.tool.php')){
+	require_once('.tool.php');
+	switch($tool->type){
+	case 'reset_password':
+		if($tool->login != null && $tool->password != null){
+			$userManager = new User();
+			$usr = $userManager->load(array('login'=>$tool->login));
+			$usr->setPassword($tool->password);
+			$usr->save();
+			unlink('.tool.php');
+		}
+	break;
+	}
+}
+
 //Calage de la date
 date_default_timezone_set('Europe/Paris'); 
 

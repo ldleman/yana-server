@@ -51,7 +51,7 @@ function radioRelay_plugin_setting_page(){
 							<?php  if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" id="nameRadioRelay" value="<?php  if(isset($selected)){echo $selected->getName();} ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameRadioRelay" placeholder="Lumiere Canapé…"/>
 							<small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME'); ?>, allume <span id="vocalCommand"></span>"</small>
-							<label for="descriptionRadioRelay">Déscription</label>
+							<label for="descriptionRadioRelay">Description</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRadioRelay" id="descriptionRadioRelay" placeholder="Relais sous le canapé…" />
 							<label for="radioCodeRadioRelay">Code radio</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getRadioCode();} ?>" name="radioCodeRadioRelay" id="radioCodeRadioRelay" placeholder="0,1,2…" />
@@ -70,7 +70,7 @@ function radioRelay_plugin_setting_page(){
 									<?php } ?>
 								</select>
 							<label for="pulseRadioRelay">Mode impulsion (laisser à zéro pour désactiver le mode impulsion ou definir un temps d'impulsion en milli-seconde)</label>
-							<input type="text" name="pulseRadioRelay" value="<? if(isset($selected))echo $selected->getPulse(); else echo "0";?>" id="pulseWireRelay" placeholder="0" />
+							<input type="text" name="pulseRadioRelay" value="<?php if(isset($selected))echo $selected->getPulse(); else echo "0";?>" id="pulseWireRelay" placeholder="0" />
 			    
 							</div>
 
@@ -84,7 +84,7 @@ function radioRelay_plugin_setting_page(){
 						<thead>
 							<tr>
 								<th>Nom</th>
-								<th>Déscription</th>
+								<th>Description</th>
 								<th>Code radio</th>
 								<th>Pièce</th>
 								<th>Impulsion</th>
@@ -135,14 +135,13 @@ function radioRelay_plugin_setting_page(){
 
 
 				$radioRelayManager = new RadioRelay();
+				
 				$radioRelays = $radioRelayManager->loadAll(array('room'=>$room->getId()));
 
 				if(count($radioRelays)>0){
 				foreach ($radioRelays as $radioRelay) {
 
 					?>
-
-					
 					<div class="flatBloc blue-color" style="max-width:30%;display:inline-block;vertical-align:top;">
 						<h3><?php echo $radioRelay->getName() ?></h3>	
 						<p><?php echo $radioRelay->getDescription() ?>
@@ -160,7 +159,7 @@ function radioRelay_plugin_setting_page(){
 					
 				</div>
 				<?php
-			}
+				}
 			}else{
 				if(isset($_['id']))
 					echo '<div>Aucun relais radio ajouté dans la pièce <code>'.$room->getName().'</code>, <a href="setting.php?section=radioRelay&amp;room='.$room->getId().'">ajouter un relais radio ?</a></div>';
