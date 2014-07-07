@@ -3,3 +3,4 @@ database.db
 /plugins/plugins.states.json
 /templates/save-default
 /db/.database.db
+/log/.log.txt

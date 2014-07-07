@@ -60,9 +60,9 @@ switch ($_['action']){
 	break;
 
 	case 'GET_TOKEN':
-	$user = $userManager->load(array('login'=>$_['login'],'password'=>sha1(md5($_['password']))));
-	$response['token'] = $user->getToken();
-	echo json_encode($response);
+		$user = $userManager->load(array('login'=>$_['login'],'password'=>sha1(md5($_['password']))));
+		$response['token'] = $user->getToken();
+		echo json_encode($response);
 	break;
 	
 	case 'user_add_user':
@@ -201,7 +201,6 @@ else
 	if(!$myUser->can('plugin','u')) exit('ERREUR: Permissions insuffisantes.');
 	if($_['state']=='0'){
 		Plugin::enabled($_['plugin']);
-
 	}else{
 		Plugin::disabled($_['plugin']);
 	}

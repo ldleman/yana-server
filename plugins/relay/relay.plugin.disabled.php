@@ -156,7 +156,6 @@ function radioRelay_plugin_setting_page(){
 					<?php if($radioRelay->getPulse()==0){ ?>
 						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down icon-white"></i></a>
 					<?php } ?>
-					
 				</div>
 				<?php
 				}
@@ -245,7 +244,9 @@ function radioRelay_plugin_setting_page(){
 						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' pulse '.$radioRelay->getPulse();
 					}
 				//TODO change bdd state
+					Functions::log('Launch system command : '.$cmd);
 					system($cmd,$out);
+					
 					if(!isset($_['webservice'])){
 						header('location:index.php?module=room&id='.$radioRelay->getRoom());
 					}else{
