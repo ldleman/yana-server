@@ -2,7 +2,6 @@
 	(function($){
 	
 	    $.callBack =  function(options) {
-		
 	        if(options!=null){
                 if(options.message!=null)alert(options.message);
                 if(options.fonction!=null && options.redirection==null)eval(options.fonction);
@@ -30,6 +29,8 @@
 				return results[1] || 0;
 			}
 		}
+		
+	
 		
 		$.method =  function(options) {
                 var defaults = {
@@ -117,6 +118,66 @@
 						}
 					});
 
+				
+            });
+        },
+		
+		
+		chart: function(options) {
+                var defaults = {
+                    type: 'bar',
+					success: $.callBack,
+					label : ["January","February","March","April","May","June","July"],
+					data:  [0,1,2,3,4,5,6],
+					options : {responsive : true},
+					backgroundColor : ["rgba(220,220,220,0.5)"],
+					borderColor : ["rgba(220,220,220,0.8)"],
+					backgroundColorHover: ["rgba(220,220,220,0.75)"],
+					borderColorHover: ["rgba(220,220,220,1)"],
+                }
+                    
+            var options = $.extend(defaults, options);
+				
+				
+            return this.each(function() {
+                    var o = options;
+					var obj = $(this);
+				
+				var graphic = new Chart(obj[0].getContext("2d"));
+				
+				var conf = {
+							labels : o.label,
+							datasets:[{
+								fillColor : o.backgroundColor[0],
+								strokeColor : o.borderColor[0],
+								highlightFill: o.backgroundColorHover[0],
+								highlightStroke: o.borderColorHover[0],
+								data : o.data
+							}]
+						};
+							
+				
+				switch(o.type){
+					case 'line':
+						graphic.Line(conf,o.options);
+					break;		
+
+					case 'pie':
+						var conf = [];
+						for(var key in o.data){
+							var backgroundColor = o.backgroundColor[key] == null ? '#cecece': o.backgroundColor[key];
+							var backgroundColorHover = o.backgroundColorHover[key] == null ? '#dedede': o.backgroundColorHover[key];
+							conf.push({ value : o.data[key],highlight : backgroundColorHover,color : backgroundColor,label : o.label[key]  });
+						}
+						
+						graphic.Pie(conf,o.options);
+					break;
+					
+					case 'bar':
+					default :
+						graphic.Bar(conf,o.options);
+					break;
+				}
 				
             });
         },
