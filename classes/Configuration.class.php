@@ -36,9 +36,10 @@ class Configuration extends SQLiteEntity{
 	}
 
 	public function get($key){
-
 		return (isset($this->confTab[$key])?$this->confTab[$key]:'');
 	}
+	
+
 
 	public function put($key,$value){
 		$configurationManager = new Configuration();

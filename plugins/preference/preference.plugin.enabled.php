@@ -28,10 +28,47 @@ function preference_plugin_page(){
 		<p>Gestion des préférences du programme</p>
 
 		<ul class="nav nav-tabs">
+			<li><a href="setting.php?section=preference&amp;block=global"><i class="icon-chevron-right"></i> Général</a></li>
 	       <?php Plugin::callHook("preference_menu", array()); ?>
 	    </ul>
+			
+		
+		 <?php 
+		 
+		 if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='global' )  ){
+				if($myUser!=false){
+					?>
 
-		 <?php Plugin::callHook("preference_content", array()); ?>
+					<div class="span9 userBloc">
+							<table class="table table-striped table-bordered">
+							<tr><th>Clé</th><th>Valeur</th><tr>
+							<?php 
+								$conf = new Configuration();
+								$confs = $conf->populate();
+								foreach($confs as $value){
+									echo '<tr><td>'.$value->getKey().'</td><td><input class="input-xxlarge" disabled="disabled" readonly="readonly" type="text" value="'.$value->getValue().'" id="'.$value->getId().'"></td></tr>';
+								}
+							?>
+							<!--<tr><td colspan="2"><button type="submit" class="btn">Modifier</button></td></tr>-->
+							</table>
+						
+					</div>
+
+					<?php }else{ ?>
+
+					<div id="main" class="wrapper clearfix">
+						<article>
+							<h3>Vous devez être connecté</h3>
+						</article>
+					</div>
+					<?php
+
+				}
+			}
+			
+		 Plugin::callHook("preference_content", array()); 
+		 
+		 ?>
 		</div>
 
 <?php }else{ ?>
