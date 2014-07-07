@@ -17,7 +17,7 @@ $(document).ready(function(){
 function get_dash_infos(){
 	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').html('Chargement...')
 
-	$('#dash_network,#dash_gpio').each(function(i,elem){
+	$('#dash_network,#dash_gpio,#dash_graphics').each(function(i,elem){
 		refresh_dash(elem);
 		setInterval(function(){
 			refresh_dash(elem);
@@ -37,37 +37,7 @@ function get_dash_infos(){
 			refresh_dash(elem);
 		},120000);
 	});
-	
-	/*
-		$('#pie').chart({
-			type : 'pie',
-			label : ['CPU','RAM','DDR'],
-			backgroundColor : ['red','green','blue'],
-			data : [50,40,10]
-		});
-		$('#bar').chart({
-			type : 'bar',
-			label : ['CPU','RAM','DDR'],
-			backgroundColor : ['red','green','blue'],
-			data : [50,40,10]
-		});
-		$('#line').chart({
-			type : 'line',
-			label : ['CPU','RAM','DDR'],
-			backgroundColor : ['red','green','blue'],
-			data : [50,40,10]
-		});
-		
-		<div style="width: 20%">
-			<canvas id="bar"></canvas>
-		</div>
-		<div style="width: 20%">
-			<canvas id="pie"></canvas>
-		</div>
-		<div style="width: 20%">
-			<canvas id="line"></canvas>
-		</div>
-	*/
+
 }
 
 function refresh_dash(elem){

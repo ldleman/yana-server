@@ -74,7 +74,7 @@ class Monitoring {
 		list($total, $used, $free, $shared, $buffers, $cached) = $matches[1];
 		return array(
 			'free' => $free + $buffers + $cached,
-			'percentage' => round(($used - $buffers - $cached) / $total * 100),
+			'percentage' => $total == 0 ? 0:round(($used - $buffers - $cached) / $total * 100),
 			'total'  => $total,
 			'used' => $used - $buffers - $cached,
 			'detail' => shell_exec('ps -e -o pmem,user,args --sort=-pmem | sed "/^ 0.0 /d" | head -5')

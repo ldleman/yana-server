@@ -49,30 +49,33 @@ function __autoload($class_name) {
       </div>
     </div>
 
-
-
-
-
 <?php
-if(isset($_POST['install'])){
- //On récupère le chemin de yana
+
+//On récupère le chemin de yana
   $path_yana =  substr($_SERVER['SCRIPT_FILENAME'],0,-11);
+
+if(isset($_POST['install'])){
+ 
  
     if(is_writable($path_yana)) {
+	  //Supression de l'ancienne base si elle existe
+	  if(file_exists(DB_NAME)) unlink(DB_NAME);
       //Instanciation des managers d'entités
-    	$user = new User();
-    	$configuration = new Configuration();
-    	$right = new Right();
-    	$rank = new Rank();
-    	$section = new Section();
+      $user = new User();
+      $configuration = new Configuration();
+      $right = new Right();
+      $rank = new Rank();
+      $section = new Section();
       $event = new Event();
 
+	  
+
       //Création des tables SQL
-    	$configuration->create();
-    	$user->create();
-    	$right->create();
-    	$rank->create();
-    	$section->create();
+      $configuration->create();
+      $user->create();
+      $right->create();
+      $rank->create();
+      $section->create();
       $event->create();
 
       $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
@@ -137,9 +140,50 @@ if(isset($_POST['install'])){
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Installation terminée: </strong> L'installation est terminée, vous devez supprimer le fichier <code>yana-server/install.php</code> par mesure de sécurité, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
   </div>
-<?php }else{ ?>
+<?php }else{ 
+?>
       <div id="body" class="container">
-          <div class="alert alert-error">
+	  
+	  <?php 
+	  
+	  /*tests*/
+		$tests = array();
+		
+		if(!is_writable($path_yana)) $tests['error'][] = "Le dossier <b>".$path_yana."</b> n'est pas accessible en écriture. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo chown -R www-data:www-data ".$path_yana."</code> ";
+		if(!class_exists('SQLite3')) $tests['error'][] = "Le pré-requis SQLITE3 n'est pas installé. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo apt-get install sqlite3 php5-sqlite</code> ";
+		
+		$out = system('whereis gpio',$out);
+		if($out == '') $tests['warning'][] = "La librairie Wiring pi ne semble pas installé sur le rpi, merci de vérifier l'existence du binaire GPIO sur la machine.";
+		
+		if(function_exists('posix_getpwuid')){
+			
+			$permissions = array('root:www-data'=>'plugins/relay/radioEmission');
+			foreach($permissions as $key=>$file){
+				if(file_exists($file)){
+					list($o,$g) = explode(':',$key);
+					$owner = posix_getpwuid(fileowner($file));
+					$group = posix_getgrgid(filegroup($file));
+					if($owner!=$o || $group !=$g) $tests['warning'][] = 'Le fichier <strong>'.$file.'</strong> devrait avoir <i>'.$o.'</i> comme proprietaire et <i>'.$g.'</i> comme groupe, <strong>'.$file.'</strong> pourrait ne pas fonctionner comme attendu';
+				}
+			}
+		}else{
+			$tests['warning'][] = 'Impossible de vérifier les droits sur les fichiers sensibles, librairie posix manquante';
+		}
+		
+		foreach($tests as $type=>$messages){
+			foreach($messages as $message){
+			echo 
+			'<div class="alert alert-'.$type.'">
+				<strong>'.$type.': </strong> '.$message.' 
+			 </div>';
+			}
+		}
+		
+		if(!isset($tests['error'])){
+		
+	  ?>
+	  
+          <div class="alert alert-info">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
           <strong>Installation: </strong> Vous devez remplir le formulaire ci dessous pour installer l'application.
         </div>
@@ -192,7 +236,7 @@ if(isset($_POST['install'])){
           </div>
         </div>
       </form>
-	<?php } ?>
+	<?php }} ?>
   
 
  <div class="well well-small" id="footer">CC by nc sa <?php echo PROGRAM_NAME ?>

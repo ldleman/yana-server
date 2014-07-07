@@ -173,6 +173,16 @@
 						graphic.Pie(conf,o.options);
 					break;
 					
+					case 'doughnut':
+						var conf = [];
+						for(var key in o.data){
+							var backgroundColor = o.backgroundColor[key] == null ? '#cecece': o.backgroundColor[key];
+							var backgroundColorHover = o.backgroundColorHover[key] == null ? '#dedede': o.backgroundColorHover[key];
+							conf.push({ value : o.data[key],highlight : backgroundColorHover,color : backgroundColor,label : o.label[key]  });
+						}
+						graphic.Doughnut(conf,o.options);
+					break;
+
 					case 'bar':
 					default :
 						graphic.Bar(conf,o.options);

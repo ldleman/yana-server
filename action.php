@@ -30,7 +30,7 @@ switch ($_['action']){
 	$user = $userManager->exist($_['login'],$_['password']);
 	$error = '?init=1';
 	if($user==false){
-		$error = '&error='.urlencode('le compte spécifié est inexistant');
+		$error .= '&error='.urlencode('le compte spécifié est inexistant');
 	}else{
 		$_SESSION['currentUser'] = serialize($user);
 	
@@ -304,14 +304,6 @@ else
 	case 'GET_DASH_INFO':
 		switch($_['type']){
 
-			/*$tpl->assign('users',Monitoring::users());
-		$tpl->assign('hdds',Monitoring::hdd());
-		$tpl->assign('services',Monitoring::services());
-		$tpl->assign('ethernet',Monitoring::ethernet());
-		$tpl->assign('ram',Monitoring::ram());
-		$tpl->assign('cpu',Monitoring::cpu());
-		$tpl->assign('heat',Monitoring::heat());
-		$tpl->assign('disks',Monitoring::disks());*/
 			case 'dash_system':
 				//echo "heat".$heat;
 				$heat = Monitoring::heat();
@@ -355,6 +347,42 @@ else
 				}
 				echo '</ul>';
 			break;
+			
+			case 'dash_graphics':
+				$hdds = Monitoring::ram();
+				echo '
+				<div style="width: 100%">
+					<h3>RAM '.$hdds['percentage'].'%</h3>
+					<canvas id="RAM_PIE"></canvas>
+				</div>
+				<script>
+					$("#RAM_PIE").chart({
+						type : "doughnut",
+						label : ["RAM UTILISEE","RAM LIBRE"],
+						backgroundColor : ["'.($hdds['percentage']>80? '#f16529' : '#ADEA75' ).'","#ADEDC1"],
+						data : ['.$hdds['percentage'].','.(100-$hdds['percentage']).']
+					});
+				</script>';
+			break;
+			/*
+			
+		$('#bar').chart({
+			type : 'bar',
+			label : ['CPU','RAM','DDR'],
+			backgroundColor : ['red','green','blue'],
+			data : [50,40,10]
+		});
+		$('#line').chart({
+			type : 'line',
+			label : ['CPU','RAM','DDR'],
+			backgroundColor : ['red','green','blue'],
+			data : [50,40,10]
+		});
+		
+		
+			*/
+			
+			
 			case 'dash_disk':
 				$disks = Monitoring::disks();
 				echo '<ul>';
