@@ -196,14 +196,14 @@ function wireRelay_action_wireRelay(){
 				$wireRelay = $wireRelay->getById($_['engine']);
 				//TODO - remplacer par Gpio::mode($wireRelay->getPin(),'out');
 				$cmd = '/usr/local/bin/gpio mode '.$wireRelay->getPin().' out';
-				Functions::log('Launch system command : '.$cmd);
+				//Functions::log('Launch system command : '.$cmd);
 				system($cmd,$out);
 				
 				
 				if($wireRelay->getPulse()==0){
 					//TODO - remplacer par Gpio::write($wireRelay->getPin(),$_['state']);
 					$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' '.$_['state'];
-					Functions::log('Launch system command : '.$cmd);
+					//Functions::log('Launch system command : '.$cmd);
 					system($cmd,$out);
 				}else{
 				//TODO - remplacer par Gpio::write($wireRelay->getPin(),1);
@@ -212,7 +212,7 @@ function wireRelay_action_wireRelay(){
 					usleep($wireRelay->getPulse());
 					//TODO - remplacer par Gpio::write($wireRelay->getPin(),0);
 					$cmd = '/usr/local/bin/gpio write '.$wireRelay->getPin().' 0';
-					Functions::log('Launch system command : '.$cmd);
+					//Functions::log('Launch system command : '.$cmd);
 					system($cmd,$out);
 				}
 

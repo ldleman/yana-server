@@ -244,7 +244,7 @@ function radioRelay_plugin_setting_page(){
 						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' pulse '.$radioRelay->getPulse();
 					}
 				//TODO change bdd state
-					Functions::log('Launch system command : '.$cmd);
+					//Functions::log('Launch system command : '.$cmd);
 					system($cmd,$out);
 					
 					if(!isset($_['webservice'])){
