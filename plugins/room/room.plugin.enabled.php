@@ -108,7 +108,7 @@ function room_plugin_setting_page(){
 							<label for="nameRoom">Nom</label>
 							<?php if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
-							<label for="descriptionRoom">Déscription</label>
+							<label for="descriptionRoom">Description</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
 						</div>
 
@@ -122,7 +122,7 @@ function room_plugin_setting_page(){
 					<thead>
 						<tr>
 							<th>Nom</th>
-							<th>Déscription</th>
+							<th>Description</th>
 							<th></th> 
 						</tr>
 					</thead>
@@ -164,8 +164,8 @@ function room_plugin_setting_page(){
 			if($myUser->can('room',$right_toverify)){
 				$room = new Room();
 				if ($right_toverify == "u"){$room = $room->load(array("id"=>$_['id']));}
-				$room->setName($_['nameRoom']);
-				$room->setDescription($_['descriptionRoom']);
+				$room->setName(ucfirst(strtolower($_['nameRoom']));
+				$room->setDescription(ucfirst(strtolower($_['descriptionRoom'])));
 				$room->save();
 			header('location:setting.php?section=room');	
 			}
