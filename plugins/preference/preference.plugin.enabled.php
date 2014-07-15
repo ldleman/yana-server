@@ -28,7 +28,7 @@ function preference_plugin_page(){
 		<p>Gestion des préférences du programme</p>
 
 		<ul class="nav nav-tabs">
-			<li><a href="setting.php?section=preference&amp;block=global"><i class="icon-chevron-right"></i> Général</a></li>
+			<li <?php echo (isset($_['block']) && $_['block']=='global'?'class="active"':'')?> ><a href="setting.php?section=preference&amp;block=global"><i class="icon-chevron-right"></i> Général</a></li>
 	       <?php Plugin::callHook("preference_menu", array()); ?>
 	    </ul>
 			
@@ -40,16 +40,16 @@ function preference_plugin_page(){
 					?>
 
 					<div class="span9 userBloc">
-							<table class="table table-striped table-bordered">
+							<table class="table table-striped table-bordered" id="setting_table">
 							<tr><th>Clé</th><th>Valeur</th><tr>
 							<?php 
 								$conf = new Configuration();
 								$confs = $conf->populate();
 								foreach($confs as $value){
-									echo '<tr><td>'.$value->getKey().'</td><td><input class="input-xxlarge" disabled="disabled" readonly="readonly" type="text" value="'.$value->getValue().'" id="'.$value->getId().'"></td></tr>';
+									echo '<tr><td>'.$value->getKey().'</td><td><input class="input-xxlarge" type="text" value="'.$value->getValue().'" id="'.$value->getId().'"></td></tr>';
 								}
 							?>
-							<!--<tr><td colspan="2"><button type="submit" class="btn">Modifier</button></td></tr>-->
+							<tr><td colspan="2"><button type="submit" onclick="save_settings();" class="btn">Modifier</button></td></tr>
 							</table>
 						
 					</div>
@@ -84,7 +84,22 @@ function preference_plugin_page(){
 	}
 }
 
-
+function preference_plugin_action(){
+	global $_,$myUser,$conf;
+	switch($_['action']){
+	
+	case 'SAVE_SETTINGS':
+		$configuration = new Configuration();
+		$configuration->getAll();
+		foreach($_['data'] as $key=>$value){
+			$configuration->put($key,$value);
+		}
+		echo 'Réglages sauvegardés';
+	break;
+	}
+}
+Plugin::addJs('/js/main.js');
 Plugin::addHook("setting_menu", "preference_plugin_menu");  
 Plugin::addHook("setting_bloc", "preference_plugin_page"); 
+Plugin::addHook("action_post_case", "preference_plugin_action"); 
 ?>
