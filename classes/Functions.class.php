@@ -181,17 +181,15 @@ class Functions
 	}
 	
 	public static function log($message,$type = 'notice'){
-		$message = date('d-m-Y H:i:s').' - ['.$type.'] :'.$message;
-		if(!file_exists(LOG_FILE)) touch(LOG_FILE);
-		
+	$message = date('d-m-Y H:i:s').' - ['.$type.'] :'.$message.PHP_EOL;
+	if(!file_exists(LOG_FILE)) touch(LOG_FILE);
 		$linecount = 0;
 		$handle = fopen(LOG_FILE, "r");
-		while(!feof($handle)){
+		while(fgets($handle)!=false){
 		  $linecount++;
 		}
 		fclose($handle);
 		if($linecount>1000) unlink(LOG_FILE);
-		
 		file_put_contents(LOG_FILE,$message,FILE_APPEND);
 	}
 }
