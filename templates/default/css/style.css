@@ -85,6 +85,23 @@ h1,h2,h3,h4{
   padding:5px;
 }
 
+.tokenbox{
+  background-color: #373737;
+  border: medium none;
+  border-radius: 0;
+  color: #ffffff;
+  padding: 2px 4px;
+  white-space: nowrap;
+}
+.tokenbox input{
+  background:transparent;
+  padding:0px;
+  margin:0px;
+  border:none;
+  cursor:pointer;
+  color:#ffffff;
+}
+
 .logo{
   background: url('../img/logo.png') no-repeat;
   width: 78px;
@@ -164,6 +181,32 @@ h1,h2,h3,h4{
   background-color:#394264; 
 }
 
+.avatar{
+  border-radius: 100px;
+  border:5px solid #6FCFFC;
+}
+.avatar-100{
+  margin:0 auto 10px auto;
+  width:100px;
+  display: block;
+}
+
+.user-infos li{
+  padding:0px;
+  margin:0px;
+  text-align: center;
+}
+
+#dash_application a.btn,.user-infos code{
+  display:block;
+}
+.user-infos code{
+  margin-bottom: 5px;
+}
+.user-infos li h1{
+  font-size: 20px;
+  text-align: center;
+}
 
 .graphic_pane{
   background: #50597B;
@@ -308,6 +351,11 @@ code, pre {
 
 .noPadding{
   padding:0px;
+}
+
+.inline{
+  display: inline-block;
+  vertical-align: top;
 }
 
 

@@ -88,7 +88,19 @@ class User extends SQLiteEntity{
 	    return strcmp($a->getName(), $b->getName());
 	}
 
+
+	function getGravatar($size = 100){
+		$gravatar = AVATAR_FOLDER.'/'.$this->getMail().'-'.$size.'.jpg';
+		if(!file_exists($gravatar)){
+			if (!file_exists(AVATAR_FOLDER)) mkdir(AVATAR_FOLDER);
+			file_put_contents($gravatar, file_get_contents("http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->getMail() ) ) ) . "?&s=".$size));
+		}
+		return $gravatar;
+	}
+	function getGravatarImg($size = 100){
 	
+		return "<img class='avatar avatar-".$size."' src='".$this->getGravatar($size)."' />" ;
+	}
 
 	function can($section,$selectedRight){
 
@@ -112,7 +124,8 @@ class User extends SQLiteEntity{
 	}
 
 	function getFullName(){
-		return ucfirst($this->firstname).' '.strtoupper($this->name);
+		$fn = ucfirst($this->firstname).' '.strtoupper($this->name);
+		return trim($fn)==''?'Anonymous Guy':$fn;
 	}
 
 	function getName(){
