@@ -351,14 +351,28 @@ else
 				$hdds = Monitoring::ram();
 				echo '
 				<div style="width: 100%">
-					<h3>RAM '.$hdds['percentage'].'%</h3>
 					<canvas id="RAM_PIE"></canvas>
+					<br/><br/>
+					<ul class="graphic_pane">
+						<li class="pane_red">
+							<h1>RAM UTILISEE</h1>
+							<h2>'.$hdds['percentage'].'%</h2>
+						</li><li class="pane_cyan">
+							<h1>RAM LIBRE</h1>
+							<h2>'.$hdds['free'].'%</h2>
+						</li><li class="pane_orange">
+							<h1>RAM TOTALE</h1>
+							<h2>'.$hdds['total'].'%</h2>
+						</li>
+					</ul>
 				</div>
+
 				<script>
 					$("#RAM_PIE").chart({
 						type : "doughnut",
 						label : ["RAM UTILISEE","RAM LIBRE"],
-						backgroundColor : ["'.($hdds['percentage']>80? '#f16529' : '#ADEA75' ).'","#ADEDC1"],
+						backgroundColor : ["'.($hdds['percentage']>80? '#E64C65' : '#FCB150' ).'","#4FC4F6"],
+						segmentShowStroke:false,
 						data : ['.$hdds['percentage'].','.(100-$hdds['percentage']).']
 					});
 				</script>';

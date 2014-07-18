@@ -134,6 +134,7 @@
 					borderColor : ["rgba(220,220,220,0.8)"],
 					backgroundColorHover: ["rgba(220,220,220,0.75)"],
 					borderColorHover: ["rgba(220,220,220,1)"],
+					segmentShowStroke:false
                 }
                     
             var options = $.extend(defaults, options);
@@ -178,9 +179,15 @@
 						for(var key in o.data){
 							var backgroundColor = o.backgroundColor[key] == null ? '#cecece': o.backgroundColor[key];
 							var backgroundColorHover = o.backgroundColorHover[key] == null ? '#dedede': o.backgroundColorHover[key];
-							conf.push({ value : o.data[key],highlight : backgroundColorHover,color : backgroundColor,label : o.label[key]  });
+							conf.push({ value : o.data[key],highlight : backgroundColorHover,color : backgroundColor,label : o.label[key] });
 						}
-						graphic.Doughnut(conf,o.options);
+
+						o.options.segmentShowStroke = false;
+						o.options.percentageInnerCutout = 60;
+						
+						var myGraphic = graphic.Doughnut(conf,o.options);
+						
+
 					break;
 
 					case 'bar':
