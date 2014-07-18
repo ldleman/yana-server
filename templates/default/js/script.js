@@ -14,6 +14,28 @@ $(document).ready(function(){
 
 });
 
+
+function change_gpio_state(pin,element){
+	state = $(element).text()=='on'?0:1;
+	$.ajax({
+		  url: "action.php",
+		  type: "POST",
+		  data: {action:'CHANGE_GPIO_STATE',pin:pin,state:state},
+		  success:function(response){
+		  	if(state){
+		  		$(element).removeClass('label-info');
+		  		$(element).addClass('label-warning');
+		  		$(element).html('on');
+		  	}else{
+		  		$(element).addClass('label-info');
+		  		$(element).removeClass('label-warning');
+		  		$(element).html('off');
+		  	}
+
+		  }
+		});
+}
+
 function get_dash_infos(){
 	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').html('Chargement...')
 

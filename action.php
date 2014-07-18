@@ -417,7 +417,20 @@ else
 				$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
 				echo '<pre><ul>';
 			    for ($i = 0; $i <= 21; $i+=2) {
-			    	echo '     <strong>'.$pin[$i].'</strong>-> '.($gpios[$i]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').'  '.($gpios[($i+1)]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').' <-<strong>'.$pin[($i+1)].'</strong><br/>';
+			    	$class = 'info';
+			    	$value = 'off';
+			    	if($gpios[$i]){
+			    		$class = 'warning';
+			    		$value = 'on';
+			    	}
+			    	$class2 = 'info';
+			    	$value2 = 'off';
+			    	if($gpios[$i+1]){
+			    		$class2 = 'warning';
+			    		$value2 = 'on';
+			    	}
+
+			    	echo '     <strong>'.$pin[$i].'</strong>-> <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="label label-'.$class.' pointer">'.$value.'</span>  <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="pointer label label-'.$class2.'">'.$value2.'</span>'.' <-<strong>'.$pin[($i+1)].'</strong><br/>';
 			    }
 
 			    echo '</ul></pre>';
@@ -427,6 +440,7 @@ else
 
 
 	case 'installPlugin':
+	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 	$tempZipName = 'plugins/'.md5(microtime());
 	echo '<br/>Téléchargement du plugin...';
 	file_put_contents($tempZipName,file_get_contents(urldecode($_['zip'])));
@@ -467,8 +481,13 @@ else
 		}
 	break;
 
+	case 'CHANGE_GPIO_STATE':
+		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+	break;
+
 	default:
-	Plugin::callHook("action_post_case", array());
+		Plugin::callHook("action_post_case", array());
+		return Gpio::write($_['pin'],$_['state'],true);
 	break;
 }
 

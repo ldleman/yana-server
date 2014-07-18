@@ -110,10 +110,15 @@ if(isset($_POST['install'])){
       	$r->save();
       }
     	
+      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Luke Skywalker','Mac Gyver','Marty McFly');
+      $im = $personalities[rand(0,count($personalities)-1)];
+      list($fn,$n) = explode(' ',$im);
       //Creation du premier compte et assignation en admin
     	$user->setMail($_POST['email']);
     	$user->setPassword($_POST['password']);
     	$user->setLogin($_POST['login']);
+      $user->setFirstName($fn);
+      $user->setName($n);
     	$user->setToken(sha1(time().rand(0,1000)));
     	$user->setState(1);
     	$user->setRank($rank->getId());
