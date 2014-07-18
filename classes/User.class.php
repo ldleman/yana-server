@@ -98,7 +98,6 @@ class User extends SQLiteEntity{
 		return $gravatar;
 	}
 	function getGravatarImg($size = 100){
-	
 		return "<img class='avatar avatar-".$size."' src='".$this->getGravatar($size)."' />" ;
 	}
 
@@ -177,7 +176,11 @@ class User extends SQLiteEntity{
 	}
 
 	function setPassword($password){
-		$this->password = sha1(md5($password));
+		$this->password = User::cryptPassword($password);
+	}
+
+	public static function cryptPassword($string){
+		return sha1(md5($string));
 	}
 
 	function setPhone($phone){

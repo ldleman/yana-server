@@ -205,7 +205,17 @@ h1,h2,h3,h4{
 }
 .user-infos li h1{
   font-size: 20px;
+  cursor: pointer;
   text-align: center;
+}
+.user-infos li h1 i{
+  line-height: 20px;
+  margin-right:10px;
+  opacity: 0;
+  transition : all 0.2s linear;
+}
+.user-infos li h1:hover i{
+  opacity: 0.8;
 }
 
 .graphic_pane{

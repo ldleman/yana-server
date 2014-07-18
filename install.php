@@ -84,7 +84,7 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
-	  $configuration->put('HOME_PAGE','index.php');
+	    $configuration->put('HOME_PAGE','index.php');
 
       //Création du rang admin
     	$rank = new Rank();
@@ -129,6 +129,7 @@ if(isset($_POST['install'])){
     	Plugin::enabled('vocal_infos-vocalinfo');
     	Plugin::enabled('room-room');
       Plugin::enabled('eventManager-eventmanager');
+      Plugin::enabled('profile-profile');
       
   }else{
     ?>
