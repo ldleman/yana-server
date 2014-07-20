@@ -359,10 +359,10 @@ else
 							<h2>'.$hdds['percentage'].'%</h2>
 						</li><li class="pane_cyan">
 							<h1>RAM LIBRE</h1>
-							<h2>'.$hdds['free'].'%</h2>
+							<h2>'.$hdds['free'].' Mo</h2>
 						</li><li class="pane_orange">
 							<h1>RAM TOTALE</h1>
-							<h2>'.$hdds['total'].'%</h2>
+							<h2>'.$hdds['total'].' Mo</h2>
 						</li>
 					</ul>
 				</div>
