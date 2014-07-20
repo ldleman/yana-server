@@ -30,7 +30,7 @@ if(isset($argv)){
 	$response = 0;
 	if(count($argv)>1){
 		list($me,$badge) = $argv;
-		$badge = trim(substr($badge,0,6));
+		$badge = trim(substr($badge,2,4));
 		$user = 0;
 		if(in_array($badge, $allowed_badges)){
 			$response = 1;
