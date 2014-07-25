@@ -315,6 +315,7 @@ else
 				    	<li><strong>Température :</strong>  <span class="label '.$heat["label"].'">'.$heat["degrees"].'°C</span></li>
 				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
+				    	<li><strong>Charge :</strong>  <span class="label label-info">'.$cpu['loads'].' </span>  | '.$cpu['loads5'].'  5min | '.$cpu['loads15'].'  15min</li>
 				    </ul>';
 					/* <li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>  // Au cas ou 
 					   <li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>*/
@@ -354,13 +355,13 @@ else
 					<canvas id="RAM_PIE"></canvas>
 					<br/><br/>
 					<ul class="graphic_pane">
-						<li class="pane_red">
+						<li class="pane_orange">
 							<h1>RAM UTILISEE</h1>
 							<h2>'.$hdds['percentage'].'%</h2>
 						</li><li class="pane_cyan">
 							<h1>RAM LIBRE</h1>
 							<h2>'.$hdds['free'].' Mo</h2>
-						</li><li class="pane_orange">
+						</li><li class="pane_red">
 							<h1>RAM TOTALE</h1>
 							<h2>'.$hdds['total'].' Mo</h2>
 						</li>
