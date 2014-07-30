@@ -20,15 +20,15 @@ $r1->setRank('1');
 $r1->save();
 
 
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (1,	\'dash_profil\',	\'null\',	\'0\',	\'0\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (2,	\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (3,	\'dash_monitoring_system\',	\'null\',	\'0\',	\'2\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (4,	\'dash_monitoring_network\',	\'null\',	\'0\',	\'2\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (5,	\'dash_monitoring_hdd\',	\'null\',	\'3\',	\'1\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (6,	\'dash_monitoring_disk\',	\'null\',	\'0\',	\'1\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (7,	\'dash_monitoring_gpio\',	\'null\',	\'1\',	\'0\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (8,	\'dash_monitoring_services\',	\'null\',	\'0\',	\'2\',	\'\');');
-$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified") VALUES (9,	\'dash_monitoring_users\',	\'null\',	\'0\',	\'0\',	\'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (1,	\'dash_profil\',	\'null\',	\'0\',	\'0\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (2,	\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (3,	\'dash_monitoring_system\',	\'null\',	\'0\',	\'2\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (4,	\'dash_monitoring_network\',	\'null\',	\'0\',	\'2\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (5,	\'dash_monitoring_hdd\',	\'null\',	\'3\',	\'1\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (6,	\'dash_monitoring_disk\',	\'null\',	\'0\',	\'1\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (7,	\'dash_monitoring_gpio\',	\'null\',	\'1\',	\'0\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (8,	\'dash_monitoring_services\',	\'null\',	\'0\',	\'2\',	\'\',\'0\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (9,	\'dash_monitoring_users\',	\'null\',	\'0\',	\'0\',	\'\',\'0\');');
 
 
 ?>

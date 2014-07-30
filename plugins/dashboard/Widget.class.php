@@ -8,7 +8,7 @@
 
 class Widget extends SQLiteEntity{
 
-	public $id,$minified,$column,$cell,$model,$data;
+	public $id,$minified,$column,$cell,$model,$data,$dashboard;
 	protected $TABLE_NAME = 'plugin_dashboard';
 	protected $CLASS_NAME = 'Widget';
 	protected $object_fields = 
@@ -18,11 +18,13 @@ class Widget extends SQLiteEntity{
 		'data'=>'longstring',
 		'cell'=>'int',
 		'column'=>'int',
-		'minified' => 'int'
+		'minified' => 'int',
+		'dashboard' => 'int'
 	);
 
 	function __construct(){
 		parent::__construct();
+		$this->dashboard = 0;
 	}
 
 }
