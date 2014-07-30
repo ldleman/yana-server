@@ -1,0 +1,18 @@
+<?php
+
+require_once('DoorLog.class.php');
+require_once('DoorAccess.class.php');
+$table = new DoorAccess();
+$table->drop();
+
+$table = new DoorLog();
+$table->drop();
+
+$table_section = new Section();
+$id_section = $table_section->load(array("label"=>"door"))->getId();
+$table_section->delete(array('label'=>'door'));
+
+$table_right = new Right();
+$table_right->delete(array('section'=>$id_section));
+
+?>

@@ -10,15 +10,17 @@
     	<div class="span4 ">
 			{function="Plugin::callHook("dashboard_pre_column1", array($_))"}
     		<div class="flatBloc blue-color">
-    		<h3><i class="icon-globe"></i> Application</h3>
+    		<h3><i class="icon-globe"></i> Connecté</h3>
     		
     			<div id="dash_application">
-			    <ul>
-			    	<li><strong>Identité :</strong> {$myUser->getFullName()}</li>
-			    	<li><strong>Mail :</strong> <a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
-			    	<li><strong>Token :</strong> <code title="{$myUser->getToken()}">{$myUser->getToken()}</code></li>
+    			
+    			{$myUser->getGravatarImg()}
+			    <ul class="user-infos">
+			    	<li><h1 onclick="window.location='setting.php?section=profil';"><i class="icon-pencil"></i>{$myUser->getFullName()}</h1></li>
+			    	<li><a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
+			    	<li><div class="tokenbox" title="{$myUser->getToken()}">Token : <input type="text" onclick="$(this).select();" value="{$myUser->getToken()}"></div></li>
 			    </ul>
-				<a href="#myModal" role="button" data-toggle="modal" class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a>
+				<a href="#myModal" role="button" data-toggle="modal"  class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a>
 			</div>
 		</div>
 
@@ -61,8 +63,8 @@
 	    <div class="span4">
 			{function="Plugin::callHook("dashboard_pre_column3", array($_))"}
 	    	
-			<div class="flatBloc apple-color">
-		    	<h3><i class="icon-chart-pie"></i> Graphiques </h3>
+			<div class="flatBloc noPadding sea-color">
+		    	<h3><i class="icon-chart-pie"></i> RAM </h3>
 		    	<div id="dash_graphics"></div>
 	    	</div>
 			<div class="flatBloc brown-color">

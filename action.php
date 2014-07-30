@@ -315,6 +315,7 @@ else
 				    	<li><strong>Température :</strong>  <span class="label '.$heat["label"].'">'.$heat["degrees"].'°C</span></li>
 				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
+				    	<li><strong>Charge :</strong>  <span class="label label-info">'.$cpu['loads'].' </span>  | '.$cpu['loads5'].'  5min | '.$cpu['loads15'].'  15min</li>
 				    </ul>';
 					/* <li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>  // Au cas ou 
 					   <li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>*/
@@ -351,14 +352,28 @@ else
 				$hdds = Monitoring::ram();
 				echo '
 				<div style="width: 100%">
-					<h3>RAM '.$hdds['percentage'].'%</h3>
 					<canvas id="RAM_PIE"></canvas>
+					<br/><br/>
+					<ul class="graphic_pane">
+						<li class="pane_orange">
+							<h1>RAM UTILISEE</h1>
+							<h2>'.$hdds['percentage'].'%</h2>
+						</li><li class="pane_cyan">
+							<h1>RAM LIBRE</h1>
+							<h2>'.$hdds['free'].' Mo</h2>
+						</li><li class="pane_red">
+							<h1>RAM TOTALE</h1>
+							<h2>'.$hdds['total'].' Mo</h2>
+						</li>
+					</ul>
 				</div>
+
 				<script>
 					$("#RAM_PIE").chart({
 						type : "doughnut",
 						label : ["RAM UTILISEE","RAM LIBRE"],
-						backgroundColor : ["'.($hdds['percentage']>80? '#f16529' : '#ADEA75' ).'","#ADEDC1"],
+						backgroundColor : ["'.($hdds['percentage']>80? '#E64C65' : '#FCB150' ).'","#4FC4F6"],
+						segmentShowStroke:false,
 						data : ['.$hdds['percentage'].','.(100-$hdds['percentage']).']
 					});
 				</script>';
@@ -403,7 +418,20 @@ else
 				$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
 				echo '<pre><ul>';
 			    for ($i = 0; $i <= 21; $i+=2) {
-			    	echo '     <strong>'.$pin[$i].'</strong>-> '.($gpios[$i]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').'  '.($gpios[($i+1)]?'<span class="label label-warning">on&nbsp</span>':'<span class="label label-info">off</span>').' <-<strong>'.$pin[($i+1)].'</strong><br/>';
+			    	$class = 'info';
+			    	$value = 'off';
+			    	if($gpios[$i]){
+			    		$class = 'warning';
+			    		$value = 'on';
+			    	}
+			    	$class2 = 'info';
+			    	$value2 = 'off';
+			    	if($gpios[$i+1]){
+			    		$class2 = 'warning';
+			    		$value2 = 'on';
+			    	}
+
+			    	echo '     <strong>'.$pin[$i].'</strong>-> <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="label label-'.$class.' pointer">'.$value.'</span>  <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="pointer label label-'.$class2.'">'.$value2.'</span>'.' <-<strong>'.$pin[($i+1)].'</strong><br/>';
 			    }
 
 			    echo '</ul></pre>';
@@ -413,6 +441,7 @@ else
 
 
 	case 'installPlugin':
+	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 	$tempZipName = 'plugins/'.md5(microtime());
 	echo '<br/>Téléchargement du plugin...';
 	file_put_contents($tempZipName,file_get_contents(urldecode($_['zip'])));
@@ -453,8 +482,13 @@ else
 		}
 	break;
 
+	case 'CHANGE_GPIO_STATE':
+		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+	break;
+
 	default:
-	Plugin::callHook("action_post_case", array());
+		Plugin::callHook("action_post_case", array());
+		return Gpio::write($_['pin'],$_['state'],true);
 	break;
 }
 

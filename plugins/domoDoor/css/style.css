@@ -1,0 +1,55 @@
+/* Fichier de style CSS réservé a votre plugin*/
+.userBloc .avatar-30{
+	border:none;
+}
+
+
+..domodoor_log.state-0{
+	background-color: #E51400;
+}
+
+.domodoor-bloc{
+	padding:0px;
+	background-color: #105DAE;
+}
+.domodoor-bloc h3 {
+	margin:5px;
+}
+
+.domodoor_log .avatar-50{
+	border:2px solid #678CF9;
+	display: inline-block;
+	vertical-align: top;
+}
+.flatBloc li.domodoor_log{
+	padding: 10px;
+	margin:0;
+	border-bottom: 1px solid #2B478C;
+	transition:all 0.2s linear;
+}
+.domodoor_log:hover{
+	background-color: #1BA1E2;
+}
+.domodoor_log:hover h2{
+	color: #ffffff;
+}
+
+.domodoor_log div{
+	display: inline-block;
+	vertical-align: top;
+	margin-left:22px;
+
+}
+.domodoor_log h1{
+	font-size: 18px;
+	margin: 0px;
+}
+.domodoor_log h2{
+	font-style: italic;
+	color: #9BADEB;
+	font-size: 14px;
+	margin-bottom: 0px;
+}
+
+
+
