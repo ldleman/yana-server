@@ -433,7 +433,7 @@ function vocalinfo_event(&$response){
 
 function vocalinfo_plugin_preference_menu(){
 	global $_;
-	echo '<li '.(@$_['block']=='vocalinfo'?'class="active"':'').'><a  href="setting.php?section=preference&block=vocalinfo"><i class="fa fa-angle-right"></i>Informations Vocales</a></li>';
+	echo '<li '.(@$_['block']=='vocalinfo'?'class="active"':'').'><a  href="setting.php?section=preference&block=vocalinfo"><i class="fa fa-angle-right"></i> Informations Vocales</a></li>';
 }
 function vocalinfo_plugin_preference_page(){
 	global $myUser,$_,$conf;
@@ -445,10 +445,10 @@ function vocalinfo_plugin_preference_page(){
 		<div class="span9 userBloc">
 			<form class="form-inline" action="action.php?action=vocalinfo_plugin_setting" method="POST">
 			<legend>Météo</legend>
-			    <p>Tapez le nom de votre ville et votre pays</p>
-			    <input type="text" class="input-xxlarge" name="weather_place" value="<?php echo $conf->get('plugin_vocalinfo_place');?>" placeholder="Votre ville">	
-			    <br><span id="weather_query" class="btn">Chercher</span>
-			    <p>Votre Identifiant WOEID</p>
+			    <label>Tapez le nom de votre ville et votre pays</label>
+			    <input type="text" class="input-xlarge" name="weather_place" value="<?php echo $conf->get('plugin_vocalinfo_place');?>" placeholder="Votre ville">	
+			    <span id="weather_query" class="btn">Chercher</span>
+			    <br/><br/><label>Votre Identifiant WOEID</label>
 			    <input type="text" class="input-large" name="woeid" value="<?php echo $conf->get('plugin_vocalinfo_woeid');?>" placeholder="Votre WOEID">					
 			    <button type="submit" class="btn">Sauvegarder</button>
 	    </form>

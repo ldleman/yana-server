@@ -28,11 +28,11 @@ function room_plugin_page($_){
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
-				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="fa fa-angle-right"></i>Toutes les pièces</a></li>
+				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="fa fa-angle-right"></i> Toutes les pièces</a></li>
 					<?php foreach($rooms as $room){ 
 						if(isset($_['id']) && $room->getId()==$_['id']) $currentRoom = $room;
 					?>
-					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="fa fa-angle-right"></i><?php echo $room->getName(); ?></a></li>
+					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="fa fa-angle-right"></i> <?php echo $room->getName(); ?></a></li>
 					<?php } ?>
 				</ul>
 
@@ -108,7 +108,7 @@ function room_plugin_setting_page(){
 							<label for="nameRoom">Nom</label>
 							<?php if(isset($selected)){echo '<input type="hidden" name="id" value="'.$id_mod.'">';} ?>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getName();} ?>" id="nameRoom" name="nameRoom" placeholder="Cuisine,salon…"/>
-							<label for="descriptionRoom">Déscription</label>
+							<label for="descriptionRoom">Description</label>
 							<input type="text" value="<?php if(isset($selected)){echo $selected->getDescription();} ?>" name="descriptionRoom" id="descriptionRoom" />
 						</div>
 
@@ -122,7 +122,7 @@ function room_plugin_setting_page(){
 					<thead>
 						<tr>
 							<th>Nom</th>
-							<th>Déscription</th>
+							<th>Description</th>
 							<th></th> 
 						</tr>
 					</thead>

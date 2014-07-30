@@ -9,7 +9,7 @@ function __autoload($class_name) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8">
     <title>Installation</title>
@@ -81,10 +81,10 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
-	    $configuration->put('HOME_PAGE','index.php');
-
+	  $configuration->put('HOME_PAGE','index.php');
+	
       //Création du rang admin
-    	$rank = new Rank();
+		$rank = new Rank();
     	$rank->setLabel('admin');
     	$rank->save();
 
@@ -114,19 +114,19 @@ if(isset($_POST['install'])){
     	$user->setMail($_POST['email']);
     	$user->setPassword($_POST['password']);
     	$user->setLogin($_POST['login']);
-      $user->setFirstName($fn);
-      $user->setName($n);
+        $user->setFirstName($fn);
+        $user->setName($n);
     	$user->setToken(sha1(time().rand(0,1000)));
     	$user->setState(1);
     	$user->setRank($rank->getId());
     	$user->save();
 
     	Plugin::enabled('relay-relay');
-      Plugin::enabled('wireRelay-relay');
+        Plugin::enabled('wireRelay-relay');
     	Plugin::enabled('vocal_infos-vocalinfo');
     	Plugin::enabled('room-room');
-      Plugin::enabled('eventManager-eventmanager');
-      Plugin::enabled('profile-profile');
+        Plugin::enabled('eventManager-eventmanager');
+        Plugin::enabled('profile-profile');
       
   }else{
     ?>

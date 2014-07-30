@@ -32,8 +32,8 @@
 					    <label for="labelRank">Libellé</label>
 					    {if="isset($id_modrank)"}<input type="hidden" name="id" value="{$id_modrank}">{/if}
 					    <input {if="isset($label_rank)"}value="{$label_rank}"{/if} type="text" id="labelRank" name="labelRank" placeholder="Libellé du rang…"/>
-					    <label for="descriptionRank">Déscription</label>
-					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Déscription courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
+					    <label for="descriptionRank">Description</label>
+					    <textarea name="descriptionRank" id="descriptionRank" placeholder="Description courte du rang…" >{if="isset($description_rank)"}{$description_rank}{/if}</textarea>
 		  				<div class="clear"></div>
 				    	<br/><button type="submit" class="btn">{$button}</button>
 			  	</fieldset>
@@ -44,7 +44,7 @@
 			    <thead>
 			    <tr>
 			    	<th>Libellé</th>
-				    <th>Déscription</th>
+				    <th>Description</th>
 				    <th></th>
 			    </tr>
 			    </thead>

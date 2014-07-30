@@ -45,7 +45,7 @@ function wireRelay_plugin_setting_page(){
 			    <input type="hidden" name="id" value="<?php echo $selected->getId(); ?>">
 			    <input type="text" id="nameWireRelay" value="<?php echo $selected->getName(); ?>" onkeyup="$('#vocalCommand').html($(this).val());" name="nameWireRelay" placeholder="Lumiere Canapé…"/>
 			    <small>Commande vocale associée : "<?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, allume <span id="vocalCommand"></span>"</small>
-			    <label for="descriptionWireRelay">Déscription</label>
+			    <label for="descriptionWireRelay">Description</label>
 			    <input type="text" name="descriptionWireRelay" value="<?php echo $selected->getDescription(); ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
 			    <label for="pinWireRelay">Pin GPIO (Numéro Wiring PI)</label>
 			    <input type="text" name="pinWireRelay" value="<?php echo $selected->getPin(); ?>" id="pinWireRelay" placeholder="0,1,2…" />
@@ -70,7 +70,7 @@ function wireRelay_plugin_setting_page(){
 	    <thead>
 	    <tr>
 	    	<th>Nom</th>
-		    <th>Déscription</th>
+		    <th>Description</th>
 		    <th>Pin GPIO</th>
 		    <th>Pièce</th>
 		    <th>Impulsion</th>

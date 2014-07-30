@@ -92,7 +92,7 @@ function story_plugin_action(){
 	break;
 	}
 }
-Plugin::addCss("/css/font-awesome.css"); 
+
 Plugin::addCss("/css/main.css"); 
 Plugin::addJs("/js/main.js"); 
 
