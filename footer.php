@@ -1,4 +1,4 @@
 <?php 
 	$tpl->assign('executionTime',number_format(microtime(true)-$start,3));
-	$html = $tpl->draw($view);
+	if(isset($view) && $view!='') $html = $tpl->draw($view);
 ?>
