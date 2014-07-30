@@ -433,7 +433,7 @@ function vocalinfo_event(&$response){
 
 function vocalinfo_plugin_preference_menu(){
 	global $_;
-	echo '<li '.(@$_['block']=='vocalinfo'?'class="active"':'').'><a  href="setting.php?section=preference&block=vocalinfo"><i class="icon-chevron-right"></i>Informations Vocales</a></li>';
+	echo '<li '.(@$_['block']=='vocalinfo'?'class="active"':'').'><a  href="setting.php?section=preference&block=vocalinfo"><i class="fa fa-angle-right"></i>Informations Vocales</a></li>';
 }
 function vocalinfo_plugin_preference_page(){
 	global $myUser,$_,$conf;

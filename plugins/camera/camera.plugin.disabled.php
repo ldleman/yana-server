@@ -10,7 +10,7 @@
 
 function camera_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>3,'content'=>'<a href="index.php?module=camera"><i class="icon-eye"></i> Camera</a>');
+	$menuItems[] = array('sort'=>3,'content'=>'<a href="index.php?module=camera"><i class="fa fa-eye"></i> Camera</a>');
 }
 
 

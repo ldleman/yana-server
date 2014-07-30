@@ -51,7 +51,7 @@ require_once('DoorLog.class.php');
 
 function domodoor_plugin_setting_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='domodoor'?'class="active"':'').'><a href="setting.php?section=domodoor"><i class="icon-chevron-right"></i> Porte domotique</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='domodoor'?'class="active"':'').'><a href="setting.php?section=domodoor"><i class="fa fa-angle-right"></i> Porte domotique</a></li>';
 	
 }
 
@@ -115,8 +115,8 @@ function domodoor_plugin_setting_page(){
 						<td><?php echo $user->getGravatarImg(30); ?></td>
 						<td><?php echo $user->getFullName(); ?></td>
 						<td><?php echo $access->code; ?></td>
-						<td><a class="btn" href="action.php?action=domodoor_delete_domodoor&id=<?php echo $access->getId(); ?>"><i class="icon-remove"></i></a>
-							<a class="btn" href="setting.php?section=domodoor&id=<?php echo $access->getId(); ?>"><i class="icon-edit"></i></a></td>
+						<td><a class="btn" href="action.php?action=domodoor_delete_domodoor&id=<?php echo $access->getId(); ?>"><i class="fa fa-times"></i></a>
+							<a class="btn" href="setting.php?section=domodoor&id=<?php echo $access->getId(); ?>"><i class="fa fa-pencil"></i></a></td>
 						</tr>
 						<?php } ?>
 					</table>
@@ -193,7 +193,7 @@ function domodoor_plugin_setting_page(){
 		if($myUser->can('door','r')){
 			?>
 			<div class="flatBloc domodoor-bloc">
-			    <h3><i class="icon-login"></i> Porte principale</h3>
+			    <h3><i class="fa fa-sign-in"></i> Porte principale</h3>
 			    <div id="dash_domodoor"></div>
 		    </div>
 			<?php

@@ -13,7 +13,7 @@
 
 function preference_plugin_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='preference'?'class="active"':'').'><a href="setting.php?section=preference"><i class="icon-chevron-right"></i> Préférences</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='preference'?'class="active"':'').'><a href="setting.php?section=preference"><i class="fa fa-angle-right"></i> Préférences</a></li>';
 }
 
 
@@ -28,7 +28,7 @@ function preference_plugin_page(){
 		<p>Gestion des préférences du programme</p>
 
 		<ul class="nav nav-tabs">
-			<li <?php echo (isset($_['block']) && $_['block']=='global'?'class="active"':'')?> ><a href="setting.php?section=preference&amp;block=global"><i class="icon-chevron-right"></i> Général</a></li>
+			<li <?php echo (isset($_['block']) && $_['block']=='global'?'class="active"':'')?> ><a href="setting.php?section=preference&amp;block=global"><i class="fa fa-angle-right"></i> Général</a></li>
 	       <?php Plugin::callHook("preference_menu", array()); ?>
 	    </ul>
 			

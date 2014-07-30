@@ -102,8 +102,8 @@ function radioRelay_plugin_setting_page(){
 								<td><?php echo $radioRelay->getRadioCode(); ?></td>
 								<td><?php echo $room->getName(); ?></td>
 								<td><?php echo $radioRelay->getPulse(); ?></td>
-								<td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-remove"></i></a>
-									<a class="btn" href="setting.php?section=radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
+								<td><a class="btn" href="action.php?action=radioRelay_delete_radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="fa fa-times"></i></a>
+									<a class="btn" href="setting.php?section=radioRelay&id=<?php echo $radioRelay->getId(); ?>"><i class="fa fa-pencil"></i></a></td>
 								</tr>
 								<?php } ?>
 							</table>
@@ -124,7 +124,7 @@ function radioRelay_plugin_setting_page(){
 
 			function radioRelay_plugin_setting_menu(){
 				global $_;
-				echo '<li '.(isset($_['section']) && $_['section']=='radioRelay'?'class="active"':'').'><a href="setting.php?section=radioRelay"><i class="icon-chevron-right"></i> Relais radio</a></li>';
+				echo '<li '.(isset($_['section']) && $_['section']=='radioRelay'?'class="active"':'').'><a href="setting.php?section=radioRelay"><i class="fa fa-angle-right"></i> Relais radio</a></li>';
 			}
 
 
@@ -152,9 +152,9 @@ function radioRelay_plugin_setting_page(){
 					</ul>
 				<?php  if(fileperms(Plugin::path().'radioEmission')!='36333'){ ?><div class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href='https://github.com/ldleman/yana-server#installation';">la doc</span> pour les régler</div><?php } ?>
 					
-					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="icon-thumbs-up icon-white"></i></a>
+					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="fa fa-hand-o-up icon-white"></i></a>
 					<?php if($radioRelay->getPulse()==0){ ?>
-						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="icon-thumbs-down icon-white"></i></a>
+						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="fa fa-hand-o-down icon-white"></i></a>
 					<?php } ?>
 				</div>
 				<?php
@@ -283,7 +283,7 @@ function radioRelay_plugin_setting_page(){
 
 		function radioRelay_plugin_preference_menu(){
 			global $_;
-			echo '<li '.(@$_['block']=='radioRelay'?'class="active"':'').'><a  href="setting.php?section=preference&block=radioRelay"><i class="icon-chevron-right"></i> Radio Relais</a></li>';
+			echo '<li '.(@$_['block']=='radioRelay'?'class="active"':'').'><a  href="setting.php?section=preference&block=radioRelay"><i class="fa fa-angle-right"></i> Radio Relais</a></li>';
 		}
 		function radioRelay_plugin_preference_page(){
 			global $myUser,$_,$conf;

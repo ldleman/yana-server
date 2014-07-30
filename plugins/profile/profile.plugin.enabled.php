@@ -35,7 +35,7 @@ function profil_plugin_actions(){
 
 function profil_plugin_menu(){
 	global $_;
-	echo '<li '.((isset($_['section']) && $_['section']=='profil') || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=profil"><i class="icon-chevron-right"></i> Profil</a></li>';
+	echo '<li '.((isset($_['section']) && $_['section']=='profil') || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=profil"><i class="fa fa-angle-right"></i> Profil</a></li>';
 }
 
 function profil_plugin_page(){

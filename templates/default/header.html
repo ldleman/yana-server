@@ -11,7 +11,7 @@
     <!-- Le styles -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/fontello.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link href="css/style.css" rel="stylesheet">
     {function="Plugin::callLink()"}
     {function="Plugin::callCss()"}
@@ -39,17 +39,17 @@
           <li class="logoBox" title="Revenir à l'accueil"><a id="aLogoBox" href="index.php"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></a></li>
           <!-- <li class="logoBox"><div class="logo"><span class="badge badge-warning" id="notification">&nbsp;</span>{$configurationManager->get('PROGRAM_VERSION')}</div></li>-->
           {if="$myUser!=false"}
-              <li><a href="index.php"><i class="icon-home"></i> Accueil</a></li>
+              <li><a href="index.php"><i class="fa fa-home"></i> Accueil</a></li>
               {loop="menuItems"}
               <li>{$value.content}</li>
               {/loop}
               {if="$myUser!=false && $myUser->can('configuration','r')"}
-                <li><a href="setting.php"><i class="icon-cog"></i> Configuration</a></li>
+                <li><a href="setting.php"><i class="fa fa-cog"></i> Configuration</a></li>
               {/if}
               {if="$myUser!=false"}
 
             
-              <li class="infobulle"  title="Connecté avec {$myUser->getFullName()} ({$rank->getLabel()})"><a href="action.php?action=logout"><i class="icon-erase"></i> Déconnexion</a></li>
+              <li class="infobulle"  title="Connecté avec {$myUser->getFullName()} ({$rank->getLabel()})"><a href="action.php?action=logout"><i class="fa fa-bolt"></i> Déconnexion</a></li>
               {/if}
           {/if}
            </ul>

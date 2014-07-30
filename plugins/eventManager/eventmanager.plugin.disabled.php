@@ -86,7 +86,7 @@ function eventmanager_action(){
 
 function eventmanager_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="icon-back-in-time"></i> Événements</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=eventmanager"><i class="fa fa-clock-o"></i> Événements</a>');
 }
 
 
@@ -124,7 +124,7 @@ function eventmanager_plugin_page($_){
 
 						<div class="row">
 							<div class="flatBloc blue-color">
-								<h3><i class="icon-clock"></i> Événement : heure/date</h3>
+								<h3><i class="fa fa-clock-o"></i> Événement : heure/date</h3>
 								<div class="span2">
 									<label for="eventMinut">Minute</label>
 								    <select class="input-medium" name="eventMinut" id="eventMinut">
@@ -180,7 +180,7 @@ function eventmanager_plugin_page($_){
 
 					 <div class="row">
 					 	<div class="flatBloc green-color">
-								<h3><i class="icon-forward"></i> Action résultante</h3>
+								<h3><i class="fa fa-bomb"></i> Action résultante</h3>
 				    	<div class="span4">
 						 
 							    <label for="eventName">Nom</label>
@@ -305,8 +305,8 @@ function eventmanager_plugin_page($_){
 				    <td><?php  echo implode(',',$recipients) ?></td>
 				    <td><?php  echo ($event->getState()=='1'?'Actif':'Inactif');?></td>
 				    <td>
-						<a class="btn" href="index.php?module=eventmanager&id=<?php echo $event->getId(); ?>"><i class="icon-edit"></i></a>
-				    	<a class="btn" href="action.php?action=eventmanager_delete_event&id=<?php echo $event->getId(); ?>"><i class="icon-remove"></i></a></td>
+						<a class="btn" href="index.php?module=eventmanager&id=<?php echo $event->getId(); ?>"><i class="fa fa-pencil"></i></a>
+				    	<a class="btn" href="action.php?action=eventmanager_delete_event&id=<?php echo $event->getId(); ?>"><i class="fa fa-times"></i></a></td>
 			   	 </tr>
 			    <?php } ?>
 			    </table>

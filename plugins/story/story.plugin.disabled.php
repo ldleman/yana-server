@@ -16,7 +16,7 @@ include('Effect.class.php');
 
 function story_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=story"><i class="icon-address"></i> Scénarios</a>');
+	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=story"><i class="fa fa-caret-square-o-right"></i> Scénarios</a>');
 }
 
 function story_plugin_page($_){

@@ -13,7 +13,7 @@ include('Room.class.php');
 
 function room_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="icon-login"></i> Pièces</a>');
+	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="fa fa-codepen"></i> Pièces</a>');
 }
 
 
@@ -28,11 +28,11 @@ function room_plugin_page($_){
 		<div class="row">
 			<div class="span12">
 				<ul class="nav nav-tabs">
-				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="icon-chevron-right"></i>Toutes les pièces</a></li>
+				<li <?php if (!isset($_['id'])): ?> class="active" <?php endif ?>><a href="index.php?module=room"><i class="fa fa-angle-right"></i>Toutes les pièces</a></li>
 					<?php foreach($rooms as $room){ 
 						if(isset($_['id']) && $room->getId()==$_['id']) $currentRoom = $room;
 					?>
-					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="icon-chevron-right"></i><?php echo $room->getName(); ?></a></li>
+					<li <?php echo (isset($_['id']) && $room->getId()==$_['id'] ?'class="active"':''); ?>><a href="index.php?module=room&id=<?php echo $room->getId(); ?>"><i class="fa fa-angle-right"></i><?php echo $room->getName(); ?></a></li>
 					<?php } ?>
 				</ul>
 
@@ -66,7 +66,7 @@ function room_plugin_page($_){
 
 function room_plugin_setting_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='room'?'class="active"':'').'><a href="setting.php?section=room"><i class="icon-chevron-right"></i> Pièces</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='room'?'class="active"':'').'><a href="setting.php?section=room"><i class="fa fa-angle-right"></i> Pièces</a></li>';
 	
 }
 
@@ -131,8 +131,8 @@ function room_plugin_setting_page(){
 					<tr>
 						<td><?php echo $room->getName(); ?></td>
 						<td><?php echo $room->getDescription(); ?></td>
-						<td><a class="btn" href="action.php?action=room_delete_room&id=<?php echo $room->getId(); ?>"><i class="icon-remove"></i></a>
-							<a class="btn" href="setting.php?section=room&id=<?php echo $room->getId(); ?>"><i class="icon-edit"></i></a></td>
+						<td><a class="btn" href="action.php?action=room_delete_room&id=<?php echo $room->getId(); ?>"><i class="fa fa-times"></i></a>
+							<a class="btn" href="setting.php?section=room&id=<?php echo $room->getId(); ?>"><i class="fa fa-pencil"></i></a></td>
 						</tr>
 						<?php } ?>
 					</table>

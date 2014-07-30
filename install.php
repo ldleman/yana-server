@@ -36,9 +36,6 @@ function __autoload($class_name) {
         <div class="container">
 
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
           </button>
           <a class="brand" href="index.php"><?php echo PROGRAM_NAME; ?></a>
           <div class="nav-collapse collapse">
@@ -110,7 +107,7 @@ if(isset($_POST['install'])){
       	$r->save();
       }
     	
-      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Luke Skywalker','Mac Gyver','Marty McFly');
+      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Emmet Brown','Geo trouvetou','Luke Skywalker','Mac Gyver','Marty McFly');
       $im = $personalities[rand(0,count($personalities)-1)];
       list($fn,$n) = explode(' ',$im);
       //Creation du premier compte et assignation en admin

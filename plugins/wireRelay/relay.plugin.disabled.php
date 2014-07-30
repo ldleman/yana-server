@@ -88,8 +88,8 @@ function wireRelay_plugin_setting_page(){
 		    <td><?php echo $wireRelay->getPin(); ?></td>
 		    <td><?php echo $room->getName(); ?></td>
 		    <td><?php echo $wireRelay->getPulse(); ?></td>
-		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-remove"></i></a>
-		    <a class="btn" href="setting.php?section=wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="icon-edit"></i></a></td>
+		    <td><a class="btn" href="action.php?action=wireRelay_delete_wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="fa fa-times"></i></a>
+		    <a class="btn" href="setting.php?section=wireRelay&id=<?php echo $wireRelay->getId(); ?>"><i class="fa fa-pencil"></i></a></td>
 		    </td>
 	    </tr>
 	    <?php } ?>
@@ -111,7 +111,7 @@ function wireRelay_plugin_setting_page(){
 
 function wireRelay_plugin_setting_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='wireRelay'?'class="active"':'').'><a href="setting.php?section=wireRelay"><i class="icon-chevron-right"></i> Relais filaires</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='wireRelay'?'class="active"':'').'><a href="setting.php?section=wireRelay"><i class="fa fa-angle-right"></i> Relais filaires</a></li>';
 }
 
 
@@ -134,8 +134,8 @@ function wireRelay_display($room){
 		  	</ul>
 		 
 		
-			<a class="flatBloc" title="Activer le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="icon-thumbs-up icon-white"></i></a>
-			<a class="flatBloc" title="Désactiver le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="icon-thumbs-down"></i></a>
+			<a class="flatBloc" title="Activer le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=off"><i class="fa fa-hand-o-up icon-white"></i></a>
+			<a class="flatBloc" title="Désactiver le relais" href="action.php?action=wireRelay_change_state&engine=<?php echo $wireRelay->getId() ?>&amp;code=<?php echo $wireRelay->getPin() ?>&amp;state=on"><i class="fa fa-hand-o-down"></i></a>
 
     </div>
        

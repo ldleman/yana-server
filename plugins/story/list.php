@@ -18,7 +18,7 @@
 	    </thead>
 		<?php 
 			foreach($stories as $story){
-				echo '<tr><td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td><td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="icon-remove"></i></td></tr>';
+				echo '<tr><td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td><td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td></tr>';
 			}
 		?>
 	    </table>

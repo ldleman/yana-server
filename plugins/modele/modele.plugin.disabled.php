@@ -14,7 +14,7 @@ include('Modele.class.php');
 //Cette fonction va generer un nouveau element dans le menu
 function test_plugin_menu(&$menuItems){
 	global $_;
-	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=test"><i class="icon-th-large"></i> Modele</a>');
+	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=test"><i class="fa fa-codepen"></i> Modele</a>');
 }
 
 //Cette fonction va generer une page quand on clique sur Modele dans menu
@@ -23,10 +23,10 @@ function test_plugin_page($_){
 	?>
 	<div class="span3 bs-docs-sidebar">
 	  <ul class="nav nav-tabs nav-stacked">
-	    <li  class="active"><a href="#components"><i class="icon-chevron-right"></i> 1. Menu 1</a></li>
-	    <li><a href=""><i class="icon-chevron-right"></i> 2. Menu 2</a></li>
-	    <li><a href=""><i class="icon-chevron-right"></i> 3. Menu 3</a></li>
-	    <li><a href=""><i class="icon-chevron-right"></i> 4. Menu <span class="badge badge-warning">4</span></a></li>
+	    <li  class="active"><a href="#components"><i class="fa fa-angle-right"></i> 1. Menu 1</a></li>
+	    <li><a href=""><i class="fa fa-angle-right"></i> 2. Menu 2</a></li>
+	    <li><a href=""><i class="fa fa-angle-right"></i> 3. Menu 3</a></li>
+	    <li><a href=""><i class="fa fa-angle-right"></i> 4. Menu <span class="badge badge-warning">4</span></a></li>
 	  </ul>
 	</div>
 

@@ -10,26 +10,26 @@
     	<div class="span4 ">
 			{function="Plugin::callHook("dashboard_pre_column1", array($_))"}
     		<div class="flatBloc blue-color">
-    		<h3><i class="icon-globe"></i> Connecté</h3>
+    		<h3><i class="fa fa-globe"></i> Connecté</h3>
     		
     			<div id="dash_application">
     			
     			{$myUser->getGravatarImg()}
 			    <ul class="user-infos">
-			    	<li><h1 onclick="window.location='setting.php?section=profil';"><i class="icon-pencil"></i>{$myUser->getFullName()}</h1></li>
+			    	<li><h1 onclick="window.location='setting.php?section=profil';"><i class="fa fa-pencil"></i>{$myUser->getFullName()}</h1></li>
 			    	<li><a href="mailto:{$myUser->getMail()}">{$myUser->getMail()}</a></li>
 			    	<li><div class="tokenbox" title="{$myUser->getToken()}">Token : <input type="text" onclick="$(this).select();" value="{$myUser->getToken()}"></div></li>
 			    </ul>
-				<a href="#myModal" role="button" data-toggle="modal"  class="btn btn-primary"><i class="icon-download-alt  icon-white"></i> Installer YANA Windows</a>
+				<a href="#myModal" role="button" data-toggle="modal"  class="btn btn-primary"><i class="fa fa-download-alt  fa fa-white"></i> Installer YANA Windows</a>
 			</div>
 		</div>
 
 		    <div class="flatBloc green-color">
-			    <h3><i class="icon-monitor"></i> Système</h3>
+			    <h3><i class="fa fa-tachometer"></i> Système</h3>
 			    <div id="dash_system"></div>
 			</div>
 		    <div class="flatBloc violet-color">
-				<h3><i class="icon-switch"></i> Réseau</h3>
+				<h3><i class="fa fa-exchange"></i> Réseau</h3>
 			    <div id="dash_network"></div>
 			</div>
 			{function="Plugin::callHook("dashboard_post_column1", array($_))"}
@@ -39,22 +39,22 @@
 	    <div class="span4">
 			{function="Plugin::callHook("dashboard_pre_column2", array($_))"}
 		    <div class="flatBloc red-color">
-			    <h3><i class="icon-vcard"></i> Utilisateurs</h3>
+			    <h3><i class="fa fa-users"></i> Utilisateurs</h3>
 			    <div id="dash_user"></div>
 		    </div>
 
 		    <div class="flatBloc orange-color">
-			    <h3><i class="icon-monitor"></i> HDD</h3>
+			    <h3><i class="fa fa-hdd-o"></i> HDD</h3>
 			    <div id="dash_hdd"></div>
 			</div>
 
 			<div class="flatBloc pink-color">
-			    <h3><i class="icon-install"></i> Disques</h3>
+			    <h3><i class="fa fa-download"></i> Disques</h3>
 			    <div id="dash_disk"></div>
 			</div>
 
 			<div class="flatBloc black-color">
-			    <h3><i class="icon-flow-cascade"></i> GPIO</h3>
+			    <h3><i class="fa fa-dot-circle-o"></i> GPIO</h3>
 			    <div id="dash_gpio"></div>
 		    </div>
 			{function="Plugin::callHook("dashboard_post_column2", array($_))"}
@@ -64,11 +64,11 @@
 			{function="Plugin::callHook("dashboard_pre_column3", array($_))"}
 	    	
 			<div class="flatBloc noPadding sea-color">
-		    	<h3><i class="icon-chart-pie"></i> RAM </h3>
+		    	<h3 style="padding:10px;"><i class="fa fa-bar-chart-o"></i> RAM </h3>
 		    	<div id="dash_graphics"></div>
 	    	</div>
 			<div class="flatBloc brown-color">
-		    	<h3><i class="icon-book"></i> Services</h3>
+		    	<h3><i class="fa fa-book"></i> Services</h3>
 		    	<div id="dash_services"></div>
 	    	</div>
 			{function="Plugin::callHook("dashboard_post_column3", array($_))"}

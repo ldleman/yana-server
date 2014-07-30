@@ -4,9 +4,9 @@
 <div class="row">
 	<div class="span3 bs-docs-sidebar">
 	  <ul class="nav nav-tabs nav-stacked">
-	  	<li {if="isset($_['section']) && $_['section']=='plugin'"}class="active"{/if}><a href="setting.php?section=plugin"><i class="icon-chevron-right"></i> Plugins</a></li>
-	  	<li {if="isset($_['section']) && $_['section']=='user'"}class="active"{/if}><a href="setting.php?section=user"><i class="icon-chevron-right"></i> Utilisateurs</a></li>
-	  	<li {if="isset($_['section']) && $_['section']=='access'"}class="active"{/if}><a href="setting.php?section=access"><i class="icon-chevron-right"></i> Accès</a></li>
+	  	<li {if="isset($_['section']) && $_['section']=='plugin'"}class="active"{/if}><a href="setting.php?section=plugin"><i class="fa fa-angle-right"></i> Plugins</a></li>
+	  	<li {if="isset($_['section']) && $_['section']=='user'"}class="active"{/if}><a href="setting.php?section=user"><i class="fa fa-angle-right"></i> Utilisateurs</a></li>
+	  	<li {if="isset($_['section']) && $_['section']=='access'"}class="active"{/if}><a href="setting.php?section=access"><i class="fa fa-angle-right"></i> Accès</a></li>
 	    {function="Plugin::callHook("setting_menu", array())"}
 	  </ul>
 	</div>
@@ -53,9 +53,9 @@
 			    <tr>
 			    	<td>{$value->getLabel()}</td>
 				    <td>{$value->getDescription()}</td>
-				    <td><a class="btn btn-warning" href="setting.php?section=right&id={$value->getId()}"><i class="icon-white icon-ok-circle"></i></a>
-				    	<a class="btn btn-danger" href="setting.php?section=access&id_rank={$value->getId()}"><i class="icon-edit icon-white"></i></a>
-				    	<a class="btn btn-danger" href="action.php?action=access_delete_rank&id={$value->getId()}"><i class="icon-remove icon-white"></i></a></td>
+				    <td><a class="btn btn-warning" href="setting.php?section=right&id={$value->getId()}"><i class="icon-white fa fa-check-circle-o"></i></a>
+				    	<a class="btn btn-danger" href="setting.php?section=access&id_rank={$value->getId()}"><i class="fa fa-pencil icon-white"></i></a>
+				    	<a class="btn btn-danger" href="action.php?action=access_delete_rank&id={$value->getId()}"><i class="fa fa-times icon-white"></i></a></td>
 			    </tr>
 			    {/loop}
 			    </table>
@@ -99,7 +99,7 @@
 		    <td><input type="checkbox" onclick="setRankAccess({$rank->getId()},{$value->getId()},'u',this)" {if="@$rights[$value->getId()]['u']"}checked="checked"{/if} /></td>
 		    <td><input type="checkbox" onclick="setRankAccess({$rank->getId()},{$value->getId()},'d',this)" {if="@$rights[$value->getId()]['d']"}checked="checked"{/if} /></td>
 		    <td>
-		    	<a class="btn btn-danger" href="action.php?action=access_delete_right&id={$value->getId()}"><i class="icon-remove icon-white"></i></a>
+		    	<a class="btn btn-danger" href="action.php?action=access_delete_right&id={$value->getId()}"><i class="fa fa-times icon-white"></i></a>
 		    </td>
 	    </tr>
 	    {/loop}
@@ -114,9 +114,9 @@
 			<h1>Plugins</h1>
 			<p>Voici la liste des plugins installés :</p> 
 			<ul class="nav nav-tabs">
-					<li  {if="@$_['block']=='actif' || !isset($_['block'])"}class="active"{/if}><a  href="setting.php?section=plugin&block=actif"><i class="icon-chevron-right"></i> Actif</a></li>
-					<li {if="@$_['block']=='inactif'"}class="active"{/if}><a  href="setting.php?section=plugin&block=inactif"><i class="icon-chevron-right"></i> Inactif</a></li>
-					<li {if="@$_['block']=='market'"}class="active"{/if}><a  href="setting.php?section=plugin&block=market"><i class="icon-chevron-right"></i> Market</a></li>
+					<li  {if="@$_['block']=='actif' || !isset($_['block'])"}class="active"{/if}><a  href="setting.php?section=plugin&block=actif"><i class="fa fa-angle-right"></i> Actif</a></li>
+					<li {if="@$_['block']=='inactif'"}class="active"{/if}><a  href="setting.php?section=plugin&block=inactif"><i class="fa fa-angle-right"></i> Inactif</a></li>
+					<li {if="@$_['block']=='market'"}class="active"{/if}><a  href="setting.php?section=plugin&block=market"><i class="fa fa-angle-right"></i> Market</a></li>
 			</ul>
 				
 
@@ -214,8 +214,8 @@
 		    <td>{$ranksLabel[$value->getRank()]}</td>
 		    <td>
 		    	{if="$value->getId()!='' && $myUser->can('user','d')"}
-					<a href="action.php?action=delete_user&amp;id={$value->getId()}" class="btn btn-danger"><i class="icon-remove icon-white"></i></a>
-					<a class="btn btn-danger" href="setting.php?section=user&id_user={$value->getId()}"><i class="icon-edit icon-white"></i></a></td>
+					<a href="action.php?action=delete_user&amp;id={$value->getId()}" class="btn btn-danger"><i class="fa fa-times icon-white"></i></a>
+					<a class="btn btn-danger" href="setting.php?section=user&id_user={$value->getId()}"><i class="fa fa-pencil icon-white"></i></a></td>
 		    	{/if}
 		    </td>
 	    </tr>
