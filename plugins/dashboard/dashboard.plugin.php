@@ -107,8 +107,10 @@ function dashboard_plugin_actions(){
 }
 
 function dashboard_plugin_home(){
-
-	echo '<div id="dashboard"></div>';
+	global $_;
+	if(!isset($_['module'])){
+		echo '<div id="dashboard"></div>';
+	}
 }
 
 Plugin::addJs('/js/jquery.dashboard.js',true);
