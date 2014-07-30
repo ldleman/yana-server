@@ -1,0 +1,39 @@
+.graphic_pane{
+  background: #50597B;
+  width:100%;
+  list-style-type: none;
+  margin:0;
+}
+
+.graphic_pane li{
+  background: #50597B;
+  margin:0;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  margin-right: 1px;
+}
+.graphic_pane li h2{
+  color: #ffffff;
+  font-size: 16px;
+  margin:0;
+  padding: 0;
+}
+.graphic_pane li h1{
+  color: #8B95B8;
+  font-size: 11px;
+  margin:0 0 10px 0;
+  padding: 0;
+}
+.graphic_pane li.pane_red{
+  border-top: 3px solid #EF4D66;
+}
+.graphic_pane li.pane_blue{
+  border-top: 3px solid #0AB4B3;
+}
+.graphic_pane li.pane_orange{
+  border-top: 3px solid #FFBF4C;
+}
+.graphic_pane li.pane_cyan{
+  border-top: 3px solid #4F92BD;
+}

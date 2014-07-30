@@ -3,68 +3,22 @@ $(document).ready(function(){
 	$('.infobulle').tooltip({placement:'bottom'});
 
 	if($.urlParam('init')=='1'){
-		$.getJSON($("#UPDATE_URL").html(),function(data){
-		});
+		$.getJSON($("#UPDATE_URL").html(),function(data){});
 	}
 
-	get_dash_infos();
+	var page = window.location.href.split('/');
+	page = page[page.length-1];
+
+	if(page=='index.php' && $.trim($('.container .row:eq(0)').html()) == ''){
+			$('.container .row:eq(0)').html('<div class="alert alert-warning">Aucune plugin n\'utilise la home actuellement, souhaitez vous <a href="action.php?action=ENABLE_DASHBOARD">activer la dashboard?</a></div>');
+	}
+
 	$('#btnSearchPlugin').trigger("click");
-	
-	
 
 });
 
 
-function change_gpio_state(pin,element){
-	state = $(element).text()=='on'?0:1;
-	$.ajax({
-		  url: "action.php",
-		  type: "POST",
-		  data: {action:'CHANGE_GPIO_STATE',pin:pin,state:state},
-		  success:function(response){
-		  	if(state){
-		  		$(element).removeClass('label-info');
-		  		$(element).addClass('label-warning');
-		  		$(element).html('on');
-		  	}else{
-		  		$(element).addClass('label-info');
-		  		$(element).removeClass('label-warning');
-		  		$(element).html('off');
-		  	}
 
-		  }
-		});
-}
-
-function get_dash_infos(){
-	$('#dash_system,#dash_network,#dash_user,#dash_hdd,#dash_disk,#dash_services,#dash_gpio').html('Chargement...')
-
-	$('#dash_network,#dash_gpio,#dash_graphics').each(function(i,elem){
-		refresh_dash(elem);
-		setInterval(function(){
-			refresh_dash(elem);
-		},7000);
-	});
-
-	$('#dash_user,#dash_hdd,#dash_disk').each(function(i,elem){
-		refresh_dash(elem);
-		setInterval(function(){
-			refresh_dash(elem);
-		},60000);
-	});
-
-	$('#dash_system,#dash_services').each(function(i,elem){
-		refresh_dash(elem);
-		setInterval(function(){
-			refresh_dash(elem);
-		},120000);
-	});
-
-}
-
-function refresh_dash(elem){
-	$(elem).load('action.php?action=GET_DASH_INFO&type='+$(elem).attr('id'));
-}
 
 function maj(data){
  	server = data.maj["yana-server"];
@@ -97,8 +51,6 @@ function setRankAccess(rank,section,access,elem){
 
 
 }
-
-
 
 
 function searchPlugin(keyword){

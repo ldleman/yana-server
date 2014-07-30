@@ -196,6 +196,12 @@ else
 		exit('1');
 	break;
 
+	case 'ENABLE_DASHBOARD':
+		Plugin::enabled('dashboard-dashboard');
+		Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
+		header('location: index.php');
+	break;
+
 	case 'changePluginState':
 	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 	if(!$myUser->can('plugin','u')) exit('ERREUR: Permissions insuffisantes.');
@@ -299,145 +305,6 @@ else
 	echo ($json=='[]'?'{}':$json);
 	break;
 
-
-	case 'GET_DASH_INFO':
-		switch($_['type']){
-
-			case 'dash_system':
-				//echo "heat".$heat;
-				$heat = Monitoring::heat();
-				//$heat = shell_exec("/opt/vc/bin/vcgencmd measure_temp | cut -c 6-");
-				$cpu = Monitoring::cpu();
-				echo '<ul>
-				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
-				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
-				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
-				    	<li><strong>Température :</strong>  <span class="label '.$heat["label"].'">'.$heat["degrees"].'°C</span></li>
-				    	<li><strong>Temps de marche :</strong> '.Monitoring::uptime().'</li>
-				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
-				    	<li><strong>Charge :</strong>  <span class="label label-info">'.$cpu['loads'].' </span>  | '.$cpu['loads5'].'  5min | '.$cpu['loads15'].'  15min</li>
-				    </ul>';
-					/* <li><strong>Temperature :</strong> <span class="label label-warning">'.$heat['degree'].'</span></li>  // Au cas ou 
-					   <li><strong>Temperature RaspCtrl :</strong> '.Monitoring::heat().'</li>*/
-			break;
-			case 'dash_network':
-			$ethernet = Monitoring::ethernet();
-			echo '<ul>
-			    	<li><strong>IP LAN :</strong> <code>'.Monitoring::internalIp().'</code></li>
-			    	<li><strong>IP WAN :</strong> <code>'.Monitoring::externalIp().'</code></li>
-			    	<li><strong>Serveur HTTP :</strong> '.Monitoring::webServer().'</li>
-			    	<li><strong>Ethernet :</strong> '.$ethernet['up'].' Montant / '.$ethernet['down'].' Descendant</li>
-			    	<li><strong>Connexions :</strong>  <span class="label label-info">'.Monitoring::connections().'</span></li>
-			    </ul>';
-			break;
-			case 'dash_user':
-				echo '<ul>';
-				$users = Monitoring::users();
-			    foreach ($users as $value) {
-					echo '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
-			    }
-			    echo '</ul>';
-			break;
-			case 'dash_hdd':
-				$hdds = Monitoring::hdd();
-				echo '<ul>';
-
-				foreach ($hdds as $value) {
-					echo '<li><strong class="badge">'.$value['name'].'</strong><br><strong> Espace :</strong> '.$value['used'].'/'.$value['total'].'<strong> Format :</strong> '.$value['format'].' </li>';
-				}
-				echo '</ul>';
-			break;
-			
-			case 'dash_graphics':
-				$hdds = Monitoring::ram();
-				echo '
-				<div style="width: 100%">
-					<canvas id="RAM_PIE"></canvas>
-					<br/><br/>
-					<ul class="graphic_pane">
-						<li class="pane_orange">
-							<h1>RAM UTILISEE</h1>
-							<h2>'.$hdds['percentage'].'%</h2>
-						</li><li class="pane_cyan">
-							<h1>RAM LIBRE</h1>
-							<h2>'.$hdds['free'].' Mo</h2>
-						</li><li class="pane_red">
-							<h1>RAM TOTALE</h1>
-							<h2>'.$hdds['total'].' Mo</h2>
-						</li>
-					</ul>
-				</div>
-
-				<script>
-					$("#RAM_PIE").chart({
-						type : "doughnut",
-						label : ["RAM UTILISEE","RAM LIBRE"],
-						backgroundColor : ["'.($hdds['percentage']>80? '#E64C65' : '#FCB150' ).'","#4FC4F6"],
-						segmentShowStroke:false,
-						data : ['.$hdds['percentage'].','.(100-$hdds['percentage']).']
-					});
-				</script>';
-			break;
-			/*
-			
-		$('#bar').chart({
-			type : 'bar',
-			label : ['CPU','RAM','DDR'],
-			backgroundColor : ['red','green','blue'],
-			data : [50,40,10]
-		});
-		$('#line').chart({
-			type : 'line',
-			label : ['CPU','RAM','DDR'],
-			backgroundColor : ['red','green','blue'],
-			data : [50,40,10]
-		});
-		
-		
-			*/
-			
-			
-			case 'dash_disk':
-				$disks = Monitoring::disks();
-				echo '<ul>';
-			    foreach ($disks as $value) {
-			    	echo '<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
-			    }
-			    echo '</ul>';
-			break;
-			case 'dash_services':
-				$services = Monitoring::services();
-				echo '<ul>';
-			    foreach ($services as $value) {
-			    	echo '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
-			    }
-			    echo '</ul>';
-			break;
-			case 'dash_gpio':
-				$gpios = Monitoring::gpio();
-				$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
-				echo '<pre><ul>';
-			    for ($i = 0; $i <= 21; $i+=2) {
-			    	$class = 'info';
-			    	$value = 'off';
-			    	if($gpios[$i]){
-			    		$class = 'warning';
-			    		$value = 'on';
-			    	}
-			    	$class2 = 'info';
-			    	$value2 = 'off';
-			    	if($gpios[$i+1]){
-			    		$class2 = 'warning';
-			    		$value2 = 'on';
-			    	}
-
-			    	echo '     <strong>'.$pin[$i].'</strong>-> <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="label label-'.$class.' pointer">'.$value.'</span>  <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="pointer label label-'.$class2.'">'.$value2.'</span>'.' <-<strong>'.$pin[($i+1)].'</strong><br/>';
-			    }
-
-			    echo '</ul></pre>';
-			break;
-		}
-	break;
 
 
 	case 'installPlugin':

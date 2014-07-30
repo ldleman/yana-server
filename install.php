@@ -122,12 +122,13 @@ if(isset($_POST['install'])){
     	$user->save();
 
     	Plugin::enabled('relay-relay');
-        Plugin::enabled('wireRelay-relay');
+      Plugin::enabled('wireRelay-relay');
     	Plugin::enabled('vocal_infos-vocalinfo');
     	Plugin::enabled('room-room');
-        Plugin::enabled('eventManager-eventmanager');
-        Plugin::enabled('profile-profile');
-      
+      Plugin::enabled('eventManager-eventmanager');
+      Plugin::enabled('profile-profile');
+      Plugin::enabled('dashboard-dashboard');
+      Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
   }else{
     ?>
         <div id="body" class="container">
