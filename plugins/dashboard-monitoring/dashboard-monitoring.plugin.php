@@ -290,8 +290,8 @@ function dash_monitoring_plugin_actions(){
 				break;
 			}
 
-				echo json_encode($response);
-
+			echo json_encode($response);
+			exit(0);
 
 		break;
 

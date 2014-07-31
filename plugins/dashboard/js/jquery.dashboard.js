@@ -107,6 +107,18 @@
 					var obj = $(this);
 					var columnWidth = (obj.width()/o.column) - 10;
 			
+
+					obj.html('');
+					$('.dashboard_placement').off( "click" );
+					$(document).off('mousedown');
+					$(document).off('mousemove');
+					$(document).off('change');
+					$(document).off('mousedown');
+					$(document).off('mouseup');
+					$('.dashboard_widget_picker').off('change');
+					$('.dashboard_delete_button,.dashboard_bloc_head,.dashboard_setting_cancel_button,.dashboard_setting_save_button,.dashboard_setting_button,.dashboard_minimize_button').off('mousedown');
+					
+
 					/********************/
 					/** INIT STRUCTURE **/
 					/********************/
@@ -141,7 +153,7 @@
 					/*****************/
 
 					//Etape 1 : choix du modele de widget
-					$(document).on('click','.dashboard_placement',function(){
+					$('.dashboard_placement').on('click',function(){
 						var content = '<select class="dashboard_widget_picker" id="dashboard_widget_picker"><option value=""> - </option>';
 						for(var key in o.models){
 							var widget = o.models[key];

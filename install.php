@@ -121,6 +121,9 @@ if(isset($_POST['install'])){
     	$user->setRank($rank->getId());
     	$user->save();
 
+      global $myUser;
+      $myUser = $user;
+
     	Plugin::enabled('relay-relay');
       Plugin::enabled('wireRelay-relay');
     	Plugin::enabled('vocal_infos-vocalinfo');

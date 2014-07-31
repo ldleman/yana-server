@@ -6,10 +6,19 @@
 */
 
 $(document).ready(function(){
+	var view = $('#dashboard_switch').val();
+	
+	
+	plugin_dashboard_load_view(view);
+	
+});
 
-		$.ajax({
+function plugin_dashboard_load_view(view){
+	if($.trim(view) =='') return;
+	$.ajax({
 		dataType: "json",
 		url: 'action.php?action=GET_WIDGETS',
+		data : {dashboard : view},
 		success: function(response){
 			
 				$('#dashboard').dashboard({
@@ -20,7 +29,7 @@ $(document).ready(function(){
 					$.ajax({
 						dataType: "json",
 						url: 'action.php?action=ADD_WIDGET',
-						data : {model : widget['uid'] , data : response.data, column:column,cell:cell},
+						data : {view : $('#dashboard_switch').val(),model : widget['uid'] , column:column,cell:cell},
 						method : 'POST',
 						success : function(response){
 							$.dashboard.setBlocData(bloc,response);
@@ -110,4 +119,5 @@ $(document).ready(function(){
 
 		}
 	});
-});
+	
+}

@@ -17,14 +17,20 @@ function dashboard_plugin_actions(){
 	switch($_['action']){
 		case 'GET_WIDGETS':
 			header('Content-type: application/json');
-
+			
+			require_once('Dashboard.class.php');
 			require_once('Widget.class.php');
+
+			$dashManager = new Dashboard();
+			$dashManager->change(array('default'=>'0'));
+			$dashManager->change(array('default'=>'1'),array('id'=>$_['dashboard']));
+
 			$widgetManager = new Widget();
 
 			$model = array();
 			Plugin::callHook("widgets",array(&$model));
 
-			$widgets = $widgetManager->populate('cell');
+			$widgets = $widgetManager->loadAll(array('dashboard'=>$_['dashboard']),'cell');
 			$data = array();
 			foreach($widgets as $widget){
 				$data[] = array('data'=>$widget->data,
@@ -46,10 +52,11 @@ function dashboard_plugin_actions(){
 			$response = array();
 
 			$widget = new Widget();
-			$widget->data = json_encode($_['data']);
+			$widget->data = json_encode(array());
 			$widget->column = $_['column'];
 			$widget->cell = $_['cell'];
 			$widget->model = $_['model'];
+			$widget->dashboard = $_['view'];
 			$widget->save();
 			$response['id'] = $widget->id;
 
@@ -103,12 +110,40 @@ function dashboard_plugin_actions(){
 
 			echo json_encode($response);
 		break;
+
+		case 'DASH_ADD_VIEW':
+			global $_,$myUser;
+			require_once('Dashboard.class.php');
+			$entity = new Dashboard();
+			$entity->user = $myUser->getId();
+			$entity->label = $_['viewName'];
+			$entity->default = 0;
+			$entity->save();
+			header('location: index.php');
+		break;
 	}
 }
 
 function dashboard_plugin_home(){
-	global $_;
+	global $_,$myUser;
 	if(!isset($_['module'])){
+		require_once('Dashboard.class.php');
+		$dashManager = new Dashboard();
+		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()));
+		
+		
+		echo '<form action="action.php?action=DASH_ADD_VIEW" method="POST">';
+		echo '<select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
+		foreach($dashes as $dash){
+			echo '<option '.($dash->default=='1'?'selected="selected"':'').' value="'.$dash->id.'">'.$dash->label.'</option>';
+		}
+		echo '</select>
+		<div class="input-append">
+			<input type="text" name="viewName" placeholder="Salon,cuisine...">
+			<button type="submit" class="btn">Ajouter la vue</button>
+		</div>
+		</form>
+		';
 		echo '<div id="dashboard"></div>';
 	}
 }
