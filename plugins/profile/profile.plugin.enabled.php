@@ -37,7 +37,8 @@ function profil_plugin_actions(){
 					
 
 		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-		$url_link =$protocol.$_SERVER['HTTP_HOST'].str_replace(array('index.php','?init=1'),'',$_SERVER['REQUEST_URI'].'action.php');
+		$split = explode('action.php',$_SERVER['REQUEST_URI']);
+		$url_link =$protocol.$_SERVER['HTTP_HOST'].$split[0].'action.php';
 		
 		$response['content'] = '<div id="dash_application">'.$myUser->getGravatarImg().'
 			    <ul class="user-infos">
@@ -60,8 +61,8 @@ function profil_plugin_actions(){
 				    <li>Si ce n\'est pas déja fait <a href="https://github.com/ldleman/yana-windows/archive/master.zip">téléchargez Yana Windows</a> et décompressez le.</li>
 				  <li>Exécutez le programme <b>"ScanSoft Virginie_Dri40_16kHz.exe"</b> pour installez la voix de yana</li>
 				  <li>Lancez le programme <b>"yana.exe"</b>, puis faites un clic droit sur l\'îcone de yana situé dans la barre de tâche et cliquez sur \'Configuration\'
-				  <li>Configurez \'Adresse du serveur\' avec la valeur suivante : <code>{$url_link}</code></li> 
-				  <li>Dans le champs suivant, entrez le \'Token\' d\'identification suivant : <code>{$myUser->getToken()}</code></li> 
+				  <li>Configurez \'Adresse du serveur\' avec la valeur suivante : <code>'.$url_link.'</code></li> 
+				  <li>Dans le champs suivant, entrez le \'Token\' d\'identification suivant : <code>'.$myUser->getToken().'</code></li> 
 				  <li>Cliquez sur enregistrer, le programme se relance et l\'installation est terminée !!</li> 
 				</ul>
 				  </div>
