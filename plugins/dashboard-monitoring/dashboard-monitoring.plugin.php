@@ -247,7 +247,7 @@ function dash_monitoring_plugin_actions(){
 				    	foreach ($services as $value) {
 				    		$response['content'] .= '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
 				    	}
-				   		$response['content'] = '</ul>';
+				   		$response['content'] .= '</ul>';
 					}else{
 						$response['content'] .='Information indisponible sur cet OS :'.PHP_OS;
 					}
