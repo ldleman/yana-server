@@ -1,6 +1,6 @@
 /* Fichier de style CSS réservé a votre plugin*/
-.userBloc .avatar-30{
-	border:none;
+.domodoor_history .avatar-50{
+	border-color:#B0B0B0;
 }
 
 
@@ -28,7 +28,7 @@
 	transition:all 0.2s linear;
 }
 .domodoor_log:hover{
-	background-color: #1BA1E2;
+	background-color: #50597B;
 }
 .domodoor_log:hover h2{
 	color: #ffffff;
@@ -51,5 +51,14 @@
 	margin-bottom: 0px;
 }
 
+.domodoor_history{
+	list-style-type: none;
+	margin:0;
+}
+.domodoor_history li{
+
+	padding:5px 0 5px 5px;
+	border-bottom: 1px solid #cecece;
+}
 
 

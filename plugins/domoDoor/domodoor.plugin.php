@@ -47,6 +47,18 @@ if(isset($argv)){
 require_once('DoorAccess.class.php');
 require_once('DoorLog.class.php');
 
+function dash_domodoor_plugin_menu(&$widgets){
+		$widgets[] = array(
+		    'uid'      => 'dash_domodoor',
+		    'icon'     => 'fa  fa-key',
+		    'label'    => 'Porte d\'entréé',
+		    'background' => '#50597B', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=domodoor_get_history',
+		    'onDelete' => 'action.php?action=dash_domodoor_plugin_delete',
+		);
+}
+
 
 
 function domodoor_plugin_setting_menu(){
@@ -153,12 +165,13 @@ function domodoor_plugin_setting_page(){
 			break;
 
 			case 'domodoor_get_history':
-				if(!$myUser->can('door','r')) exit('permission denied');
+				header('content-type: application/json');
+				$response['title'] = 'Entrees porte';
 				$doorAccessManager = new DoorLog();
 				$morning = mktime (0, 0, 0, date("n") , date("j") ,  date("Y"));
 
 				$entries = $doorAccessManager->loadAll(array('time'=>$morning),'time DESC',10,$operation=">");
-				echo '<ul>';
+				$response['content'] ='<ul class="domodoor_history">';
 				$userManager = new User();
 				foreach($entries as $entry){
 					$user = new User();
@@ -166,9 +179,11 @@ function domodoor_plugin_setting_page(){
 					if($entry->user!=0){
 						$user = $userManager->getById($entry->user);
 					}
-					echo '<li title="Code fournis : '.$entry->code.'" class="domodoor_log state-'.$entry->success.'">'.$user->getGravatarImg(50).'<div><h1>'.$user->getFullName().'</h1><h2>'.date('à H:i \l\e d/m ',$entry->time).'<h2></div></li>';
+					$response['content'] .='<li title="Code fournis : '.$entry->code.'" class="domodoor_log state-'.$entry->success.'">'.$user->getGravatarImg(50).'<div><h1>'.$user->getFullName().'</h1><h2>'.date('à H:i \l\e d/m ',$entry->time).'<h2></div></li>';
 				}
-				echo '</ul>';
+				$response['content'] .= '</ul>';
+				echo json_encode($response);
+				exit(0);
 			break;
 
 			case 'domodoor_delete_domodoor':
@@ -206,6 +221,6 @@ function domodoor_plugin_setting_page(){
 		Plugin::addHook("setting_bloc", "domodoor_plugin_setting_page"); 
 		Plugin::addHook("action_post_case", "domodoor_action_domodoor"); 
 		Plugin::addHook("dashboard_pre_column2", "domodoor_dashboard"); 
-		
+		Plugin::addHook("widgets", "dash_domodoor_plugin_menu");
 
 		?>

@@ -105,7 +105,7 @@
 					
 
 					var obj = $(this);
-					var columnWidth = (obj.width()/o.column) - 10;
+					var columnWidth = (100/o.column) -2;
 			
 
 					obj.html('');
@@ -124,7 +124,7 @@
 					/********************/
 
 					for(i=0;i<o.column;i++){
-						obj.append('<div style="width:'+columnWidth+'px;" id="dashboard_column_'+i+'" class="dashboard_column"><div data-column="'+i+'" data-cell="0"  class="dashboard_placement"></div></div>');
+						obj.append('<div style="min-width:300px;width:'+columnWidth+'%;" id="dashboard_column_'+i+'" class="dashboard_column"><div data-column="'+i+'" data-cell="0"  class="dashboard_placement"></div></div>');
 					}
 
 					/***************/
