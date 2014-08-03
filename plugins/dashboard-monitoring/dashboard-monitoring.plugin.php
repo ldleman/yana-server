@@ -110,6 +110,7 @@ function dash_monitoring_plugin_actions(){
 	switch($_['action']){
 
 		case 'dash_monitoring_plugin_load':
+			if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 			header('Content-type: application/json');
 
 			$response = array();
