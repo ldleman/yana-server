@@ -7,6 +7,7 @@
 
 	var dashboard_handle = null;
 	var dashboard_bloc = null;
+	var clickpoint = null;
 
 	(function($){
 
@@ -190,6 +191,9 @@
 						dashboard_bloc = dashboard_handle.parent();
 
 						dashboard_bloc.addClass('dashboard_bloc_mouved');
+						dashboard_bloc.css('width',dashboard_bloc.width()+'px').css('position','absolute');
+
+				
 
 						$(this).on('mouseup',function(){
 							dashboard_bloc.removeAttr('style');
@@ -204,13 +208,6 @@
 							dashboard_selected = null;
 							dashboard_handle = null;
 
-							/*var sort = [];
-							$('.dashboard_column').each(function(i,column){
-								sort[i] = {};
-								$('.dashboard_bloc',column).each(function(u,bloc){
-									sort[i] = {u:$(bloc).data('widget')};
-								});
-							});*/
 							if(o.onMove!=null && sort.column!=null) o.onMove(dashboard_bloc.data('widget'),sort);
 						});
 						e.preventDefault();
@@ -218,9 +215,11 @@
 					});
 					$(document).on('mousemove',function(e){
 						if(dashboard_bloc != null && dashboard_handle!=null){
-							x = e.clientX-dashboard_handle.width()/2 ;
-							y = e.clientY-(dashboard_handle.height()/2) - 50 ;
-							dashboard_bloc.attr('style','position:absolute;z-index:100;top:'+y+'px;left:'+x+'px');
+
+							x = e.clientX - dashboard_bloc.width() ;
+							y = e.clientY - 65;
+							dashboard_bloc.css('top',y+'px').css('left',x+'px');
+
 							$('.dashboard_placement').each(function(i,elem){
 							if(collision($(elem),dashboard_handle)){
 									$('.dashboard_placement').removeClass('dragover');
