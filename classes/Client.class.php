@@ -20,11 +20,13 @@ class Client extends SQLiteEntity{
             'ip'=>'string',
 		    'port'=>'int'
 	    );
-	function __construct($ip,$port){
+	function __construct($ip=null,$port=null){
 		 parent::__construct();
-		 $this->ip = $ip;
-		 $this->name = $ip;
-		 $this->port = $port;
+		 if(null!=$ip){
+		 	$this->ip = $ip;
+		 	$this->name = $ip;
+		 }
+		 if(null!=$port) $this->port = $port;
 	}
 
 	public function suscribe($url,$token){
