@@ -2,31 +2,32 @@
 
 /*
  @nom: Plugin
- @auteur: Valentin CARRUESCO (idleman@idleman.fr)
+ @auteur: Valentin CARRUESCO (valentin.carruesco@sys1.fr)
  @description: Classe de gestion des plugins au travers de l'application
  */
 
 class Plugin{
 	const FOLDER = '/plugins';
+
 	protected $name,$author,$mail,$link,$licence,$path,$description,$version,$state,$type;
 
 	function __construct(){
 	}
 
-	public static function includeAll($default_theme){
+	public static function includeAll(){
 		$pluginFiles = Plugin::getFiles(true);
 		if(is_array($pluginFiles)) {   
-			foreach($pluginFiles as $pluginFile) {  
+			foreach($pluginFiles as $pluginFile) {
 				//Inclusion du coeur de plugin
 				include $pluginFile;  
 				//Gestion des css du plugin en fonction du thème actif
-				$cssTheme = glob('../'.dirname($pluginFile).'/*/'.$default_theme.'.css');
+				$cssTheme = glob('../'.dirname($pluginFile).'/*/'.DEFAULT_THEME.'.css');
 				$cssDefault = glob('../'.dirname($pluginFile).'/*/default.css');
 				if(isset($cssTheme[0])){
 					$GLOBALS['hooks']['css_files'][] = Functions::relativePath(str_replace('\\','/',dirname(__FILE__)),str_replace('\\','/',$cssTheme[0])); 
 				}else if(isset($cssDefault[0])){
 					$GLOBALS['hooks']['css_files'][] =  Functions::relativePath(str_replace('\\','/',dirname(__FILE__)),str_replace('\\','/',$cssDefault[0])); 
-				} 
+				}
 			}  
 		}  
 	}
@@ -92,25 +93,47 @@ class Plugin{
 		return $plugins;
 	}
 
+	public static function getFiles($onlyActivated=false){
+
+		$enabled = $disabled =  array();
+		$files = glob(dirname(dirname(__FILE__)). Plugin::FOLDER .'/*/*.plugin*.php');
+		$plugins = array();
+		foreach($files as $file){
+			$plugins[] = Plugin::getObject($file);
+		}
+		usort($plugins, "Plugin::sortPlugin");
+		foreach($plugins as $plugin){
+			if($plugin->getState() || $plugin->getType() =='component'){
+				$enabled [] =  $plugin->getPath();
+			}else{
+				$disabled [] =  $plugin->getPath();
+			}
+		}
+		if(!$onlyActivated)$enabled = array_merge($enabled,$disabled);
+		return $enabled;
+	}
+
 	
 
 		public static function addHook($hookName, $functionName) {  
 		    $GLOBALS['hooks'][$hookName][] = $functionName;  
 		} 
 
-		public static function addCss($css) {  
+		public static function addCss($css,$force = false) {  
 			$bt =  debug_backtrace();
-			
+			$module = isset($_GET['module'])?$_GET['module']:'';
+			$module = isset($_GET['section']) && $module==''?$_GET['section']:$module;
+			$module = isset($_GET['block']) && $module==''?$_GET['block']:$module;
 			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$css));
-
-		    $GLOBALS['hooks']['css_files'][] = $path;  
+			if(basename(dirname($bt[0]['file'])) == $module || $force)
+		    	$GLOBALS['hooks']['css_files'][] = $path;  
 		}
 
 		public static function callCss(){
 			$return='';
 		    if(isset($GLOBALS['hooks']['css_files'])) { 
 		        foreach($GLOBALS['hooks']['css_files'] as $css_file) {  
-		            $return .='<link rel="stylesheet" href="'.$css_file.'">'."\n";
+		            $return .='<link href="'.$css_file.'" rel="stylesheet">'."\n";
 		        }  
 		    }    
 		    return $return;
@@ -124,7 +147,7 @@ class Plugin{
 			$return='';
 		    if(isset($GLOBALS['hooks']['head_link'])) { 
 		        foreach($GLOBALS['hooks']['head_link'] as $head_link) {  
-		            $return .='<link rel="'.$head_link['rel'].'" href="'.$head_link['link'].'" />'."\n";
+		            $return .='<link href="'.$head_link['link'].'" rel="'.$head_link['rel'].'" />'."\n";
 		        }
 		    }
 		    return $return;
@@ -135,15 +158,22 @@ class Plugin{
 			return Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']))).'/'; 
 		}
 
-		public static function addJs($js) {  
+		public static function addJs($js,$force = false){  
+
+			global $_;
 			$bt =  debug_backtrace();
 			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$js));
-		    $GLOBALS['hooks']['js_files'][] = $path;  
+			
+			$module = isset($_GET['module'])?$_GET['module']:'';
+			$module = isset($_GET['block'])?$_GET['block']:$module;
+			$module = isset($_GET['section']) && $module==''?$_GET['section']:$module;
+			if( strcasecmp(basename(dirname($bt[0]['file'])), $module) == 0  || $force)
+		    	$GLOBALS['hooks']['js_files'][] = $path;  
 		}
 
 		public static function callJs(){
 			$return='';
-		    if(isset($GLOBALS['hooks']['js_files'])) { 
+		    if(isset($GLOBALS['hooks']['js_files'])) {
 		        foreach($GLOBALS['hooks']['js_files'] as $js_file) {  
 		            $return .='<script type="text/javascript" src="'.$js_file.'"></script>'."\n";
 		        }  
@@ -153,29 +183,27 @@ class Plugin{
 
 		public static function callHook($hookName, $hookArguments) {  
 			//echo '<div style="display:inline;background-color:#CC47CB;padding:3px;border:5px solid #9F1A9E;border-radius:5px;color:#ffffff;font-size:15px;">'.$hookName.'</div>';
-		    if(isset($GLOBALS['hooks'][$hookName]) && count($GLOBALS['hooks'][$hookName])!=0) { 
+		    if(isset($GLOBALS['hooks'][$hookName])) { 
 		        foreach($GLOBALS['hooks'][$hookName] as $functionName) {  
 		            call_user_func_array($functionName, $hookArguments);  
-		        } 
-		    }
+		        }  
+		    }  
 		} 
 
-	public static function getFiles($onlyActivated=false){
-
-		$enabled = $disabled =  array();
-		$files = glob(dirname(dirname(__FILE__)). Plugin::FOLDER .'/*/*.plugin*.php');
-		foreach($files as $file){
-			$plugin = Plugin::getObject($file);
-			if($plugin->getState()){
-				$enabled [] =  $file;
-			}else{
-				$disabled [] =  $file;
+	//Définis si un plugin existe et si il est activé ou non
+	public static function exist($pluginName){
+		$exist = false;
+		$file = glob(dirname(dirname(__FILE__)). Plugin::FOLDER .'/'.$pluginName.'/*.plugin*.php');
+		if(count($file)!=0){
+			$plugin = Plugin::getObject($file[0]);
+			if($plugin->getState() || $plugin->getType() =='component'){
+				$exist = true;
 			}
 		}
-
-		if(!$onlyActivated)$enabled = array_merge($enabled,$disabled);
-		return $enabled;
+		return $exist;
 	}
+
+	
 
 	
 	public static function loadState($plugin){
@@ -197,8 +225,12 @@ class Plugin{
 		foreach($plugins as $plugin){
 			if($plugin->getUid()==$pluginUid){
 				Plugin::changeState($plugin->getPath(),true);
-				$install = dirname($plugin->getPath()).'/install.php';
-				if(file_exists($install))require_once($install);
+				$install = dirname($plugin->getPath()).'/install';
+				if(file_exists($install)) {
+					require_once($install);
+				}else if (file_exists($install.'.php')){
+					require_once($install.'.php');
+				}
 			}
 		}
 	}
@@ -207,8 +239,12 @@ class Plugin{
 		foreach($plugins as $plugin){
 			if($plugin->getUid()==$pluginUid){
 				Plugin::changeState($plugin->getPath(),false);
-				$uninstall = dirname($plugin->getPath()).'/uninstall.php';
-				if(file_exists($uninstall))require_once($uninstall);
+				$uninstall = dirname($plugin->getPath()).'/uninstall';
+				if(file_exists($uninstall)){
+					require_once($uninstall);
+				}else if (file_exists($uninstall.'.php')){
+					require_once($uninstall.'.php');
+				}
 			}
 		}
 		
@@ -223,9 +259,24 @@ class Plugin{
 
 
 	static function sortPlugin($a, $b){
+
 		if ($a->getName() == $b->getName()) 
-        return 0;
-	    return ($a->getName() < $b->getName()) ? -1 : 1;
+        	$result = 0;
+
+	    if($a->getName() < $b->getName()){
+	   		$result = -1;
+	    } else{
+	   		$result = 1;
+	    }
+
+	    if($b->getType() != $a->getType()){
+		    if($a->getType() == 'component'){
+				$result = -1;
+			}else{
+				$result = 1;
+			}
+		}
+	    return  $result;
 	}
 
 

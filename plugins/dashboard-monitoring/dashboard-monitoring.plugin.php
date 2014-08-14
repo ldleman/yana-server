@@ -23,6 +23,17 @@ function dash_monitoring_plugin_menu(&$widgets){
 		);
 
 		$widgets[] = array(
+		    'uid'      => 'dash_monitoring_vocal',
+		    'icon'     => 'fa fa-comments-o',
+		    'label'    => 'Commandes vocales',
+		    'background' => '#014B96', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=dash_monitoring_plugin_load&bloc=vocal',
+		    'onMove'   => 'action.php?action=dash_monitoring_plugin_move&bloc=vocal',
+		    'onDelete' => 'action.php?action=dash_monitoring_plugin_delete&bloc=vocal',
+		);
+
+		$widgets[] = array(
 			'uid'      => 'dash_monitoring_system',
 		    'icon'     => 'fa fa-tachometer',
 		    'label'    => 'Système',
@@ -167,6 +178,25 @@ function dash_monitoring_plugin_actions(){
 				    	<li><strong>CPU :</strong>  <span class="label label-info">'.$cpu['current_frequency'].' Mhz</span> (Max '.$cpu['maximum_frequency'].'  Mhz/ Min '.$cpu['minimum_frequency'].'  Mhz)</li>
 				    	<li><strong>Charge :</strong>  <span class="label label-info">'.$cpu['loads'].' </span>  | '.$cpu['loads5'].'  5min | '.$cpu['loads15'].'  15min</li>
 				    </ul>';
+				break;
+				case 'vocal':
+
+					if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
+					if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
+					
+					list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
+					$actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+					$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
+					
+					Plugin::callHook("vocal_command", array(&$response,$actionUrl));
+
+					
+					$response['title'] = count($response['commands']).' Commandes vocales';
+					$response['content'] = '<ul>';
+					foreach($response['commands'] as $command){
+						$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
+					}
+					$response['content'] .= '</ul>';
 				break;
 				case 'network':
 					$response['title'] = 'Réseau';
@@ -376,8 +406,8 @@ function dash_monitoring_plugin_actions(){
 </body>
 </html>
 */
-Plugin::addCss('/css/style.css');
-Plugin::addJs('/js/main.js');
+Plugin::addCss('/css/style.css',true);
+Plugin::addJs('/js/main.js',true);
 Plugin::addHook("widgets", "dash_monitoring_plugin_menu");
 Plugin::addHook("action_post_case", "dash_monitoring_plugin_actions");
 ?>

@@ -57,6 +57,12 @@ class Functions
 		return mb_substr($msg, 0, $nb).$fin;
 	}
 
+	public static function getBaseUrl($from){
+
+		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+		$split = explode('/'.$from,$_SERVER['REQUEST_URI']);
+		return $protocol.$_SERVER['HTTP_HOST'].$split[0];
+	}
 
 	/**
 	 * Definis si la chaine fournie est existante dans la reference fournie ou non

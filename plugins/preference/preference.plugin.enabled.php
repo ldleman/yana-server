@@ -46,7 +46,15 @@ function preference_plugin_page(){
 								$conf = new Configuration();
 								$confs = $conf->populate();
 								foreach($confs as $value){
-									echo '<tr><td>'.$value->getKey().'</td><td><input class="input-xxlarge" type="text" value="'.$value->getValue().'" id="'.$value->getId().'"></td></tr>';
+
+									$ns = 'conf';
+									$key = $value->getKey();
+									$infos  = explode(':',$key);
+									if(count($infos) ==2){
+										list($ns,$key) = $infos;
+									}
+									if($ns != 'conf') continue;
+									echo '<tr><td>'.$key.'</td><td><input class="input-xxlarge" type="text" value="'.$value->getValue().'" id="'.$value->getId().'"></td></tr>';
 								}
 							?>
 							<tr><td colspan="2"><button type="submit" onclick="save_settings();" class="btn">Modifier</button></td></tr>
@@ -98,7 +106,7 @@ function preference_plugin_action(){
 	break;
 	}
 }
-Plugin::addJs('/js/main.js');
+Plugin::addJs('/js/main.js',true);
 Plugin::addHook("setting_menu", "preference_plugin_menu");  
 Plugin::addHook("setting_bloc", "preference_plugin_page"); 
 Plugin::addHook("action_post_case", "preference_plugin_action"); 

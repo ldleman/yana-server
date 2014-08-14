@@ -1,0 +1,14 @@
+<?php
+/* 
+	Le code contenu dans cette page ne sera éxecuté qu'à l'activation du plugin 
+	Vous pouvez donc l'utiliser pour créer des tables MySQL, des dossiers, ou executer une action
+	qui ne doit se lancer qu'à l'installation ex :
+*/
+	require_once('FileUploaded.class.php');
+	$table = new FileUploaded();
+	$table->create();
+		
+	Section::add("file","fichiers");
+
+
+?>

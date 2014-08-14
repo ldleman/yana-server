@@ -20,6 +20,26 @@
             }
         }
 
+        $.action =  function(data,success,error) {
+			$.ajax({
+				dataType : 'json',
+				method : 'POST',
+				url : 'action.php',
+				data : data,
+				success: function(response){
+					if(response.errors == null ) response.errors.push('Erreur indefinie, merci de contacter un administrateur');
+					if(response.errors.length ==0 ){
+						if(success!=null)success(response);
+					}else{
+						alert('ERREUR : '+"\n"+response.errors.join("\n"));
+						if(error!=null) error(response);
+					}
+				},
+				error : function(){
+					alert('Erreur indefinie, merci de contacter un administrateur');
+				}
+			});
+        }
 
 		$.urlParam = function(name){
 			var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
