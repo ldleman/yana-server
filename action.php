@@ -1,9 +1,11 @@
 <?php
+if ($_GET['action'] == 'KNOCK_KNOCK_YANA') exit('1');
 
 
 if(!ini_get('safe_mode')) @set_time_limit(0);
 
 require_once("common.php");
+
 if(php_sapi_name() == 'cli'){
 	$_['action'] = $_SERVER['argv'][1];	
 }
@@ -194,9 +196,7 @@ else
 	Functions::goback(" ./index");
 	break;
 
-	case 'KNOCK_KNOCK_YANA':
-		exit('1');
-	break;
+	
 
 	case 'ENABLE_DASHBOARD':
 		Plugin::enabled('dashboard-dashboard');

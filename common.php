@@ -73,10 +73,6 @@ if(!$myUser && isset($_COOKIE[$conf->get('COOKIE_NAME')])){
 	}
 }
 
-
-
-
-
 $userManager = new User();
 
 //Instanciation du template
@@ -91,7 +87,6 @@ $rank = new Rank();
 if($myUser!=false && $myUser->getRank()!=false){
 	$rank = $rank->getById($myUser->getRank());
 }
-
 
 $tpl->assign('myUser',$myUser);
 $tpl->assign('userManager',$userManager);
