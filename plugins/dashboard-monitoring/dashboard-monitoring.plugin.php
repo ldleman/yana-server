@@ -1,9 +1,9 @@
 <?php
 /*
 @name dash_monitoring
-@author Valentin CARRUESCO <valentin.carruesco@sys1.fr>
-@link http://www.sys1.fr
-@licence Copyright Sys1
+@author Valentin CARRUESCO <idleman@idleman.fr>
+@link http://blog.idleman.fr
+@licence CC by nc sa
 @version 1.0.0
 @description Ajoute des widgets de monitoring du raspberry pi
 */

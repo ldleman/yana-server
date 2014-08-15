@@ -1,9 +1,9 @@
 <?php
 /*
 @name Dashboard
-@author Valentin CARRUESCO <valentin.carruesco@sys1.fr>
-@link http://www.sys1.fr
-@licence Copyright Sys1
+@author Valentin CARRUESCO <idleman@idleman.fr>
+@link http://blog.idleman.fr
+@licence CC by nc sa
 @version 1.0.0
 @description Active la dashboard dynamique utilisable par d'autres plugins
 @type plugin
