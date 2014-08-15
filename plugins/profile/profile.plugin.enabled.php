@@ -34,11 +34,8 @@ function profil_plugin_actions(){
 		case 'dash_profil_plugin_load':
 		header('content-type:application/json');
 		$response['title'] = 'Connecté';
-					
 
-		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-		$split = explode('action.php',$_SERVER['REQUEST_URI']);
-		$url_link =$protocol.$_SERVER['HTTP_HOST'].$split[0].'action.php';
+		$url_link = Functions::getBaseUrl('action.php').'/action.php';
 		
 		$response['content'] = '<div id="dash_application">'.$myUser->getGravatarImg().'
 			    <ul class="user-infos">
@@ -140,7 +137,7 @@ function profil_plugin_page(){
 	}
 }
 
-Plugin::addCss('/css/style.css');
+Plugin::addCss('/css/style.css',true);
 Plugin::addHook("setting_menu", "profil_plugin_menu");  
 Plugin::addHook("setting_bloc", "profil_plugin_page"); 
 Plugin::addHook("action_post_case", "profil_plugin_actions");

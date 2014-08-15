@@ -12,7 +12,7 @@ Pré-requis
 - SQLite 3
 - [Librairie Wiring PI](https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/)
 
-Installation
+Installation manuelle
 ============
 
 Executez les commandes suivantes dans un shell :
@@ -25,6 +25,21 @@ Puis executez l'adresse web de yana dans un navigateur :
 
 Et suivez le formulaire d'installation.
 
+nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
+configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
+
+Installation automatique
+========================
+Si vous n'êtes pas à l'aise avec le monde linux et que vous n'avez pas trop bidouillé votre système jusqu'ici, vous pouvez utiliser la commande
+d'installation automatique gentiment proposé par maditnerd, tapez simplement :
+
+> sudo wget https://raw.githubusercontent.com/ldleman/yana-server/master/install.sh && sudo chmod +x install.sh && sudo ./install.sh
+
+Puis executez l'adresse web de yana dans un navigateur :
+
+`http://adresse.de.votre.rpi/yana-server`
+
+Et suivez le formulaire d'installation.
 nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
 configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
 

@@ -32,6 +32,16 @@ function story_plugin_page($_){
 	}
 }
 
+function plugin_story_check(){
+	require_once('Story.class.php');
+	require_once('Cause.class.php');
+	$time = new Cause();
+	$time->type = "time";
+	$time->value = date('i-h-d-m-Y');
+	Story::check($time);
+}
+
+
 function story_plugin_action(){
 	global $_,$myUser;
 	switch($_['action']){
@@ -44,6 +54,15 @@ function story_plugin_action(){
 		$causeManager->delete(array('story'=>$_['id']));
 		$effectManager->delete(array('story'=>$_['id']));
 	break;
+
+	case 'plugin_story_check':
+		require_once('Cause.class.php');
+		$vocal = new Cause();
+		$vocal = $vocal->getById($_['event']);
+		
+		Story::check($vocal);
+	break;
+
 	case 'SAVE_STORY':
 	
 		$causeManager = new Cause();
@@ -93,10 +112,29 @@ function story_plugin_action(){
 	}
 }
 
+
+
+
+
+function story_vocal_command(&$response,$actionUrl){
+	global $conf;
+	require_once('Cause.class.php');
+	$causeManager = new Cause();
+	$vocals = $causeManager->loadAll(array('type'=>'listen'));
+	foreach($vocals as $vocal){
+		$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$vocal->value,
+		'url'=>$actionUrl.'?action=plugin_story_check&type=talk&event='.$vocal->id,'confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
+		);
+	}
+}
+
 Plugin::addCss("/css/main.css"); 
 Plugin::addJs("/js/main.js"); 
 
 Plugin::addHook("menubar_pre_home", "story_plugin_menu");  
 Plugin::addHook("home", "story_plugin_page");  
-Plugin::addHook("action_post_case", "story_plugin_action"); 
+Plugin::addHook("action_post_case", "story_plugin_action");
+Plugin::addHook("vocal_command", "story_vocal_command");
+Plugin::addHook("cron", "plugin_story_check");
 ?>

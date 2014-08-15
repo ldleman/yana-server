@@ -17,6 +17,35 @@ function test_plugin_menu(&$menuItems){
 	$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=test"><i class="fa fa-codepen"></i> Modele</a>');
 }
 
+//Cette fonction ajoute une commande vocale
+function test_plugin_vocal_command(&$response,$actionUrl){
+	global $conf;
+	//Création de la commande vocale "Yana, commande de test" avec une sensibilité de 0.90 et un appel 
+	// vers l'url /action.php?action=test_plugin_vocal_test après compréhension de la commande
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' commande vocale de test',
+		'url'=>$actionUrl.'?action=test_plugin_vocal_test','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
+		);
+}
+
+//cette fonction comprends toutes les actions du plugin qui ne nécessitent pas de vue html
+function test_plugin_action(){
+	global $_,$conf;
+
+	//Action de réponse à la commande vocale "Yana, commande de test"
+	switch($_['action']){
+		case 'test_plugin_vocal_test':
+			$response = array('responses'=>array(
+										array('type'=>'talk','sentence'=>'Ma réponse à la commande de test est inutile.')
+											)
+								);
+			$json = json_encode($response);
+			echo ($json=='[]'?'{}':$json);
+		break;
+	}
+}
+
+
 //Cette fonction va generer une page quand on clique sur Modele dans menu
 function test_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='test'){
@@ -85,4 +114,6 @@ Plugin::addCss("/css/style.css");
 
 Plugin::addHook("menubar_pre_home", "test_plugin_menu");  
 Plugin::addHook("home", "test_plugin_page");  
+Plugin::addHook("action_post_case", "test_plugin_action");    
+Plugin::addHook("vocal_command", "test_plugin_vocal_command");
 ?>

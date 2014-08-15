@@ -59,7 +59,26 @@ class SQLiteEntity extends SQLite3
 
 	// GESTION SQL
 
+	/**
+	* Verifie l'existence de la table en base de donnée
+	* @author Valentin CARRUESCO
+	* @category manipulation SQL
+	* @param <String> créé la table si elle n'existe pas
+	* @return true si la table existe, false dans le cas contraire
+	*/
+	public function checkTable($autocreate = false){
+		$query = 'SELECT count(*) as numRows FROM sqlite_master WHERE type="table" AND name="'.MYSQL_PREFIX.$this->TABLE_NAME.'"';  
+		$statement = $this->query($query);
 
+		if($statement!=false){
+			$statement = $statement->fetchArray();
+			if($statement['numRows']==1){
+				$return = true;
+			}
+		}
+		if($autocreate && !$return) $this->create();
+		return $return;
+	}
 
 	/**
 	* Methode de creation de l'entité

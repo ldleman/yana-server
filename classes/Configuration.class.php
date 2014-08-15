@@ -2,7 +2,7 @@
 
 class Configuration extends SQLiteEntity{
 
-	protected $id,$key,$value,$confTab;
+	protected $id,$key,$value,$confTab,$namespace;
 	protected $TABLE_NAME = 'configuration';
 	protected $CLASS_NAME = 'Configuration';
 	protected $object_fields = 
@@ -25,7 +25,15 @@ class Configuration extends SQLiteEntity{
 		$confTab = array();
 
 		foreach($configs as $config){
-			$this->confTab[$config->getKey()] = $config->getValue();
+			
+			$ns = 'conf';
+			$key = $config->getKey();
+			$infos  = explode(':',$key);
+			if(count($infos) ==2){
+				list($ns,$key) = $infos;
+			}
+
+			$this->confTab[$ns][$key] = $config->getValue();
 		}
 
 		$_SESSION['configuration'] = serialize($this->confTab);
@@ -35,29 +43,29 @@ class Configuration extends SQLiteEntity{
 		}
 	}
 
-	public function get($key){
-		return (isset($this->confTab[$key])?$this->confTab[$key]:'');
+	public function get($key,$ns = 'conf'){
+		return (isset($this->confTab[$ns][$key])?$this->confTab[$ns][$key]:'');
 	}
 	
 
 
-	public function put($key,$value){
+	public function put($key,$value,$ns = 'conf'){
 		$configurationManager = new Configuration();
-		if (isset($this->confTab[$key])){
-			$configurationManager->change(array('value'=>$value),array('key'=>$key));
+		if (isset($this->confTab[$ns][$key])){
+			$configurationManager->change(array('value'=>$value),array('key'=>$ns.':'.$key));
 		} else {
-			$configurationManager->add($key,$value);	
+			$configurationManager->add($key,$value,$ns);	
 		}
-		$this->confTab[$key] = $value;
+		$this->confTab[$ns][$key] = $value;
 		unset($_SESSION['configuration']);
 	}
 
-	public function add($key,$value){
+	public function add($key,$value,$ns = 'conf'){
 		$config = new Configuration();
-		$config->setKey($key);
+		$config->setKey($ns.':'.$key);
 		$config->setValue($value);
 		$config->save();
-		$this->confTab[$key] = $value;
+		$this->confTab[$ns][$key] = $value;
 		unset($_SESSION['configuration']);
 	}
 	
@@ -80,7 +88,12 @@ class Configuration extends SQLiteEntity{
 	function setValue($value){
 		$this->value = $value;
 	}
-
+	function setNameSpace($ns){
+		$this->namespace = $ns;
+	}
+	function getNameSpace(){
+		return $this->namespace;
+	}
 
 
 

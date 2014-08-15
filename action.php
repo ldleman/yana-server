@@ -66,6 +66,8 @@ switch ($_['action']){
 		$response['token'] = $user->getToken();
 		echo json_encode($response);
 	break;
+
+	
 	
 	case 'user_add_user':
 	$right_toverify = isset($_['id']) ? 'u' : 'c';
@@ -214,11 +216,11 @@ else
 	break;
 
 	case 'crontab':
-	Plugin::callHook("cron", array());
+		Plugin::callHook("cron", array());
 	break;
 	
 	default:
-	Plugin::callHook("action_post_case", array());
+		Plugin::callHook("action_post_case", array());
 	break;
 
 
@@ -352,6 +354,28 @@ else
 	case 'CHANGE_GPIO_STATE':
 		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
 	break;
+
+	// Gestion des interfaces de seconde génération
+	case 'SUBSCRIBE_TO_CLIENT':
+		Action::write(function($_,&$response){
+			global $myUser,$conf;
+			if(!isset($_['ip'])) throw new Exception("IP invalide");
+			if(!isset($_['port']) || !is_numeric($_['port'])) throw new Exception("Port invalide");
+			
+			$url = Functions::getBaseUrl('action.php').'/action.php';
+			$client = new CLient($_['ip'],$_['port']);
+
+			Plugin::callHook("vocal_command", array(&$vocal,$url));
+			$conf =  array(
+				'VOCAL_ENTITY_NAME' => $conf->put('VOCAL_ENTITY_NAME','YANA'),
+				'SPEECH_COMMAND' => $vocal
+			);
+
+			if(!$client->suscribe($url,$myUser->getToken()))  throw new Exception("Appairage impossible");
+			if(!$client->configure($conf))  throw new Exception("Configuration impossible");
+		},array('user'=>'u'));
+	break;
+
 
 	default:
 		Plugin::callHook("action_post_case", array());
