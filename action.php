@@ -379,7 +379,7 @@ else
 
 	default:
 		Plugin::callHook("action_post_case", array());
-		return Gpio::write($_['pin'],$_['state'],true);
+		
 	break;
 }
 
