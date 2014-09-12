@@ -8,6 +8,8 @@
 	var dashboard_handle = null;
 	var dashboard_bloc = null;
 	var clickpoint = null;
+	var dashboard_handle_x = null;
+	var dashboard_handle_y = null;
 
 	(function($){
 
@@ -192,8 +194,12 @@
 
 						dashboard_bloc.addClass('dashboard_bloc_mouved');
 						dashboard_bloc.css('width',dashboard_bloc.width()+'px').css('position','absolute');
+						
+						var offset = dashboard_handle.offset();
+						dashboard_handle_x = e.pageX - offset.left;
+						dashboard_handle_y = e.pageY - offset.top;
 
-				
+					
 
 						$(this).on('mouseup',function(){
 							dashboard_bloc.removeAttr('style');
@@ -226,8 +232,8 @@
 								y = e.clientY + document.body.scrollTop  - document.body.clientTop 
 						    }
 
-							x = x - dashboard_bloc.width() ;
-							y = y - 65;
+							x = x - dashboard_bloc.width(); //dashboard_handle_x;
+							y = y - 69; //dashboard_handle_y;
 
 							dashboard_bloc.css('top',y+'px').css('left',x+'px');
 
