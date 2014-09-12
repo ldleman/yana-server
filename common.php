@@ -1,4 +1,5 @@
 <?php
+session_name('yana-server'); 
 session_start();
 $start=microtime(true);
 ini_set('display_errors','1');
@@ -77,6 +78,8 @@ $userManager = new User();
 
 //Instanciation du template
 $tpl = new RainTPL();
+
+
 //Definition des dossiers de template
 raintpl::configure("base_url", null );
 raintpl::configure("tpl_dir", './templates/'.$conf->get('DEFAULT_THEME').'/' );
