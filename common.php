@@ -60,8 +60,16 @@ $conf->getAll();
 //Inclusion des plugins  
 Plugin::includeAll($conf->get("DEFAULT_THEME"));
 
+
+$userManager = new User();
+
 if(isset($_SESSION['currentUser'])){
 	$myUser =unserialize($_SESSION['currentUser']);
+}else{
+	if(AUTO_LOGIN!=''){
+		$myUser = $userManager->exist(AUTO_LOGIN,'',true);
+		$_SESSION['currentUser'] = serialize($myUser);
+	}
 }
 if(!$myUser && isset($_COOKIE[$conf->get('COOKIE_NAME')])){
 	$users = User::getAllUsers();
@@ -74,7 +82,7 @@ if(!$myUser && isset($_COOKIE[$conf->get('COOKIE_NAME')])){
 	}
 }
 
-$userManager = new User();
+
 
 //Instanciation du template
 $tpl = new RainTPL();

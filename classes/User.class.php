@@ -34,10 +34,16 @@ class User extends SQLiteEntity{
 	}
 
 	//Teste la validité d'un compte à l'identification
-	function exist($login,$password){
+	function exist($login,$password,$force = false){
 		$userManager = new User();
 	    $newUser = false;
-	    $newUser = $userManager->load(array('login'=>$login,'password'=>sha1(md5($password))));
+	    if($force){
+	    	$newUser = $userManager->load(array('login'=>$login));
+	    }else{
+	    	$newUser = $userManager->load(array('login'=>$login,'password'=>sha1(md5($password))));
+	    }
+	   
+
 	    Plugin::callHook("action_pre_login", array(&$newUser));
 	   	if(is_object($newUser)) $newUser->loadRight();
 		return $newUser;
