@@ -216,8 +216,19 @@
 					$(document).on('mousemove',function(e){
 						if(dashboard_bloc != null && dashboard_handle!=null){
 
-							x = e.clientX - dashboard_bloc.width() ;
-							y = e.clientY - 65;
+							var x;
+							var y;
+							if(e.pageX || e.pageY){ 
+								x = e.pageX;
+								y = e.pageY;
+						    }else{
+								x = e.clientX + document.body.scrollLeft - document.body.clientLeft, 
+								y = e.clientY + document.body.scrollTop  - document.body.clientTop 
+						    }
+
+							x = x - dashboard_bloc.width() ;
+							y = y - 65;
+
 							dashboard_bloc.css('top',y+'px').css('left',x+'px');
 
 							$('.dashboard_placement').each(function(i,elem){
@@ -336,3 +347,6 @@
       if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
       return true;
     }
+
+
+
