@@ -119,16 +119,7 @@ class Plugin{
 		    $GLOBALS['hooks'][$hookName][] = $functionName;  
 		} 
 
-		public static function addCss($css,$force = false) {  
-			$bt =  debug_backtrace();
-			$module = isset($_GET['module'])?$_GET['module']:'';
-			$module = isset($_GET['section']) && $module==''?$_GET['section']:$module;
-			$module = isset($_GET['block']) && $module==''?$_GET['block']:$module;
-			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$css));
-			if(basename(dirname($bt[0]['file'])) == $module || $force)
-		    	$GLOBALS['hooks']['css_files'][] = $path;  
-		}
-
+		
 		public static function callCss(){
 			$return='';
 		    if(isset($GLOBALS['hooks']['css_files'])) { 
@@ -158,16 +149,26 @@ class Plugin{
 			return Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']))).'/'; 
 		}
 
-		public static function addJs($js,$force = false){  
+		public static function addCss($css,$force = false) {  
+			$bt =  debug_backtrace();
+			$module = isset($_GET['module'])?$_GET['module']:'';
+			$module = isset($_GET['section']) && $module==''?$_GET['section']:$module;
+			$module = isset($_GET['block']) && $module==''?$_GET['block']:$module;
+			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$css));
+			if(strcasecmp(basename(dirname($bt[0]['file'])), $module) == 0  || $force)
+		    	$GLOBALS['hooks']['css_files'][] = $path;  
+		}
 
+		
+		public static function addJs($js,$force = false){  
 			global $_;
 			$bt =  debug_backtrace();
-			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$js));
 			
 			$module = isset($_GET['module'])?$_GET['module']:'';
-			$module = isset($_GET['block'])?$_GET['block']:$module;
 			$module = isset($_GET['section']) && $module==''?$_GET['section']:$module;
-			if( strcasecmp(basename(dirname($bt[0]['file'])), $module) == 0  || $force)
+			$module = isset($_GET['block']) && $module==''?$_GET['block']:$module;
+			$path = Functions::relativePath(str_replace('\\','/',dirname(dirname(__FILE__))),str_replace('\\','/',dirname($bt[0]['file']).$js));
+			if(strcasecmp(basename(dirname($bt[0]['file'])), $module) == 0  || $force)
 		    	$GLOBALS['hooks']['js_files'][] = $path;  
 		}
 
