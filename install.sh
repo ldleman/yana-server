@@ -18,12 +18,6 @@ branch=master #Branche utilisee
 web_right=755 #Droits pour l'utilisateur web
 web_user=www-data #Utilisateur web
 
-
-
-
-
-
-
 ############### DEPENDANCES
 
 ########## BIBLIOTHEQUE LAZASS (version FR Standalone Abridged Unattended) ###################
@@ -352,6 +346,33 @@ installer() {
 		fi
 	}
 
+
+	check_package() {
+		console
+		dpkg -s "$webserver_to_check"|grep -q "Status: install ok installed" > /dev/null 2>&1
+		if [[ $? == 0 ]]
+			then 
+			package_isinstalled=1
+			messagebox "$webserver_to_check est installé"
+		else
+			messagebox "$webserver_to_check n'est pas installé"
+		fi
+		console
+	}
+
+	check_webserver() {
+		webserver_to_check="apache2"
+		check_package
+		webserver_to_check="nginx"
+		check_package
+		if [[ $package_isinstalled == 1 ]]
+			then
+			colecho "Un serveur web est déjà installé! Lighttpd/Sqlite/Php ne sera pas installé afin d'éviter des conflits !" $ERR 
+			continue_prompt
+		fi
+	}
+
+
 ##!!!! gitcloner() : Git Cloner
 ##>* $1 Program name (for showing it)
 ##>* $2 Repo url (ex: http://github.com/nameofuser/nameofrepo)
@@ -451,37 +472,44 @@ line_break
 sleep $wait
 jumpline
 
-#Installe lighttpd sqlite
-description "Installation de LIGHTTPD (serveur web) Whhaouuhh !"
-sleep $wait
 
-installer "lighttpd"
-rm -vf /var/www/index.lighttpd.html
+check_webserver
+if [[ $package_isinstalled != 1 ]]
+	then
+		#Installe lighttpd sqlite
+	description "Installation de LIGHTTPD (serveur web) Whhaouuhh !"
+	sleep $wait
 
-installer "php5-common"
-installer "php5-cgi"
-installer "php5"
+	install_webserver
+	installer "lighttpd"
+	rm -vf /var/www/index.lighttpd.html
 
-messagebox "Configuration de PHP ! Rock'n'roll !"
-lighty-enable-mod fastcgi-php
+	installer "php5-common"
+	installer "php5-cgi"
+	installer "php5"
 
-jumpline
-description "Installation de SQLite (base de donnees)"
-sleep $wait
-installer "sqlite3"
-installer "libsqlite3-0"
-installer "libsqlite3-dev"
-installer "php5-sqlite"
+	messagebox "Configuration de PHP ! Rock'n'roll !"
+	lighty-enable-mod fastcgi-php
 
-messagebox "On relance lighttpd afin qu'il integre tout ca!"
-service lighttpd force-reload
+	jumpline
+	description "Installation de SQLite (base de donnees)"
+	sleep $wait
+	installer "sqlite3"
+	installer "libsqlite3-0"
+	installer "libsqlite3-dev"
+	installer "php5-sqlite"
 
-line_break
-nlbecho "Vous venez d'installer"
-colecho "un serveur WEB avec PHP/SQLITE ! Yeeahh !" $OK
-line_break
+	messagebox "On relance lighttpd afin qu'il integre tout ca!"
+	service lighttpd force-reload
 
-jumpline
+	line_break
+	nlbecho "Vous venez d'installer"
+	colecho "un serveur WEB avec PHP/SQLITE ! Yeeahh !" $OK
+	line_break
+
+	jumpline
+
+fi
 
 description "Installation de git-core (client pour dépot GIT)"
 sleep $wait
