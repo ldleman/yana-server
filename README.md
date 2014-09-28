@@ -43,6 +43,12 @@ Et suivez le formulaire d'installation.
 nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
 configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
 
+Sécurité
+========
+Pour des raisons de sécurité, il est très fortement déconseillé d'ouvrir l'accès au serveur web de yana sur l'exterieur.
+Si vous le faites cependant, il est necessaire d'utiliser apache comme serveur http OU de configurer votre serveur http
+pour interdire l'accès au dossier /db
+
 Mise à jour
 ============
 
