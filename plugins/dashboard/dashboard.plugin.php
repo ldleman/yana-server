@@ -91,12 +91,11 @@ function dashboard_plugin_actions(){
 			require_once('Widget.class.php');
 			$response = array();
 			$widgetManager = new Widget();
-			$widgetManager = $widgetManager->getById($_['id']);
 
-			$widgetManager->cell = $_['sort']['cell'];
-			$widgetManager->column = $_['sort']['column'];
-			$widgetManager->save();
-
+			foreach($_['sort']['cells'] as $id=>$sort){
+				$widgetManager->change(array('cell'=>$sort['cell'],'column'=>$sort['column']),array('id'=>$id));
+			}
+			
 			echo json_encode($response);
 		break;
 

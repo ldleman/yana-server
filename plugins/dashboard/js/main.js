@@ -98,7 +98,9 @@ function plugin_dashboard_load_view(view){
 				},
 
 				onMove : function(widget,sort){
-				
+					
+					
+					
 					$.ajax({
 						dataType: "json",
 						url: 'action.php?action=MOVE_WIDGET',
