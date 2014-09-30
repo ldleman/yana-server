@@ -131,7 +131,7 @@ function dashboard_plugin_home(){
 		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()));
 		
 		
-		echo '<form style="margin:0;" action="action.php?action=DASH_ADD_VIEW" method="POST">';
+		echo '<form style="margin:0;text-align:center;" action="action.php?action=DASH_ADD_VIEW" method="POST">';
 		echo '<select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
 		foreach($dashes as $dash){
 			echo '<option '.($dash->default=='1'?'selected="selected"':'').' value="'.$dash->id.'">'.$dash->label.'</option>';
