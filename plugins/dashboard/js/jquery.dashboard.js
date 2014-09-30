@@ -67,6 +67,7 @@
         	setBlocModel : function(bloc,model) {
 				bloc.data('widget',model);
 				$.dashboard.setBlocData(bloc,model);
+				if(model.addToHead != null) bloc.find('.dashboard_bloc_head ul').prepend(model.addToHead);
 				if(model.onEdit != null) bloc.find('.dashboard_bloc_head ul').prepend('<li class="dashboard_setting_button"><i class="fa fa-wrench"></i></li>');
         	},
         	loadBlocData : function(bloc,url,data){
@@ -205,7 +206,7 @@
 					$( ".dashboard_column" ).sortable({
 						connectWith: ".dashboard_column",
 						handle: ".dashboard_bloc_head",
-						placeholder: "dashboard_placement",
+						placeholder: "dashboard_place_holder",
 						update: function( event, ui ){
 							console.log('update');
 							var sort = {};

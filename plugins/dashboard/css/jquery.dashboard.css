@@ -26,7 +26,7 @@
 }
 
 .dashboard_column .dashboard_placement{
- 	background-color: #e7e7e7;
+ 	background-color: #ffffff;
     cursor: pointer;
     margin: 0;
     opacity: 0.5;
@@ -34,16 +34,33 @@
     text-align: center;
     transition: opacity 0.2s linear 0s;
 }
+
 .dashboard_column .dashboard_placement:before{
-	content :  'Ajouter un widget';
+	content :  '+ Ajouter un widget';
+	color:#0093EE;
+}
+.dashboard_column .dashboard_place_holder{
+ 	background-color: #e7e7e7;
+    cursor: pointer;
+    opacity: 0.5;
+    text-align: center;
+    transition: opacity 0.2s linear 0s;
+    margin: 10px 0;
+    padding: 40px;
+}
+.dashboard_column .dashboard_place_holder:before{
+	content :  'D\00E9placer ici';
 	color:#6F6F6F;
 }
+
+
+
 .dashboard_column .dashboard_placement:hover,.dashboard_column .dashboard_placement.dragover{
 	opacity:1;
 }
 
 .dashboard_bloc{
-	margin:0 0 5px 0;
+	margin:0 0 10px 0;
 	padding:0px;
 	cursor: pointer;
 	z-index:100;
@@ -113,4 +130,13 @@
 }
 .dashboard_bloc_minified .dashboard_bloc_content{
 	display:none;
+}
+
+
+@media (max-width: 700px) {
+	#dashboard div.dashboard_column,#dashboard div.dashboard_column[style]{
+		width:100% !important;
+		min-width:100% !important;
+	}
+
 }

@@ -60,6 +60,15 @@ class Configuration extends SQLiteEntity{
 		unset($_SESSION['configuration']);
 	}
 
+	public function remove($key,$ns = 'conf'){
+		$configurationManager = new Configuration();
+		if (isset($this->confTab[$ns][$key])){
+			$configurationManager->delete(array('key'=>$ns.':'.$key));
+		}
+		unset($this->confTab[$ns][$key]);
+		unset($_SESSION['configuration']);
+	}
+	
 	public function add($key,$value,$ns = 'conf'){
 		$config = new Configuration();
 		$config->setKey($ns.':'.$key);
