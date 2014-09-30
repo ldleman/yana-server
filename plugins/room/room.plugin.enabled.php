@@ -164,8 +164,8 @@ function room_plugin_setting_page(){
 			if($myUser->can('room',$right_toverify)){
 				$room = new Room();
 				if ($right_toverify == "u"){$room = $room->load(array("id"=>$_['id']));}
-				$room->setName($_['nameRoom']);
-				$room->setDescription($_['descriptionRoom']);
+				$room->setName(ucfirst(strtolower($_['nameRoom']));
+				$room->setDescription(ucfirst(strtolower($_['descriptionRoom'])));
 				$room->save();
 			header('location:setting.php?section=room');	
 			}
