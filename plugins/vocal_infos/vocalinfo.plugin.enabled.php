@@ -8,93 +8,19 @@
 @description Permet la récuperations d'informations locales ou sur le web comme la météo, les séries TV, l'heure, la date et l'état des GPIO
 */
 
-
+define('VOCALINFO_COMMAND_FILE','cmd.json');
 
 function vocalinfo_vocal_command(&$response,$actionUrl){
 	global $conf;
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' quelle heure est il',
-		'url'=>$actionUrl.'?action=vocalinfo_hour','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' on est le combien',
-		'url'=>$actionUrl.'?action=vocalinfo_day','confidence'=>(('0.88'+$conf->get('VOCAL_SENSITIVITY'))+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' quel temps fait-il',
-		'url'=>$actionUrl.'?action=vocalinfo_meteo&today=1','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' météo semaine',
-		'url'=>$actionUrl.'?action=vocalinfo_meteo','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi a la télé',
-		'url'=>$actionUrl.'?action=vocalinfo_tv','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme série a la télée',
-		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Série','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme documentaire a la télée',
-		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Documentaire','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' ya quoi comme comédie a la télée',
-		'url'=>$actionUrl.'?action=vocalinfo_tv&category=Comédie','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' siffle',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=sifflement.wav','confidence'=>('0.94'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' concours de pet',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=pet.wav','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' mode développement',
-		'url'=>$actionUrl.'?action=vocalinfo_devmod','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' concours de rot',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=rot.wav','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
-		'url'=>$actionUrl.'?action=vocalinfo_sound&sound=poule.wav','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' liste des commandes',
-		'url'=>$actionUrl.'?action=vocalinfo_commands','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' diagnostique des G.P.I.O',
-		'url'=>$actionUrl.'?action=vocalinfo_gpio_diag','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' wikipedia exemple',
-		'url'=>$actionUrl.'?action=vocalinfo_wikipedia&word=exemple','confidence'=>('0.70'+$conf->get('VOCAL_SENSITIVITY'))
-		);
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' comment vas-tu',
-		'url'=>$actionUrl.'?action=vocalinfo_mood','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
-		);
 
-
-	
-/*
-	$preAction =  array(
-						array('type'=>'talk','sentence'=>'Emails en cours de traitement, merci de patienter')					
-				);
-
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
-		'preAction'=>$preAction,
-		'url'=>$actionUrl.'','confidence'=>('0.88'+$conf->get('VOCAL_SENSITIVITY'))
+	$commands = json_decode(file_get_contents(Plugin::path().'/'.VOCALINFO_COMMAND_FILE),true);
+	foreach($commands as $key=>$command){
+		if($command['disabled']=='true') continue;
+		$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$command['command'],
+		'url'=>$actionUrl.$command['url'],'confidence'=>($command['confidence']+$conf->get('VOCAL_SENSITIVITY'))
 		);
-	
-*/
+	}
 
 }
 
@@ -102,6 +28,18 @@ function vocalinfo_action(){
 	global $_,$conf;
 
 	switch($_['action']){
+	
+		case 'plugin_vocalinfo_save':
+			$commands = json_decode(file_get_contents(Plugin::path().'/'.VOCALINFO_COMMAND_FILE),true);
+			
+			foreach($_['config'] as $key=>$config){
+				$commands[$key]['confidence'] = $config['confidence'];
+				$commands[$key]['disabled'] = $config['disabled'];
+			}
+			file_put_contents(Plugin::path().'/'.VOCALINFO_COMMAND_FILE,json_encode($commands));
+			echo 'Enregistré';
+		break;
+	
 		case 'vocalinfo_plugin_setting':
 			$conf->put('plugin_vocalinfo_place',$_['weather_place']);
 			$conf->put('plugin_vocalinfo_woeid',$_['woeid']);
@@ -419,16 +357,6 @@ function vocalinfo_event(&$response){
 							);
 		}
 	}
-	/*
-	if(date('H:i')=='10:00'){
-		if(date('s')<45){
-		$response['responses']= array(
-								array('type'=>'sound','file'=>'poule.wav'),
-								array('type'=>'talk','sentence'=>'Il faut se lever!')
-							);
-		}
-	}
-	*/
 }
 
 function vocalinfo_plugin_preference_menu(){
@@ -439,10 +367,29 @@ function vocalinfo_plugin_preference_page(){
 	global $myUser,$_,$conf;
 	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='vocalinfo' )  ){
 		if($myUser!=false){
-	Plugin::addjs("/js/woeid.js");
+	Plugin::addjs("/js/woeid.js",true);
+	Plugin::addJs('/js/main.js',true);
+	$commands = json_decode(file_get_contents(Plugin::path().'/'.VOCALINFO_COMMAND_FILE),true);
+
 	?>
 
 		<div class="span9 userBloc">
+		<legend>Commandes</legend>
+	<table class="table table-striped table-bordered">
+		<tr>
+			<th></th>
+			<th>Commande</th>
+			<th>Confidence</th>
+		</tr>
+	<?php	foreach($commands as $key=>$command){ ?>
+			<tr class="command" data-id="<?php echo $key; ?>"><td><input type="checkbox" <?php echo $command['disabled']=='true'?'':'checked="checked"' ?> class="enabled"></td><td><?php echo $conf->get('VOCAL_ENTITY_NAME').' '.$command['command']; ?></td><td><input type="text" class="confidence" value="<?php echo $command['confidence']; ?>"/></td></tr>
+	<?php	}  ?>
+		<tr>
+			<td colspan="3"><div class="btn" onclick="plugin_vocalinfo_save();">Enregistrer</div></td>
+		</tr>
+	</table>
+		
+		
 			<form class="form-inline" action="action.php?action=vocalinfo_plugin_setting" method="POST">
 			<legend>Météo</legend>
 			    <label>Tapez le nom de votre ville et votre pays</label>
