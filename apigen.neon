@@ -1,0 +1,18 @@
+source:
+	- classes
+	
+destination: doc
+charset:
+	- UTF-8
+	
+todo: true
+download: true
+title: Yana documentation technique
+groups: none
+autocomplete:
+	- classes
+	- constants
+	- functions
+	- methods
+	- properties
+	

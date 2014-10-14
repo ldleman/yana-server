@@ -1,4 +1,11 @@
 <?php
+/**
+* Tool library wich provide many common functions to ease your life :)
+* 
+* @author Idleman
+* @category Tools
+* @license cc by nc sa
+*/
 
 class Functions
 {
@@ -6,12 +13,14 @@ class Functions
 	public $debug=0;
 
 	/**
-	 * Securise la variable utilisateur entrée en parametre
-	 * @author Valentin
-	 * @param<String> variable a sécuriser
-	 * @param<Integer> niveau de securisation
-	 * @return<String> variable securisée
-	 */
+	* Secure client var
+	* #### Example
+	* ```php
+	* Functions::secure($_GET['nonThrustedInput']);
+	* ```
+	* @param mixed var to secure
+	* @return mixed secured var
+	*/
 
 	public static function secure($var){
 		$response = '';
@@ -25,11 +34,13 @@ class Functions
 	}
 
 	/**
-	 * Recupere l'ip de l'internaute courant
-	 * @author Valentin
-	 * @return<String> ip de l'utilisateur
-	 */
-
+	* Get client IP
+	* #### Example
+	* ```php
+	* Functions::getIP();
+	* ```
+	* @return string client ip
+	*/
 	public static function getIP(){
 		if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];}
@@ -40,12 +51,15 @@ class Functions
 			}
 
 	/**
-	 * Retourne une version tronquée au bout de $limit caracteres de la chaine fournie
-	 * @author Valentin
-	 * @param<String> message a tronquer
-	 * @param<Integer> limite de caracteres
-	 * @return<String> chaine tronquée
-	 */
+	* Truncate string after 'x' characters and add '...'
+	* #### Example
+	* ```php
+	* echo Functions::truncate('This is incredibly long !!',5);
+	* ```
+	* @param string String to truncate
+	* @param int Max length before truncate
+	* @return string truncated string
+	*/
 	public static function truncate($msg,$limit){
 		if(mb_strlen($msg)>$limit){
 			$fin='…' ;
@@ -57,6 +71,15 @@ class Functions
 		return mb_substr($msg, 0, $nb).$fin;
 	}
 
+	/**
+	* Get script base url (require calling file path in parameter)
+	* #### Example
+	* ```php
+	* echo Functions::getBaseUrl('action.php');
+	* ```
+	* @param string calling file path
+	* @return string base url
+	*/
 	public static function getBaseUrl($from){
 
 		$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
@@ -66,6 +89,7 @@ class Functions
 
 	/**
 	 * Definis si la chaine fournie est existante dans la reference fournie ou non
+	 * @TODO delete that after verifying that is not used by plugin or core! 
 	 * @param unknown_type $string
 	 * @param unknown_type $reference
 	 * @return false si aucune occurence du string, true dans le cas contraire
@@ -80,6 +104,7 @@ class Functions
 	}
 
 	/**
+	 * @TODO delete that after verifying that is not used by plugin or core! 
 	 * Définis si la chaine passée en parametre est une url ou non
 	 */
 	public static function isUrl($url){
@@ -91,6 +116,7 @@ class Functions
 	}
 
 	/**
+	 * @TODO delete that after verifying that is not used by plugin or core! 
 	 * Définis si la chaine passée en parametre est une couleur héxadécimale ou non
 	 */
 	public static function isColor($color){
@@ -102,6 +128,7 @@ class Functions
 	}
 
 	/**
+	 * @TODO delete that after verifying that is not used by plugin or core! 
 	 * Définis si la chaine passée en parametre est un mail ou non
 	 */
 	public static function isMail($mail){
@@ -113,6 +140,7 @@ class Functions
 	}
 
 	/**
+	 * @TODO delete that after verifying that is not used by plugin or core! 
 	 * Définis si la chaine passée en parametre est une IP ou non
 	 */
 	public static function isIp($ip){
