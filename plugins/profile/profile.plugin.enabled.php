@@ -94,12 +94,12 @@ function profil_plugin_actions(){
 
 function profil_plugin_menu(){
 	global $_;
-	echo '<li '.((isset($_['section']) && $_['section']=='profil') || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=profil"><i class="fa fa-angle-right"></i> Profil</a></li>';
+	echo '<li '.((isset($_['section']) && $_['section']=='profil') ?'class="active"':'').'><a href="setting.php?section=profil"><i class="fa fa-angle-right"></i> Profil</a></li>';
 }
 
 function profil_plugin_page(){
 	global $myUser,$_,$conf;
-	if((isset($_['section']) && $_['section']=='profil') || !isset($_['section'])  ){
+	if((isset($_['section']) && $_['section']=='profil')  ){
 		if($myUser!=false){
 	?>
 

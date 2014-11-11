@@ -13,7 +13,7 @@
 
 function preference_plugin_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='preference'?'class="active"':'').'><a href="setting.php?section=preference"><i class="fa fa-angle-right"></i> Préférences</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='preference' || !isset($_['section']) ?'class="active"':'').'><a href="setting.php?section=preference"><i class="fa fa-angle-right"></i> Préférences</a></li>';
 }
 
 
@@ -35,7 +35,7 @@ function preference_plugin_page(){
 		
 		 <?php 
 		 
-		 if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='global' )  ){
+		 if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='global' )   || !isset($_['section'])){
 				if($myUser!=false){
 					?>
 
