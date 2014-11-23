@@ -4,3 +4,4 @@ database.db
 /templates/save-default
 /db/.database.db
 /log/.log.txt
+/dbversion

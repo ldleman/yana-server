@@ -12,6 +12,7 @@ include('RadioRelay.class.php');
 
 
 
+
 function radioRelay_plugin_setting_page(){
 	global $_,$myUser,$conf;
 	if(isset($_['section']) && $_['section']=='radioRelay' ){
@@ -122,50 +123,11 @@ function radioRelay_plugin_setting_page(){
 
 			}
 
-			function radioRelay_plugin_setting_menu(){
-				global $_;
-				echo '<li '.(isset($_['section']) && $_['section']=='radioRelay'?'class="active"':'').'><a href="setting.php?section=radioRelay"><i class="fa fa-angle-right"></i> Relais radio</a></li>';
-			}
-
-
-
-
-			function radioRelay_display($room){
-				global $_;
-
-
-				$radioRelayManager = new RadioRelay();
-				
-				$radioRelays = $radioRelayManager->loadAll(array('room'=>$room->getId()));
-
-				if(count($radioRelays)>0){
-				foreach ($radioRelays as $radioRelay) {
-
-					?>
-					<div class="flatBloc blue-color" style="max-width:30%;display:inline-block;vertical-align:top;">
-						<h3><?php echo $radioRelay->getName() ?></h3>	
-						<p><?php echo $radioRelay->getDescription() ?>
-						</p><ul>
-						<li>Code radio : <code><?php echo $radioRelay->getRadioCode() ?></code></li>
-						<li>Type : <span>Interrupteur radio</span></li>
-						<li>Emplacement : <span><?php echo $room->getName() ?></span></li>
-					</ul>
-				<?php  if(fileperms(Plugin::path().'radioEmission')!='36333'){ ?><div class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href='https://github.com/ldleman/yana-server#installation';">la doc</span> pour les régler</div><?php } ?>
-					
-					<a class="flatBloc" title="Activer le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=on"><i class="fa fa-hand-o-up icon-white"></i></a>
-					<?php if($radioRelay->getPulse()==0){ ?>
-						<a class="flatBloc" title="Désactiver le relais" href="action.php?action=radioRelay_change_state&engine=<?php echo $radioRelay->getId() ?>&amp;code=<?php echo $radioRelay->getRadioCode() ?>&amp;state=off"><i class="fa fa-hand-o-down icon-white"></i></a>
-					<?php } ?>
-				</div>
-				<?php
-				}
-			}else{
-				if(isset($_['id']))
-					echo '<div>Aucun relais radio ajouté dans la pièce <code>'.$room->getName().'</code>, <a href="setting.php?section=radioRelay&amp;room='.$room->getId().'">ajouter un relais radio ?</a></div>';
-			}
-
-
+		function radioRelay_plugin_setting_menu(){
+			global $_;
+			echo '<li '.(isset($_['section']) && $_['section']=='radioRelay'?'class="active"':'').'><a href="setting.php?section=radioRelay"><i class="fa fa-angle-right"></i> Relais radio</a></li>';
 		}
+
 
 		function radioRelay_vocal_command(&$response,$actionUrl){
 			global $conf;
@@ -178,105 +140,138 @@ function radioRelay_plugin_setting_page(){
 			}
 		}
 
+
+		function dash_radioRelay_plugin_menu(&$widgets){
+			$roomManager = new Room();
+			$rooms = $roomManager->populate('name');
+			foreach($rooms as $room){
+				$widgets[] = array(
+			    'uid'      => 'dash_radioRelay',
+			    'icon'     => 'fa fa-lightbulb-o',
+			    'label'    => 'Relai radio '.$room->getName(),
+			    'data'     => array('room'=>$room->getId(),'roomName'=>$room->getName()),
+			    'background' => '#182E7D', 
+			    'color' => '#fffffff',
+			    'onLoad'   => 'action.php?action=dash_radioRelay_plugin_load',
+				);
+			}
+		}
+
 		function radioRelay_action_radioRelay(){
 			global $_,$conf,$myUser;
 
-	//Mise à jour des droits
+			//Mise à jour des droits
 			$myUser->loadRight();
 
 			switch($_['action']){
-				case 'radioRelay_delete_radioRelay':
-				if($myUser->can('radio relais','d')){
+
+
+				case 'dash_radioRelay_plugin_load':
+					header('Content-type: application/json');
+					$response = array();
+					
+
+					$data = json_decode(html_entity_decode($_['widget']['data']),true);
+					$response['title'] = 'Relais radio '.$data['roomName'];
+
+					$response['content'] = '<div style="width: 100%">';
+					if(fileperms(Plugin::path().'radioEmission')!='36333')
+						$response['content'] .= '<div class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href=\'https://github.com/ldleman/yana-server#installation\';">la doc</span> pour les régler</div>';
+					
+					$response['content'] .= '<ul class="plugin_radiorelay_button">';
 					$radioRelayManager = new RadioRelay();
-					$radioRelayManager->delete(array('id'=>$_['id']));
-					header('location:setting.php?section=radioRelay');
-				}
-				else
-				{
-					header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
-				}
+
+					$radioRelays = $radioRelayManager->loadAll(array('room'=>$data['room']));
+					foreach($radioRelays as $radioRelay){
+						$response['content'] .='<li title="'.$radioRelay->getDescription()."\rCode :".$radioRelay->getRadioCode().'"><button  onclick="plugin_radiorelay_state('.$radioRelay->getId().',this);" class="btn plugin_radiorelay_button_switch '.($radioRelay->state?'btn-warning':'').'"><i class="fa fa-lightbulb-o"></i></button> '.$radioRelay->getName().'</li>';
+					}
+		
+					$response['content'] .='</ul></div>';
+
+					
+
+					echo json_encode($response);
+					exit(0);
 
 				break;
+
+
+				case 'radioRelay_change_state':
+					Action::write(function($_,&$response){
+						global $myUser,$conf;
+						$radioRelay = new RadioRelay();
+						$radioRelay = $radioRelay->getById($_['id']);
+
+						if(!is_object($radioRelay)) throw new Exception("Relais introuvable en base de données");
+						Event::emit('relay_change_state',array('relay'=>$radioRelay,'state'=>$_['state']));
+						
+						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' ';
+						//Gestion du mode pulse ou du simple on/off
+						$cmd .= $radioRelay->getPulse()==0 ? $_['state'] : 'pulse '.$radioRelay->getPulse();
+					
+						$radioRelay->state = $_['state'];
+						Functions::log('Launch system command : '.$cmd);
+						system($cmd,$out);
+						$radioRelay->save();
+
+						$response['responses']= 
+										array(
+											array(
+												'type'=>'talk',
+												'sentence'=>Personality::response('ORDER_CONFIRMATION')
+											)
+										)
+									;
+					},array('radio relais'=>'u'));
+
+				break;
+
+
+				case 'radioRelay_delete_radioRelay':
+					if($myUser->can('radio relais','d')){
+						$radioRelayManager = new RadioRelay();
+						$radioRelayManager->delete(array('id'=>$_['id']));
+						header('location:setting.php?section=radioRelay');
+					}
+					else
+					{
+						header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
+					}
+
+				break;
+
 				case 'radioRelay_plugin_setting':
-				$conf->put('plugin_radioRelay_emitter_pin',$_['emiterPin']);
-				$conf->put('plugin_radioRelay_emitter_code',$_['emiterCode']);
-				header('location: setting.php?section=preference&block=radioRelay');
+					$conf->put('plugin_radioRelay_emitter_pin',$_['emiterPin']);
+					$conf->put('plugin_radioRelay_emitter_code',$_['emiterCode']);
+					header('location: setting.php?section=preference&block=radioRelay');
 				break;
 
 				case 'radioRelay_add_radioRelay':
 
-				//Vérifie si on veut modifier ou ajouter un relai
-				$right_toverify = isset($_['id']) ? 'u' : 'c';
+					//Vérifie si on veut modifier ou ajouter un relai
+					$right_toverify = isset($_['id']) ? 'u' : 'c';
 
-				if($myUser->can('radio relais',$right_toverify)){
-					$radioRelay = new RadioRelay();
-					//Si modification on charge la ligne au lieu de la créer
-					if ($right_toverify == "u"){$radioRelay = $radioRelay->load(array("id"=>$_['id']));}
-					$radioRelay->setName($_['nameRadioRelay']);
-					$radioRelay->setDescription($_['descriptionRadioRelay']);
-					$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
-					$radioRelay->setRoom($_['roomRadioRelay']);
-					$radioRelay->setPulse($_['pulseRadioRelay']);
-					$radioRelay->save();
-					header('location:setting.php?section=radioRelay');
-				}
-				else
-				{
-					header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
-				}
+					if($myUser->can('radio relais',$right_toverify)){
+						$radioRelay = new RadioRelay();
+						//Si modification on charge la ligne au lieu de la créer
+						if ($right_toverify == "u"){$radioRelay = $radioRelay->load(array("id"=>$_['id']));}
+						$radioRelay->setName($_['nameRadioRelay']);
+						$radioRelay->setDescription($_['descriptionRadioRelay']);
+						$radioRelay->setRadioCode($_['radioCodeRadioRelay']);
+						$radioRelay->setRoom($_['roomRadioRelay']);
+						$radioRelay->setPulse($_['pulseRadioRelay']);
+						$radioRelay->save();
+						header('location:setting.php?section=radioRelay');
+					}
+					else
+					{
+						header('location:setting.php?section=radioRelay&error=Vous n\'avez pas le droit de faire ça!');
+					}
 
 
 				break;
 
-				case 'radioRelay_change_state':
-				global $_,$myUser;
-
-
-				if($myUser->can('radio relais','u')){
-
-					$radioRelay = new RadioRelay();
-					$radioRelay = $radioRelay->getById($_['engine']);
-					Event::emit('relay_change_state',array('relay'=>$radioRelay,'state'=>$_['state']));
-
-					if($radioRelay->getPulse()==0){
-						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' '.$_['state'];
-					}else{
-						$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->getRadioCode().' pulse '.$radioRelay->getPulse();
-					}
-				//TODO change bdd state
-					Functions::log('Launch system command : '.$cmd);
-					system($cmd,$out);
-					
-					if(!isset($_['webservice'])){
-						header('location:index.php?module=room&id='.$radioRelay->getRoom());
-					}else{
-						$affirmations = array(	'A vos ordres!',
-							'Bien!',
-							'Oui commandant!',
-							'Avec plaisir!',
-							'J\'aime vous obéir!',
-							'Avec plaisir!',
-							'Certainement!',
-							'Je fais ça sans tarder!',
-							'Avec plaisir!',
-							'Oui chef!');
-						$affirmation = $affirmations[rand(0,count($affirmations)-1)];
-						$response = array('responses'=>array(
-							array('type'=>'talk','sentence'=>$affirmation)
-							)
-						);
-
-						$json = json_encode($response);
-						echo ($json=='[]'?'{}':$json);
-					}
-				}else{
-					$response = array('responses'=>array(
-						array('type'=>'talk','sentence'=>'Je ne vous connais pas, je refuse de faire ça!')
-						)
-					);
-					echo json_encode($response);
-				}
-				break;
+		
 			}
 		}
 
@@ -317,18 +312,16 @@ function radioRelay_plugin_setting_page(){
 			}
 		}
 
-
+		Plugin::addCss('/css/style.css',true);
+		Plugin::addJs('/js/main.js',true);
 		Plugin::addHook("preference_menu", "radioRelay_plugin_preference_menu"); 
 		Plugin::addHook("preference_content", "radioRelay_plugin_preference_page"); 
-
-
 		Plugin::addHook("action_post_case", "radioRelay_action_radioRelay"); 
 
-		Plugin::addHook("node_display", "radioRelay_display");   
 		Plugin::addHook("setting_bloc", "radioRelay_plugin_setting_page");
 		Plugin::addHook("setting_menu", "radioRelay_plugin_setting_menu");  
 		Plugin::addHook("vocal_command", "radioRelay_vocal_command");
-
+		Plugin::addHook("widgets", "dash_radioRelay_plugin_menu");
 		//Anonnce que le plugin propose un évenement à l'application lors du changement d'etat (cf Event::emit('relay_change_state') dans le code )
 		Event::announce('relay_change_state', 'Changement de l\'état d\'un relais radio',array('code radio'=>'int','etat'=>'string'));
 

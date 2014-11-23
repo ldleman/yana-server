@@ -5,6 +5,8 @@ $start=microtime(true);
 ini_set('display_errors','1');
 
 error_reporting(E_ALL & ~E_NOTICE);
+//Calage de la date
+date_default_timezone_set('Europe/Paris'); 
 
 //Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
 //car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
@@ -25,7 +27,17 @@ if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
 	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
 }
 
+if(file_exists('db.json')){
 
+	if(!file_exists('dbversion')) file_put_contents('dbversion', '0');
+	$current = file_get_contents('dbversion');
+	$versions = json_decode(file_get_contents('db.json'),true);
+	
+	if($current<$versions[0]['version']){
+		Functions::alterBase($versions,$current);
+		file_put_contents('dbversion',$versions[0]['version']);
+	}
+}
 
 require_once('RainTPL.php');
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
@@ -51,8 +63,7 @@ if(file_exists('.tool.php')){
 	}
 }
 
-//Calage de la date
-date_default_timezone_set('Europe/Paris'); 
+
 
 $myUser = false;
 $conf = new Configuration();

@@ -71,6 +71,7 @@
 				if(model.onEdit != null) bloc.find('.dashboard_bloc_head ul').prepend('<li class="dashboard_setting_button"><i class="fa fa-wrench"></i></li>');
         	},
         	loadBlocData : function(bloc,url,data){
+        		
         		$.dashboard.setBlocData(bloc,{title:"Chargement",content:"<div class='dashboard_loading'></div>"});
         		
         		$.ajax({
@@ -116,6 +117,7 @@
                     
             var o = $.extend(defaults, options);
 				
+
             return this.each(function() {
 					
 
@@ -159,8 +161,12 @@
 							id : widget.id,
 							minified : widget.minified,
 							placement : '#dashboard_column_'+widget.column+' .dashboard_placement:eq(0)',
-							model : model
+							model : model,
+							widget : widget
 						});
+						if(o.onLoad!=null)
+							o.onLoad(model,widget);
+						
 					}
 
 					/*****************/
@@ -188,7 +194,7 @@
 						var widget = bloc.data('widget');
 						var model = o.models[$(this).val()];
 						$.dashboard.setBlocModel(bloc,model);
-		
+						
 						if(o.onCreate!=null){
 							o.onCreate(model,bloc,widget.column,widget.cell);
 						}

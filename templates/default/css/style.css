@@ -210,6 +210,11 @@ h1,h2,h3,h4{
   color:#222222;
   }
 
+
+.btn-warning i {
+    color: #fff;
+}
+
 #footer{
   color:#ffffff;
   text-align: center;

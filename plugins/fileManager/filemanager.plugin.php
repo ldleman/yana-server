@@ -11,9 +11,9 @@
 
 function plugin_filemanager_plugin_menu(&$menuItems){
 	global $_,$myUser;
-	if($myUser->can('file','r')){
+
 		$menuItems[] = array('sort'=>10,'content'=>'<a href="index.php?module=filemanager&title=Fichiers"><i class="fa fa-upload"></i> Fichiers</a>');
-	}
+	
 }
 
 

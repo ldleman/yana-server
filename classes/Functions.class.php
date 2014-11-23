@@ -226,5 +226,19 @@ class Functions
 		if($linecount>1000) unlink(LOG_FILE);
 		file_put_contents(LOG_FILE,$message,FILE_APPEND);
 	}
+
+	public static function alterBase($versions,$current){
+		$manager = new User();
+		foreach($versions as $version){
+			if($version['version'] <= $current) continue;
+
+			foreach($version['sql'] as $command){
+				$sql = str_replace(array('{PREFIX}'), array(MYSQL_PREFIX), $command);
+				Functions::log('Execute alter base query : '.$sql);
+				$manager->customQuery($sql);
+			}
+		}
+	}
+
 }
 ?>

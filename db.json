@@ -1,0 +1,8 @@
+[
+    {
+        "version": 1,
+        "sql": [
+            "ALTER TABLE {PREFIX}plugin_radioRelay ADD COLUMN state INT(11);"
+        ]
+    }
+]

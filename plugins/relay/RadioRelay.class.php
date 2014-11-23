@@ -1,14 +1,14 @@
 <?php
 
-/*
- @nom: RadioRelay
- @auteur: Idleman (idleman@idleman.fr)
- @description:  Classe de gestion des peices
- */
+/**
+* Classe de gestion des relais radio 433 mhz
+* @author: Idleman (idleman@idleman.fr)
+*/
 
 class RadioRelay extends SQLiteEntity{
 
 	protected $id,$name,$description,$radioCode,$room,$pulse;
+	public $state;
 	protected $TABLE_NAME = 'plugin_radioRelay';
 	protected $CLASS_NAME = 'RadioRelay';
 	protected $object_fields = 
@@ -17,6 +17,7 @@ class RadioRelay extends SQLiteEntity{
 		'name'=>'string',
 		'description'=>'string',
 		'radioCode'=>'int',
+		'state'=>'int',
 		'room'=>'int',
 		'pulse'=>'int'
 	);

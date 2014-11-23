@@ -15,12 +15,13 @@ $(document).ready(function(){
 
 function plugin_dashboard_load_view(view){
 	if($.trim(view) =='') return;
+
 	$.ajax({
 		dataType: "json",
 		url: 'action.php?action=GET_WIDGETS',
 		data : {dashboard : view},
 		success: function(response){
-			
+				
 				$('#dashboard').dashboard({
 				models: response.model ,
 				data: response.data ,
@@ -29,7 +30,7 @@ function plugin_dashboard_load_view(view){
 					$.ajax({
 						dataType: "json",
 						url: 'action.php?action=ADD_WIDGET',
-						data : {view : $('#dashboard_switch').val(),model : widget['uid'] , column:column,cell:cell},
+						data : {view : $('#dashboard_switch').val(),model : widget['uid'],data:widget['data'] , column:column,cell:cell},
 						method : 'POST',
 						success : function(response){
 							$.dashboard.setBlocData(bloc,response);
@@ -37,15 +38,19 @@ function plugin_dashboard_load_view(view){
 					});
 
 					if(widget.onLoad!=null){
+
 						$.ajax({
 							url : widget.onLoad,
-							data : {id:widget.id},
+							data : {id:widget.id,widget:{data:JSON.stringify(widget.data)}},
 							method : 'POST',
 							success : function(response){
 								$.dashboard.setBlocData(bloc,response);
 							}
 						});
 					}
+				},
+				onLoad : function(model,widget){
+					
 				},
 				onDelete : function(widget,bloc){
 					
@@ -98,9 +103,7 @@ function plugin_dashboard_load_view(view){
 				},
 
 				onMove : function(widget,sort){
-					
-					
-					
+				
 					$.ajax({
 						dataType: "json",
 						url: 'action.php?action=MOVE_WIDGET',

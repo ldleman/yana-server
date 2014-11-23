@@ -52,7 +52,7 @@ function dashboard_plugin_actions(){
 			$response = array();
 
 			$widget = new Widget();
-			$widget->data = json_encode(array());
+			$widget->data = json_encode($_POST['data']);
 			$widget->column = $_['column'];
 			$widget->cell = $_['cell'];
 			$widget->model = $_['model'];
@@ -137,8 +137,6 @@ function dashboard_plugin_home(){
 		$dashManager = new Dashboard();
 		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()));
 		
-		
-		
 		echo '<div style="margin:0;text-align:center;"><select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
 		foreach($dashes as $dash){
 			echo '<option '.($dash->default=='1'?'selected="selected"':'').' value="'.$dash->id.'">'.$dash->label.'</option>';
@@ -150,16 +148,11 @@ function dashboard_plugin_home(){
 
 
 
-
-
-
-
-
-
 function dashboard_plugin_preference_menu(){
 	global $_;
 	echo '<li '.(@$_['block']=='dashboard'?'class="active"':'').'><a  href="setting.php?section=preference&block=dashboard"><i class="fa fa-angle-right"></i> Dashboard</a></li>';
 }
+
 function dashboard_plugin_preference_page(){
 	global $myUser,$_,$conf;
 	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='dashboard' )  ){

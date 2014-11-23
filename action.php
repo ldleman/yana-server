@@ -1,5 +1,5 @@
 <?php
-if ($_GET['action'] == 'KNOCK_KNOCK_YANA') exit('1');
+if (isset($_GET['action']) && $_GET['action'] == 'KNOCK_KNOCK_YANA') exit('1');
 
 
 if(!ini_get('safe_mode')) @set_time_limit(0);
