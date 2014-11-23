@@ -20,8 +20,10 @@ $_ = array_map('Functions::secure',array_merge($_POST,$_GET));
 $error = '';
 require_once('constant.php');
 
+$versions = json_decode(file_get_contents('db.json'),true);
 
 if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
+	file_put_contents('dbversion',$versions[0]['version']);
 	header('location:install.php');
 }else{
 	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
