@@ -172,8 +172,8 @@ if(isset($_POST['install'])){
 					list($o,$g) = explode(':',$key);
 					$owner = posix_getpwuid(fileowner($file));
 					$group = posix_getgrgid(filegroup($file));
-					if($owner['name']!=$o || $group['name'] !=$g) $tests['warning'][] = 'Le fichier <strong>'.$file.'</strong> devrait avoir <i>'.$o.'</i> comme proprietaire et <i>'.$g.'</i> comme groupe, <strong>'.$file.'</strong> pourrait ne pas fonctionner comme attendu';
-				}
+				  if($owner['name']!=$o || $group['name'] !=$g) $tests['warning'][] = 'Le fichier <strong>'.$path_yana.$file.'</strong> devrait avoir <i>'.$o.'</i> comme proprietaire et <i>'.$g.'</i> comme groupe, <strong>'.$path_yana.$file.'</strong> pourrait ne pas fonctionner comme attendu, pour résoudre le problème, tapez la commande <code>sudo chown root:www-data '.$path_yana.$file.' && sudo chmod +s '.$path_yana.$file.'</code>';
+        }
 			}
 		}else{
 			$tests['warning'][] = 'Impossible de vérifier les droits sur les fichiers sensibles, librairie posix manquante';
