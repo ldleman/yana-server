@@ -27,6 +27,16 @@ class Widget extends SQLiteEntity{
 		$this->dashboard = 0;
 	}
 
+	public function data($data=null){
+		if(empty($data)){
+			$array = json_decode($this->data,true);
+			return is_array($array)?$array:array();
+		}else{
+			$this->data = json_encode($data);
+		}
+	}
+
+
 }
 
 ?>

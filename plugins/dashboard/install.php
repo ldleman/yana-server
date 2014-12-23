@@ -7,6 +7,35 @@ require_once('Widget.class.php');
 $entity = new Dashboard();
 $entity->create();
 $entity->user = $myUser->getId();
+$entity->label = "Cuisine";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Salon";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Chambre";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Garage";
+$entity->default = 0;
+$entity->save();
+
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
 $entity->label = "Général";
 $entity->default = 1;
 $entity->save();
@@ -17,18 +46,8 @@ $entity = new Widget();
 $entity->create();
 
 
-$s1 = New Section();
-$s1->setLabel('dashboard');
-$s1->save();
+Section::add('dashboard');
 
-$r1 = New Right();
-$r1->setSection($s1->getId());
-$r1->setRead('1');
-$r1->setDelete('1');
-$r1->setCreate('1');
-$r1->setUpdate('1');
-$r1->setRank('1');
-$r1->save();
 
 
 $entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("id", "model", "data", "cell", "column", "minified","dashboard") VALUES (1,	\'dash_profil\',	\'null\',	\'0\',	\'0\',	\'\',\''.$dashboard.'\');');

@@ -1,5 +1,34 @@
-//fonction appelée depuis la fonction squelette_plugin_menu de la page squelette.plugin.[enabled/disabled].php 
-function squelette_javascript(){
-	alert('Cette fonction ne sert à rien :p');
+$(document).ready(function(){
+
+
+
+});
+
+//Ajout / Modification
+function plugin_wirerelay_save(element){
+
+ 	var data = $(element).closest('fieldset').toData();
+ 	data.action = 'wireRelay_save_wireRelay'
+	$.action(data,
+		function(response){
+			alert(response.message);
+			location.reload();
+		}
+	);
 }
 
+//Supression
+function plugin_wirerelay_delete(id,element){
+
+	if(!confirm('ÃŠtes vous sÃ»r de vouloir faire Ã§a ?')) return;
+	$.action(
+		{
+			action : 'wireRelay_delete_wireRelay', 
+			id: id
+		},
+		function(response){
+			$(element).closest('tr').fadeOut();
+		}
+	);
+
+}

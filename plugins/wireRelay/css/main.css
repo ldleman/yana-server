@@ -1,0 +1,8 @@
+/* Fichier de style CSS réservé à votre plugin*/
+.wireRelayLight{
+	font-size: 30px;
+}
+
+.wireRelayLight.wireRelayLight-active{
+	color:yellow;
+}

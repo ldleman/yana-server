@@ -108,7 +108,6 @@ class User extends SQLiteEntity{
 	}
 
 	function can($section,$selectedRight){
-
 		return (!isset($this->rights[$section])?false:$this->rights[$section][$selectedRight]);
 	}
 

@@ -11,7 +11,7 @@ class Gpio{
 	const GPIO_DEFAULT_PATH = '/usr/local/bin/gpio';
 	
 	private static function system($cmd){
-		//var_dump($cmd);
+		Functions::log('Launch system command : '.$cmd);
 		return system($cmd);
 	}
 	
@@ -25,6 +25,12 @@ class Gpio{
 	public static function read($pin,$automode = false){
 		if($automode) self::mode($pin,'in');
 		return self::system(self::GPIO_DEFAULT_PATH.' read '.$pin);
+	}
+	public static function pulse($miliseconds,$state){
+		Gpio::write($wireRelay->getPin(),$state);
+		usleep($miliseconds);
+		$state = $state == 1 ? 0 : 1;
+		Gpio::write($wireRelay->getPin(),$state);
 	}
 }
 ?>

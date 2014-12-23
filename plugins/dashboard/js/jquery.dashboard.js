@@ -195,9 +195,9 @@
 						var model = o.models[$(this).val()];
 						$.dashboard.setBlocModel(bloc,model);
 						
-						if(o.onCreate!=null){
+						if(o.onCreate!=null)
 							o.onCreate(model,bloc,widget.column,widget.cell);
-						}
+						
 					});
 
 					
@@ -214,7 +214,7 @@
 						handle: ".dashboard_bloc_head",
 						placeholder: "dashboard_place_holder",
 						update: function( event, ui ){
-							console.log('update');
+							
 							var sort = {};
 							sort.column = $('.dashboard_column').index(this);
 							sort.cell = ui.item.index();
@@ -238,13 +238,21 @@
 					$(document).on('mousedown','.dashboard_setting_button',function(e){
 						var bloc = $(this).parent().parent().parent();
 						var widget = bloc.data('widget');
+						widget.id = bloc.attr('id').replace('dashboard_bloc_','');
+						bloc.data('widget',widget);
+
+
 						bloc.find('.dashboard_bloc_content').load(widget.onEdit,{id:widget.id},function(){
 							
 							bloc.find('.dashboard_bloc_content').append('<div class="dashboard_setting_form_options"></div>');
 
+							var options = bloc.find('.dashboard_bloc_content .dashboard_setting_form_options');
+						
 							if(widget.onSave!=null)
-								bloc.find('.dashboard_bloc_content .dashboard_setting_form_options').append('<div class="dashboard_setting_form_options"><button class="dashboard_setting_save_button">Enregistrer</button> ');
-							bloc.find('.dashboard_bloc_content .dashboard_setting_form_options').append('<button class="dashboard_setting_cancel_button">Annuler</button>');
+								options.append('<button class="dashboard_setting_save_button">Enregistrer</button> ');
+							
+							options.append('<button class="dashboard_setting_cancel_button">Annuler</button>');
+							
 							
 						});
 						e.preventDefault();

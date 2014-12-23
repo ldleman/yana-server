@@ -1,76 +1,30 @@
 <?php
 
-/*
- @nom: WireRelay
- @auteur: Idleman (idleman@idleman.fr)
- @description:  Classe de gestion des relais filaires
- */
+/**
+* Classe de gestion SQL de la table wirerelay liée à la classe Wirerelay 
+* @author: valentin carruesco <idleman@idleman.fr>
+*/
 
-class WireRelay extends SQLiteEntity{
+//La classe Wirerelay hérite de SQLiteEntity qui lui ajoute des méthode de gestion de sa table en bdd (save,delete...)
+class Wirerelay extends SQLiteEntity{
 
-	protected $id,$name,$description,$pin,$room,$pulse;
-	protected $TABLE_NAME = 'plugin_wireRelay';
-	protected $CLASS_NAME = 'WireRelay';
+	public $name,$description,$pin,$room,$pulse,$id,$offCommand,$onCommand; //Pour rajouter des champs il faut ajouter les variables ici...
+	protected $TABLE_NAME = 'plugin_wirerelay'; 	//Pensez à mettre le nom de la table sql liée a cette classe
+	protected $CLASS_NAME = 'wirerelay'; //Nom de la classe courante
 	protected $object_fields = 
-	array(
-		'id'=>'key',
+	array( // Ici on définit les noms des champs sql de la table et leurs types
 		'name'=>'string',
+		'onCommand'=>'string',
+		'offCommand'=>'string',
 		'description'=>'string',
 		'pin'=>'int',
 		'room'=>'int',
-		'pulse'=>'int'
+		'pulse'=>'int',
+		'id'=>'key'
 	);
 
 	function __construct(){
 		parent::__construct();
-	}
-
-	function setId($id){
-		$this->id = $id;
-	}
-	
-	function getId(){
-		return $this->id;
-	}
-
-	function getName(){
-		return $this->name;
-	}
-
-	function setName($name){
-		$this->name = $name;
-	}
-
-	function getDescription(){
-		return $this->description;
-	}
-
-	function setDescription($description){
-		$this->description = $description;
-	}
-
-	function getPin(){
-		return $this->pin;
-	}
-
-	function setPin($pin){
-		$this->pin = $pin;
-	}
-
-	function getRoom(){
-		return $this->room;
-	}
-
-	function setRoom($room){
-		$this->room = $room;
-	}
-
-	function getPulse(){
-		return $this->pulse;
-	}
-
-	function setPulse($pulse){
-		$this->pulse = $pulse;
 	}
 
 }

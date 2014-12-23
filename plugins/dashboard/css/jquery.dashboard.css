@@ -19,15 +19,11 @@
 .dashboard_setting_form_options button{
 	border:1px solid #cecece;
 	background: #E8E8E8;
-	color:#958888;
+	color:#625D5D;
 	padding:3px 5px;
 	border-radius: 3px;
-	opacity:0.5;
-	transition:opacity 0.2s linear;
 }
-.dashboard_setting_form_options button:hover{
-	opacity:1;
-}
+
 
 .dashboard_column .dashboard_placement{
  	background-color: #ffffff;

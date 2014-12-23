@@ -8,7 +8,6 @@
 $(document).ready(function(){
 	var view = $('#dashboard_switch').val();
 	
-	
 	plugin_dashboard_load_view(view);
 	
 });
@@ -33,21 +32,22 @@ function plugin_dashboard_load_view(view){
 						data : {view : $('#dashboard_switch').val(),model : widget['uid'],data:widget['data'] , column:column,cell:cell},
 						method : 'POST',
 						success : function(response){
+
 							$.dashboard.setBlocData(bloc,response);
+							if(widget.onLoad!=null){
+								$.ajax({
+									url : widget.onLoad,
+									data : {id:widget.id},
+									method : 'POST',
+									success : function(response2){
+										$.dashboard.setBlocData(bloc,response2);
+									}
+								});
+							}
 						}
 					});
 
-					if(widget.onLoad!=null){
-
-						$.ajax({
-							url : widget.onLoad,
-							data : {id:widget.id,widget:{data:JSON.stringify(widget.data)}},
-							method : 'POST',
-							success : function(response){
-								$.dashboard.setBlocData(bloc,response);
-							}
-						});
-					}
+					
 				},
 				onLoad : function(model,widget){
 					

@@ -1,12 +1,16 @@
 <?php
-$table = new WireRelay();
+/* 
+	Le code contenu dans cette page ne sera éxecuté qu'à la désactivation du plugin 
+	Vous pouvez donc l'utiliser pour supprimer des tables SQLite, des dossiers, ou executer une action
+	qui ne doit se lancer qu'à la désinstallation ex :
+*/
+require_once('Wirerelay.class.php');
+require_once('plugins/dashboard/Widget.class.php');
+
+$table = new Wirerelay();
 $table->drop();
+Section::remove('plugin_wirerelay');
 
-$table_section = new Section();
-$id_section = $table_section->load(array("label"=>"relais filaire"))->getId();
-$table_section->delete(array('label'=>'relais filaire'));
-
-$table_right = new Right();
-$table_right->delete(array('section'=>$id_section));
-
+$dash = new Widget();
+$dash->delete(array('model'=>'dash_wirerelay'));
 ?>
