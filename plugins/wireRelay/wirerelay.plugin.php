@@ -1,6 +1,6 @@
 <?php
 /*
-@name Wirerelay
+@name WireRelay
 @author Valentin CARRUESCO <idleman@idleman.fr>
 @link Http://blog.idleman.fr
 @licence Cc -by-nc-sa
@@ -9,7 +9,7 @@
 */
 
 //On appelle les entités de base de données
-include('Wirerelay.class.php');
+include('WireRelay.class.php');
 
 
 //Cette fonction ajoute une commande vocale
@@ -35,12 +35,12 @@ function wirerelay_plugin_action(){
 		case 'wireRelay_save_wireRelay':
 			Action::write(
 				function($_,&$response){
-					$wireRelayManager = new Wirerelay();
+					$wireRelayManager = new WireRelay();
 
 					if(empty($_['nameWireRelay'])) throw new Exception("Le nom est obligatoire");
 					if(!is_numeric($_['pinWireRelay']))  throw new Exception("Le PIN GPIO est obligatoire et doit être numerique");
 
-					$wireRelay = !empty($_['id']) ? $wireRelayManager->getById($_['id']): new Wirerelay();
+					$wireRelay = !empty($_['id']) ? $wireRelayManager->getById($_['id']): new WireRelay();
 					$wireRelay->name = $_['nameWireRelay'];
 					$wireRelay->description = $_['descriptionWireRelay'];
 					$wireRelay->pin = $_['pinWireRelay'];
@@ -48,6 +48,7 @@ function wirerelay_plugin_action(){
 					$wireRelay->pulse = $_['pulseWireRelay'];
 					$wireRelay->onCommand = $_['onWireRelay'];
 					$wireRelay->offCommand = $_['offWireRelay'];
+					$wireRelay->icon = $_['iconWireRelay'];
 					$wireRelay->save();
 					$response['message'] = 'Relais enregistré avec succès';
 				},
@@ -116,7 +117,7 @@ function wirerelay_plugin_action(){
 					if(empty($data['relay'])){
 						$content = 'Choisissez un relais en cliquant sur l \'icone <i class="fa fa-wrench"></i> de la barre du widget';
 					}else{
-						$relay = new Wirerelay();
+						$relay = new WireRelay();
 						$relay = $relay->getById($data['relay']);
 						
 						$response['title'] = $relay->name;
@@ -144,14 +145,14 @@ function wirerelay_plugin_action(){
 							}
 							.relay_pane li h2 {
 							    color: #ffffff;
-							    font-size: 20px;
+							    font-size: 16px;
 							    margin: 0 0 5px;
 							    padding: 0;
 							    cursor:default;
 							}
 							.relay_pane li h1 {
 							    color: #B6BED9;
-							    font-size: 15px;
+							    font-size: 14px;
 							    margin: 0 0 10px;
 							    padding: 0;
 							    cursor:default;
@@ -164,19 +165,33 @@ function wirerelay_plugin_action(){
 							.wirerelay-case i{
 								color:#8b95b8;
 								font-size:50px;
-								
 								transition: all 0.2s ease-in-out;
 							}
 							.wirerelay-case.active i{
 								color:#FFED00;
 								text-shadow: 0 0 10px #ffdc00;
 							}
+							.wirerelay-case.active i.fa-power-off{
+								color:#BDFF00;
+								text-shadow: 0 0 10px #4fff00;
+							}
+
+							.wirerelay-case.active i.fa-flash{
+								color:#FFFFFF;
+								text-shadow: 0 0 10px #00FFD9;
+							}
+
+							.wirerelay-case.active i.fa-gears{
+								color:#FFFFFF;
+								text-shadow: 0 0 10px #FF00E4;
+							}
+
 						</style>
 						
 						<!-- CSS -->
 						<ul class="relay_pane">
 								<li class="wirerelay-case '.(Gpio::read($relay->pin,true)?'active':'').'" onclick="plugin_wirerelay_change(this);" style="text-align:center;">
-									<i title="On/Off" class="fa fa-lightbulb-o"></i>
+									<i title="On/Off" class="'.$relay->icon.'"></i>
 								</li>
 								<li>
 									<h2>'.$relay->description.'</h2>
@@ -215,7 +230,7 @@ function wirerelay_plugin_action(){
 			$widget = $widget->getById($_['id']);
 			$data = $widget->data();
 		
-			$relayManager = new Wirerelay();
+			$relayManager = new WireRelay();
 			$relays = $relayManager->populate();
 
 			$content = '<h3>Relais ciblé</h3>';
@@ -274,11 +289,13 @@ function wireRelay_plugin_setting_page(){
 		$rooms = $roomManager->populate();
 		$selected =  new WireRelay();
 		$selected->pulse = 0;
+		$selected->icon = 'fa fa-flash';
 
 		//Si on est en mode modification
 		if (isset($_['id']))
 			$selected = $wireRelayManager->getById($_['id']);
 			
+
 		?>
 
 		<div class="span9 userBloc">
@@ -296,7 +313,19 @@ function wireRelay_plugin_setting_page(){
 				    <input type="text" id="nameWireRelay" value="<?php echo $selected->name; ?>" placeholder="Lumiere Canapé…"/>
 				    
 				    <label for="descriptionWireRelay">Description</label>
-				    <input type="text" name="descriptionWireRelay" value="<?php echo $selected->description; ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
+				    <input type="text"  value="<?php echo $selected->description; ?>" id="descriptionWireRelay" placeholder="Relais sous le canapé…" />
+
+					<label for="iconWireRelay">Icone</label>
+				    <input type="hidden"  value="<?php echo $selected->icon; ?>" id="iconWireRelay"  />
+					
+					<div>
+						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-lightbulb-o');" class="fa fa-lightbulb-o btn <?php echo $selected->icon=='fa fa-lightbulb-o'?'btn-success':''; ?>"></i>
+						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-power-off');" class="fa fa-power-off btn <?php echo $selected->icon=='fa fa-power-off'?'btn-success':''; ?>"></i>
+						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-flash');" class="fa fa-flash btn <?php echo $selected->icon=='fa fa-flash'?'btn-success':''; ?>"></i>
+						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-gears');" class="fa fa-gears btn <?php echo $selected->icon=='fa fa-gears'?'btn-success':''; ?>"></i>
+						 
+						  
+					</div>
 
 				    <label for="onWireRelay">Commande vocale "ON" associée</label>
 				    <?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, <input type="text" id="onWireRelay" value="<?php echo $selected->onCommand; ?>" placeholder="Allume la lumière, Ouvre le volet…"/>

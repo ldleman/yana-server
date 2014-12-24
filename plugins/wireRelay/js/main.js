@@ -4,14 +4,24 @@ $(document).ready(function(){
 
 });
 
+
+
+
+function plugin_wirerelay_set_icon(element,icon){
+	$(element).parent().find('i').removeClass('btn-success');
+	$('#iconWireRelay').val(icon);
+	$(element).addClass('btn-success');
+}
+
 //Ajout / Modification
 function plugin_wirerelay_save(element){
-
- 	var data = $(element).closest('fieldset').toData();
+	var form = $(element).closest('fieldset');
+ 	var data = form.toData();
  	data.action = 'wireRelay_save_wireRelay'
 	$.action(data,
 		function(response){
 			alert(response.message);
+			form.find('input').val('');
 			location.reload();
 		}
 	);
