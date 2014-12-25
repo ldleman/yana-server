@@ -5,9 +5,9 @@
 	qui ne doit se lancer qu'à l'installation ex :
 	
 */
-	require_once(dirname(__FILE__).'/Wirerelay.class.php');
+	require_once(dirname(__FILE__).'/WireRelay.class.php');
 	
-	$table = new Wirerelay();
+	$table = new WireRelay();
 	$table->create();
 
 	//Creation d'une section plugin_wirerelay sur laquelle on pourra gerer des droits (creation(c),lecture(r), modification(u), suppression(d))

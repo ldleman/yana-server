@@ -4,10 +4,10 @@
 	Vous pouvez donc l'utiliser pour supprimer des tables SQLite, des dossiers, ou executer une action
 	qui ne doit se lancer qu'à la désinstallation ex :
 */
-require_once(dirname(__FILE__).'/Wirerelay.class.php');
+require_once(dirname(__FILE__).'/WireRelay.class.php');
 require_once(dirname(__FILE__).'/../dashboard/Widget.class.php');
 
-$table = new Wirerelay();
+$table = new WireRelay();
 $table->drop();
 Section::remove('plugin_wirerelay');
 
