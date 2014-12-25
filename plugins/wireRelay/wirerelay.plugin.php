@@ -280,7 +280,7 @@ function wirerelay_plugin_change_state($engine,$state){
 	if($wireRelay->pulse==0){
 		Gpio::write($wireRelay->pin,$state);
 	}else{
-		Gpio::pulse($wireRelay->pulse,1);
+		Gpio::pulse($wireRelay->pin,$wireRelay->pulse,1);
 	}
 }
 

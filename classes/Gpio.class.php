@@ -26,11 +26,11 @@ class Gpio{
 		if($automode) self::mode($pin,'in');
 		return self::system(self::GPIO_DEFAULT_PATH.' read '.$pin);
 	}
-	public static function pulse($miliseconds,$state){
-		Gpio::write($wireRelay->getPin(),$state);
+	public static function pulse($pin,$miliseconds,$state){
+		Gpio::write($pin,$state);
 		usleep($miliseconds);
 		$state = $state == 1 ? 0 : 1;
-		Gpio::write($wireRelay->getPin(),$state);
+		Gpio::write($pin,$state);
 	}
 }
 ?>

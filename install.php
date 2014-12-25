@@ -129,7 +129,7 @@ if(isset($_POST['install'])){
       global $myUser;
       $myUser = $user;
 
-    	Plugin::enabled('relay-relay');
+    	Plugin::enabled('radioRelay-radioRelay');
       Plugin::enabled('wireRelay-wireRelay');
     	Plugin::enabled('vocal_infos-vocalinfo');
     	Plugin::enabled('room-room');

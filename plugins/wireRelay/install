@@ -10,6 +10,7 @@
 	$table = new WireRelay();
 	$table->create();
 
+
 	//Creation d'une section plugin_wirerelay sur laquelle on pourra gerer des droits (creation(c),lecture(r), modification(u), suppression(d))
 	Section::add('plugin_wirerelay','Section de gestion des relais filaires');
 	

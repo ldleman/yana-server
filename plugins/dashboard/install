@@ -1,0 +1,130 @@
+<?php
+
+global $myUser;
+require_once(dirname(__FILE__).'/Dashboard.class.php');
+require_once(dirname(__FILE__).'/Widget.class.php');
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Cuisine";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Salon";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Chambre";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Garage";
+$entity->default = 0;
+$entity->save();
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Système";
+$entity->default = 0;
+$entity->save();
+$system = $entity->id;
+
+
+$entity = new Dashboard();
+$entity->create();
+$entity->user = $myUser->getId();
+$entity->label = "Général";
+$entity->default = 1;
+$entity->save();
+
+$dashboard = $entity->id;
+
+$entity = new Widget();
+$entity->create();
+
+
+Section::add('dashboard');
+
+
+
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_profil\',	\'null\',	\'0\',	\'0\',	\'\',\''.$dashboard.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_system\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_network\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_hdd\',	\'null\',	\'3\',	\'1\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_disk\',	\'null\',	\'0\',	\'1\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_gpio\',	\'null\',	\'1\',	\'0\',	\'\',\''.$dashboard.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_services\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_users\',	\'null\',	\'0\',	\'0\',	\'\',\''.$system.'\');');
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\',\''.$dashboard.'\');');
+
+$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_vocal\',	\'null\',	\'1\',	\'2\',	\'\',\''.$dashboard.'\');');
+
+
+
+	if(Plugin::exist('wireRelay')){
+		require_once(dirname(__FILE__).'/../wireRelay/wireRelay.class.php');
+		$table = new WireRelay();
+		$table->create();
+
+		$table->name = 'Lumiere salon';
+		$table->description = 'Lumière d\'exemple';
+		$table->pin = 0;
+		$table->room = 1;
+		$table->pulse = 0;
+		$table->oncommand = 'Allume le salon';
+		$table->offcommand = 'Eteinds le salon';
+		$table->icon = 'fa fa-lightbulb-o';
+		$table->save();
+
+		$wr1 = $table->id;
+
+		$table = new WireRelay();
+		$table->name = 'Prise TV';
+		$table->description = 'Prise d\'exemple';
+		$table->pin = 2;
+		$table->room = 1;
+		$table->pulse = 50;
+		$table->oncommand = 'Allume la télé';
+		$table->offcommand = 'Eteinds la télé';
+		$table->icon = 'fa fa-power-off';
+		$table->save();
+
+		$wr2 = $table->id;
+
+		$table = new WireRelay();
+		$table->name = 'Stores salon';
+		$table->description = 'Stores d\'exemple';
+		$table->pin = 1;
+		$table->room = 1;
+		$table->pulse = 120;
+		$table->oncommand = 'Ouvre les stores';
+		$table->offcommand = 'Ferme les stores';
+		$table->icon = 'fa fa-gears';
+		$table->save();
+
+		$wr3 = $table->id;
+
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr1.'&quot;}\',	\'0\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr2.'&quot;}\',	\'1\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr3.'&quot;}\',	\'2\',	\'2\',	\'\',\''.$dashboard.'\');');
+	}
+
+
+
+
+
+
+
+?>
