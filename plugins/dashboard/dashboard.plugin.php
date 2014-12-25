@@ -18,8 +18,8 @@ function dashboard_plugin_actions(){
 		case 'GET_WIDGETS':
 			header('Content-type: application/json');
 			
-			require_once('Dashboard.class.php');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Dashboard.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 
 			$dashManager = new Dashboard();
 			$dashManager->change(array('default'=>'0'));
@@ -47,7 +47,7 @@ function dashboard_plugin_actions(){
 		case 'ADD_WIDGET':
 
 			header('Content-type: application/json');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 
 			$response = array();
 
@@ -65,7 +65,7 @@ function dashboard_plugin_actions(){
 		case 'MINIMIZE_WIDGET':
 
 			header('Content-type: application/json');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 			$response = array();
 			$widgetManager = new Widget();
 			$widgetManager = $widgetManager->getById($_['id']);
@@ -76,7 +76,7 @@ function dashboard_plugin_actions(){
 		break;
 		case 'MAXIMIZE_WIDGET':
 			header('Content-type: application/json');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 			$response = array();
 			$widgetManager = new Widget();
 			$widgetManager = $widgetManager->getById($_['id']);
@@ -88,7 +88,7 @@ function dashboard_plugin_actions(){
 
 		case 'MOVE_WIDGET':
 			header('Content-type: application/json');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 			$response = array();
 			$widgetManager = new Widget();
 
@@ -101,7 +101,7 @@ function dashboard_plugin_actions(){
 
 		case 'DELETE_WIDGET':
 			header('Content-type: application/json');
-			require_once('Widget.class.php');
+			require_once(dirname(__FILE__).'/Widget.class.php');
 			$response = array();
 
 			$widgetManager = new Widget();
@@ -112,7 +112,7 @@ function dashboard_plugin_actions(){
 
 		case 'DASH_ADD_VIEW':
 			global $_,$myUser;
-			require_once('Dashboard.class.php');
+			require_once(dirname(__FILE__).'/Dashboard.class.php');
 			$entity = new Dashboard();
 			$entity->user = $myUser->getId();
 			$entity->label = $_['viewName'];
@@ -122,7 +122,7 @@ function dashboard_plugin_actions(){
 		break;
 		case 'DASH_DELETE_VIEW':
 			global $_,$myUser;
-			require_once('Dashboard.class.php');
+			require_once(dirname(__FILE__).'/Dashboard.class.php');
 			$entity = new Dashboard();
 			$entity->delete(array('id'=>$_['id']));
 			header('location: setting.php?section=preference&block=dashboard');
@@ -133,9 +133,9 @@ function dashboard_plugin_actions(){
 function dashboard_plugin_home(){
 	global $_,$myUser;
 	if(!isset($_['module'])){
-		require_once('Dashboard.class.php');
+		require_once(dirname(__FILE__).'/Dashboard.class.php');
 		$dashManager = new Dashboard();
-		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()));
+		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()),'label');
 		
 		echo '<div style="margin:0;text-align:center;"><select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
 		foreach($dashes as $dash){
@@ -159,7 +159,7 @@ function dashboard_plugin_preference_page(){
 		if($myUser!=false){
 
 
-			require_once('Dashboard.class.php');
+			require_once(dirname(__FILE__).'/Dashboard.class.php');
 			$dashManager = new Dashboard();
 			$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()));
 		

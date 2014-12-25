@@ -15,8 +15,8 @@ if(isset($_GET['argv'])){
 
 if(isset($argv)){
 
-	require_once('../../constant.php');
-	$db = new SQLite3('../../'.DB_NAME);
+	require_once(dirname(__FILE__).'/../../constant.php');
+	$db = new SQLite3(dirname(__FILE__).'/../../'.DB_NAME);
 	
 	$execQuery = $db->query('SELECT * FROM '.MYSQL_PREFIX.'plugin_door');
 	
@@ -44,8 +44,8 @@ if(isset($argv)){
 	exit();
 }
 
-require_once('DoorAccess.class.php');
-require_once('DoorLog.class.php');
+require_once(dirname(__FILE__).'/DoorAccess.class.php');
+require_once(dirname(__FILE__).'/DoorLog.class.php');
 
 function dash_domodoor_plugin_menu(&$widgets){
 		$widgets[] = array(

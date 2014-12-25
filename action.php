@@ -4,7 +4,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'KNOCK_KNOCK_YANA') exit('1');
 
 if(!ini_get('safe_mode')) @set_time_limit(0);
 
-require_once("common.php");
+require_once(dirname(__FILE__).'/common.php');
+
 
 if(php_sapi_name() == 'cli'){
 	$_['action'] = $_SERVER['argv'][1];	

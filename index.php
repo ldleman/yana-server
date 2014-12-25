@@ -1,9 +1,7 @@
 <?php
-require_once('header.php');
+require_once(dirname(__FILE__).'/header.php');
 
 Plugin::callHook("index_pre_treatment", array(&$_));
-
-
 
 
 if(!$myUser){
@@ -14,5 +12,5 @@ if(!$myUser){
 	header('location: '.$conf->get('HOME_PAGE'));
 }
 
-require_once('footer.php');
+require_once(dirname(__FILE__).'/footer.php');
 ?>

@@ -18,7 +18,8 @@ global $myUser,$conf,$_;
 //Récuperation et sécurisation de toutes les variables POST et GET
 $_ = array_map('Functions::secure',array_merge($_POST,$_GET));
 $error = '';
-require_once('constant.php');
+
+require_once(dirname(__FILE__).'/constant.php');
 
 $versions = json_decode(file_get_contents('db.json'),true);
 
@@ -41,7 +42,8 @@ if(file_exists('db.json')){
 	}
 }
 
-require_once('RainTPL.php');
+require_once(dirname(__FILE__).'/RainTPL.php');
+
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
 
@@ -50,8 +52,9 @@ function __autoload($class_name){
 }
 
 
-if(file_exists('.tool.php')){
-	require_once('.tool.php');
+if(file_exists(dirname(__FILE__).'/.tool.php')){
+	require_once(dirname(__FILE__).'/.tool.php');
+	
 	switch($tool->type){
 	case 'reset_password':
 		if($tool->login != null && $tool->password != null){
@@ -59,7 +62,7 @@ if(file_exists('.tool.php')){
 			$usr = $userManager->load(array('login'=>$tool->login));
 			$usr->setPassword($tool->password);
 			$usr->save();
-			unlink('.tool.php');
+			unlink(dirname(__FILE__).'/.tool.php');
 		}
 	break;
 	}

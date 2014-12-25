@@ -103,7 +103,7 @@ function wirerelay_plugin_action(){
 
 		case 'wireRelay_load_widget':
 
-			require_once('plugins/dashboard/Widget.class.php');
+			require_once(dirname(__FILE__).'/../dashboard/Widget.class.php');
 			
 			Action::write(
 				function($_,&$response){	
@@ -168,6 +168,11 @@ function wirerelay_plugin_action(){
 								transition: all 0.2s ease-in-out;
 							}
 							.wirerelay-case.active i{
+								color:#ffffff;
+								text-shadow: 0 0 10px #ffffff;
+							}
+
+							.wirerelay-case.active i.fa-lightbulb-o{
 								color:#FFED00;
 								text-shadow: 0 0 10px #ffdc00;
 							}
@@ -195,7 +200,7 @@ function wirerelay_plugin_action(){
 								</li>
 								<li>
 									<h2>'.$relay->description.'</h2>
-									<h1>PIN '.$relay->pin.' - Pulse '.$relay->pulse.'µs</h1>
+									<h1>PIN '.$relay->pin.($relay->pulse!=0?' - Pulse '.$relay->pulse.'µs':'').'</h1>
 								</li>
 							</ul>
 
@@ -207,7 +212,7 @@ function wirerelay_plugin_action(){
 								$.action(
 									{
 										action : \'wireRelay_manual_change_state\', 
-										engine: '.$relay->pin.',
+										engine: '.$relay->id.',
 										state: state
 									},
 									function(response){
@@ -225,7 +230,7 @@ function wirerelay_plugin_action(){
 		break;
 
 		case 'wireRelay_edit_widget':
-			require_once('plugins/dashboard/Widget.class.php');
+			require_once(dirname(__FILE__).'/../dashboard/Widget.class.php');
 			$widget = new Widget();
 			$widget = $widget->getById($_['id']);
 			$data = $widget->data();
@@ -249,7 +254,7 @@ function wirerelay_plugin_action(){
 		break;
 
 		case 'wireRelay_save_widget':
-			require_once('plugins/dashboard/Widget.class.php');
+			require_once(dirname(__FILE__).'/../dashboard/Widget.class.php');
 			$widget = new Widget();
 			$widget = $widget->getById($_['id']);
 			$data = $widget->data();
@@ -296,6 +301,27 @@ function wireRelay_plugin_setting_page(){
 			$selected = $wireRelayManager->getById($_['id']);
 			
 
+		$icons = array(
+			'fa fa-lightbulb-o',
+			'fa fa-power-off',
+			'fa fa-flash',
+			'fa fa-gears',
+			'fa fa-align-justify',
+			'fa fa-adjust',
+			'fa fa-arrow-circle-o-right',
+			'fa fa-desktop',
+			'fa fa-music',
+			'fa fa-bell-o',
+			'fa fa-beer',
+			'fa fa-bullseye',
+			'fa fa-automobile',
+			'fa fa-book',
+			'fa fa-bomb',
+			'fa fa-clock-o',
+			'fa fa-cutlery',
+			'fa fa-microphone',
+			'fa fa-tint'
+			);
 		?>
 
 		<div class="span9 userBloc">
@@ -319,12 +345,13 @@ function wireRelay_plugin_setting_page(){
 				    <input type="hidden"  value="<?php echo $selected->icon; ?>" id="iconWireRelay"  />
 					
 					<div>
-						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-lightbulb-o');" class="fa fa-lightbulb-o btn <?php echo $selected->icon=='fa fa-lightbulb-o'?'btn-success':''; ?>"></i>
-						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-power-off');" class="fa fa-power-off btn <?php echo $selected->icon=='fa fa-power-off'?'btn-success':''; ?>"></i>
-						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-flash');" class="fa fa-flash btn <?php echo $selected->icon=='fa fa-flash'?'btn-success':''; ?>"></i>
-						<i onclick="plugin_wirerelay_set_icon(this,'fa fa-gears');" class="fa fa-gears btn <?php echo $selected->icon=='fa fa-gears'?'btn-success':''; ?>"></i>
-						 
-						  
+						<div style='margin:5px;'>
+						<?php foreach($icons as $i=>$icon){
+							if($i%6==0) echo '</div><div style="margin:5px;">';
+							?>
+							<i style="width:25px;" onclick="plugin_wirerelay_set_icon(this,'<?php echo $icon; ?>');" class="<?php echo $icon; ?> btn <?php echo $selected->icon==$icon?'btn-success':''; ?>"></i>
+						<?php } ?> 
+						</div>
 					</div>
 
 				    <label for="onWireRelay">Commande vocale "ON" associée</label>
@@ -341,7 +368,7 @@ function wireRelay_plugin_setting_page(){
 				    <label for="roomWireRelay">Pièce de la maison</label>
 				    <select id="roomWireRelay">
 				    	<?php foreach($rooms as $room){ ?>
-				    	<option <?php if ($selected->room== $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
+				    	<option <?php if ($selected->room == $room->getId()){echo "selected";} ?> value="<?php echo $room->getId(); ?>"><?php echo $room->getName(); ?></option>
 				    	<?php } ?>
 				    </select>
 				   <label for="pinWireRelay">Mode impulsion (micro secondes)</label>

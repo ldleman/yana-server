@@ -1,6 +1,6 @@
 <?php 
+require_once(dirname(__FILE__).'/common.php');
 
-require_once('common.php');
 
 $menuItems = array();
 Plugin::callHook("menubar_pre_home", array(&$menuItems));

@@ -1,8 +1,8 @@
 <?php
 
 global $myUser;
-require_once('Dashboard.class.php');
-require_once('Widget.class.php');
+require_once(dirname(__FILE__).'/Dashboard.class.php');
+require_once(dirname(__FILE__).'/Widget.class.php');
 
 $entity = new Dashboard();
 $entity->create();

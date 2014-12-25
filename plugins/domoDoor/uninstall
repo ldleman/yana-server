@@ -1,7 +1,7 @@
 <?php
 
-require_once('DoorLog.class.php');
-require_once('DoorAccess.class.php');
+require_once(dirname(__FILE__).'/DoorLog.class.php');
+require_once(dirname(__FILE__).'/DoorAccess.class.php');
 $table = new DoorAccess();
 $table->drop();
 

@@ -27,8 +27,8 @@ class Story extends SQLiteEntity{
 	
 
 	public static function check($event =false){
-	require_once('Cause.class.php');
-	require_once('Effect.class.php');
+	require_once(dirname(__FILE__).'/Cause.class.php');
+	require_once(dirname(__FILE__).'/Effect.class.php');
 	global $conf;
 	
 

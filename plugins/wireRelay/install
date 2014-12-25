@@ -5,7 +5,7 @@
 	qui ne doit se lancer qu'à l'installation ex :
 	
 */
-	require_once('Wirerelay.class.php');
+	require_once(dirname(__FILE__).'/Wirerelay.class.php');
 	
 	$table = new Wirerelay();
 	$table->create();

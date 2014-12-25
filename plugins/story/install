@@ -5,9 +5,9 @@
 	qui ne doit se lancer qu'à l'installation ex :
 	
 */
-	require_once('Story.class.php');
-	require_once('Cause.class.php');
-	require_once('Effect.class.php');
+	require_once(dirname(__FILE__).'/Story.class.php');
+	require_once(dirname(__FILE__).'/Cause.class.php');
+	require_once(dirname(__FILE__).'/Effect.class.php');
 	
 	$current = new Cause();
 	$current->create();

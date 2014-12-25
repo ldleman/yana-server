@@ -5,7 +5,7 @@
 	qui ne doit se lancer qu'à la désinstallation ex :
 	
 */
-	require_once('FileUploaded.class.php');
+	require_once(dirname(__FILE__).'/FileUploaded.class.php');
 
 	$table = new FileUploaded();
 	$table->destroy();

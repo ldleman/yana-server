@@ -1,5 +1,5 @@
 <?php
-require_once('Door.class.php');
+require_once(dirname(__FILE__).'/Door.class.php');
 $table = new Door();
 $table->create();
 

@@ -1,5 +1,5 @@
 <?php
-require_once('VocalInfo.class.php');
+require_once(dirname(__FILE__).'/VocalInfo.class.php');
 $table = new VocalInfo();
 $table->create();
  

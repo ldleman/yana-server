@@ -9,9 +9,9 @@
 */
 
 
-include('Story.class.php');
-include('Cause.class.php');
-include('Effect.class.php');
+include(dirname(__FILE__).'/Story.class.php');
+include(dirname(__FILE__).'/Cause.class.php');
+include(dirname(__FILE__).'/Effect.class.php');
 
 
 function story_plugin_menu(&$menuItems){
@@ -23,10 +23,10 @@ function story_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='story'){
 		switch(@$_['action']){
 			case 'edit':
-				require_once('edit.php');
+				require_once(dirname(__FILE__).'/edit.php');
 			break;
 			default:
-				require_once('list.php');
+				require_once(dirname(__FILE__).'/list.php');
 			break;
 		}
 	}
@@ -56,7 +56,7 @@ function story_plugin_action(){
 	break;
 
 	case 'plugin_story_check':
-		require_once('Cause.class.php');
+		require_once(dirname(__FILE__).'/Cause.class.php');
 		$vocal = new Cause();
 		$vocal = $vocal->getById($_['event']);
 		
@@ -118,7 +118,7 @@ function story_plugin_action(){
 
 function story_vocal_command(&$response,$actionUrl){
 	global $conf;
-	require_once('Cause.class.php');
+	require_once(dirname(__FILE__).'/Cause.class.php');
 	$causeManager = new Cause();
 	$vocals = $causeManager->loadAll(array('type'=>'listen'));
 	foreach($vocals as $vocal){

@@ -172,11 +172,9 @@ void transmit(int blnOn)
 
 void action (bool b) {
 	if (b) {
-		system("/etc/lcd/screen -p \"Radio signal ON...\"");
 		log("envois du signal ON");
 	} else {
-		system("/etc/lcd/screen -p \"Radio signal OFF...\"");
-                log("envois du signal OFF");
+        log("envois du signal OFF");
 	}
 	for(int i=0;i<5;i++){
 		transmit(b);              // envoyer

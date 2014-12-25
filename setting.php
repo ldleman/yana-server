@@ -1,5 +1,5 @@
 <?php
-require_once('header.php');
+require_once(dirname(__FILE__).'/header.php');
 
 if(isset($myUser) && $myUser!=false && $myUser->can('configuration', 'r')){
 
@@ -105,5 +105,5 @@ if(isset($myUser) && $myUser!=false && $myUser->can('configuration', 'r')){
 	exit('Vous devez être connecté');
 }
 
-require_once('footer.php');
+require_once(dirname(__FILE__).'/footer.php');
 ?>

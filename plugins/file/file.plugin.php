@@ -10,7 +10,7 @@
 */
 
 //Check et creation de la table si non existente
-require_once('FileUploaded.class.php');
+require_once(dirname(__FILE__).'/FileUploaded.class.php');
 $fileManager = new FileUploaded();
 $fileManager->checkTable(true);
 

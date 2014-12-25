@@ -4,13 +4,17 @@
 	Vous pouvez donc l'utiliser pour supprimer des tables SQLite, des dossiers, ou executer une action
 	qui ne doit se lancer qu'à la désinstallation ex :
 */
-require_once(dirname(__FILE__).'/Wirerelay.class.php');
+require_once(dirname(__FILE__).'/RadioRelay.class.php');
 require_once(dirname(__FILE__).'/../dashboard/Widget.class.php');
 
-$table = new Wirerelay();
+$table = new RadioRelay();
 $table->drop();
-Section::remove('plugin_wirerelay');
+Section::remove('plugin_radiorelay');
+
+$conf = new Configuration();
+$conf->delete(array('key'=>'plugin_radioRelay_emitter_pin'));
+$conf->delete(array('key'=>'plugin_radioRelay_emitter_code'));
 
 $dash = new Widget();
-$dash->delete(array('model'=>'dash_wirerelay'));
+$dash->delete(array('model'=>'dash_radiorelay'));
 ?>
