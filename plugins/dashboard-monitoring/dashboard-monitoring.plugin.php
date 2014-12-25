@@ -169,7 +169,7 @@ function dash_monitoring_plugin_actions(){
 						$cpu = Monitoring::cpu();
 					}
 			
-					$response['content'] = '<ul>
+					$response['content'] = '<ul class="yana-list">
 				    	<li><strong>Distribution :</strong> '.Monitoring::distribution().'</li>
 				    	<li><strong>Kernel :</strong> '.Monitoring::kernel().'</li>
 				    	<li><strong>HostName :</strong> '.Monitoring::hostname().'</li>
@@ -192,7 +192,7 @@ function dash_monitoring_plugin_actions(){
 
 					
 					$response['title'] = count($response['commands']).' Commandes vocales';
-					$response['content'] = '<ul>';
+					$response['content'] = '<ul class="yana-list">';
 					foreach($response['commands'] as $command){
 						$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
 					}
@@ -214,7 +214,7 @@ function dash_monitoring_plugin_actions(){
 						$connections = Monitoring::connections();
 					}
 			
-					$response['content'] = '<ul>
+					$response['content'] = '<ul class="yana-list">
 					    	<li><strong>IP LAN :</strong> <code>'.$lan.'</code></li>
 					    	<li><strong>IP WAN :</strong> <code>'.$wan.'</code></li>
 					    	<li><strong>Serveur HTTP :</strong> '.$http.'</li>
@@ -262,7 +262,7 @@ function dash_monitoring_plugin_actions(){
 
 					$response['title'] = count($users).' utilisateurs connectés';
 					
-					$response['content'] = '<ul>';
+					$response['content'] = '<ul class="yana-list">';
 				    foreach ($users as $value) {
 						$response['content'] .= '<li>Utilisateur <strong class="badge">'.$value['user'].'</strong> IP : <code>'.$value['ip'].'</code>, Connexion : '.$value['hour'].' </li>';
 				    }
@@ -274,7 +274,7 @@ function dash_monitoring_plugin_actions(){
 					
 					if(PHP_OS!='WINNT'){
 						$services = Monitoring::services();
-						$response['content'] = '<ul>';
+						$response['content'] = '<ul class="yana-list">';
 				    	foreach ($services as $value) {
 				    		$response['content'] .= '<li '.($value['status']?'class="service-active"':'').'>- '.$value['name'].'</li>';
 				    	}
@@ -290,7 +290,7 @@ function dash_monitoring_plugin_actions(){
 					
 					if(PHP_OS!='WINNT'){
 						$hdds = Monitoring::hdd();
-						$response['content'] ='<ul>';
+						$response['content'] ='<ul class="yana-list">';
 						foreach ($hdds as $value) {
 							$response['content'] .='<li><strong class="badge">'.$value['name'].'</strong><br><strong> Espace :</strong> '.$value['used'].'/'.$value['total'].'<strong> Format :</strong> '.$value['format'].' </li>';
 						}
@@ -308,7 +308,7 @@ function dash_monitoring_plugin_actions(){
 
 					if(PHP_OS!='WINNT'){
 						$disks = Monitoring::disks();
-						$response['content'] ='<ul>';
+						$response['content'] ='<ul class="yana-list">';
 					    foreach ($disks as $value) {
 					    	$response['content'] .='<li><strong class="badge">'.$value['name'].'</strong> Statut : '.$value['size'].' Type : '.$value['type'].' Chemin : '.$value['mountpoint'].'  </li>';
 					    }

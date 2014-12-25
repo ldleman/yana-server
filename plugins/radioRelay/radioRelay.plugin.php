@@ -19,7 +19,9 @@ function radiorelay_plugin_vocal_command(&$response,$actionUrl){
 
 	$radioRelays = $radioRelayManager->populate();
 	foreach($radioRelays as $radioRelay){
+		if(!empty($radioRelay->oncommand))
 		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$radioRelay->onCommand,'url'=>$actionUrl.'?action=radioRelay_vocal_change_state&engine='.$radioRelay->id.'&state=1','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
+		if(!empty($radioRelay->offCommand))
 		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$radioRelay->offCommand,'url'=>$actionUrl.'?action=radioRelay_vocal_change_state&engine='.$radioRelay->id.'&state=0','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
 	}
 }
@@ -178,6 +180,7 @@ function radiorelay_plugin_action(){
 
 							.radiorelay_relay_pane li.radiorelay-case{
 								background-color:  #373f59;
+								width: 55px;
 								cursor:pointer;
 							}
 							.radiorelay-case i{

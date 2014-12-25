@@ -4,7 +4,7 @@
 @author Valentin CARRUESCO <idleman@idleman.fr>
 @link Http://blog.idleman.fr
 @licence Cc -by-nc-sa
-@version 1.0
+@version 1.1
 @description Prise relais filaire
 */
 
@@ -20,7 +20,10 @@ function wirerelay_plugin_vocal_command(&$response,$actionUrl){
 
 	$wireRelays = $wireRelayManager->populate();
 	foreach($wireRelays as $wireRelay){
+
+		if(!empty($wireRelay->oncommand))
 		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->oncommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=1','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
+		if(!empty($wireRelay->offcommand))
 		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->offcommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=0','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
 	}
 }
@@ -161,6 +164,7 @@ function wirerelay_plugin_action(){
 							.relay_pane li.wirerelay-case{
 								background-color:  #373f59;
 								cursor:pointer;
+								width: 55px;
 							}
 							.wirerelay-case i{
 								color:#8b95b8;

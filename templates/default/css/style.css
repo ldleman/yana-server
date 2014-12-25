@@ -39,6 +39,23 @@ h1,h2,h3,h4{
   font-weight: normal;
   line-height: 100%;
 }
+
+ul.yana-list li{
+  list-style-type:none;
+}
+ul.yana-list li:before{
+  content:"\f0da";
+  margin-right: 5px;
+  display:inline-block;
+  font-family:FontAwesome;
+  font-style:normal;
+  font-weight:normal;
+  line-height:1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+
 /* =============================================================================
    Plugins
    ========================================================================== */

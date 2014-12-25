@@ -17,7 +17,7 @@ function dashboard_plugin_actions(){
 	switch($_['action']){
 		case 'GET_WIDGETS':
 			header('Content-type: application/json');
-			
+
 			require_once(dirname(__FILE__).'/Dashboard.class.php');
 			require_once(dirname(__FILE__).'/Widget.class.php');
 
@@ -26,12 +26,15 @@ function dashboard_plugin_actions(){
 			$dashManager->change(array('default'=>'1'),array('id'=>$_['dashboard']));
 
 			$widgetManager = new Widget();
-
 			$model = array();
 			Plugin::callHook("widgets",array(&$model));
 
+
 			$widgets = $widgetManager->loadAll(array('dashboard'=>$_['dashboard']),'cell');
 			$data = array();
+
+
+
 			foreach($widgets as $widget){
 				$data[] = array('data'=>$widget->data,
 								'column'=>$widget->column,
