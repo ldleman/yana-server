@@ -34,6 +34,15 @@ function dash_monitoring_plugin_menu(&$widgets){
 		);
 
 		$widgets[] = array(
+		    'uid'      => 'dash_monitoring_logs',
+		    'icon'     => 'fa fa-dedent',
+		    'label'    => 'Logs',
+		    'background' => '#0FC7E3', 
+		    'color' => '#fffffff',
+		    'onLoad'   => 'action.php?action=dash_monitoring_plugin_load&bloc=logs'
+		);
+
+		$widgets[] = array(
 			'uid'      => 'dash_monitoring_system',
 		    'icon'     => 'fa fa-tachometer',
 		    'label'    => 'Système',
@@ -197,6 +206,25 @@ function dash_monitoring_plugin_actions(){
 						$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
 					}
 					$response['content'] .= '</ul>';
+				break;
+				case 'logs':
+					if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
+					
+					
+					$response['title'] = 'Logs';
+					$logs = dirname(__FILE__).'/../../'.LOG_FILE ;
+					$response['content'] = '<div style="overflow:auto;max-height:200px;"><ul class="yana-list" style="margin:0px;">';
+					if(file_exists($logs)){
+						$lines = file($logs);
+
+						foreach($lines as $i=>$line){
+							$response['content'] .= '<li style="font-size:8px;'.($i%2==0?'background-color:#F4F4F4;':'').'">'.$line.'</li>';
+						}
+					}else{
+						$response['content'] .= '<li>Aucun logs</li>';
+					}
+				
+					$response['content'] .= '</ul></div>';
 				break;
 				case 'network':
 					$response['title'] = 'Réseau';
