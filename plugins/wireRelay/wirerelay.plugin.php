@@ -20,8 +20,8 @@ function wirerelay_plugin_vocal_command(&$response,$actionUrl){
 
 	$wireRelays = $wireRelayManager->populate();
 	foreach($wireRelays as $wireRelay){
-		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->onCommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=1','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
-		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->offCommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=0','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
+		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->oncommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=1','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
+		$response['commands'][] = array('command'=>$conf->get('VOCAL_ENTITY_NAME').', '.$wireRelay->offcommand,'url'=>$actionUrl.'?action=wireRelay_vocal_change_state&engine='.$wireRelay->id.'&state=0','confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY')));
 	}
 }
 
@@ -46,8 +46,8 @@ function wirerelay_plugin_action(){
 					$wireRelay->pin = $_['pinWireRelay'];
 					$wireRelay->room = $_['roomWireRelay'];
 					$wireRelay->pulse = $_['pulseWireRelay'];
-					$wireRelay->onCommand = $_['onWireRelay'];
-					$wireRelay->offCommand = $_['offWireRelay'];
+					$wireRelay->oncommand = $_['onWireRelay'];
+					$wireRelay->offcommand = $_['offWireRelay'];
 					$wireRelay->icon = $_['iconWireRelay'];
 					$wireRelay->save();
 					$response['message'] = 'Relais enregistré avec succès';
@@ -355,11 +355,11 @@ function wireRelay_plugin_setting_page(){
 					</div>
 
 				    <label for="onWireRelay">Commande vocale "ON" associée</label>
-				    <?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, <input type="text" id="onWireRelay" value="<?php echo $selected->onCommand; ?>" placeholder="Allume la lumière, Ouvre le volet…"/>
+				    <?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, <input type="text" id="onWireRelay" value="<?php echo $selected->oncommand; ?>" placeholder="Allume la lumière, Ouvre le volet…"/>
 				   
 				    
 				    <label for="offWireRelay">Commande vocale "OFF" associée</label>
-				    <?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, <input type="text" id="offWireRelay" value="<?php echo $selected->offCommand; ?>" placeholder="Eteinds la lumière, Ferme le volet…"/>
+				    <?php echo $conf->get('VOCAL_ENTITY_NAME') ?>, <input type="text" id="offWireRelay" value="<?php echo $selected->offcommand; ?>" placeholder="Eteinds la lumière, Ferme le volet…"/>
 				    
 				    
 				    <label for="pinWireRelay">Pin GPIO (Numéro Wiring PI) relié au relais</label>
