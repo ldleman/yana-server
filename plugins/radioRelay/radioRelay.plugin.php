@@ -71,9 +71,11 @@ function radiorelay_plugin_action(){
 
 		case 'radioRelay_plugin_setting':
 			Action::write(
-				function($_,$response){	
+				function($_,&$response){	
+					global $conf;
 					$conf->put('plugin_radioRelay_emitter_pin',$_['emiterPin']);
 					$conf->put('plugin_radioRelay_emitter_code',$_['emiterCode']);
+					$response['message'] = 'Configuration enregistrée';
 				},
 				array('plugin_radiorelay'=>'c') 
 			);
@@ -508,7 +510,7 @@ function radioRelay_plugin_preference_page(){
 
 
 Plugin::addCss("/css/main.css"); 
-Plugin::addJs("/js/main.js"); 
+Plugin::addJs("/js/main.js",true); 
 
 //Lie radioRelay_plugin_preference_menu au menu de réglages
 Plugin::addHook("preference_menu", "radioRelay_plugin_preference_menu"); 
