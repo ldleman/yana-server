@@ -117,6 +117,9 @@ ul.yana-list li:before{
   border:none;
   cursor:pointer;
   color:#ffffff;
+  font-size: 11px;
+  width:100%;
+  text-align: center;
 }
 
 .logo{
