@@ -293,12 +293,14 @@ function radiorelay_plugin_action(){
 
 function radiorelay_plugin_change_state($engine,$state){
 	global $conf;
+       
+        
 
 	$radioRelay = new RadioRelay();
 	$radioRelay = $radioRelay->getById($engine);
 
 	$cmd = dirname(__FILE__).'/radioEmission '.$conf->get('plugin_radioRelay_emitter_pin').' '.$conf->get('plugin_radioRelay_emitter_code').' '.$radioRelay->radiocode.' ';
-	$cmd .= $radioRelay->pulse ==0 ? $state : 'pulse '.$radioRelay->pulse;
+	$cmd .= $radioRelay->pulse ==0 ? ($state==1?'on':'off') : 'pulse '.$radioRelay->pulse;
 					
 	$radioRelay->state = $state;
 	Functions::log('Launch system command : '.$cmd);
