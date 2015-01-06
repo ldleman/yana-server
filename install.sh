@@ -321,7 +321,7 @@ updater() {
 ##>* $1 package (apt-get install package)
 installer() {
 	messagebox "INSTALLATION DE: $1"
-	dpkg -s "$1"|grep "Status: install ok installed" > /dev/null 2>&1
+	dpkg-query -l "$1" | grep "ii" > /dev/null 2>&1
 	#IS THE PACKAGE ALREADY INSTALLED ?
 	if [[ $? == 1 ]]
 		then
@@ -329,7 +329,7 @@ installer() {
 		apt-get -q -y install "$1"
 		aptget_error $?
 		console
-		dpkg -s "$1"|grep "Status: install ok installed" > /dev/null 2>&1
+		dpkg-query -l "$1" | grep "ii" > /dev/null 2>&1
 			#WAS THE PACKAGE INSTALLED ?
 			if [[ $? == 0 ]]
 				then
@@ -349,12 +349,12 @@ installer() {
 
 	check_package() {
 		console
-		dpkg -s "$webserver_to_check"|grep -q "Status: install ok installed" > /dev/null 2>&1
-		if [[ $? == 0 ]]
-			then 
+		if [ -e "/usr/sbin/$webserver_to_check" ]
+			then
 			package_isinstalled=1
-			messagebox "$webserver_to_check est installé"
+			messagebox "$webserver_to_check est installé"			
 		else
+			package_isinstalled=0
 			messagebox "$webserver_to_check n'est pas installé"
 		fi
 		console
@@ -480,7 +480,6 @@ if [[ $package_isinstalled != 1 ]]
 	description "Installation de LIGHTTPD (serveur web) Whhaouuhh !"
 	sleep $wait
 
-	install_webserver
 	installer "lighttpd"
 	rm -vf /var/www/index.lighttpd.html
 
