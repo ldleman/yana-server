@@ -218,7 +218,7 @@ function radiorelay_plugin_action(){
 						
 						<!-- CSS -->
 						<ul class="radiorelay_relay_pane">
-								<li class="radiorelay-case '.($relay->state?'active':'').'" onclick="plugin_radiorelay_change(this);" style="text-align:center;">
+								<li class="radiorelay-case '.($relay->state?'active':'').'" onclick="plugin_radiorelay_change(this,'.$relay->id.');" style="text-align:center;">
 									<i title="On/Off" class="'.$relay->icon.'"></i>
 								</li>
 								<li>
@@ -229,13 +229,13 @@ function radiorelay_plugin_action(){
 
 						<!-- JS -->
 						<script type="text/javascript">
-							function plugin_radiorelay_change(element){
+							function plugin_radiorelay_change(element,id){
 								var state = $(element).hasClass(\'active\') ? 0 : 1 ;
 
 								$.action(
 									{
 										action : \'radioRelay_manual_change_state\', 
-										engine: '.$relay->id.',
+										engine: id,
 										state: state
 									},
 									function(response){
@@ -419,7 +419,7 @@ function radioRelay_plugin_setting_page(){
 					    	<th>Nom</th>
 						    <th>Description</th>
 						    <th>Code</th>
-						    <th>Pin GPIO</th>
+						    
 						    <th>Pièce</th>
 						    <th colspan="2">Impulsion</th>
 						    
@@ -433,7 +433,7 @@ function radioRelay_plugin_setting_page(){
 				    	<td><?php echo $radioRelay->name; ?></td>
 					    <td><?php echo $radioRelay->description; ?></td>
 					    <td><?php echo $radioRelay->radiocode; ?></td>
-					    <td><?php echo $radioRelay->pin; ?></td>
+					    
 					    <td><?php echo $room->getName(); ?></td>
 					    <td><?php echo $radioRelay->pulse; ?></td>
 					    <td>
