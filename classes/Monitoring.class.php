@@ -96,12 +96,7 @@ class Monitoring {
   }
 
   public static function gpio() {
-    $gpios = array();
-    for($i=0;$i<25;$i++){
-      $gpios[$i] = exec("/usr/local/bin/gpio read ".$i, $out);
- 
-    }
-    return $gpios;
+    return System::gpio();
   }
 
   public static function connections() {

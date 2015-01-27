@@ -254,10 +254,33 @@ function dash_monitoring_plugin_actions(){
 				case 'gpio':
 					$response['title'] = 'GPIO';
 					$gpios = array();
-
+					$response['content'] .='Information indisponible sur cet OS :'.PHP_OS;
+					
 					if(PHP_OS!='WINNT'){
 						$gpios = Monitoring::gpio();
-						$pin=array("GPIO 0","GPIO 1","GPIO 2","GPIO 3","GPIO 4","GPIO 5","GPIO 6","GPIO 7","   SDA","SCL   ","   CE0","CE1   ","  MOSI","MOSO  ","  SCLK","TxD   ","   RxD","GPIO 8","GPIO 9","GPIO10","GPIO11","JOKER!");
+						$pin= array(
+						"GPIO 0",
+						"GPIO 1",
+						"GPIO 2",
+						"GPIO 3",
+						"GPIO 4",
+						"GPIO 5",
+						"GPIO 6",
+						"GPIO 7",
+						"   SDA",
+						"SCL   ",
+						"   CE0",
+						"CE1   ",
+						"  MOSI",
+						"MOSO  ",
+						"  SCLK",
+						"TxD   ",
+						"   RxD",
+						"GPIO 8",
+						"GPIO 9",
+						"GPIO10",
+						"GPIO11",
+						"JOKER!");
 						$response['content'] .=  '<pre><ul>';
 					    for ($i = 0; $i <= 21; $i+=2) {
 					    	$class = 'info';
@@ -277,8 +300,6 @@ function dash_monitoring_plugin_actions(){
 					    }
 
 				    	$response['content'] .=  '</ul></pre>';
-					}else{
-						$response['content'] .='Information indisponible sur cet OS :'.PHP_OS;
 					}
 			
 				break;

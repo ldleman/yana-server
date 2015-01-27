@@ -11,8 +11,8 @@ class Gpio{
 	const GPIO_DEFAULT_PATH = '/usr/local/bin/gpio';
 	
 	private static function system($cmd){
-		Functions::log('Launch system command : '.$cmd);
-		return system($cmd);
+		// For compatibily with plugins wich call that method from GPIO instead of System.
+		System::command($cmd);
 	}
 	
 	public static function mode($pin,$mode = 'out'){
