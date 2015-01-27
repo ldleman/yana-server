@@ -276,7 +276,7 @@ else
 							$content = $event->getContent();
 							switch($content['type']){
 								case 'command':
-									exec($content['program']);
+									exec(htmlspecialchars_decode($content['program']));
 								break;
 						
 								case 'gpio':
