@@ -35,7 +35,7 @@ class System{
 	}
 	
 
-	private static function command($cmd){
+	public static function command($cmd){
 		Functions::log('Launch system command : '.$cmd);
 		return system($cmd);
 	}
