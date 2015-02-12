@@ -94,7 +94,7 @@ function radiorelay_plugin_action(){
 			global $_,$myUser;
 			try{
 				$response['responses'][0]['type'] = 'talk';
-				if(!$myUser->can('relais filaire','u')) throw new Exception ('Je ne vous connais pas, ou alors vous n\'avez pas le droit, je refuse de faire ça!');
+				if(!$myUser->can('relais radio','u')) throw new Exception ('Je ne vous connais pas, ou alors vous n\'avez pas le droit, je refuse de faire ça!');
 				radiorelay_plugin_change_state($_['engine'],$_['state']);
 				$response['responses'][0]['sentence'] = Personality::response('ORDER_CONFIRMATION');
 			}catch(Exception $e){
@@ -356,10 +356,10 @@ function radioRelay_plugin_setting_page(){
 		<div class="span9 userBloc">
 
 			<h1>Relais</h1>
-			<p>Gestion des relais filaires</p>  
+			<p>Gestion des relais radios</p>  
 
 			<fieldset>
-			    <legend>Ajouter/Modifier un relais filaire</legend>
+			    <legend>Ajouter/Modifier un relais radio</legend>
 
 			    <div class="left">
 
@@ -412,7 +412,7 @@ function radioRelay_plugin_setting_page(){
 
 
 			<fieldset>
-				<legend>Consulter les relais filaires existants</legend>
+				<legend>Consulter les relais radios existants</legend>
 				<table class="table table-striped table-bordered table-hover">
 				    <thead>
 					    <tr>
