@@ -2,7 +2,7 @@
 class System{
 
 	public static function getInfos(){
-		$return = self::system('cat /proc/cpuinfo');
+		$return = self::command_silent('cat /proc/cpuinfo');
 		$lines = preg_split("/\\r\\n|\\r|\\n/", $return);
 		$infos = array();
 		foreach($lines as $line){
@@ -33,6 +33,11 @@ class System{
 		);
 		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :'unknown';
 	}
+
+	public static function command_silent($cmd){
+		Functions::log('Launch system command (without output): '.$cmd);
+		return shell_exec($cmd);
+	}
 	
 
 	public static function command($cmd){
@@ -49,6 +54,8 @@ class System{
 		}
 		return $gpios;
   }
+
+
 	
 }
 ?>
