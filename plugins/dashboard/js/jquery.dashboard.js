@@ -71,9 +71,10 @@
 				if(model.onEdit != null) bloc.find('.dashboard_bloc_head ul').prepend('<li class="dashboard_setting_button"><i class="fa fa-wrench"></i></li>');
         	},
         	loadBlocData : function(bloc,url,data){
-        		
+        		//Affichage du chargement
         		$.dashboard.setBlocData(bloc,{title:"Chargement",content:"<div class='dashboard_loading'></div>"});
         		
+        		//Chargement des donnees du bloc
         		$.ajax({
 					url: url,
 					data : data,
@@ -81,6 +82,10 @@
 					success:function(response){
 						response.id =  data.id;
 						$.dashboard.setBlocData(bloc,response);
+					},
+					error:function(response){
+						//Si la requete ne repond pas correctement, on affiche le message d'erreur
+						$.dashboard.setBlocData(bloc,{title:"ERREUR",content:response.responseText});
 					}
 				});
         	},
