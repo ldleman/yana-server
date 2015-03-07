@@ -253,7 +253,6 @@ function dash_monitoring_plugin_actions(){
 				break;
 				case 'gpio':
 					$response['title'] = 'GPIO';
-					$response['content'] .='Information indisponible sur cet OS :'.PHP_OS;
 					$gpios = array();					
 					if(PHP_OS!='WINNT'){
 						$gpios = Monitoring::gpio();
