@@ -94,7 +94,7 @@ function radiorelay_plugin_action(){
 			global $_,$myUser;
 			try{
 				$response['responses'][0]['type'] = 'talk';
-				if(!$myUser->can('relais radio','u')) throw new Exception ('Je ne vous connais pas, ou alors vous n\'avez pas le droit, je refuse de faire ça!');
+				if(!$myUser->can('plugin_radiorelay','u')) throw new Exception ('Je ne vous connais pas, ou alors vous n\'avez pas le droit, je refuse de faire ça!');
 				radiorelay_plugin_change_state($_['engine'],$_['state']);
 				$response['responses'][0]['sentence'] = Personality::response('ORDER_CONFIRMATION');
 			}catch(Exception $e){
