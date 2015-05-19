@@ -85,8 +85,8 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
-	    $configuration->put('HOME_PAGE','index.php');
-	    $configuration->put('VOCAL_SENSITIVITY','0.0');
+	  $configuration->put('HOME_PAGE','index.php');
+	  $configuration->put('VOCAL_SENSITIVITY','0.0');
 
       //Création du rang admin
 		  $rank = new Rank();
@@ -132,9 +132,10 @@ if(isset($_POST['install'])){
 	  Plugin::enabled('radioRelay-radioRelay');
       Plugin::enabled('wireRelay-wireRelay');
       Plugin::enabled('vocal_infos-vocalinfo');
-	  Plugin::enabled('room-room');
+	  Plugin::enabled('speechcommands-speechcommands');
       Plugin::enabled('eventManager-eventmanager');
       Plugin::enabled('profile-profile');
+	  Plugin::enabled('room-room');
       Plugin::enabled('dashboard-dashboard');
       Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
   }else{

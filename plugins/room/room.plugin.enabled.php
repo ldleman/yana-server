@@ -5,7 +5,7 @@
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@type module
+@type component
 @description Modele de plugin pour les modules
 */
 
@@ -199,7 +199,7 @@ function room_plugin_setting_page(){
 		Plugin::addHook("setting_bloc", "room_plugin_setting_page"); 
 		Plugin::addHook("action_post_case", "room_action_room"); 
 
-		Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
+	  //Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
 		Plugin::addHook("home", "room_plugin_page");  
 
 

@@ -254,54 +254,31 @@ function dash_monitoring_plugin_actions(){
 				case 'gpio':
 					$response['title'] = 'GPIO';
 					$gpios = array();					
-					if(PHP_OS!='WINNT'){
+					
 						$gpios = Monitoring::gpio();
-						$pin= array(
-						"GPIO 0",
-						"GPIO 1",
-						"GPIO 2",
-						"GPIO 3",
-						"GPIO 4",
-						"GPIO 5",
-						"GPIO 6",
-						"GPIO 7",
-						"   SDA",
-						"SCL   ",
-						"   CE0",
-						"CE1   ",
-						"  MOSI",
-						"MOSO  ",
-						"  SCLK",
-						"TxD   ",
-						"   RxD",
-						"GPIO 8",
-						"GPIO 9",
-						"GPIO10",
-						"GPIO11",
-						"JOKER!");
-						$response['content'] .=  '<pre><ul>';
-					    for ($i = 0; $i <= 21; $i+=2) {
-					    	$class = 'info';
-					    	$value = 'off';
-					    	if($gpios[$i]){
-					    		$class = 'warning';
-					    		$value = 'on';
-					    	}
-					    	$class2 = 'info';
-					    	$value2 = 'off';
-					    	if($gpios[$i+1]){
-					    		$class2 = 'warning';
-					    		$value2 = 'on';
-					    	}
-
-					    	$response['content'] .=  '     <strong>'.$pin[$i].'</strong>-> <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="label label-'.$class.' pointer">'.$value.'</span>  <span onclick="change_gpio_state('.$i.',this);" style="width:20px;text-align:center;" class="pointer label label-'.$class2.'">'.$value2.'</span>'.' <-<strong>'.$pin[($i+1)].'</strong><br/>';
-					    }
-
-				    	$response['content'] .=  '</ul></pre>';
-					}
-					else{
-						$response['content'] .='Information indisponible sur cet OS :'.PHP_OS;
-					}
+						$model = System::getModel();
+						$pinLabelsRange = System::getPinForModel($model['type'],$model['version']);
+						
+						
+						$response['title'] = 'RPI Type '.$model['type'].' V'.$model['version'].' ('.count($gpios).' pins)';
+						$response['content'] .=  '<table class="gpio_container">';
+						$response['content'] .=  '<tr>';
+						foreach($pinLabelsRange as $range=>$pinLabels){
+							$response['content'] .=  '<td valign="top"><table>';
+							foreach($pinLabels as $pin){
+								$roleColor = 'transparent';
+								if($pin->name=='5V' || $pin->name=='3.3V') $roleColor = '#FB0000';
+								if($pin->name=='0V' || $pin->name=='DNC') $roleColor = '#000';
+								$class = 'gpio_state_'.($gpios[$pin->wiringPiNumber]?'on':'off');
+								$response['content'] .=  '<div style="border-left:8px solid '.$roleColor.'" class="'.$class.'" title="Role : '.$pin->role.', Position physique : '.$pin->physicalNumber.', Numero BMC : '.$pin->bcmNumber.'" onclick="change_gpio_state('.$pin->wiringPiNumber.',this);">';
+								$response['content'] .=  '<span style="'.($range==0?'float:right;':'').'"></span> '.$pin->name;
+								$response['content'] .=  '</div>';
+							}
+							$response['content'] .=  '</table></td>';
+						}
+						$response['content'] .=  '</tr>';
+						$response['content'] .=  '</table>';
+						
 			
 				break;
 				case 'users':

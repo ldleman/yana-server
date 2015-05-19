@@ -1,0 +1,6 @@
+<?php
+require_once('SpeechCommand.class.php');
+$table = new SpeechCommand();
+$table->destroy();
+
+?>

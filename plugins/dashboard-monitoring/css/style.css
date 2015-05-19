@@ -37,3 +37,55 @@
 .graphic_pane li.pane_cyan{
   border-top: 3px solid #4F92BD;
 }
+
+.gpio_container{
+	background:#222222;
+	width:100%;
+	height:100%;
+	border-collapse:collapse;
+	border-top:5px solid #636363;
+	border-bottom:5px solid #636363;
+	margin:0;
+	padding:0;
+}
+.gpio_container tr td {
+margin:0;
+	padding:0;
+}
+.gpio_container tr td div{
+	padding:3px 10px 3px 10px;
+	background-color:#393939;
+	transition: all 0.2s  ease-in-out;
+}
+.gpio_container tr td div:hover{
+	background:#222222;
+}
+.gpio_state_on,.gpio_state_waiting,.gpio_state_off{
+	background:#222222;
+	padding:5px;
+	color:#ffffff;
+	cursor:pointer;
+	transition:all 0.4s ease-in-out;
+}
+.gpio_state_on span,.gpio_state_waiting span,.gpio_state_off span{
+	display:inline-block;
+	background-color:#ffffff;
+	vertical-align:top;
+	margin:0 5px;
+	margin-top:9px;
+	width:2px;
+	height:2px;
+	border-radius:2px;
+	box-shadow:0 0 5px 3px #ED0808;
+	transition:all 0.4s ease-in-out;
+}
+.gpio_state_on span{
+	box-shadow:0 0 5px 3px #ED0808;
+}
+.gpio_state_waiting span{
+	box-shadow:0 0 5px 3px #08D2ED;
+}
+.gpio_state_off span{
+	box-shadow:0 0 5px 3px #0AED08;
+}
+
