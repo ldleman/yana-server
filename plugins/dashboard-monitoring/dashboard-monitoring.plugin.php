@@ -267,11 +267,14 @@ function dash_monitoring_plugin_actions(){
 							$response['content'] .=  '<td valign="top"><table>';
 							foreach($pinLabels as $pin){
 								$roleColor = 'transparent';
-								if($pin->name=='5V' || $pin->name=='3.3V') $roleColor = '#FB0000';
-								if($pin->name=='0V' || $pin->name=='DNC') $roleColor = '#000';
+								
 								$class = 'gpio_state_'.($gpios[$pin->wiringPiNumber]?'on':'off');
-								$response['content'] .=  '<div style="border-left:8px solid '.$roleColor.'" class="'.$class.'" title="Role : '.$pin->role.', Position physique : '.$pin->physicalNumber.', Numero BMC : '.$pin->bcmNumber.'" onclick="change_gpio_state('.$pin->wiringPiNumber.',this);">';
-								$response['content'] .=  '<span style="'.($range==0?'float:right;':'').'"></span> '.$pin->name;
+								
+								if($pin->name=='5V' || $pin->name=='3.3V') $class = 'gpio_power';
+								if($pin->name=='0V' || $pin->name=='DNC') $class = 'gpio_ground';
+								
+								$response['content'] .=  '<div class="'.$class.'" title="Role : '.($pin->role==''?'GPIO':$pin->role).', Position physique : '.$pin->physicalNumber.', Numero BMC : '.$pin->bcmNumber.'" onclick="change_gpio_state('.$pin->wiringPiNumber.',this);">';
+								$response['content'] .=  '<span style="'.($range==0?'float:right;':'').'"></span> '.$pin->name.' <small>('.($pin->role==''?'GPIO':$pin->role).')</small>';
 								$response['content'] .=  '</div>';
 							}
 							$response['content'] .=  '</table></td>';

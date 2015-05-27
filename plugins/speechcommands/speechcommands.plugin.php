@@ -41,7 +41,7 @@ function speechcommands_action(){
 			$command->confidence = $_['confidence'];
 			$command->state = $_['state']=='on'?1:0;
 			$command->save();
-			header('location: setting.php?section=preference&block=speechcommands');
+			header('location: setting.php?section=speechcommands');
 		break;
 	
 		case 'plugin_speechcommands_delete' :
@@ -49,7 +49,7 @@ function speechcommands_action(){
 			require_once('SpeechCommand.class.php');
 			$command = new SpeechCommand();
 			$command->delete(array('id'=>$_['id']));
-			header('location: setting.php?section=preference&block=speechcommands');
+			header('location: setting.php?section=speechcommands');
 		break;
 		case 'speechcommands_execute':
 			global $_;
@@ -147,11 +147,13 @@ function speechcommands_action(){
 
 function speechcommands_plugin_preference_menu(){
 	global $_;
-	echo '<li '.(@$_['block']=='speechcommands'?'class="active"':'').'><a  href="setting.php?section=preference&block=speechcommands"><i class="fa fa-angle-right"></i> Commandes Vocales</a></li>';
+	echo '<li '.(@$_['section']=='speechcommands'?'class="active"':'').'><a  href="setting.php?section=speechcommands"><i class="fa fa-angle-right"></i> Commandes Vocales</a></li>';
 }
+
+
 function speechcommands_plugin_preference_page(){
 	global $myUser,$_,$conf;
-	if((isset($_['section']) && $_['section']=='preference' && @$_['block']=='speechcommands' )  ){
+	if((isset($_['section']) && $_['section']=='speechcommands'  )  ){
 		if($myUser!=false){
 	
 	require_once('SpeechCommand.class.php');
@@ -203,7 +205,7 @@ function speechcommands_plugin_preference_page(){
 				<td><?php echo $command->parameter; ?></td>
 				<td><?php echo $command->state=='1'?'Actif':'Inactif'; ?></td>
 				<td>
-					<a class="btn" title="modifier" href="setting.php?section=preference&block=speechcommands&id=<?php echo $command->id; ?>"><i class="fa fa-edit"></i></a>
+					<a class="btn" title="modifier" href="setting.php?section=speechcommands&id=<?php echo $command->id; ?>"><i class="fa fa-edit"></i></a>
 					<a class="btn" title="supprimer" href="action.php?action=plugin_speechcommands_delete&id=<?php echo $command->id; ?>"><i class="fa fa-times"></i></a>
 				</td>
 			</tr>
@@ -243,8 +245,8 @@ function speechcommands_plugin_preference_page(){
 }
 
 
-Plugin::addHook("preference_menu", "speechcommands_plugin_preference_menu"); 
-Plugin::addHook("preference_content", "speechcommands_plugin_preference_page");   
+Plugin::addHook("setting_menu", "speechcommands_plugin_preference_menu"); 
+Plugin::addHook("setting_bloc", "speechcommands_plugin_preference_page");   
 Plugin::addHook("action_post_case", "speechcommands_action");    
 Plugin::addHook("vocal_command", "speechcommands_vocal_command");
 ?>
