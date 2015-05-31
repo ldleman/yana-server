@@ -74,7 +74,7 @@ $entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cel
 
 
 	if(Plugin::exist('wireRelay')){
-		require_once(dirname(__FILE__).'/../wireRelay/wireRelay.class.php');
+		require_once(dirname(__FILE__).'/../wireRelay/WireRelay.class.php');
 		$table = new WireRelay();
 		$table->create();
 
