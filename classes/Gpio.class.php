@@ -34,7 +34,7 @@ class Gpio{
 	}
 	public static function read($pin,$automode = false){
 		if($automode) self::mode($pin,'in');
-		return self::system(self::GPIO_DEFAULT_PATH.' read '.$pin);
+		return System::commandSilent(self::GPIO_DEFAULT_PATH.' read '.$pin);
 	}
 	public static function pulse($pin,$miliseconds,$state){
 		Gpio::write($pin,$state);
