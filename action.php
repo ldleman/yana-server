@@ -353,7 +353,12 @@ else
 	break;
 
 	case 'CHANGE_GPIO_STATE':
-		if($myUser==false) exit('Vous devez vous connecter pour cette action.');
+		if($myUser==false) {
+			exit('Vous devez vous connecter pour cette action.');
+		}
+		else {
+			Gpio::write($_["pin"],$_["state"],true);
+		}
 	break;
 
 	// Gestion des interfaces de seconde génération
