@@ -181,7 +181,7 @@ function speechcommands_plugin_preference_page(){
 		<tr class="command">
 				
 				<td><?php echo $conf->get('VOCAL_ENTITY_NAME').', <input type="text" class="input-medium" value="'.$command->command.'" placeholder="ma phrase ici" name="command">' ?></td>
-				<td><input  type="number" step="any" class="input-mini" name="confidence" value="<?php echo $command->confidence; ?>"/></td>
+				<td><input  type="number" min="0" max="1" step=".01" class="input-mini" name="confidence" value="<?php echo $command->confidence; ?>"/></td>
 				<td>
 					<select name="type" class="type input-small">
 						<option <?php echo $command->action=='gpio'?'selected="selected"':''; ?> value="gpio">Changer un GPIO (sur le serveur)</option>
