@@ -241,6 +241,7 @@ class Functions
 	}
 
 
+	
 
 	public static function tail($filepath, $lines = 1, $adaptive = true) {
 		$f = @fopen($filepath, "rb");

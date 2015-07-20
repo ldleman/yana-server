@@ -202,9 +202,12 @@ function dash_monitoring_plugin_actions(){
 					
 					$response['title'] = count($response['commands']).' Commandes vocales';
 					$response['content'] = '<ul class="yana-list">';
-					foreach($response['commands'] as $command){
-						$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
+					if(isset($response['commands'])){
+						foreach($response['commands'] as $command){
+							$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
+						}
 					}
+
 					$response['content'] .= '</ul>';
 				break;
 				case 'logs':

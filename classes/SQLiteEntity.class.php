@@ -108,14 +108,14 @@ class SQLiteEntity extends SQLite3
 	}
 
 
-	public function massiveInsert($events){
+	public function massiveInsert($events,$forceId = false){
 		$query = 'INSERT INTO `'.MYSQL_PREFIX.$this->TABLE_NAME.'`(';
 			$i=false;
 			foreach($this->object_fields as $field=>$type){
-				if($type!='key'){
+				if($type=='key' && !$forceId) continue;
 					if($i){$query .=',';}else{$i=true;}
 					$query .='`'.$field.'`';
-				}
+				
 			}
 			$query .=') select';
 			$u = false;
@@ -124,10 +124,9 @@ class SQLiteEntity extends SQLite3
 				
 				$i=false;
 				foreach($event->object_fields as $field=>$type){
-					if($type!='key'){
+					if($type=='key' && !$forceId) continue;
 						if($i){$query .=',';}else{$i=true;}
 						$query .='"'.eval('return htmlentities($event->'.$field.');').'"';
-					}
 				}
 				
 			}

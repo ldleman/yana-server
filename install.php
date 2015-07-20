@@ -69,6 +69,8 @@ if(isset($_POST['install'])){
       $event = new Event();
       $client = new Client();
 	  
+      $personnality = new Personality();
+
 
       //Création des tables SQL
       $configuration->create();
@@ -78,6 +80,9 @@ if(isset($_POST['install'])){
       $section->create();
       $event->create();
       $client->create();
+      $personnality->create();
+      
+      $personnality->birth();
 
       $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
       $configuration->put('DEFAULT_THEME','default');
@@ -85,8 +90,8 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
-	  $configuration->put('HOME_PAGE','index.php');
-	  $configuration->put('VOCAL_SENSITIVITY','0.0');
+	    $configuration->put('HOME_PAGE','index.php');
+	    $configuration->put('VOCAL_SENSITIVITY','0.0');
 
       //Création du rang admin
 		  $rank = new Rank();
