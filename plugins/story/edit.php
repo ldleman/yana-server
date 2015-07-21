@@ -15,12 +15,12 @@ $effects = array();
 		?>
 		
 		<div class="story">
-		<h1><input id="storyName" value="<?php echo $story->label; ?>" placeholder="Scénario 1"/></h1>
+		<h1>Nom : <input id="storyName" value="<?php echo $story->label; ?>" placeholder="Scénario 1"/></h1>
 		<input type="hidden" id="story" value="<?php echo $story->id; ?>">
 		<h2>
-			<span id="causePanelButton" class="active" onclick="switchCauseEffect('CAUSE');"><i class="fa fa-puzzle-piece"> Causes</i></span>
+			<span id="causePanelButton" class="active" onclick="switchCauseEffect('CAUSE');"><i class="fa fa-puzzle-piece"></i> Causes</span>
 			/ 
-			<span id="effectPanelButton" onclick="switchCauseEffect('EFFECT');"><i class="fa fa-bolt"> Effets</i></span>
+			<span id="effectPanelButton" onclick="switchCauseEffect('EFFECT');"><i class="fa fa-bolt"></i> Effets</span>
 		</h2>
 		<div id="causePanel">
 			<ul class="toolbar">
@@ -31,7 +31,7 @@ $effects = array();
 				<div class="clear"></div>
 			</ul>
 			<ul class="workspace">
-				<li class="union"><i class="fa fa-arrow-circle-o-right"></i> SI</li>
+				<li class="union">SI</li>
 				<li id="place-0" class="place">...</li>
 			</ul>
 		</div>
@@ -47,7 +47,7 @@ $effects = array();
 				<div class="clear"></div>
 			</ul>
 			<ul class="workspace">
-				<li class="union"><i class="fa fa-arrow-circle-o-right"></i> Alors</li>
+				<li class="union">ALORS</li>
 				<li id="place-effect-0" class="place">...</li>
 			</ul>
 			

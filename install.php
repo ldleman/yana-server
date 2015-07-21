@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Europe/Paris'); 
 //TODO cron auto install
 // echo "*/1 * * * * root wget http://127.0.0.1/yana-server/action.php?action=crontab -O /dev/null 2>&1" > /etc/cron.d/yana-server
 unset($myUser);

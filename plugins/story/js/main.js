@@ -4,47 +4,27 @@ var mode = 'CAUSE';
 
 $(document).ready(function(){
 	init();
+	    
 });
 
-function init(){
-	
-	if(window['story']!=null){
-		for(var key in story){
-			addLine(story[key]);
-		}
-	}
-	
-	$(document).mousemove(function(e){
-
-		if(handle !=null){
-			handle.css('top',e.clientY-(handle.height()/2)+'px').css('left',(e.clientX-handle.width()/2)+'px');
-			$('.place').each(function(i,elem){
-				if(collision($(elem),handle)){
-					$(elem).addClass('dragover');
-				}else{
-					$(elem).removeClass('dragover');
-				}
-			})
-		}
-		e.preventDefault();
-		e.stopPropagation();
-	});
-
-	$('.toolbar li').mousedown(function(e){
-		var item = $(this).clone();
-		item.addClass('dragged');
-		$('body').append(item);
-		e.preventDefault();
-		handle = item;
-		item.mouseup(function(){
-			if($('.dragover').length!=0){
-				addLine({type:item.data('type'),place:$('.dragover'),panel:mode});
-			}
-			$('.dragover').removeClass('dragover');
-			item.remove();
-			handle = null;
+function initDragAndDrop(){
+	$( ".toolbar li" ).draggable({
+			helper: "clone"
 		});
-	});
+		$( ".place" ).droppable({
+			hoverClass :  "dragover" ,
+			drop: function( event, ui ) {
+				addLine({type:$(ui.draggable[0]).data('type'),place:$(this),panel:mode}); 
+			}
+		});
+}
+
+function init(){
+	if(window['story']!=null){
+		for(var key in story)
+			addLine(story[key]);
+	}
+	initDragAndDrop();
 }
 
 
@@ -93,7 +73,7 @@ function addLine(options){
 	var line = '';
 
 	if($(options.place).attr('id')!='place-0' && $(options.place).attr('id')!='place-effect-0'){
-		line +='<li class="union"><i class="fa fa-arrow-circle-o-right"></i> <select><option '+(options.data.union=='ET'?' selected="selected" ':'')+' >ET</option>';
+		line +='<li class="union"><select><option '+(options.data.union=='ET'?' selected="selected" ':'')+' >ET</option>';
 
 		if(options.panel=='CAUSE') line +='<option '+(options.data.union=='OU'?' selected="selected" ':'')+'>OU</option></select></li>';
 		line +='</select></li>';
@@ -110,22 +90,22 @@ function addLine(options){
 				for(var i=0;i<60;i++)
 					line += '<option '+(values[0]==i?' selected="selected" ':'')+' value="'+i+'">'+i+'</option>';
 				line +='</select>';
-				line += '<select style="width:100px;" id="hour">';
+				line += ' <select style="width:100px;" id="hour">';
 				line +='<option value="*">Toutes les heures</option>';
 				for(var i=0;i<24;i++)
 					line += '<option '+(values[1]==i?' selected="selected" ':'')+' value="'+i+'">'+i+'</option>';
 				line +='</select> ';
-				line += '<select style="width:100px;" id="day">';
+				line += ' <select style="width:100px;" id="day">';
 				line +='<option value="*">Tous les mois</option>';
 				for(var i=1;i<13;i++)
 					line += '<option '+(values[2]==i?' selected="selected" ':'')+' value="'+i+'">'+i+'</option>';
 				line +='</select>';
-				line += '<select style="width:100px;" id="month">';
+				line += ' <select style="width:100px;" id="month">';
 				line +='<option value="*">Toutes les jours</option>';
 				for(var i=1;i<32;i++)
 					line += '<option value="'+i+'">'+i+'</option>';
 				line +='</select>';
-				line += '<select style="width:100px;" id="year">';
+				line += ' <select style="width:100px;" id="year">';
 				line +='<option value="*">Tous les ans</option>';
 				for(var i=2000;i<2200;i++)
 					line += '<option '+(values[3]==i?' selected="selected" ':'')+' value="'+i+'">'+i+'</option>';
@@ -156,11 +136,14 @@ function addLine(options){
 		case 'readvar':
 			line += '<i class="fa dollar"></i> Variable <input type="text" placeholder="Ma variable" value=""></div> <select class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <div class="value"><input type="text" placeholder="Ma valeur" value="'+options.data.value+'">';
 		break;
+		case 'readvar':
+			line += '<i class="fa fa-caret-square-o-right"></i> Scénario  <select class="story"><option>=</option><option>!=</option><option><</option><option>></option></select>';
+		break;
 	}
 	line += '<div class="delbutton" onclick="deleteLine(this);"><i class="fa fa-times"></i></div></div><div class="clear"></div></li><li class="place">...</li>';
 	
 	$(options.place).after(line);
-	
+	initDragAndDrop();
 }
 
 function deleteLine(elem){
