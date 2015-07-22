@@ -69,7 +69,7 @@ if(isset($_POST['install'])){
       $section = new Section();
       $event = new Event();
       $client = new Client();
-	  
+	  $device = new Device();
       $personnality = new Personality();
 
 
@@ -81,8 +81,8 @@ if(isset($_POST['install'])){
       $section->create();
       $event->create();
       $client->create();
+	  $device->create();
       $personnality->create();
-      
       $personnality->birth();
 
       $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
