@@ -50,8 +50,7 @@ function story_plugin_action(){
 		Action::write(
 				function($_,&$response){
 					$templates = array_merge(Cause::types(),Effect::types());
-					$template = $templates[$_['type']] ;
-					
+					$template = $templates[$_['type']];
 					$response['html'] = 
 					'<li class="line" data-type="'.$_['type'].'">
 						<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
@@ -108,72 +107,77 @@ function story_plugin_action(){
 	break;
 	
 	case 'plugin_story_delete_story':
-		$storyManager = new Story();
-		$causeManager = new Cause();
-		$effectManager = new Effect();
-		$storyManager->delete(array('id'=>$_['id']));
-		$causeManager->delete(array('story'=>$_['id']));
-		$effectManager->delete(array('story'=>$_['id']));
+		Action::write(
+			function($_,&$response){
+				$storyManager = new Story();
+				$causeManager = new Cause();
+				$effectManager = new Effect();
+				$storyManager->delete(array('id'=>$_['id']));
+				$causeManager->delete(array('story'=>$_['id']));
+				$effectManager->delete(array('story'=>$_['id']));
+			},
+			array()
+		);
 	break;
 
 	case 'plugin_story_check':
 		require_once(dirname(__FILE__).'/Cause.class.php');
 		$vocal = new Cause();
 		$vocal = $vocal->getById($_['event']);
-		
 		Story::check($vocal);
 	break;
 
 	case 'plugin_story_save_story':
-	
-		$causeManager = new Cause();
-		$effectManager = new Effect();
-		$story = new Story();
-		if(isset($_['story']['id']) && $_['story']['id']!='0'){
-			$story = $story->getById($_['story']['id']);
-			$causeManager->delete(array('story'=>$story->id));
-			$effectManager->delete(array('story'=>$story->id));
-		}
+
+	Action::write(
+		function($_,&$response){
+			$causeManager = new Cause();
+			$effectManager = new Effect();
+			$story = new Story();
+			if(isset($_['story']['id']) && $_['story']['id']!='0'){
+				$story = $story->getById($_['story']['id']);
+				$causeManager->delete(array('story'=>$story->id));
+				$effectManager->delete(array('story'=>$story->id));
+			}
+			
+			$story->label = $_['story']['label'];
+			$story->date = time();
+			$story->state = 1;
+			$story->save();
+			
+			$i = 0;
+			
+			foreach($_['story']['causes'] as $cause){
+				$current = new Cause();
+				$current->type = $cause['type'];
+				$current->operator = @$cause['operator'];
+				$current->setValues($cause);
+				$current->sort = $i;
+				$current->union = $cause['union'];
+				$current->story = $story->id;
+				$current->save();
+				$i++;
+			}
+			
+			$i = 0;
+			foreach($_['story']['effects'] as $effect){
+				$current = new Effect();
+				$current->type = $effect['type'];
+				$current->setValues($effect);
+				$current->sort = $i;
+				$current->union = $cause['union'];
+				$current->story = $story->id;
+				$current->save();
+				$i++;
+			}
 		
-		$story->label = $_['story']['label'];
-		$story->date = time();
-		$story->state = 1;
-		$story->save();
-	
-		$i = 0;
-		
-		foreach($_['story']['cause'] as $cause){
-			$current = new Cause();
-			$current->type = $cause['type'];
-			$current->target = is_array(@$cause['target'])?implode('|',@$cause['target']):@$cause['target'];
-			$current->operator = @$cause['operator'];
-			$current->value = $cause['value'];
-			$current->sort = $i;
-			$current->union = $cause['union'];
-			$current->story = $story->id;
-			$current->save();
-			$i++;
-		}
-		
-		$i = 0;
-		foreach($_['story']['effect'] as $effect){
-			$current = new Effect();
-			$current->type = $effect['type'];
-			$current->target = is_array(@$effect['target'])?implode('|',@$effect['target']):@$effect['target'];
-			$current->value = $effect['value'];
-			$current->sort = $i;
-			$current->union = $cause['union'];
-			$current->story = $story->id;
-			$current->save();
-			$i++;
-		}
-		
-		
+		},
+		array()
+	);
+
 	break;
 	}
 }
-
-
 
 
 

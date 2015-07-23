@@ -24,28 +24,23 @@ class Story extends SQLiteEntity{
 		parent::__construct();
 	}
 	
-	
-
 	public static function check($event =false){
-	require_once(dirname(__FILE__).'/Cause.class.php');
-	require_once(dirname(__FILE__).'/Effect.class.php');
-	global $conf;
-	
+		require_once(dirname(__FILE__).'/Cause.class.php');
+		require_once(dirname(__FILE__).'/Effect.class.php');
+		global $conf;
+		
+		$causeManager = new Cause();
+		$effectManager = new Effect();
 
-	$causeManager = new Cause();
-	$effectManager = new Effect();
-
-	$causes = array();
-
+		$causes = array();
 		$storyCauses = $causeManager->loadAll(array('story'=>$event->story));
 		$validate = $event->story;
 		foreach($storyCauses as $storyCause){
-			switch ($storyCause->type) {
+			switch ($storyCause->type){
 				case 'listen':
 					if($event->type == $storyCause->type){
-						if($storyCause->value != $event->value){
+						if($storyCause->value != $event->value)
 							$validate = false;
-						}
 					}
 				break;
 				case 'time':
@@ -53,28 +48,24 @@ class Story extends SQLiteEntity{
 					list($i2,$h2,$d2,$m2,$y2) = explode('-',$storyCause->value);
 					if ($storyCause->value != $i.'-'.$h.'-'.$d.'-'.$m.'-'.$y) $validate = false;
 					if (!(
-								($i == $i2 || $i2 == '*') && 
-								($h == $h2 || $h2 == '*') && 
-								($d == $d2 || $d2 == '*') && 
-								($m == $m2 || $m2 == '*') && 
-								($y == $y2 || $y2 == '*')
-							)){
-								$validate = false;
+						($i == $i2 || $i2 == '*') && 
+						($h == $h2 || $h2 == '*') && 
+						($d == $d2 || $d2 == '*') && 
+						($m == $m2 || $m2 == '*') && 
+						($y == $y2 || $y2 == '*')
+						)){
+							$validate = false;
 						}
-
-
 				break;
 				case 'readvar':
 					if ($conf->get($storyCause->target,'var') != $storyCause->value) $validate = false;
 				break;
-
 			}
 		}
 
-		
+
 
 		if($validate!=false){
-
 			//consequences
 			$effects = $effectManager->loadAll(array('story'=>$event->story),'sort');
 			foreach($effects as $effect){
@@ -102,66 +93,7 @@ class Story extends SQLiteEntity{
 				}
 			}
 		}
-
-	
-
-		/*
-		$manager = new Story();
-
-		//get all dictionnary values
-		$query = '
-		SELECT * FROM plugin_story_cause WHERE story = (SELECT story.id FROM plugin_story story 
-		LEFT JOIN plugin_story_cause cause ON story.id = cause.story)';
-
-		$storyToCheck = array();
-		
-		$results = $manager->customQuery($query);
-		while($result = $results->fetchArray()){
-			$storyToCheck[$result['story']][] = $result;
-		}
-		
-		if(count($storyToCheck)!=0){
-			foreach($storyToCheck as $story=>$causes){
-				//On part du principe que le scénario est validé tant qu'aucune cause manquante ne viens la contredire
-				$activateStory = true;
-				//On vas checker toutes les causes de ce scenario 
-				foreach($causes as $cause){
-					$validateCause = false;
-					switch($cause['type']){
-						case 'listen':
-							if($cause['value'] == $dic['lastphrase'])
-								$validateCause = true;
-							if($cause['operator']=='!=') $validateCause = !$validateCause;
-						break;
-						case 'readvar':
-						break;
-						case 'event':
-						break;
-						case 'time':
-							list($i2,$h2,$d2,$m2,$y2) = explode('-',$cause['value']);
-							if (
-								($i == $i2 || $i2 == '*') && 
-								($h == $h2 || $h2 == '*') && 
-								($d == $d2 || $d2 == '*') && 
-								($m == $m2 || $m2 == '*') && 
-								($y == $y2 || $y2 == '*')
-							)
-								$validateCause = true;
-							
-							if($cause['operator']=='!=') $validateCause = !$validateCause;
-							
-						break;
-					}
-					$activateStory = $activateStory && $validateCause;
-					
-					var_dump($cause);
-				}
-				if($activateStory) var_dump('story validated !');
-			}
-		
-		}*/
 	}
-
 }
 
 ?>

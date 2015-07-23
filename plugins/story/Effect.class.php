@@ -8,7 +8,7 @@
 
 class Effect extends SQLiteEntity{
 
-	public $id,$story,$sort,$type,$value,$target,$operator,$union;
+	public $id,$story,$sort,$type,$values,$operator,$union;
 	protected $TABLE_NAME = 'plugin_story_effect';
 	protected $CLASS_NAME = 'Effect';
 	protected $object_fields = 
@@ -18,8 +18,7 @@ class Effect extends SQLiteEntity{
 		'sort'=>'int',
 		'type'=>'string',
 		'union'=>'string',
-		'value'=>'longstring',
-		'target'=>'longstring'
+		'values'=>'longstring'
 	);
 
 	function __construct(){
@@ -59,6 +58,15 @@ class Effect extends SQLiteEntity{
 					'template' => '<input data-field="url" type="text">'
 					),
 		);
+	}
+
+
+	function setValues($values){
+		$this->values = json_encode($values);
+	}
+	
+	function getValues($values){
+		return json_decode($this->values);
 	}
 }
 

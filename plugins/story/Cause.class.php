@@ -8,7 +8,7 @@
 
 class Cause extends SQLiteEntity{
 
-	public $id,$story,$sort,$type,$value,$target,$operator,$union;
+	public $id,$story,$sort,$type,$values,$operator,$union;
 	protected $TABLE_NAME = 'plugin_story_cause';
 	protected $CLASS_NAME = 'Cause';
 	protected $object_fields = 
@@ -17,8 +17,7 @@ class Cause extends SQLiteEntity{
 		'story'=>'int',
 		'sort'=>'int',
 		'type'=>'string',
-		'value'=>'longstring',
-		'target'=>'longstring',
+		'values'=>'longstring',
 		'union'=>'string',
 		'operator'=>'string'
 	);
@@ -72,6 +71,14 @@ class Cause extends SQLiteEntity{
 				$types['time']['template'] .= '</select>';
 
 		return $types;
+	}
+
+	function setValues($values){
+		$this->values = json_encode($values);
+	}
+	
+	function getValues($values){
+		return json_decode($this->values);
 	}
 	
 }
