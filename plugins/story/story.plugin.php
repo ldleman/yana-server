@@ -45,8 +45,69 @@ function plugin_story_check(){
 function story_plugin_action(){
 	global $_,$myUser;
 	switch($_['action']){
+		
+	case 'plugin_story_get_type_template':
+		Action::write(
+				function($_,&$response){
+					$templates = array_merge(Cause::types(),Effect::types());
+					$template = $templates[$_['type']] ;
+					
+					$response['html'] = 
+					'<li class="line" data-type="'.$_['type'].'">
+						<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
+					</li>';
+				},
+				array()
+			);
+	break;
 	
-	case 'DELETE_STORY':
+	case 'plugin_story_get_captors_plugins':
+		
+		Action::write(
+				function($_,&$response){
+					$deviceManager = new Device();
+					$devices = $deviceManager->loadAll(array('state'=>1,'type'=>Device::CAPTOR));
+					$response['plugins'] = array();
+					foreach($devices as $device){
+						if(!isset($response['plugins'][$device->plugin])) $response['plugins'][] = $device->plugin ;
+					}
+				},
+				array()
+			);
+	break;
+	
+	case 'plugin_story_get_captors':
+		
+		Action::write(
+				function($_,&$response){
+					$deviceManager = new Device();
+					$devices = $deviceManager->loadAll(array('state'=>1,'plugin'=>$_['plugin'],'type'=>Device::CAPTOR));
+				
+					foreach($devices as $device){
+						$response['devices'][] = array(
+							'plugin' => $device->plugin,
+							'label' => $device->label,
+							'id' => $device->id
+						);
+					}
+				},
+				array()
+			);
+	break;
+	
+	case 'plugin_story_get_captor_values':
+		
+		Action::write(
+				function($_,&$response){
+					$deviceManager = new Device();
+					$device = $deviceManager->getById($_['id']);
+					$response['values'] = $device->getValues();
+				},
+				array()
+			);
+	break;
+	
+	case 'plugin_story_delete_story':
 		$storyManager = new Story();
 		$causeManager = new Cause();
 		$effectManager = new Effect();
@@ -63,7 +124,7 @@ function story_plugin_action(){
 		Story::check($vocal);
 	break;
 
-	case 'SAVE_STORY':
+	case 'plugin_story_save_story':
 	
 		$causeManager = new Cause();
 		$effectManager = new Effect();

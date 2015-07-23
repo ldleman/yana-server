@@ -40,11 +40,10 @@ li.dragged{
 .workspace input,select{
 	border:0px;
 	border-radius:0px;
-	/*border-bottom:2px solid #cecece;*/
 	padding-left:5px;
 	padding-right:5px;
 	margin:0;
-	max-width:100px;
+	max-width:150px;
 	height: auto;
 }
 
@@ -116,28 +115,26 @@ li.dragged{
 	color:#30B2D6;
 }
 
-.workspace .target{
-	display:block;
-	max-width:48%;
-	line-height: 26px;
-	float:left;
-	color:#ffffff;
-	font-weight:bold;
-}
+
 .workspace .operator{
-	display:block;
-	float:left;
 	text-align:center;
 	margin:0 0 0 10px;
-	width:20px;
-}
-.workspace .value{
-	display:block;
-	float:right;
+	width:50px;
 }
 
-.delbutton{
+
+
+
+.workspace .line .delete{
 	float:right;
 	cursor:pointer;
-	margin:0 10px;
+	transition:opacity 0.3s linear;
+	margin: 0 10px 0 5px;
+    opacity: 0;
+    padding-top: 3px;
 }
+
+.workspace .line:hover  .delete{
+	opacity:1;
+}
+
