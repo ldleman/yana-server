@@ -285,7 +285,11 @@ function dash_monitoring_plugin_actions(){
 						$response['content'] .=  '</tr>';
 						$response['content'] .=  '</table>';
 						
-			
+						
+						if($model['type']=='unknown'){
+							$response['title'] = 'RPI Inconnu, révision ('.$model['revision'].') ';
+							$response['content'] =  '<p>Votre RPI dispose d\'une révision ('.$model['revision'].') inconnue de yana, il n\'est pas possible d\'afficher ses pins.<br/> Pour ajouter cette révision, merci de <a href="https://github.com/ldleman/yana-server/issues">faire une demande sur github</a> en précisant la révision, le nombre de pins, le modèle et la vesion de votre rpi.</p>';
+						}
 				break;
 				case 'users':
 					$users = array();

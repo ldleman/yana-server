@@ -153,24 +153,25 @@ class System{
 	public static function getModel(){
 		$infos = self::getInfos();
 		$deductionArray = array(
-			'0002' => array('ram'=>'256','version'=>'1.0','type'=>'b'),
-			'0003' => array('ram'=>'256','version'=>'1.0+ecn0001','type'=>'b'),
-			'0004' => array('ram'=>'256','version'=>'2.0','type'=>'b'),
-			'0005' => array('ram'=>'256','version'=>'2.0','type'=>'b'),
-			'0006' => array('ram'=>'256','version'=>'2.0','type'=>'b'),
-			'0007' => array('ram'=>'256','version'=>'1.0','type'=>'a'),
-			'0008' => array('ram'=>'256','version'=>'1.0','type'=>'a'),
-			'0009' => array('ram'=>'256','version'=>'1.0','type'=>'a'),
-			'0010' => array('ram'=>'512','version'=>'1.0','type'=>'b+'),
-			'0011' => array('ram'=>'512','version'=>'1.0','type'=>'compute'),
-			'0012' => array('ram'=>'256','version'=>'1.0','type'=>'a+'),
-			'000d' => array('ram'=>'512','version'=>'2.0','type'=>'b'),
-			'000e' => array('ram'=>'512','version'=>'2.0','type'=>'b'),
-			'000f' => array('ram'=>'512','version'=>'2.0','type'=>'b'),
-			'a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2')
+			'0002' => array('ram'=>'256','version'=>'1.0','type'=>'b','revision'=>'0002'),
+			'0003' => array('ram'=>'256','version'=>'1.0+ecn0001','type'=>'b','revision'=>'0003'),
+			'0004' => array('ram'=>'256','version'=>'2.0','type'=>'b','revision'=>'0004'),
+			'0005' => array('ram'=>'256','version'=>'2.0','type'=>'b','revision'=>'0005'),
+			'0006' => array('ram'=>'256','version'=>'2.0','type'=>'b','revision'=>'0006'),
+			'0007' => array('ram'=>'256','version'=>'1.0','type'=>'a','revision'=>'0007'),
+			'0008' => array('ram'=>'256','version'=>'1.0','type'=>'a','revision'=>'0008'),
+			'0009' => array('ram'=>'256','version'=>'1.0','type'=>'a','revision'=>'0009'),
+			'0010' => array('ram'=>'512','version'=>'1.0','type'=>'b+','revision'=>'0010'),
+			'0011' => array('ram'=>'512','version'=>'1.0','type'=>'compute','revision'=>'0011'),
+			'0012' => array('ram'=>'256','version'=>'1.0','type'=>'a+','revision'=>'0012'),
+			'000d' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000d'),
+			'000e' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000e'),
+			'000f' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000f'),
+			'a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a01041'),
+			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041')
 		);
-		if(PHP_OS=='WINNT') return array('ram'=>'256','version'=>'1.0','type'=>'b');//for dev mode on windows only
-		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :'unknown';
+		if(PHP_OS=='WINNT') $infos['Revision'] = '0002';//for dev mode on windows only
+		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :array('ram'=>'0','version'=>'0','type'=>'unknown','revision'=>$infos['Revision']);
 	}
 
 	public static function commandSilent($cmd){
