@@ -164,6 +164,7 @@ class System{
 			'0010' => array('ram'=>'512','version'=>'1.0','type'=>'b+','revision'=>'0010'),
 			'0011' => array('ram'=>'512','version'=>'1.0','type'=>'compute','revision'=>'0011'),
 			'0012' => array('ram'=>'256','version'=>'1.0','type'=>'a+','revision'=>'0012'),
+			'0013' => array('ram'=>'512','version'=>'1.0','type'=>'b+','revision'=>'0013'),
 			'000d' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000d'),
 			'000e' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000e'),
 			'000f' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000f'),

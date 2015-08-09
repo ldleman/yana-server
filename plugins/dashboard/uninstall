@@ -1,10 +1,13 @@
 <?php
-
+require_once(dirname(__FILE__).'/Dashboard.class.php');
 require_once(dirname(__FILE__).'/Widget.class.php');
 
 $table = new Widget();
 $table->drop();
 
+
+$table = new Dashboard();
+$table->drop();
 
 Section::remove('dashboard');
 

@@ -96,7 +96,7 @@
 .gpio_state_waiting span{
 	text-shadow:0 0 5px #08D2ED;
 }
-.gpio_state_off span{
+.gpio_state_on span{
 	text-shadow:0 0 5px #0AED08;
 }
 
