@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Europe/Paris'); 
 //TODO cron auto install
 // echo "*/1 * * * * root wget http://127.0.0.1/yana-server/action.php?action=crontab -O /dev/null 2>&1" > /etc/cron.d/yana-server
 unset($myUser);
@@ -68,7 +69,7 @@ if(isset($_POST['install'])){
       $section = new Section();
       $event = new Event();
       $client = new Client();
-	  
+	  $device = new Device();
       $personnality = new Personality();
 
 
@@ -80,8 +81,8 @@ if(isset($_POST['install'])){
       $section->create();
       $event->create();
       $client->create();
+	  $device->create();
       $personnality->create();
-      
       $personnality->birth();
 
       $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');

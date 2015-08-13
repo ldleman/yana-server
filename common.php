@@ -23,6 +23,8 @@ require_once(dirname(__FILE__).'/constant.php');
 
 $versions = json_decode(file_get_contents('db.json'),true);
 
+
+
 if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
 	file_put_contents('dbversion',$versions[0]['version']);
 	header('location:install.php');
@@ -35,7 +37,6 @@ if(file_exists('db.json')){
 	if(!file_exists('dbversion')) file_put_contents('dbversion', '0');
 	$current = file_get_contents('dbversion');
 	$versions = json_decode(file_get_contents('db.json'),true);
-	
 	if($current<$versions[0]['version']){
 		Functions::alterBase($versions,$current);
 		file_put_contents('dbversion',$versions[0]['version']);

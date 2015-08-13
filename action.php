@@ -197,7 +197,10 @@ else
 	Functions::goback(" ./index");
 	break;
 
-	
+	case 'save_sentence':
+		global $conf;
+		$conf->put('last_sentence',$_['sentence']);
+	break;
 
 	case 'ENABLE_DASHBOARD':
 		Plugin::enabled('dashboard-dashboard');
