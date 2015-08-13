@@ -97,6 +97,7 @@ function dashboard_plugin_actions(){
 			$widgetManager = new Widget();
 
 			foreach($_['sort']['cells'] as $id=>$sort){
+				if(empty($sort)) continue;
 				$widgetManager->change(array('cell'=>$sort['cell'],'column'=>$sort['column']),array('id'=>$id));
 			}
 			

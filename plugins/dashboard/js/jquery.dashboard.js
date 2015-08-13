@@ -46,10 +46,16 @@
 					<div class="dashboard_bloc_content">'+o.content+'</div> \
 					</div>');
 
+				var placement = $(o.placement).parent();
+				
+				if(placement.length==0) return;
 			
-				var column = $(o.placement).parent().attr('id').split('_');
-				column = column[column.length-1];
-				var cell = bloc.index();
+					var column = placement.attr('id').split('_');
+					column = column[column.length-1];
+					var cell = bloc.index();
+				
+
+				
 
 				bloc.data('widget',{column: column,cell:cell});
 
