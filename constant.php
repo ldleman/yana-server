@@ -11,6 +11,8 @@
 	define('LOG_FILE','log/.log.txt');
 	/* Chemin vers le cache des avatars */
 	define('AVATAR_FOLDER','cache/avatar');
+	/* Chemin http vers yana */
+	define('YANA_URL','http://127.0.0.1:80/yana-server');
 	/* 
 	* <!> Laisser à vide sauf si vous souhaitez vous auto-logguer avec un compte sans mot de passe 
 	*     Ceci peut être utile pour les yana-server accessible uniquement depuis votre réseau interne

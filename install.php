@@ -6,6 +6,7 @@ date_default_timezone_set('Europe/Paris');
 unset($myUser);
 error_reporting(E_ALL);
 ini_set('display_errors','On');
+define('__ROOT__',realpath(dirname(__FILE__)));
 require_once(dirname(__FILE__).'/constant.php');
 
 function __autoload($class_name) {
@@ -69,8 +70,13 @@ if(isset($_POST['install'])){
       $section = new Section();
       $event = new Event();
       $client = new Client();
-	  $device = new Device();
+	    $device = new Device();
       $personnality = new Personality();
+
+      if(isset($_POST['url'])){
+      $const = file_get_contents("constant.php");
+      file_put_contents('constant.php', (preg_replace("/(define\(\'YANA_URL\'\,\')(.*)('\)\;)/", "$1".$_POST['url']."$3", $const)));
+      }
 
 
       //Création des tables SQL
@@ -80,8 +86,8 @@ if(isset($_POST['install'])){
       $rank->create();
       $section->create();
       $event->create();
-      $client->create();
-	  $device->create();
+  
+	    $device->create();
       $personnality->create();
       $personnality->birth();
 
@@ -198,6 +204,16 @@ if(isset($_POST['install'])){
 		
 		if(!isset($tests['error'])){
 		
+
+    if(strpos($_SERVER['HTTP_HOST'], ':') !==false){
+      list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
+    }else{
+      $host = $_SERVER['HTTP_HOST'];
+      $port = 80;
+    }
+    $actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+    $actionUrl = str_replace("/install.php", "", $actionUrl );
+ 
 	  ?>
 	  
           <div class="alert alert-info">
@@ -223,6 +239,14 @@ if(isset($_POST['install'])){
           <label class="control-label" for="inputEmail">Email</label>
           <div class="controls">
             <input type="text" name="email" id="inputEmail" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="inputUrl">Adresse de yana</label>
+          <div class="controls">
+
+            <input type="text" name="url" id="inputUrl" placeholder="http://" value="<?php echo $actionUrl; ?>">
           </div>
         </div>
 

@@ -364,30 +364,24 @@ else
 	break;
 
 	// Gestion des interfaces de seconde génération
-	case 'SUBSCRIBE_TO_CLIENT':
+	case 'ADD_CLIENT':
 		Action::write(function($_,&$response){
-			global $myUser,$conf;
-			if(!isset($_['ip'])) throw new Exception("IP invalide");
-			if(!isset($_['port']) || !is_numeric($_['port'])) throw new Exception("Port invalide");
+			global $myUser,$conf,$client;
+			if(!isset($_SERVER['argv'][2])) throw new Exception("Type client invalide");
 			
-			$url = Functions::getBaseUrl('action.php').'/action.php';
-			$client = new CLient($_['ip'],$_['port']);
+			
+			file_put_contents('filename', $_SERVER['argv'][2]);
+			
+			
 
-			Plugin::callHook("vocal_command", array(&$vocal,$url));
-			$conf =  array(
-				'VOCAL_ENTITY_NAME' => $conf->put('VOCAL_ENTITY_NAME','YANA'),
-				'SPEECH_COMMAND' => $vocal
-			);
 
-			if(!$client->suscribe($url,$myUser->getToken()))  throw new Exception("Appairage impossible");
-			if(!$client->configure($conf))  throw new Exception("Configuration impossible");
-		},array('user'=>'u'));
+			
+		});
 	break;
 
 
 	default:
 		Plugin::callHook("action_post_case", array());
-		
 	break;
 }
 

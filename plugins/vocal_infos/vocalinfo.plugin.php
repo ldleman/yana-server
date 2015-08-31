@@ -13,7 +13,7 @@ define('VOCALINFO_COMMAND_FILE','cmd.json');
 function vocalinfo_vocal_command(&$response,$actionUrl){
 	global $conf;
 
-	$commands = json_decode(file_get_contents(Plugin::path().'/'.VOCALINFO_COMMAND_FILE),true);
+	$commands = json_decode(file_get_contents(__ROOT__.'/'.Plugin::path().'/'.VOCALINFO_COMMAND_FILE),true);
 	foreach($commands as $key=>$command){
 		if($command['disabled']=='true') continue;
 		$response['commands'][] = array(

@@ -16,7 +16,7 @@ class SQLiteEntity extends SQLite3
 	private $debug = false;
 	
 	function __construct(){
-		$this->open(DB_NAME);
+		$this->open(__ROOT__.'/'.DB_NAME);
 	}
 
 	function __destruct(){

@@ -182,9 +182,11 @@ class Plugin{
 		    return $return;
 		}
 
-		public static function callHook($hookName, $hookArguments) {  
+		public static function callHook($hookName, $hookArguments) { 
+
 			//echo '<div style="display:inline;background-color:#CC47CB;padding:3px;border:5px solid #9F1A9E;border-radius:5px;color:#ffffff;font-size:15px;">'.$hookName.'</div>';
 		    if(isset($GLOBALS['hooks'][$hookName])) { 
+		    	
 		        foreach($GLOBALS['hooks'][$hookName] as $functionName) {  
 		            call_user_func_array($functionName, $hookArguments);  
 		        }  

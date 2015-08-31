@@ -449,6 +449,11 @@ function wireRelay_plugin_setting_menu(){
 }
 
 
+function wireRelay_plugin_listen($command,$text,$confidence){
+	//echo 'diction de la commande : '.$command;
+}
+
+
 function wireRelay_plugin_widget(&$widgets){
 		$widgets[] = array(
 		    'uid'      => 'dash_wirerelay',
@@ -478,5 +483,7 @@ Plugin::addHook("action_post_case", "wirerelay_plugin_action");
 Plugin::addHook("vocal_command", "wirerelay_plugin_vocal_command");
 //Lie wireRelay_plugin_widget aux widgets de la dashboard
 Plugin::addHook("widgets", "wireRelay_plugin_widget");
+
+Plugin::addHook("listen", "wireRelay_plugin_listen");
 
 ?>

@@ -19,14 +19,18 @@ global $myUser,$conf,$_;
 $_ = array_map('Functions::secure',array_merge($_POST,$_GET));
 $error = '';
 
-require_once(dirname(__FILE__).'/constant.php');
 
-$versions = json_decode(file_get_contents('db.json'),true);
+
+define('__ROOT__',realpath(dirname(__FILE__)));
+
+require_once(__ROOT__ .'/constant.php');
+
+$versions = json_decode(file_get_contents(__ROOT__.'/db.json'),true);
 
 
 
 if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
-	file_put_contents('dbversion',$versions[0]['version']);
+	file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
 	header('location:install.php');
 }else{
 	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
@@ -34,16 +38,16 @@ if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
 
 if(file_exists('db.json')){
 
-	if(!file_exists('dbversion')) file_put_contents('dbversion', '0');
-	$current = file_get_contents('dbversion');
-	$versions = json_decode(file_get_contents('db.json'),true);
+	if(!file_exists(__ROOT__.'/dbversion')) file_put_contents(__ROOT__.'/dbversion', '0');
+	$current = file_get_contents(__ROOT__.'/dbversion');
+	$versions = json_decode(file_get_contents(__ROOT__.'/db.json'),true);
 	if($current<$versions[0]['version']){
 		Functions::alterBase($versions,$current);
-		file_put_contents('dbversion',$versions[0]['version']);
+		file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
 	}
 }
 
-require_once(dirname(__FILE__).'/RainTPL.php');
+require_once(__ROOT__.'/RainTPL.php');
 
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
@@ -53,8 +57,8 @@ function __autoload($class_name){
 }
 
 
-if(file_exists(dirname(__FILE__).'/.tool.php')){
-	require_once(dirname(__FILE__).'/.tool.php');
+if(file_exists(__ROOT__.'/.tool.php')){
+	require_once(__ROOT__.'/.tool.php');
 	
 	switch($tool->type){
 	case 'reset_password':
