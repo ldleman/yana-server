@@ -143,7 +143,7 @@ class Client extends SocketServer {
 	private $lastMessage;
 }
 
-	$client = new Client('localhost',9999,20);
+	$client = new Client('0.0.0.0',9999,20);
 	$client->start();
 
 
