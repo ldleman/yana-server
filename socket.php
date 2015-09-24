@@ -114,10 +114,12 @@ class Client extends SocketServer {
 		if(count($clients)==0)
 			$clients = $this->getByType('speak');
 			if(count($clients)==0) return;
-			$client = $clients[0];
+			foreach($clients as $client){
+			//$client = $clients[0];
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("url ".'{"action":"url","url":"'.$message.'"} to '.$client->name);
 			$this->send($socket,'{"action":"url","url":"'.$message.'"}');
+		}
 		
 	}
 
