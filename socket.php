@@ -64,7 +64,7 @@ class Client extends SocketServer {
 				
 
 				
-				Plugin::callHook('listen',array($_['command'],$_['text'],$_['confidence']));
+				Plugin::callHook('listen',array($_['command'],$_['text'],$_['confidence'],$this));
 			break;
 			case '':
 			default:
@@ -104,7 +104,6 @@ class Client extends SocketServer {
 		if(count($clients)==0)
 			 $clients = $this->getByType('speak');
 		
-
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("send ".'{"action":"talk","message":"'.$message.'"} to '.$client->name);
