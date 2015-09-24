@@ -40,12 +40,14 @@ class Client extends SocketServer {
 				$this->log('setting infos '.$client->location.' for '.$client->name);
 			break;
 			case 'GET_SPEECH_COMMANDS':
-
-	
-				
 				$response = array();
 				Plugin::callHook("vocal_command", array(&$response,YANA_URL));
-				$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMANDS","commands":'.json_encode($response['commands']).'}');
+				$commands = array();
+				foreach($response['commands'] as $command){
+					unset($command['url']);
+					$commands[] = $command;
+				}
+				$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMANDS","commands":'.json_encode($commands).'}');
 			break;
 			case 'CATCH_COMMAND':
 				
