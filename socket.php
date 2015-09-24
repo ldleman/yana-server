@@ -54,7 +54,7 @@ class Client extends SocketServer {
 				$response = array();
 				Plugin::callHook("vocal_command", array(&$response,''));
 
-				
+				/*
 				foreach ($response['commands'] as $command) {
 			
 					if($command['command'] != $_['command']) continue;
@@ -63,7 +63,7 @@ class Client extends SocketServer {
 						$this->url(YANA_URL.'/action.php'.$command['url']);
 					} 
 				}
-				
+				*/
 
 				
 				Plugin::callHook('listen',array($_['command'],$_['text'],$_['confidence'],$this));
