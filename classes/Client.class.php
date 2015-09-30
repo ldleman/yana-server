@@ -8,56 +8,43 @@ class Client {
 		$clients = array();
 	}
 
+
+	public static  function  send($msg){
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $response = '';
+        if ($socket !== false) {
+            $result = socket_connect($socket, '127.0.0.1', 9999);
+            if ($result !== false) {
+                $in = json_encode($msg);
+                socket_write($socket, $in, strlen($in));
+                $out = '';
+               /* while ($out = socket_read($socket, 2048)) {
+                   var_dump($out);
+                   $response.= $out;
+                }*/
+            }
+            socket_close($socket);
+        }
+        return $response;
+    }
+
 	public function add($socket,$type){
 		$this->clients[] = new ClientDevice($socket,$type,$location);
 	}
 
-	public function configure(){
-		return true;
+
+	public function sound($parameter){
+		Client::send(array("action"=>"SOUND","parameter"=>$parameter));
 	}
-	public function sound(){
-		return true;
+	public static function talk($parameter){
+		Client::send(array("action"=>"TALK","parameter"=>$parameter));
 	}
-	public function talk(){
-		return true;
+	public function execute($parameter){
+		Client::send(array("action"=>"EXECUTE","parameter"=>$parameter));
 	}
-	public function execute(){
-		return true;
-	}
-	public function send(){
-		return true;
-	}
+
 }
 
-class ClientDevice {
-	public $id,$type,$socket,$location;
 
-	function __construct($socket,$type,$location='global'){
-		$this->$type = $type;
-		$this->$socket = $socket;
-	}
-
-
-
-	public function suscribe($url,$token){
-		//$this->save();
-		return true;
-	}
-	public function configure($conf){
-		return true;
-	}
-	public function sound(){
-		return true;
-	}
-	public function talk(){
-		return true;
-	}
-	public function execute(){
-		return true;
-	}
-	public function send(){
-		return true;
-	}
-}
 
 ?>

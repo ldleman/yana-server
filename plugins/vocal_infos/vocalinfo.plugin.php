@@ -18,10 +18,26 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		if($command['disabled']=='true') continue;
 		$response['commands'][] = array(
 		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$command['command'],
-		'url'=>$actionUrl.$command['url'],'confidence'=>($command['confidence']+$conf->get('VOCAL_SENSITIVITY'))
+		'url'=>$actionUrl.$command['url'],
+		'confidence'=>($command['confidence']+$conf->get('VOCAL_SENSITIVITY'))
 		);
 	}
 
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' Définit le mot',
+		'callback'=>'vocalinfo_define_word',
+		'confidence'=>0.8);
+
+}
+
+function vocalinfo_define_word($text,$confidence,$parameters){
+
+	if($text=='bistro'){
+		Client::talk("Un bistro est un lieu de cultes, ou les sages de ce siècle vont se receuillir");
+	}else{
+		Client::talk("Le mot ".$text." ne fait pas partie de mot vocabulaire, essayez plutot avec le mot bistro");
+	}
+	//Client::execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
 }
 
 function vocalinfo_action(){
@@ -413,6 +429,9 @@ function vocalinfo_plugin_preference_page(){
 		}
 	}
 }
+
+
+
 
 
 Plugin::addHook("preference_menu", "vocalinfo_plugin_preference_menu"); 

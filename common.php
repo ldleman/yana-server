@@ -120,6 +120,29 @@ if($myUser!=false && $myUser->getRank()!=false){
 	$rank = $rank->getById($myUser->getRank());
 }
 
+
+function common_listen($command,$text,$confidence){
+	echo "\n".'diction de la commande : '.$command;
+	
+	$response = array();
+	Plugin::callHook("vocal_command", array(&$response,YANA_URL));
+	$commands = array();
+	foreach($response['commands'] as $cmd){
+		if($command != $cmd['command']) continue;
+		if(!isset($cmd['parameters'])) $cmd['parameters'] = array();
+		if(isset($cmd['callback']))call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters']);
+	}
+
+}
+
+
+Plugin::addHook("listen", "common_listen");
+
+
+
+
+
+
 $tpl->assign('myUser',$myUser);
 $tpl->assign('userManager',$userManager);
 $tpl->assign('configurationManager',$conf);

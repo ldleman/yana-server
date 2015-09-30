@@ -2,7 +2,7 @@
 require_once(realpath(dirname(__FILE__)).'/common.php');
 date_default_timezone_set('Europe/Paris');
 
-class Client extends SocketServer {
+class ClientSocket extends SocketServer {
 	public $connected = array();
 
 	function onDataReceived($socket,$data) {
@@ -28,16 +28,36 @@ class Client extends SocketServer {
 	}
 	
 	function handleData($client,$data){
-		
+		$this->log("Try to parse received data : ".$data);
+		try{
 		$_ = json_decode($data,true);
 
-		if(!isset($_['action'])) $_['action'] = '';
+		if(!$_) throw new Exception("Unable to parse data : ".$data);
 		
+
+		if(!isset($_['action'])) $_['action'] = '';
+		$this->log("Parsed action : ".$_['action']);
+
 		switch($_['action']){
+			case 'TALK':
+				$this->talk($_['parameter']);
+			break;
+			case 'SOUND':
+				$this->sound($_['parameter']);
+			break;
+			case 'EXECUTE':
+				$this->execute($_['parameter']);
+			break;
 			case 'CLIENT_INFOS':
+
 				$client->type = $_['type'];
 				$client->location = $_['location'];
-				$this->log('setting infos '.$client->location.' for '.$client->name);
+				$userManager = new User();
+				$myUser = $userManager->load(array('token'=>$_['token']));
+				if(isset($myUser) && $myUser!=false)
+					$myUser->loadRight();
+				$client->user =  (!$myUser?new User():$myUser);
+				$this->log('setting infos '.$client->location.' for '.$client->name.' with user:'.$client->user->getLogin());
 			break;
 			case 'GET_SPEECH_COMMANDS':
 				$response = array();
@@ -45,28 +65,15 @@ class Client extends SocketServer {
 				$commands = array();
 				foreach($response['commands'] as $command){
 					unset($command['url']);
-					$commands[] = $command;
+					$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMAND","command":'.json_encode($command).'}');
 				}
-				$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMANDS","commands":'.json_encode($commands).'}');
+				$this->send($this->connected[$client->id]->socket,'{"action":"UPDATE_COMMANDS"}');
 			break;
 			case 'CATCH_COMMAND':
+				$response = "";
+				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
+				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence']));
 				
-				$response = array();
-				Plugin::callHook("vocal_command", array(&$response,''));
-
-				/*
-				foreach ($response['commands'] as $command) {
-			
-					if($command['command'] != $_['command']) continue;
-					
-					if( isset($command['url'])){
-						$this->url(YANA_URL.'/action.php'.$command['url']);
-					} 
-				}
-				*/
-
-				
-				Plugin::callHook('listen',array($_['command'],$_['text'],$_['confidence'],$this));
 			break;
 			case '':
 			default:
@@ -78,13 +85,16 @@ class Client extends SocketServer {
 		}
 
 		$this->updateClient($client);
-	
+		}catch(Exception $e){
+			$this->log("ERROR : ".$e->getMessage());
+		}
 		//system('php '.realpath(dirname(__FILE__)).'\action.php '.$json['action'],$out);
 		//$this->send($socket,$out);
 	}
 
 
 	function updateClient($client){
+	
 		$this->connected[$client->id] = $client;
 	}
 
@@ -102,7 +112,8 @@ class Client extends SocketServer {
 	}
 	
 	public function talk($message,$clients=array()){
-		$this->log("Try to send ".$message." to ".count($clients)." clients");
+
+		$this->log("TALK : Try to send ".$message." to ".count($clients)." clients");
 		if(count($clients)==0)
 			 $clients = $this->getByType('speak');
 		
@@ -148,7 +159,7 @@ class Client extends SocketServer {
 	private $lastMessage;
 }
 
-	$client = new Client('0.0.0.0',9999,20);
+	$client = new ClientSocket('0.0.0.0',9999,20);
 	$client->start();
 
 
@@ -156,7 +167,7 @@ class Client extends SocketServer {
 
 
 class ClientDevice {
-	public $id,$type,$socket,$location;
+	public $id,$type,$socket,$location,$user;
 }
 
 
