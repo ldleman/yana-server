@@ -127,10 +127,14 @@ function common_listen($command,$text,$confidence){
 	$response = array();
 	Plugin::callHook("vocal_command", array(&$response,YANA_URL));
 	$commands = array();
+	echo "\n".'Test de comparaison avec '.count($response['commands']).' commandes';
 	foreach($response['commands'] as $cmd){
 		if($command != $cmd['command']) continue;
 		if(!isset($cmd['parameters'])) $cmd['parameters'] = array();
-		if(isset($cmd['callback']))call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters']);
+		if(isset($cmd['callback'])){
+			echo "\n".'Commande trouvée, execution de la fonction plugin '.$cmd['callback'];
+			call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters']);
+		}
 	}
 
 }

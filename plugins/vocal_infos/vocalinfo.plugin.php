@@ -31,7 +31,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 }
 
 function vocalinfo_define_word($text,$confidence,$parameters){
-
+		echo 'Plugin vocalinfo, execution function define_word';
 	if($text=='bistro'){
 		Client::talk("Un bistro est un lieu de cultes, ou les sages de ce siècle vont se receuillir");
 	}else{
