@@ -4,11 +4,22 @@ date_default_timezone_set('Europe/Paris');
 
 class ClientSocket extends SocketServer {
 	public $connected = array();
-
+	private $received = array();
 	function onDataReceived($socket,$data) {
+				$socketId = (int)$socket;
+			if(!isset($received[$socketId] )) $received[$socketId] = '';
+			$received[$socketId].= $data;
 			
-			$this->handleData($this->connected[(int)$socket],$data);
-			//$this->sendBroadcast("\r\n".$this->$connected[$socket]->name . ' : ' . $data);
+			if(substr($received[$socketId],-5)=='<EOF>'){
+				$received[$socketId] = substr($received[$socketId],0,-5);
+				$this->handleData($this->connected[(int)$socket],$received[$socketId]);
+				$received[$socketId] = '';
+			}
+			//$this->handleData($this->connected[(int)$socket],$data);
+			
+			
+			
+			//OLD - $this->sendBroadcast("\r\n".$this->$connected[$socket]->name . ' : ' . $data);
 			
 	}
 	function onClientConnected($socket) {
@@ -373,7 +384,9 @@ abstract class SocketServer {
 	 */
 	protected function send($client,$data) {
 
-		return @socket_write($client, $data . chr(0));
+		@socket_write($client, $data);
+		usleep(100);
+		@socket_write($client, "<EOF>");
 	}
 	
 	/**

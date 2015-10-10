@@ -19,6 +19,7 @@ class Client {
             if ($result !== false) {
                 $in = json_encode($msg);
                 echo PHP_EOL.'Envois du message au client: '.$in;
+                $in .= '<EOF>';
                 socket_write($socket, $in, strlen($in));
                 $out = '';
                /* while ($out = socket_read($socket, 2048)) {
