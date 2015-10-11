@@ -33,7 +33,9 @@ class ClientSocket extends SocketServer {
 	}
 
 	function onClientDisconnected($socket) {
-		$this->log($socket . ' disconnected');
+		$client = $this->connected[(int)$socket];
+
+		$this->log($client->type.' - '.$client->location . ' disconnected');
 		unset($this->connected[(int)$socket]);
 		//$this->sendBroadcast($socket . ' left the room');
 	}
@@ -51,7 +53,18 @@ class ClientSocket extends SocketServer {
 
 		switch($_['action']){
 			case 'TALK':
+				$this->talkAnimate();
 				$this->talk($_['parameter']);
+			break;
+			case 'TALK_FINISHED':
+				$this->muteAnimate();
+			break;
+
+			case 'EMOTION':
+				$this->emotion($_['parameter']);
+			break;
+			case 'IMAGE':
+				$this->image($_['parameter']);
 			break;
 			case 'SOUND':
 				$this->sound($_['parameter']);
@@ -68,7 +81,8 @@ class ClientSocket extends SocketServer {
 				if(isset($myUser) && $myUser!=false)
 					$myUser->loadRight();
 				$client->user =  (!$myUser?new User():$myUser);
-				$this->log('setting infos '.$client->location.' for '.$client->name.' with user:'.$client->user->getLogin());
+				$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->getLogin());
+			
 			break;
 			case 'GET_SPEECH_COMMANDS':
 				$response = array();
@@ -84,7 +98,6 @@ class ClientSocket extends SocketServer {
 				$response = "";
 				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
 				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence']));
-				
 			break;
 			case '':
 			default:
@@ -115,7 +128,6 @@ class ClientSocket extends SocketServer {
 		if(count($clients)==0)
 			 $clients = $this->getByType('speak');
 		
-
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$this->send($socket,'{"action":"sound","file":"'.str_replace('\\','/',$message).'"}');
@@ -123,17 +135,74 @@ class ClientSocket extends SocketServer {
 	}
 	
 	public function talk($message,$clients=array()){
-
-		$this->log("TALK : Try to send ".$message." to ".count($clients)." clients");
+		
 		if(count($clients)==0)
 			 $clients = $this->getByType('speak');
 		
+		$this->log("TALK : Try to send ".$message." to ".count($clients)." clients");
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("send ".'{"action":"talk","message":"'.$message.'"} to '.$client->name);
 			$this->send($socket,'{"action":"talk","message":"'.$message.'"}');
 		}
 	}
+
+	public function emotion($emotion,$clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		$this->log("EMOTION : Try to send ".$emotion." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"emotion","type":"'.$emotion.'"}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
+		}
+	}
+
+	public function image($image,$clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		$this->log("IMAGE : Try to send ".$image." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"image","url":"'.$image.'"}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
+		}
+	}
+
+	public function talkAnimate($clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		$this->log("TALK ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"talk"}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
+		}
+	}
+
+	public function muteAnimate($clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		$this->log("MUTE ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"mute"}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
+		}
+	}
+
 	public function url($message,$clients=array()){
 			echo "Envois de l\'url".$message;
 		if(count($clients)==0)

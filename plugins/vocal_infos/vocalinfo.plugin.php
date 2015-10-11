@@ -28,16 +28,68 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'callback'=>'vocalinfo_define_word',
 		'confidence'=>0.8);
 
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' montre moi',
+		'callback'=>'vocalinfo_give_me_all',
+		'confidence'=>0.8);
+
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' enerve toi',
+		'callback'=>'vocalinfo_emotion_angry',
+		'confidence'=>0.8);
 }
 
 function vocalinfo_define_word($text,$confidence,$parameters){
-		echo 'Plugin vocalinfo, execution function define_word';
 	if($text=='bistro'){
 		Client::talk("Un bistro est un lieu de cultes, ou les sages de ce siècle vont se receuillir");
 	}else{
-		Client::talk("Le mot ".$text." ne fait pas partie de mot vocabulaire, essayez plutot avec le mot bistro");
+		$json = json_decode(file_get_contents('https://fr.wikipedia.org/w/api.php?action=opensearch&search='.$text),true);
+		$define = $json[2][0];
+		if($json==false || trim($define)==""){Client::talk("Le mot ".$text." ne fait pas partie de mot vocabulaire, essayez plutot avec le mot bistro");
+			return;
+		}
+		Client::talk($define);
 	}
 	//Client::execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
+}
+
+function vocalinfo_emotion_angry($text,$confidence,$parameters){
+	Client::emotion("angry");
+	Client::talk("Je me fache toute rouge");
+}
+
+function vocalinfo_give_me_all($text,$confidence,$parameters){
+	
+	//Client::talk("Ok patron");
+	//sleep(5);
+	//Client::talk("Je peux parler, evidemment, et t\'écouter plus précisement qu\'avant");
+	// sleep(2);
+	// Client::talk("Je peux eprouver et montrer des sentiments");
+	// sleep(2);
+	// Client::talk("Comme la colère");
+	// Client::emotion("angry");
+	// sleep(2);
+	// Client::talk("Ou la timidité");
+	// Client::emotion("shy");
+	// sleep(2);
+	// Client::talk("Et tout un tas d\'autres lubies humaines");
+	// sleep(2);
+	// Client::talk("Je peux aussi executer un programme");
+	// Client::execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
+	// sleep(2);
+	// Client::talk("ou un son");
+	// Client::sound("C:/poule.wav");
+	// sleep(2);
+	// Client::talk("ou te montrer des images");
+	// Client::image("yana.jpg");
+	// sleep(2);
+	// Client::talk("ou executer une commande domotique");
+	// system('gpio write 1 1');
+	// sleep(2);
+	// Client::talk("ou executer un humain");
+	// sleep(2);
+	// Client::talk("non je déconne.");
+	//
 }
 
 function vocalinfo_action(){
