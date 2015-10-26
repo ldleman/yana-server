@@ -6,21 +6,19 @@ class ClientSocket extends SocketServer {
 	public $connected = array();
 	private $received = array();
 	function onDataReceived($socket,$data) {
-				$socketId = (int)$socket;
+		
+			$socketId = (int)$socket;
 			if(!isset($received[$socketId] )) $received[$socketId] = '';
 			$received[$socketId].= $data;
 			
 			if(substr($received[$socketId],-5)=='<EOF>'){
+				
 				$received[$socketId] = substr($received[$socketId],0,-5);
 				$this->handleData($this->connected[(int)$socket],$received[$socketId]);
 				$received[$socketId] = '';
 			}
-			//$this->handleData($this->connected[(int)$socket],$data);
-			
-			
-			
-			//OLD - $this->sendBroadcast("\r\n".$this->$connected[$socket]->name . ' : ' . $data);
-			
+	
+				
 	}
 	function onClientConnected($socket) {
 		$this->log('New client connected: ' . $socket);
@@ -43,6 +41,9 @@ class ClientSocket extends SocketServer {
 	function handleData($client,$data){
 		$this->log("Try to parse received data : ".$data);
 		try{
+
+			$datas = explode('<EOF>',$data);
+		foreach($datas  as $data){
 		$_ = json_decode($data,true);
 
 		if(!$_) throw new Exception("Unable to parse data : ".$data);
@@ -98,6 +99,8 @@ class ClientSocket extends SocketServer {
 				$response = "";
 				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
 				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence']));
+
+
 			break;
 			case '':
 			default:
@@ -109,11 +112,13 @@ class ClientSocket extends SocketServer {
 		}
 
 		$this->updateClient($client);
+		}
 		}catch(Exception $e){
 			$this->log("ERROR : ".$e->getMessage());
 		}
 		//system('php '.realpath(dirname(__FILE__)).'\action.php '.$json['action'],$out);
 		//$this->send($socket,$out);
+		
 	}
 
 

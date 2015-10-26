@@ -8,6 +8,8 @@
 @description Permet la récuperations d'informations locales ou sur le web comme la météo, les séries TV, l'heure, la date et l'état des GPIO
 */
 
+
+
 define('VOCALINFO_COMMAND_FILE','cmd.json');
 
 function vocalinfo_vocal_command(&$response,$actionUrl){
@@ -29,7 +31,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'confidence'=>0.8);
 
 	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' montre moi',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' présente toi',
 		'callback'=>'vocalinfo_give_me_all',
 		'confidence'=>0.8);
 
@@ -37,59 +39,109 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'command'=>$conf->get('VOCAL_ENTITY_NAME').' enerve toi',
 		'callback'=>'vocalinfo_emotion_angry',
 		'confidence'=>0.8);
+
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' montre toi',
+		'callback'=>'vocalinfo_show_you',
+		'confidence'=>0.8);
+
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' lance le programme',
+		'callback'=>'vocalinfo_launch_program',
+		'confidence'=>0.8);
+
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
+		'callback'=>'vocalinfo_chicken',
+		'confidence'=>0.8);
 }
 
 function vocalinfo_define_word($text,$confidence,$parameters){
+	$cli = new Client();
+	$cli->connect();
 	if($text=='bistro'){
-		Client::talk("Un bistro est un lieu de cultes, ou les sages de ce siècle vont se receuillir");
+		$cli->talk("Un bistro est un lieu de cultes, ou les sages de ce siècle vont se recueillir");
 	}else{
 		$json = json_decode(file_get_contents('https://fr.wikipedia.org/w/api.php?action=opensearch&search='.$text),true);
 		$define = $json[2][0];
-		if($json==false || trim($define)==""){Client::talk("Le mot ".$text." ne fait pas partie de mot vocabulaire, essayez plutot avec le mot bistro");
+		if($json==false || trim($define)==""){$cli->talk("Le mot ".$text." ne fait pas partie de mot vocabulaire, essayez plutot avec le mot bistro");
+			$cli->disconnect();
 			return;
 		}
-		Client::talk($define);
+		$cli->talk($define);
 	}
+	$cli->disconnect();
 	//Client::execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
 }
 
-function vocalinfo_emotion_angry($text,$confidence,$parameters){
-	Client::emotion("angry");
-	Client::talk("Je me fache toute rouge");
+function vocalinfo_show_you($text,$confidence,$parameters){
+	$cli = new Client();
+	$cli->connect();
+	$cli->image(YANA_URL."/plugins/vocal_infos/img/yana.jpg");
+	$cli->talk("Est ce que tu me trouve jolie?");
+	$cli->disconnect();
 }
+
+function vocalinfo_emotion_angry($text,$confidence,$parameters){
+	$cli = new Client();
+	$cli->connect();
+	$cli->talk("Tu vois ce qui se passe quand tu me prend la tête ?");
+	$cli->emotion("angry");
+	$cli->disconnect();
+}
+
+function vocalinfo_chicken($text,$confidence,$parameters){
+	$cli = new Client();
+	$cli->connect();
+	$cli->sound("C:/poule.wav");
+	$cli->disconnect();
+}
+
+function vocalinfo_launch_program($text,$confidence,$parameters){
+	$cli = new Client();
+	$cli->connect();
+	switch($text){
+		case 'sublime texte':
+			$cli->execute("C:\Program Files\Sublime Text 2\sublime_text.exe");
+			$cli->talk("Programme en cours de lancement");
+		break;
+		default:
+			$cli->talk("Je ne connais pas le programme : ".$text);
+		break;
+	}
+	
+	
+	
+	$cli->disconnect();
+}
+
 
 function vocalinfo_give_me_all($text,$confidence,$parameters){
 	
-	//Client::talk("Ok patron");
-	//sleep(5);
-	//Client::talk("Je peux parler, evidemment, et t\'écouter plus précisement qu\'avant");
-	// sleep(2);
-	// Client::talk("Je peux eprouver et montrer des sentiments");
-	// sleep(2);
-	// Client::talk("Comme la colère");
-	// Client::emotion("angry");
-	// sleep(2);
-	// Client::talk("Ou la timidité");
-	// Client::emotion("shy");
-	// sleep(2);
-	// Client::talk("Et tout un tas d\'autres lubies humaines");
-	// sleep(2);
-	// Client::talk("Je peux aussi executer un programme");
-	// Client::execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
-	// sleep(2);
-	// Client::talk("ou un son");
-	// Client::sound("C:/poule.wav");
-	// sleep(2);
-	// Client::talk("ou te montrer des images");
-	// Client::image("yana.jpg");
-	// sleep(2);
-	// Client::talk("ou executer une commande domotique");
-	// system('gpio write 1 1');
-	// sleep(2);
-	// Client::talk("ou executer un humain");
-	// sleep(2);
-	// Client::talk("non je déconne.");
-	//
+	$cli = new Client();
+	$cli->connect();
+
+	$cli->talk("Je peux parler, evidemment, et t\'écouter plus précisément qu\'avant");
+	$cli->talk("Je peux eprouver et montrer des sentiments");
+	$cli->talk("Comme la colère");
+	$cli->emotion("angry");
+	$cli->talk("Ou la timidité");
+	$cli->emotion("shy");
+	$cli->talk("Et tout un tas d\'autres lubies humaines");
+	$cli->talk("Je peux aussi exécuter un programme");
+	$cli->execute("D:\Programme_installes\Qt\Tools\QtCreator\bin\qtcreator.exe");
+	$cli->talk("ou un son");
+	$cli->sound("C:/poule.wav");
+	$cli->talk("ou te montrer des images");
+	$cli->image("yana.jpg");
+	$cli->talk("ou executer une commande domotique");
+	//system('gpio write 1 1');
+	
+	//$cli->talk("ou executer un humain");
+
+	//$cli->talk("non je déconne.");
+
+	$cli->disconnect();
 }
 
 function vocalinfo_action(){
