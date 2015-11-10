@@ -27,7 +27,7 @@ class ClientSocket extends SocketServer {
 		$client->id= (int)$socket;
 		$client->name = 'Client '.count($this->clients);
 		$this->connected[(int)$socket] = $client;
-		//$this->sendBroadcast($socket . ' entered the room');
+
 	}
 
 	function onClientDisconnected($socket) {
@@ -35,6 +35,9 @@ class ClientSocket extends SocketServer {
 
 		$this->log($client->type.' - '.$client->location . ' disconnected');
 		unset($this->connected[(int)$socket]);
+
+		
+		$this->clientdisconnected($client);
 		//$this->sendBroadcast($socket . ' left the room');
 	}
 	
@@ -84,6 +87,9 @@ class ClientSocket extends SocketServer {
 				$client->user =  (!$myUser?new User():$myUser);
 				$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->getLogin());
 			
+				$this->clientConnected($client);
+				
+
 			break;
 			case 'GET_SPEECH_COMMANDS':
 				$response = array();
@@ -98,7 +104,7 @@ class ClientSocket extends SocketServer {
 			case 'CATCH_COMMAND':
 				$response = "";
 				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
-				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence']));
+				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence'],$client->user));
 
 
 			break;
@@ -149,6 +155,33 @@ class ClientSocket extends SocketServer {
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("send ".'{"action":"talk","message":"'.$message.'"} to '.$client->name);
 			$this->send($socket,'{"action":"talk","message":"'.$message.'"}');
+		}
+	}
+
+	public function clientConnected($new_client,$clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		//$this->log("CONNECTED : Try to send ".$emotion." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.$new_client->user->getLogin().'"}}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
+		}
+	}
+	public function clientDisconnected($new_client,$clients=array()){
+		
+		if(count($clients)==0)
+			 $clients = $this->getByType('face');
+		
+		//$this->log("CONNECTED : Try to send ".$emotion." to ".count($clients)." clients");
+		foreach($clients as $client){
+			$socket = $this->connected[$client->id]->socket;
+			$packet = '{"action":"clientDisconnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'"}}';
+			$this->log("send ".$packet." to ".$client->name);
+			$this->send($socket,$packet);
 		}
 	}
 

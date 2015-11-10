@@ -37,7 +37,6 @@ if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
 }
 
 if(file_exists('db.json')){
-
 	if(!file_exists(__ROOT__.'/dbversion')) file_put_contents(__ROOT__.'/dbversion', '0');
 	$current = file_get_contents(__ROOT__.'/dbversion');
 	$versions = json_decode(file_get_contents(__ROOT__.'/db.json'),true);
@@ -121,19 +120,46 @@ if($myUser!=false && $myUser->getRank()!=false){
 }
 
 
-function common_listen($command,$text,$confidence){
+function common_listen($command,$text,$confidence,$user){
 	echo "\n".'diction de la commande : '.$command;
 	
 	$response = array();
-	Plugin::callHook("vocal_command", array(&$response,YANA_URL));
+	Plugin::callHook("vocal_command", array(&$response,YANA_URL.'/action.php'));
 	$commands = array();
 	echo "\n".'Test de comparaison avec '.count($response['commands']).' commandes';
 	foreach($response['commands'] as $cmd){
 		if($command != $cmd['command']) continue;
 		if(!isset($cmd['parameters'])) $cmd['parameters'] = array();
 		if(isset($cmd['callback'])){
+			//Catch des commandes pour les plugins en format client v2
 			echo "\n".'Commande trouvée, execution de la fonction plugin '.$cmd['callback'];
 			call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters']);
+		}else{
+			//Catch des commandes pour les plugins en format  client v1
+			echo "\n".'Commande ancien format trouvée, execution de l\'url '.$cmd['url'].'&token='.$user->getToken();
+			$result = file_get_contents($cmd['url'].'&token='.$user->getToken());
+			$result = json_decode($result,true);
+
+			if(is_array($result)){
+				$client=new Client();
+				$client->connect();
+
+				foreach($result['responses'] as $resp){
+					
+					switch($resp['type']){
+						case 'talk':
+							$client->talk($resp['sentence']);					
+						break;
+						case 'sound':
+							$client->sound($resp['file']);					
+						break;
+						case 'command':
+							$client->execute($resp['program']);					
+						break;
+					}
+				}
+				$client->disconnect();
+			}
 		}
 	}
 

@@ -25,6 +25,13 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		);
 	}
 
+
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
+		'callback'=>'vocalinfo_chicken',
+		'parameters' => array('un','deux'),
+		'confidence'=>0.8);
+
 	$response['commands'][] = array(
 		'command'=>$conf->get('VOCAL_ENTITY_NAME').' Définit le mot',
 		'callback'=>'vocalinfo_define_word',
@@ -50,10 +57,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'callback'=>'vocalinfo_launch_program',
 		'confidence'=>0.8);
 
-	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
-		'callback'=>'vocalinfo_chicken',
-		'confidence'=>0.8);
+	
 }
 
 function vocalinfo_define_word($text,$confidence,$parameters){
@@ -91,6 +95,7 @@ function vocalinfo_emotion_angry($text,$confidence,$parameters){
 }
 
 function vocalinfo_chicken($text,$confidence,$parameters){
+	
 	$cli = new Client();
 	$cli->connect();
 	$cli->sound("C:/poule.wav");
