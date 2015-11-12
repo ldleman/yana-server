@@ -101,6 +101,15 @@ class ClientSocket extends SocketServer {
 				}
 				$this->send($this->connected[$client->id]->socket,'{"action":"UPDATE_COMMANDS"}');
 			break;
+			case 'GET_CONNECTED_CLIENTS':
+				$response = array();
+			
+				foreach($this->connected as $id=>$cli){
+					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.$cli->user->getLogin().'"}}');
+				}
+				
+				
+			break;
 			case 'CATCH_COMMAND':
 				$response = "";
 				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
@@ -165,6 +174,7 @@ class ClientSocket extends SocketServer {
 		
 		//$this->log("CONNECTED : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
+			if($client->id == $new_client->id) continue;
 			$socket = $this->connected[$client->id]->socket;
 			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.$new_client->user->getLogin().'"}}';
 			$this->log("send ".$packet." to ".$client->name);
