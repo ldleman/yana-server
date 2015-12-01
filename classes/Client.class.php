@@ -33,7 +33,7 @@ class Client {
 
 
     public function talk($parameter){
-        echo 'Execution envois de parole vers un client : '.$parameter;
+        //echo 'Execution envois de parole vers un client : '.$parameter;
         $this->send(array("action"=>"TALK","parameter"=>$parameter));
     }
     
