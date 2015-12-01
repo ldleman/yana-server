@@ -6,11 +6,11 @@ class Client {
 
 
     public   function  connect(){ 
-        echo PHP_EOL.'Creation du socket d auto connexion';
+        //echo PHP_EOL.'Creation du socket d auto connexion';
         $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $response = '';
         if ($this->socket !== false) {
-            echo PHP_EOL.'Connexion au serveur socket depuis yana-server';
+            //echo PHP_EOL.'Connexion au serveur socket depuis yana-server';
             $result = socket_connect( $this->socket, '127.0.0.1', 9999);
              return $result;
         }
@@ -24,7 +24,7 @@ class Client {
     }
 
 	public  function send($msg){ 
-        echo PHP_EOL.'Envois du message au client: '.$in;
+        //echo PHP_EOL.'Envois du message au client: '.$in;
         $in = json_encode($msg);
         $in .= '<EOF>';
         socket_write( $this->socket, $in, strlen($in));
