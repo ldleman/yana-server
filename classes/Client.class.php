@@ -6,13 +6,17 @@ class Client {
 
 
     public   function  connect(){ 
-        //echo PHP_EOL.'Creation du socket d auto connexion';
-        $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        $response = '';
-        if ($this->socket !== false) {
-            //echo PHP_EOL.'Connexion au serveur socket depuis yana-server';
-            $result = socket_connect( $this->socket, '127.0.0.1', 9999);
-             return $result;
+        try{
+            //echo PHP_EOL.'Creation du socket d auto connexion';
+            $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+            $response = '';
+            if ($this->socket !== false) {
+                //echo PHP_EOL.'Connexion au serveur socket depuis yana-server';
+                $result = @socket_connect( $this->socket, '127.0.0.1', 9999);
+                return $result;
+            }
+        }catch(Exception $e){
+            echo PHP_EOL.'Erreur connexion au serveur socket depuis yana-server';
         }
         return false;
     }

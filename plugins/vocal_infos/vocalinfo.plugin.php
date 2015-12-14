@@ -27,7 +27,7 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 
 
 	$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' fait la poule',
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' imite le bruit de la poule',
 		'callback'=>'vocalinfo_chicken',
 		'parameters' => array('un','deux'),
 		'confidence'=>0.8);
@@ -474,7 +474,7 @@ function vocalinfo_action(){
 
 function vocalinfo_event(&$response){
 	
-	if(date('d/m H:i')=='24/01 18:00'){
+	if(date('d/m H:i')=='24/01 15:00'){
 		if(date('s')<45){
 		$response['responses']= array(
 								array('type'=>'sound','file'=>'sifflement.wav'),

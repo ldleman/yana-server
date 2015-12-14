@@ -204,7 +204,7 @@ function dash_monitoring_plugin_actions(){
 					$response['content'] = '<ul class="yana-list">';
 					if(isset($response['commands'])){
 						foreach($response['commands'] as $command){
-							$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'">'.$command['command'].'</li>';
+							$response['content'] .= '<li title="Sensibilité : '.$command['confidence'].'" onclick="window.open(\''.$command['url'].'\')">'.$command['command'].'</li>';
 						}
 					}
 
@@ -376,6 +376,8 @@ function dash_monitoring_plugin_actions(){
 		case 'dash_monitoring_plugin_move':
 
 		break;
+
+		
 	
 	}
 	
