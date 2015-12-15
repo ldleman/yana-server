@@ -23,6 +23,45 @@ class Dashboard extends SQLiteEntity{
 		parent::__construct();
 	}
 
+	public static function initForUser($id){
+
+		foreach(array('Salon','Cuisine','Chambre','Garage','Système') as $room){
+			$entity = new Dashboard();
+			$entity->create();
+			$entity->user = $id;
+			$entity->label = $room;
+			$entity->default = 0;
+			$entity->save();
+		}
+		$entity = new Dashboard();
+		$entity->create();
+		$entity->user = $id;
+		$entity->label = "Général";
+		$entity->default = 1;
+		$entity->save();
+
+
+
+		$dashboard = $entity->id;
+
+		$entity = new Widget();
+		$entity->create();
+
+
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_profil\',	\'null\',	\'0\',	\'0\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_system\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_network\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_hdd\',	\'null\',	\'3\',	\'1\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_disk\',	\'null\',	\'0\',	\'1\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_gpio\',	\'null\',	\'1\',	\'0\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_services\',	\'null\',	\'0\',	\'2\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_users\',	\'null\',	\'0\',	\'0\',	\'\',\''.$system.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_ram\',	\'null\',	\'0\',	\'1\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_vocal\',	\'null\',	\'1\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_monitoring_logs\',	\'null\',	\'1\',	\'2\',	\'\',\''.$system.'\');');
+	}
+
 }
 
 ?>

@@ -212,7 +212,7 @@ function wirerelay_plugin_action(){
 						
 						<!-- CSS -->
 						<ul class="relay_pane">
-								<li class="wirerelay-case '.(Gpio::read($relay->pin,true)?'active':'').'" onclick="plugin_wirerelay_change(this);" style="text-align:center;">
+								<li class="wirerelay-case '.(Gpio::read($relay->pin,true)?'active':'').'" data-id="'.$relay->id.'" onclick="plugin_wirerelay_change(this);" style="text-align:center;">
 									<i title="On/Off" class="'.$relay->icon.'"></i>
 								</li>
 								<li>
@@ -229,7 +229,7 @@ function wirerelay_plugin_action(){
 								$.action(
 									{
 										action : \'wireRelay_manual_change_state\', 
-										engine: '.$relay->id.',
+										engine: $(element).data("id"),
 										state: state
 									},
 									function(response){
@@ -299,8 +299,10 @@ function wirerelay_plugin_change_state($engine,$state){
 	//Reference device state change for other plugins
 	$device = new Device();
 	$device = $device->load(array('plugin'=>'wireRelay','uid'=>$wireRelay->id));
-	$device->setValue('value',$state);
-	$device->save();
+	if(is_object($device)){
+		$device->setValue('value',$state);
+		$device->save();
+	}
 }
 
 

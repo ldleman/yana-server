@@ -22,8 +22,8 @@ function dashboard_plugin_actions(){
 			require_once(dirname(__FILE__).'/Widget.class.php');
 
 			$dashManager = new Dashboard();
-			$dashManager->change(array('default'=>'0'));
-			$dashManager->change(array('default'=>'1'),array('id'=>$_['dashboard']));
+			$dashManager->change(array('default'=>'0'),array('user'=>$myUser->getId()));
+			$dashManager->change(array('default'=>'1'),array('id'=>$_['dashboard'],'user'=>$myUser->getId()));
 
 			$widgetManager = new Widget();
 			$model = array();
@@ -139,9 +139,15 @@ function dashboard_plugin_home(){
 	global $_,$myUser;
 	if(!isset($_['module'])){
 		require_once(dirname(__FILE__).'/Dashboard.class.php');
+		require_once(dirname(__FILE__).'/Widget.class.php');
 		$dashManager = new Dashboard();
 		$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()),'label');
 		
+		if(count($dashes) == 0){
+			Dashboard::initForUser($myUser->getId());
+			$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()),'label');
+		}
+		//var_dump($dashes);
 		echo '<div style="margin:0;text-align:center;"><select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
 		foreach($dashes as $dash){
 			echo '<option '.($dash->default=='1'?'selected="selected"':'').' value="'.$dash->id.'">'.$dash->label.'</option>';
