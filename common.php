@@ -133,7 +133,7 @@ function common_listen($command,$text,$confidence,$user){
 		if(isset($cmd['callback'])){
 			//Catch des commandes pour les plugins en format client v2
 			echo "\n".'Commande trouvée, execution de la fonction plugin '.$cmd['callback'];
-			call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters']);
+			call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters'],$user);
 		}else{
 			//Catch des commandes pour les plugins en format  client v1
 			echo "\n".'Commande ancien format trouvée, execution de l\'url '.$cmd['url'].'&token='.$user->getToken();

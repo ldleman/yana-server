@@ -47,6 +47,7 @@ class ClientSocket extends SocketServer {
 
 			$datas = explode('<EOF>',$data);
 		foreach($datas  as $data){
+			
 		$_ = json_decode($data,true);
 
 		if(!$_) throw new Exception("Unable to parse data : ".$data);
@@ -114,8 +115,6 @@ class ClientSocket extends SocketServer {
 				$response = "";
 				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
 				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence'],$client->user));
-
-
 			break;
 			case '':
 			default:

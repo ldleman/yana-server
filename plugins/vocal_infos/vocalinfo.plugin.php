@@ -57,8 +57,24 @@ function vocalinfo_vocal_command(&$response,$actionUrl){
 		'callback'=>'vocalinfo_launch_program',
 		'confidence'=>0.8);
 
+	$response['commands'][] = array(
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' test des variables',
+		'callback'=>'vocalinfo_test_variables',
+		'confidence'=>0.8);
 	
 }
+
+function vocalinfo_test_variables($text,$confidence,$parameters,$myUser){
+	global $conf;
+	$cli = new Client();
+	$cli->connect();
+
+	$cli->talk("Utilisateur: ".$myUser->getLogin());
+	$cli->talk("configuration: ".$conf->get('UPDATE_URL'));
+	$cli->disconnect();
+}
+
+
 
 function vocalinfo_define_word($text,$confidence,$parameters){
 	$cli = new Client();

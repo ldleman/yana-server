@@ -242,7 +242,6 @@ else
 	echo ($json=='[]'?'{}':$json);
 	break;
 
-
 	case 'GET_EVENT':
 	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
 	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
