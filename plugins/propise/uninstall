@@ -1,0 +1,8 @@
+<?php
+require_once(dirname(__FILE__).'/Data.class.php');
+$table = new Data();
+$table->drop();
+ 
+
+
+?>
