@@ -4,7 +4,7 @@ global $myUser;
 require_once(dirname(__FILE__).'/Dashboard.class.php');
 require_once(dirname(__FILE__).'/Widget.class.php');
 
-Dashboard::initForUser($myUser->getId());
+$dashboard = Dashboard::initForUser($myUser->getId());
 
 	Section::add('dashboard');
 
@@ -51,9 +51,9 @@ Dashboard::initForUser($myUser->getId());
 
 		$wr3 = $table->id;
 
-		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr1.'&quot;}\',	\'0\',	\'2\',	\'\',\''.$dashboard.'\');');
-		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr2.'&quot;}\',	\'1\',	\'2\',	\'\',\''.$dashboard.'\');');
-		$entity->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr3.'&quot;}\',	\'2\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$table->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr1.'&quot;}\',	\'0\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$table->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr2.'&quot;}\',	\'1\',	\'2\',	\'\',\''.$dashboard.'\');');
+		$table->customQuery('INSERT INTO "yana_plugin_dashboard" ("model", "data", "cell", "column", "minified","dashboard") VALUES (\'dash_wirerelay\',	\'{&quot;relay&quot;:&quot;'.$wr3.'&quot;}\',	\'2\',	\'2\',	\'\',\''.$dashboard.'\');');
 	}
 
 
