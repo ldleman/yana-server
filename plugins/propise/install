@@ -3,6 +3,10 @@ require_once(dirname(__FILE__).'/Data.class.php');
 $table = new Data();
 $table->create();
  
+require_once(dirname(__FILE__).'/Sensor.class.php');
+$table = new Sensor();
+$table->create();
+ 
 $s1 = New Section();
 $s1->setLabel('propise');
 $s1->save();

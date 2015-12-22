@@ -8,8 +8,8 @@
 
 class Data extends SQLiteEntity{
 
-	public $id,$light,$sound,$humidity,$temperature,$mouvment,$time,$location;
-	protected $TABLE_NAME = 'plugin_propise';
+	public $id,$light,$sound,$humidity,$temperature,$mouvment,$time,$sensor;
+	protected $TABLE_NAME = 'plugin_propise_data';
 	protected $CLASS_NAME = 'Data';
 	protected $object_fields = 
 	array(
@@ -20,7 +20,7 @@ class Data extends SQLiteEntity{
 		'temperature'=>'string',
 		'mouvment'=>'string',
 		'time'=>'string',
-		'location'=>'string'
+		'sensor'=>'string'
 	);
 
 	function __construct(){
