@@ -238,11 +238,11 @@ function propise_action(){
 						';
 						
 						$content .= '<div class="propise_widget"><ul class="propise_view">';
-						$content .= '<li class="propise_temperature"><i class="fa fa-fire"></i> '.$datas[0]->temperature.'°</li>';
-						$content .= '<li class="propise_humidity"><i class="fa fa-tint"></i> '.$datas[0]->humidity.'%</li>';
-						$content .= '<li class="propise_light"><i class="fa fa-sun-o"></i> '.$datas[0]->light.'%</li>';
-						$content .= '<li class="propise_mouvment"><i class="fa fa-eye'.($datas[0]->mouvment?'':'-slash').'"></i></li>';
-						$content .= '<li class="propise_sound"><i class="fa fa-bell'.($datas[0]->sound?'':'-slash').'"></i></li>';
+						$content .= '<li class="propise_temperature"><i class="fa fa-fire"></i> '.round($datas[0]->temperature,1).'°</li>';
+						$content .= '<li class="propise_humidity"><i class="fa fa-tint"></i> '.round($datas[0]->humidity,1).'%</li>';
+						$content .= '<li class="propise_light"><i class="fa fa-sun-o"></i> '.round($datas[0]->light,1).'%</li>';
+						$content .= '<li class="propise_mouvment"><i class="fa fa-eye'.($datas[0]->mouvment==1?'':'-slash').'"></i></li>';
+						$content .= '<li class="propise_sound"><i class="fa fa-bell'.($datas[0]->sound==1?'':'-slash').'"></i></li>';
 						$content .= '</ul><ul class="propise_menu">';
 						$content .= '<li class="propise_temperature" onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
 						$content .= '<li class="propise_humidity" onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
