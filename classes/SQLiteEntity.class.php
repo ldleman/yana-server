@@ -3,8 +3,8 @@
 /*
 	@nom: SQLiteEntity
 	@auteur: Idleman (idleman@idleman.fr)
-	@description: Classe parent de tous les modèles (classe entitées) liées a la base de donnée,
-	 cette classe est configuré pour agir avec une base SQLite, mais il est possible de redefinir ses codes SQL pour l'adapter à un autre SGBD sans affecter 
+	@description: Classe parent de tous les modÃ¨les (classe entitÃ©es) liÃ©es a la base de donnÃ©e,
+	 cette classe est configurÃ© pour agir avec une base SQLite, mais il est possible de redefinir ses codes SQL pour l'adapter Ã  un autre SGBD sans affecter 
 	 le reste du code du projet.
 
 */
@@ -15,8 +15,12 @@ class SQLiteEntity extends SQLite3
 	
 	private $debug = false;
 	
-	function __construct(){
-		$this->open(__ROOT__.'/'.DB_NAME);
+	function __construct($tag="rw"){
+		switch($tag){
+			case 'r' : $tag = SQLITE3_OPEN_READONLY; break;
+			default: $tag = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE; break;
+		}
+		$this->open(__ROOT__.'/'.DB_NAME,$tag);
 	}
 
 	function __destruct(){
@@ -60,10 +64,10 @@ class SQLiteEntity extends SQLite3
 	// GESTION SQL
 
 	/**
-	* Verifie l'existence de la table en base de donnée
+	* Verifie l'existence de la table en base de donnÃ©e
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
-	* @param <String> créé la table si elle n'existe pas
+	* @param <String> crÃ©Ã© la table si elle n'existe pas
 	* @return true si la table existe, false dans le cas contraire
 	*/
 	public function checkTable($autocreate = false){
@@ -81,7 +85,7 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Methode de creation de l'entité
+	* Methode de creation de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <String> $debug='false' active le debug mode (0 ou 1)
@@ -138,7 +142,7 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Methode d'insertion ou de modifications d'elements de l'entité
+	* Methode d'insertion ou de modifications d'elements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param  Aucun
@@ -185,7 +189,7 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Méthode de modification d'éléments de l'entité
+	* MÃ©thode de modification d'Ã©lÃ©ments de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <Array> $colonnes=>$valeurs
@@ -216,7 +220,7 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Méthode de selection de tous les elements de l'entité
+	* MÃ©thode de selection de tous les elements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <String> $ordre=null
@@ -231,7 +235,7 @@ class SQLiteEntity extends SQLite3
 
 
 	/**
-	* Méthode de selection multiple d'elements de l'entité
+	* MÃ©thode de selection multiple d'elements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <Array> $colonnes (WHERE)
@@ -283,14 +287,14 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Méthode de selection unique d'élements de l'entité
+	* MÃ©thode de selection unique d'Ã©lements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <Array> $colonnes (WHERE)
 	* @param <Array> $valeurs (WHERE)
 	* @param <String> $operation="=" definis le type d'operateur pour la requete select
 	* @param <String> $debug='false' active le debug mode (0 ou 1)
-	* @return <Entity> $Entity ou false si aucun objet n'est trouvé en base
+	* @return <Entity> $Entity ou false si aucun objet n'est trouvÃ© en base
 	*/
 	public function load($columns,$operation='=',$debug='false'){
 		eval('$objects = $this->loadAll($columns,null,\'1\',\''.$operation.'\',\''.$debug.'\');');
@@ -299,25 +303,25 @@ class SQLiteEntity extends SQLite3
 	}
 
 	/**
-	* Méthode de selection unique d'élements de l'entité
+	* MÃ©thode de selection unique d'Ã©lements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <Array> $colonnes (WHERE)
 	* @param <Array> $valeurs (WHERE)
 	* @param <String> $operation="=" definis le type d'operateur pour la requete select
 	* @param <String> $debug='false' active le debug mode (0 ou 1)
-	* @return <Entity> $Entity ou false si aucun objet n'est trouvé en base
+	* @return <Entity> $Entity ou false si aucun objet n'est trouvÃ© en base
 	*/
 	public function getById($id,$operation='=',$debug='false'){
 		return $this->load(array('id'=>$id),$operation,$debug);
 	}
 
 	/**
-	* Methode de comptage des éléments de l'entité
+	* Methode de comptage des Ã©lÃ©ments de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <String> $debug='false' active le debug mode (0 ou 1)
-	* @return<Integer> nombre de ligne dans l'entité'
+	* @return<Integer> nombre de ligne dans l'entitÃ©'
 	*/
 	public function rowCount($columns=null)
 	{
@@ -338,7 +342,7 @@ class SQLiteEntity extends SQLite3
 	}	
 	
 	/**
-	* Méthode de supression d'elements de l'entité
+	* MÃ©thode de supression d'elements de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category manipulation SQL
 	* @param <Array> $colonnes (WHERE)
@@ -369,7 +373,7 @@ class SQLiteEntity extends SQLite3
 
 	// ACCESSEURS
 		/**
-	* Méthode de récuperation de l'attribut debug de l'entité
+	* MÃ©thode de rÃ©cuperation de l'attribut debug de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category Accesseur
 	* @param Aucun
@@ -381,7 +385,7 @@ class SQLiteEntity extends SQLite3
 	}
 	
 	/**
-	* Méthode de définition de l'attribut debug de l'entité
+	* MÃ©thode de dÃ©finition de l'attribut debug de l'entitÃ©
 	* @author Valentin CARRUESCO
 	* @category Accesseur
 	* @param <boolean> $debug 
