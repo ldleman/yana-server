@@ -51,10 +51,80 @@ function story_plugin_action(){
 				function($_,&$response){
 					$templates = array_merge(Cause::types(),Effect::types());
 					$template = $templates[$_['type']];
+					
+					
+					preg_match_all("/(\{)(.*?)(\})/", $template['template'], $matches, PREG_SET_ORDER);
+					foreach($matches as $match)
+						$template['template'] = str_replace($match[0],$_['data'][$match[2]],$template['template']);
+					
+					
+		
+					/*
+					$matches = preg_split("/\[(.*?)\]/", $template['template'],-1,PREG_SPLIT_DELIM_CAPTURE);
+					
+					$tpl = '';
+					
+					for($i=0;$i<count($matches);$i+=2){
+						$start = $matches[$i];
+						$var = $matches[$i+1];
+						list($name,$value) = explode(':',$var);
+						
+						
+						if($_['data'][$name] == $value) {
+							
+							$tpl.= 'selected="selected"';
+						}
+						$tpl.= $start;
+					}
+					$template['template'] = $tpl;
+					*/
+					
+					
 					$response['html'] = 
 					'<li class="line" data-type="'.$_['type'].'">
 						<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
 					</li>';
+				},
+				array()
+			);
+	break;
+	
+	case 'plugin_story_get_causes_effects':
+		Action::write(
+				function($_,&$response){
+					
+					$cause = new Cause();
+					$effect = new Effect();
+					$effects = $effect->loadAll(array('story'=>$_['id']),'sort');
+					$causes = $cause->loadAll(array('story'=>$_['id']),'sort');
+					
+					foreach($causes as $caus){
+						$data = $caus->getValues();
+						$response['results'][]= array(
+						'type' => $caus->type,
+						'panel'=>"CAUSE",
+						'data'=> array(
+								'value'    => $data->value,
+								'target'   => $data->target,
+								'operator' => $data->operator,
+								'union'    => $data->union
+								)
+						);
+					}
+			
+					foreach($effects as $eff){
+						$data = $eff->getValues();
+						$response['results'][]=array( 
+						'type' => $eff->type,
+						'panel'=>"EFFECT",
+						'data'=> array(
+								'value'    => $data->value,
+								'target'   => $data->target,
+								'operator' => $data->operator,
+								'union'    => $data->union
+								)
+						);
+					}
 				},
 				array()
 			);

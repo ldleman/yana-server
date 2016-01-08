@@ -17,12 +17,18 @@ function initDragAndDrop(){
 		});
 }
 
-function init(){
+function init(){ 
 	//Add lines from database
-	if(window['story']!=null){
-		for(var key in story)
-			addLine(story[key]);
-	}
+	$.action({
+		action : 'plugin_story_get_causes_effects',
+		id:$('#story').data('id')
+	},function(r){
+		
+		for(var key in r.results)
+			addLine(r.results[key]);
+	});
+	
+	
 	//Init drag and drop
 	initDragAndDrop();
 	
@@ -83,7 +89,7 @@ function switchCauseEffect(mode){
 //Add line to board
 function addLine(options){
 	options.data = options.data == null ? {value:'',target:'',operator:'',union:''} : options.data ;
-	
+
 	$.action({
 		action : 'plugin_story_get_type_template',
 		data : options.data,
@@ -102,8 +108,10 @@ function addLine(options){
 				line +='</select></li>';
 			}
 			
+			
+			
 			line += r.html;
-			line += '<li class="place">...</li>';
+			line += '<li class="place"></li>';
 			//Append line
 			$(options.place).after(line);
 			//For captor only
@@ -137,14 +145,14 @@ function deleteLine(elem){
 //Save story
 function saveStory(){
 	story = {};
-	if($('.story #story').val()!='')story.id = $('.story #story').val();
+	if($('#story').data('id')!='')story.id = $('#story').data('id');
 	story.label = $('.story h1 input').val();
 	story.causes = [];
 	story.effects = [];
 	
 	//CAUSES
 	lastunion ='';
-	$('.story div#causePanel ul.workspace li,.story div#effectPanel ul.workspace li').each(function(i,elem){
+	$('.story div#causePanel ul.workspace li').each(function(i,elem){
 		switch($(elem).attr('class')){
 			case 'line':
 				var line = { type  : $(elem).data('type') }

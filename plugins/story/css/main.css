@@ -4,10 +4,10 @@ h1,h2,h3,h4{
 }
 
 .toolbar{
-	border-bottom:5px solid #cecece;
+	border-bottom:1px solid #cecece;
 	list-style-type:none;
 	margin:0px;
-	border-top:5px solid #cecece;
+	border-top:1px solid #cecece;
 	padding:10px 0px 10px 0px;
 }
 .toolbar li{
@@ -48,10 +48,13 @@ li.dragged{
 }
 
 .workspace li{
-	padding:10px;
+	padding:5px 10px 10px 10px;
 	background:#3984DE ;
 	color:#ffffff;
-	border-radius:3px;
+}
+
+.line i{
+	font-size:20px;
 }
 
 .workspace li.place{
@@ -60,6 +63,7 @@ li.dragged{
 	background:#fff;
 	font-size:30px;
 	color:#cecece;
+	margin: 5px;
 	text-align:center;
 	border-bottom: 2px solid #ffffff;
 }
@@ -69,13 +73,12 @@ li.dragged{
 }
 .workspace .union{
  text-align:center;
- margin:10px;
- font-size:40px;
+ font-size:30px;
  border:0px;
  width:100px;
  color:#cecece;
  font-weight:bold;
- margin:10px auto;
+ margin:0px auto;
  background-color:#fff;
 }
 .workspace .union select{

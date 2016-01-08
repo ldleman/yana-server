@@ -26,16 +26,16 @@ class Effect extends SQLiteEntity{
 	}
 	
 	public static function types(){
-		return array(
+		$types = array(
 			'command' => array(
 					'icon' => 'fa-terminal',
 					'label' => 'Commande',
-					'template' => '<select data-field="target"><option value="server">Serveur</option><option value="client">Client</option></select> = <input data-field="command" type="text" placeholder="valeur" value="{value}">'
+					'template' => '<select data-field="target"><option value="server">Serveur</option><option value="client">Client</option></select> = <input data-field="value" style="max-width:50%;width:50%;" type="text" placeholder="valeur" value="{value}">'
 					),
 			'talk' => array(
 					'icon' => 'fa-volume-up',
 					'label' => 'Phrase',
-					'template' => '= <input type="text" data-field="sentence" placeholder="Ma phrase.." value="{value}">'
+					'template' => '= <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="Ma phrase.." value="{value}">'
 					),
 			'var' => array(
 					'icon' => 'fa-dollar',
@@ -45,19 +45,29 @@ class Effect extends SQLiteEntity{
 			'sleep' => array(
 					'icon' => 'fa-coffee',
 					'label' => 'Pause',
-					'template' => '= <input type="text" placeholder="durée(secondes)" data-field="seconds" value="{value}"> seconde(s)'
+					'template' => '= <input type="text" placeholder="durée(secondes)" data-field="value" value="{value}"> seconde(s)'
 					),
 			'story' => array(
 					'icon' => 'fa-caret-square-o-right',
 					'label' => 'Scénario',
-					'template' => '<select data-field="story" class="story"></select>'
+					'template' => ''
 					),
 			'url' => array(
 					'icon' => 'fa-globe',
 					'label' => 'Url',
-					'template' => '<input data-field="url" type="text">'
+					'template' => '<input style="max-width:50%;width:50%;" data-field="value" value="{value}" type="text">'
 					),
 		);
+		
+		$types['story']['template'] = '<select data-field="value" class="story">';
+		require_once('Story.class.php');
+		$stories = new Story();
+		$stories = $stories->populate();
+		foreach($stories as $story):
+			$types['story']['template'] .= '<option value="'.$story->id.'">'.$story->label.'</select>';
+		endforeach;
+		$types['story']['template'] .= '</select>';
+		return $types;
 	}
 
 
@@ -65,7 +75,7 @@ class Effect extends SQLiteEntity{
 		$this->values = json_encode($values);
 	}
 	
-	function getValues($values){
+	function getValues(){
 		return json_decode($this->values);
 	}
 }

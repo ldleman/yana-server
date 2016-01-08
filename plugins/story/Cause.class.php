@@ -36,7 +36,7 @@ class Cause extends SQLiteEntity{
 			'listen' => array(
 					'icon' => 'fa-microphone',
 					'label' => 'Phrase',
-					'template' => '<select data-field="operator" class="operator"><option>=</option><option>!=</option></select> <input type="text" data-field="value" placeholder="Ma phrase.." value="{value}">'
+					'template' => '<select data-field="operator" class="operator"><option>=</option><option>!=</option></select> <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="Ma phrase.." value="{value}">'
 					),
 			'captor' => array(
 					'icon' => 'fa-tachometer',
@@ -46,7 +46,7 @@ class Cause extends SQLiteEntity{
 			'readvar' => array(
 					'icon' => 'fa-dollar',
 					'label' => 'Variable',
-					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value=""> <select data-field="operator" class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <input type="text" data-field="value" placeholder="Ma valeur" value="{value}">'
+					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value="{var}"> <select data-field="operator" class="operator"><option value="=">=</option><option value="!=">!=</option><option value="<"><</option><option value=">">></option></select> <input type="text" data-field="value" placeholder="Ma valeur" value="{value}">'
 					),
 		);
 		
@@ -54,20 +54,20 @@ class Cause extends SQLiteEntity{
 					<select style="width:100px;" data-field="minut">
 					<option value="*">Toutes les minutes</option>';
 				for($i=0;$i<60;$i++)
-					$types['time']['template'] .= '<option value="'.$i.'">'.$i.'</option>';
+					$types['time']['template'] .= '<option  value="'.$i.'">'.$i.'</option>';
 				$types['time']['template'] .= '</select> <select data-field="hour"><option value="*">Toutes les heures</option>';
 				for($i=0;$i<24;$i++)
-					$types['time']['template'] .=  '<option value="'.$i.'">'.$i.'</option>';
+					$types['time']['template'] .=  '<option  value="'.$i.'">'.$i.'</option>';
 				$types['time']['template'] .= '</select>  <select data-field="day"><option value="*">Tous les mois</option>';
 				for($i=1;$i<13;$i++)
-					$types['time']['template'] .=  '<option value="'.$i.'">'.$i.'</option>';
+					$types['time']['template'] .=  '<option  value="'.$i.'">'.$i.'</option>';
 				$types['time']['template'] .= '</select> <select data-field="month"><option value="*">Toutes les jours</option>';
 				for($i=1;$i<32;$i++)
-					$types['time']['template'] .=  '<option value="'.$i.'">'.$i.'</option>';
+					$types['time']['template'] .=  '<option  value="'.$i.'">'.$i.'</option>';
 				$types['time']['template'] .= '</select> <select style="width:100px;" data-field="year">
 				<option value="*">Tous les ans</option>';
 				for($i=2000;$i<2200;$i++)
-					$types['time']['template'] .=  '<option value="'.$i.'">'.$i.'</option>';
+					$types['time']['template'] .=  '<option  value="'.$i.'">'.$i.'</option>';
 				$types['time']['template'] .= '</select>';
 
 		return $types;
@@ -77,7 +77,7 @@ class Cause extends SQLiteEntity{
 		$this->values = json_encode($values);
 	}
 	
-	function getValues($values){
+	function getValues(){
 		return json_decode($this->values);
 	}
 	
