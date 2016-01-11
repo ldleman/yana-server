@@ -212,7 +212,7 @@ function wirerelay_plugin_action(){
 						
 						<!-- CSS -->
 						<ul class="relay_pane">
-								<li class="wirerelay-case '.(Gpio::read($relay->pin,true)?'active':'').'" data-id="'.$relay->id.'" onclick="plugin_wirerelay_change(this);" style="text-align:center;">
+								<li class="wirerelay-case '.(Gpio::read($relay->pin)?'active':'').'" data-id="'.$relay->id.'" onclick="plugin_wirerelay_change(this);" style="text-align:center;">
 									<i title="On/Off" class="'.$relay->icon.'"></i>
 								</li>
 								<li>
