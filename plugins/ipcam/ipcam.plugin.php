@@ -96,8 +96,8 @@ function ipcam_action(){
 						
 						<!-- HTML -->
 						';
-						
-						$content .= '<div class="ipcam_widget"><img name="main" id="main" border="0" src="http://'.$camera->login.':'.$camera->password.'@'.$camera->ip.'/videostream.cgi">';
+						///pour ma cam, a la fin de l'ip : videostream.cgi
+						$content .= '<div class="ipcam_widget"><img name="main" id="main" border="0" src="http://'.$camera->login.':'.$camera->password.'@'.$camera->ip.'">';
 						$content .= '</div>';
 						$content .= '
 						<!-- JS -->
