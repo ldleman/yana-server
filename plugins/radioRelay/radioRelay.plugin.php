@@ -134,7 +134,8 @@ function radiorelay_plugin_action(){
 					}else{
 
 
-						if(fileperms(Plugin::path().'radioEmission')!='36333')
+						$radioPermission = fileperms(Plugin::path().'radioEmission')!='36333';
+						if(($radioPermission !='36333') && ($radioPermission !='35913'))
 						$content .= '<div style="margin:0px;" class="flatBloc pink-color">Attention, les droits vers le fichier <br/> radioEmission sont mal réglés.<br/> Référez vous à <span style="cursor:pointer;text-decoration:underline;" onclick="window.location.href=\'https://github.com/ldleman/yana-server#installation\';">la doc</span> pour les régler</div>';
 						
 
