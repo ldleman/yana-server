@@ -24,75 +24,124 @@ class Story extends SQLiteEntity{
 		parent::__construct();
 	}
 	
-	public static function check($event =false){
+	public static function check(){
 		require_once(dirname(__FILE__).'/Cause.class.php');
-		require_once(dirname(__FILE__).'/Effect.class.php');
-		global $conf;
 		
+		global $conf;
 		$causeManager = new Cause();
-		$effectManager = new Effect();
-
-		$causes = array();
-		$storyCauses = $causeManager->loadAll(array('story'=>$event->story));
-		$validate = $event->story;
+		/*$stories = array();
+	
+		switch($trigger->type){
+			case 'time':
+				
+			break;
+			case 'talk':
+				$cause = new Cause();
+				$cause = $causeManager->getById($trigger->value);
+				$stories[]  = $cause->story;
+			break;
+		}
+		
+		
+		foreach($stories as $story){
+		*/	
+		$storyCauses = $causeManager->loadAll(array(/*'story'=>$story*/));
+			
+			
+		$sentence = $conf->get('last_sentence','var');
+		list($i,$h,$d,$m,$y) = explode('-',date('i-H-d-m-Y'));
+		$validCauses = array();
+		
+		
+		
 		foreach($storyCauses as $storyCause){
+			$values = $storyCause->getValues();
 			switch ($storyCause->type){
 				case 'listen':
-					if($event->type == $storyCause->type){
-						if($storyCause->value != $event->value)
-							$validate = false;
-					}
+					if($values->value == $sentence)
+						$validCauses[$storyCause->story][] = $storyCause;
 				break;
 				case 'time':
-					list($i,$h,$d,$m,$y) = explode('-',date('i-H-d-m-Y'));
-					list($i2,$h2,$d2,$m2,$y2) = explode('-',$storyCause->value);
-					if ($storyCause->value != $i.'-'.$h.'-'.$d.'-'.$m.'-'.$y) $validate = false;
-					if (!(
-						($i == $i2 || $i2 == '*') && 
-						($h == $h2 || $h2 == '*') && 
-						($d == $d2 || $d2 == '*') && 
-						($m == $m2 || $m2 == '*') && 
-						($y == $y2 || $y2 == '*')
-						)){
-							$validate = false;
-						}
+						;
+						
+						if ($storyCause->value != $i.'-'.$h.'-'.$d.'-'.$m.'-'.$y) $validate = false;
+						if ((
+							($i == $values->minut || $values->minut == '*') && 
+							($h == $values->hour || $values->hour == '*') && 
+							($d == $values->day || $values->day == '*') && 
+							($m == $values->month || $values->month == '*') && 
+							($y == $values->year || $values->year == '*')
+							)){
+							
+								$validCauses[$storyCause->story][] = $storyCause;
+							}
 				break;
 				case 'readvar':
-					if ($conf->get($storyCause->target,'var') != $storyCause->value) $validate = false;
+						if ($conf->get($storyCause->target,'var') == $storyCause->value) 
+							$validCauses[$storyCause->story][] = $storyCause;
 				break;
 			}
 		}
+	
+		foreach($validCauses as $story=>$causes){
+		
+			if(count($causes) == $causeManager->rowCount(array('story'=>$story)))
+				self::execute($story);
+			
+			
+		}
 
-
-
-		if($validate!=false){
-			//consequences
-			$effects = $effectManager->loadAll(array('story'=>$event->story),'sort');
+			
+	}
+	
+	
+	
+	public static function execute($story){
+			global $conf;
+			Functions::log('Execute story '.$story);
+			require_once(dirname(__FILE__).'/Effect.class.php');
+			$effectManager = new Effect();
+			$effects = $effectManager->loadAll(array('story'=>$story),'sort');
 			foreach($effects as $effect){
+				$data = $effect->getValues();
+				Functions::log($effect->type);
 				switch ($effect->type) {
 					case 'command':
-						exec($effect->value);
+						System::commandSilent($data->value);
 					break;
 					case 'var':
-						$conf->put($effect->target,$effect->value,'var');
+						$conf->put($data->var,$data->value,'var');
 					break;
-					case 'actuator':
-						file_get_contents('action.php?action='.$effect->value);
+					case 'url':
+						file_get_contents($data->value);
+					break;
+					case 'gpio':
+						$pins = explode(',',$data->gpio);
+						foreach($pins as $pin)
+							Gpio::write($pin,$data->value,true);
 					break;
 					case 'sleep':
-						if(is_numeric($effect->value))
-							sleep ($effect->value);
+						if(is_numeric($data->value))
+							sleep($data->value);
 					break;
 					case 'talk':
-						$clientManager = new Client();
-						$clients = $clientManager->populate();
-						foreach($clients as $client){
-							$client->talk($effect->value);
+						try{
+							$cli = new Client();
+							$cli->connect();
+							$cli->talk($data->value);
+							$cli->disconnect();
+						}catch(Exception $e){
+							Functions::log("Story (talk) -> Connexion au serveur socket impossible : ".$e->getMessage());
 						}
+					break;
+					case 'story':
+						self::execute($data->value);
+					break;
+					default:
+						
 					break;
 				}
 			}
-		}
 	}
 }
 

@@ -22,4 +22,8 @@
 			}
 		?>
 	    </table>
+		
+		
+		<strong>Important:</strong> Pour profiter pleinement de ce plugin, vous devez ajouter (si ce n'est pas déja fait) une tâche planifiée sur le raspberry PI.<br/>Pour cela tapez : <br/><code>sudo crontab -e</code> <br/>Puis ajoutez la ligne <br/><code>*/1 * * * * wget http://localhost/yana-server/action.php?action=crontab -O /dev/null 2>&1</code><br/>Puis sauvegardez (ctrl+x puis O puis Entrée)<br/><br/><br/>
+		
 	</div>

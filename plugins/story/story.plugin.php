@@ -5,7 +5,8 @@
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@description [EN CONSTRUCTION - NE PAS TENIR COMPTE] Plugin de gestion des scénarios avec leurs causes et leurs effets
+@client 2
+@description [BETA] Plugin de gestion des scénarios avec leurs causes et leurs effets
 */
 
 
@@ -34,11 +35,7 @@ function story_plugin_page($_){
 
 function plugin_story_check(){
 	require_once('Story.class.php');
-	require_once('Cause.class.php');
-	$time = new Cause();
-	$time->type = "time";
-	$time->value = date('i-h-d-m-Y');
-	Story::check($time);
+	Story::check();
 }
 
 
@@ -54,9 +51,9 @@ function story_plugin_action(){
 					
 					
 					preg_match_all("/(\{)(.*?)(\})/", $template['template'], $matches, PREG_SET_ORDER);
-					foreach($matches as $match)
+					foreach($matches as $match){
 						$template['template'] = str_replace($match[0],$_['data'][$match[2]],$template['template']);
-					
+					}
 					
 		
 					/*
@@ -103,12 +100,7 @@ function story_plugin_action(){
 						$response['results'][]= array(
 						'type' => $caus->type,
 						'panel'=>"CAUSE",
-						'data'=> array(
-								'value'    => $data->value,
-								'target'   => $data->target,
-								'operator' => $data->operator,
-								'union'    => $data->union
-								)
+						'data'=> $data
 						);
 					}
 			
@@ -117,12 +109,7 @@ function story_plugin_action(){
 						$response['results'][]=array( 
 						'type' => $eff->type,
 						'panel'=>"EFFECT",
-						'data'=> array(
-								'value'    => $data->value,
-								'target'   => $data->target,
-								'operator' => $data->operator,
-								'union'    => $data->union
-								)
+						'data'=> $data
 						);
 					}
 				},
@@ -191,10 +178,10 @@ function story_plugin_action(){
 	break;
 
 	case 'plugin_story_check':
-		require_once(dirname(__FILE__).'/Cause.class.php');
-		$vocal = new Cause();
-		$vocal = $vocal->getById($_['event']);
-		Story::check($vocal);
+		require_once(dirname(__FILE__).'/Story.class.php');
+		global $conf;
+		$conf->put('last_sentence',urldecode($_['sentence']),'var');
+		plugin_story_check();
 	break;
 
 	case 'plugin_story_save_story':
@@ -257,9 +244,11 @@ function story_vocal_command(&$response,$actionUrl){
 	$causeManager = new Cause();
 	$vocals = $causeManager->loadAll(array('type'=>'listen'));
 	foreach($vocals as $vocal){
+		$data = json_decode($vocal->values);
+		
 		$response['commands'][] = array(
-		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$vocal->value,
-		'url'=>$actionUrl.'?action=plugin_story_check&type=talk&event='.$vocal->id,'confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
+		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$data->value,
+		'url'=>$actionUrl.'?action=plugin_story_check&type=talk&sentence='.urlencode($data->value),'confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
 		);
 	}
 }

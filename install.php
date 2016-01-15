@@ -148,6 +148,7 @@ if(isset($_POST['install'])){
       Plugin::enabled('eventManager-eventmanager');
       Plugin::enabled('profile-profile');
 	  Plugin::enabled('room-room');
+     Plugin::enabled('story-story');
       Plugin::enabled('dashboard-dashboard');
       Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
   }else{

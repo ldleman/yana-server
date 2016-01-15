@@ -104,7 +104,7 @@ function addLine(options){
 			if($(options.place).attr('id')!='place-0' && $(options.place).attr('id')!='place-effect-0'){
 				line +='<li class="union"><select><option '+(options.data.union=='ET'?' selected="selected" ':'')+' >ET</option>';
 
-				if(options.panel=='CAUSE') line +='<option '+(options.data.union=='OU'?' selected="selected" ':'')+'>OU</option></select></li>';
+				//if(options.panel=='CAUSE') line +='<option '+(options.data.union=='OU'?' selected="selected" ':'')+'>OU</option>';
 				line +='</select></li>';
 			}
 			
@@ -114,6 +114,11 @@ function addLine(options){
 			line += '<li class="place"></li>';
 			//Append line
 			$(options.place).after(line);
+			
+			//Fill select by database values
+			$('.workspace select[data-value]').each(function(i,elem){
+				$(elem).find('option[value="'+$(elem).attr('data-value')+'"]').attr("selected", "selected");
+			});
 			//For captor only
 			if(options.type=='event'){
 				$.action(

@@ -30,7 +30,12 @@ class Effect extends SQLiteEntity{
 			'command' => array(
 					'icon' => 'fa-terminal',
 					'label' => 'Commande',
-					'template' => '<select data-field="target"><option value="server">Serveur</option><option value="client">Client</option></select> = <input data-field="value" style="max-width:50%;width:50%;" type="text" placeholder="valeur" value="{value}">'
+					'template' => '<select data-value="{target}" data-field="target"><option value="server">Serveur</option><option value="client">Client</option></select> = <input data-field="value" style="max-width:50%;width:50%;" type="text" placeholder="valeur" value="{value}">'
+					),
+			'gpio' => array(
+					'icon' => 'fa-dot-circle-o',
+					'label' => 'GPIO',
+					'template' => 'numéro <input type="text" data-field="gpio" placeholder="1,2,3,4..." value="{gpio}"> en état <select data-value="{value}" data-field="value"><option value="1">Actif</option><option value="0">Inactif</option></select>'
 					),
 			'talk' => array(
 					'icon' => 'fa-volume-up',
@@ -40,7 +45,7 @@ class Effect extends SQLiteEntity{
 			'var' => array(
 					'icon' => 'fa-dollar',
 					'label' => 'Variable',
-					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value=""> <span data-field="operator" class="operator">=</span> <input data-field="value" type="text" placeholder="Ma valeur" value="{value}">'
+					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value="{var}"> <span data-field="operator" class="operator">=</span> <input data-field="value" type="text" placeholder="Ma valeur" value="{value}">'
 					),
 			'sleep' => array(
 					'icon' => 'fa-coffee',
@@ -59,12 +64,12 @@ class Effect extends SQLiteEntity{
 					),
 		);
 		
-		$types['story']['template'] = '<select data-field="value" class="story">';
+	$types['story']['template'] = '<select data-value="{value}"  data-field="value" class="story">';
 		require_once('Story.class.php');
 		$stories = new Story();
 		$stories = $stories->populate();
 		foreach($stories as $story):
-			$types['story']['template'] .= '<option value="'.$story->id.'">'.$story->label.'</select>';
+			$types['story']['template'] .= '<option value="'.$story->id.'">'.$story->label.'</option>';
 		endforeach;
 		$types['story']['template'] .= '</select>';
 		return $types;

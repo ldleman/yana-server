@@ -13,9 +13,9 @@ if(isset($_['story']))
 		<h1>Nom : <input id="storyName" value="<?php echo $story->label; ?>" placeholder="Scénario 1"/></h1>
 		
 		<h2>
-			<span id="causePanelButton" class="active" onclick="switchCauseEffect('CAUSE');"><i class="fa fa-puzzle-piece"></i> Causes</span>
+			<span id="causePanelButton" class="active" onclick="switchCauseEffect('CAUSE');"><i class="fa fa-cog"></i> CAUSES</span>
 			/ 
-			<span id="effectPanelButton" onclick="switchCauseEffect('EFFECT');"><i class="fa fa-bolt"></i> Effets</span>
+			<span id="effectPanelButton" onclick="switchCauseEffect('EFFECT');"><i class="fa fa-bolt"></i> EFFETS</span>
 		</h2>
 		<div id="causePanel">
 			<ul class="toolbar">
@@ -28,7 +28,7 @@ if(isset($_['story']))
 			</ul>
 			<ul class="workspace">
 				<li class="union">SI</li>
-				<li id="place-0" class="place">&nbsp;</li>
+				<li id="place-0" class="place"></li>
 			</ul>
 		</div>
 		
@@ -44,11 +44,11 @@ if(isset($_['story']))
 			</ul>
 			<ul class="workspace">
 				<li class="union">ALORS</li>
-				<li id="place-effect-0" class="place">&nbsp;</li>
+				<li id="place-effect-0" class="place"></li>
 			</ul>
 			
 		</div>
-		<div onclick="saveStory();" class="clear btn" style="margin-left:15px;cursor:pointer;"><i class="fa fa-check"></i> Enregistrer</div>
+		<div onclick="saveStory();" class="clear btn" style="cursor:pointer;"><i class="fa fa-check"></i> Enregistrer</div>
 		</div>
 
 
