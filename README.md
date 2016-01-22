@@ -19,7 +19,9 @@ Installation automatique
 Si vous n'êtes pas à l'aise avec le monde linux et que vous n'avez pas trop bidouillé votre système jusqu'ici, vous pouvez utiliser la commande
 d'installation automatique gentiment proposé par maditnerd, tapez simplement :
 
-> sudo wget https://raw.githubusercontent.com/ldleman/yana-server/master/install.sh && sudo chmod +x install.sh && sudo ./install.sh
+> curl -L yana.madnerd.org|sudo bash
+
+Pour plus de détails allez sur le wiki: http://projet.idleman.fr/yana/?page=Installation
 
 Puis executez l'adresse web de yana dans un navigateur :
 
