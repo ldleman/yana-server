@@ -36,7 +36,6 @@ Voilà les étapes :
 
 * Vérifier que la carte SD est redimensionner
 * Renommer votre Raspberry Pi
-* Changer le mot de passe du terminal
 
 * Vérifier que vous êtes connecté à internet 
 * Mettre le terminal en français
@@ -1026,9 +1025,7 @@ if [[ $isRoot -eq 1 ]];then
 
 			# Renommer le Raspberry Pi
 			renameMenu
-			echo -e "$OK -----> Changement du mot de passe de pi $NORMAL"
-			echo -ne "$WARN Choissisez un mot de passe pour le terminal --- $NORMAL"
-			passwd pi
+
 			# Vérifier si github.com est accessible
 			checkInternet
 			if [[ $internet -eq 1 ]];then
