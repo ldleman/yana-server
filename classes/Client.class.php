@@ -13,7 +13,7 @@ class Client {
             $result = @socket_connect( $this->socket, '127.0.0.1', 9999);
             if(!$result){
                 $this->socket = null;
-                throw new Exception('Erreur connexion au serveur socket depuis yana-server, le serveur est il allumé ? '.socket_strerror(socket_last_error()));
+                throw new Exception('Erreur connexion au serveur socket depuis yana-server, le serveur est il allumé ? '.utf8_encode(socket_strerror(socket_last_error())));
             }
         }
     }

@@ -24,8 +24,11 @@ function init(){
 		id:$('#story').data('id')
 	},function(r){
 		
-		for(var key in r.results)
-			addLine(r.results[key]);
+		for(var key in r.results['causes'])
+			addLine(r.results['causes'][key]);
+		
+		for(var key in r.results['effects'])
+			addLine(r.results['effects'][key]);
 	});
 	
 	
@@ -57,6 +60,40 @@ function init(){
 	});
 	
 }
+
+
+function story_launch(id,elem){
+	$(elem).addClass('loading');
+	$('tr[data-log="'+id+'"] td pre').html('En cours d\'execution...');
+	$.action({
+		action:'plugin_story_launch_story',id:id},
+		function(response){
+			$('tr[data-log="'+id+'"] td pre').html(response.log);
+			$('tr[data-log="'+id+'"]').slideDown();
+			$(elem).removeClass('loading');
+		}
+	);
+}
+
+
+function story_change_state(id,elem){
+	var icon = $(elem).find('i');
+	var state = icon.hasClass('fa-check-square-o') ? 0 : 1;
+	
+	$.action({
+		action:'plugin_story_change_state',id:id,state:state},
+		function(){
+			icon.removeClass('fa-square-o').removeClass('fa-check-square-o');
+			icon.addClass((state == 1 ? 'fa-check-square-o' : 'fa-square-o'));
+		}
+	);
+}
+
+//Log story
+function story_log(id){
+	$('tr[data-log="'+id+'"]').slideToggle();
+}
+
 
 //Delete story
 function story_delete(id,element){

@@ -18,7 +18,14 @@
 	    </thead>
 		<?php 
 			foreach($stories as $story){
-				echo '<tr><td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td><td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td></tr>';
+				echo '<tr data-id="'.$story->id.'">
+						<td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td>
+						<td class="story_loader" class="pointer" title="Executer manuellement le scénario" onclick="story_launch('.$story->id.',this);"><i class="fa"> <span>Chargement...</span></td>
+						<td style="width:15px;" class="pointer" title="Voir le dernier log executé" onclick="story_log(\''.$story->id.'\')"><i class="fa fa-align-justify"></i></td>
+						<td style="width:15px;" class="pointer" title="Activer/Désactiver" onclick="story_change_state(\''.$story->id.'\',this)"><i class="fa '.($story->state?'fa-check-square-o':'fa-square-o').'"></i></td>
+						<td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td>
+					</tr>';
+				echo '<tr style="display:none" data-log="'.$story->id.'"><td colspan="3"><pre>'.$story->log.'</pre></td></tr>';
 			}
 		?>
 	    </table>

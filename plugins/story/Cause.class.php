@@ -31,12 +31,14 @@ class Cause extends SQLiteEntity{
 			'time' => array(
 					'icon' => 'fa-clock-o',
 					'label' => 'Date / Heure',
-					'template' => ''
+					'template' => '',
+					'description' => 'Déclenche le scénario en fonction du temps sélectionné'
 					),
 			'listen' => array(
 					'icon' => 'fa-microphone',
 					'label' => 'Phrase',
-					'template' => '<select data-field="operator" class="operator"><option>=</option><!--<option>!=</option>--></select> <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="Ma phrase.." value="{value}">'
+					'template' => '<select data-field="operator" class="operator"><option>=</option><!--<option>!=</option>--></select> <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="Ma phrase.." value="{value}">',
+					'description' => 'Déclenche le scénario en fonction de la phrase prononcée'
 					),
 			/*'captor' => array(
 					'icon' => 'fa-tachometer',
@@ -74,11 +76,14 @@ class Cause extends SQLiteEntity{
 	}
 
 	function setValues($values){
+		foreach($values as $key=>$value){
+			$values[$key] = htmlspecialchars_decode(stripslashes($value));
+		}
 		$this->values = json_encode($values);
 	}
 	
 	function getValues(){
-		return json_decode(str_replace('&#039;','\'',$this->values));
+		return json_decode($this->values);
 	}
 	
 }

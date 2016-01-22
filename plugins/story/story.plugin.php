@@ -55,28 +55,6 @@ function story_plugin_action(){
 						$template['template'] = str_replace($match[0],$_['data'][$match[2]],$template['template']);
 					}
 					
-		
-					/*
-					$matches = preg_split("/\[(.*?)\]/", $template['template'],-1,PREG_SPLIT_DELIM_CAPTURE);
-					
-					$tpl = '';
-					
-					for($i=0;$i<count($matches);$i+=2){
-						$start = $matches[$i];
-						$var = $matches[$i+1];
-						list($name,$value) = explode(':',$var);
-						
-						
-						if($_['data'][$name] == $value) {
-							
-							$tpl.= 'selected="selected"';
-						}
-						$tpl.= $start;
-					}
-					$template['template'] = $tpl;
-					*/
-					
-					
 					$response['html'] = 
 					'<li class="line" data-type="'.$_['type'].'">
 						<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
@@ -94,10 +72,10 @@ function story_plugin_action(){
 					$effect = new Effect();
 					$effects = $effect->loadAll(array('story'=>$_['id']),'sort');
 					$causes = $cause->loadAll(array('story'=>$_['id']),'sort');
-					
+					$response['results'] = array('causes'=>array(),'effects'=>array());
 					foreach($causes as $caus){
 						$data = $caus->getValues();
-						$response['results'][]= array(
+						$response['results']['causes'][]= array(
 						'type' => $caus->type,
 						'panel'=>"CAUSE",
 						'data'=> $data
@@ -106,7 +84,7 @@ function story_plugin_action(){
 			
 					foreach($effects as $eff){
 						$data = $eff->getValues();
-						$response['results'][]=array( 
+						$response['results']['effects'][]=array( 
 						'type' => $eff->type,
 						'panel'=>"EFFECT",
 						'data'=> $data
@@ -163,6 +141,29 @@ function story_plugin_action(){
 			);
 	break;
 	
+	case 'plugin_story_launch_story':
+		Action::write(
+			function($_,&$response){
+				Story::execute($_['id']);
+				$story = new Story();
+				$story = $story->getById($_['id']);
+				$response['log'] = $story->log;
+			},
+			array()
+		);
+	break;
+	
+	case 'plugin_story_change_state':
+		Action::write(
+			function($_,&$response){
+				$story = new Story();
+				
+				$story->change(array('state'=>$_['state']),array('id'=>$_['id']));
+			},
+			array()
+		);
+	break;
+	
 	case 'plugin_story_delete_story':
 		Action::write(
 			function($_,&$response){
@@ -217,6 +218,8 @@ function story_plugin_action(){
 			}
 			
 			$i = 0;
+			
+			
 			foreach($_['story']['effects'] as $effect){
 				$current = new Effect();
 				$current->type = $effect['type'];

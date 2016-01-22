@@ -21,7 +21,7 @@ if(isset($_['story']))
 			<ul class="toolbar">
 				<?php 
 					foreach(Cause::types() as $key=>$type):
-						echo '<li data-type="'.$key.'" class="'.$key.'"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
+						echo '<li data-type="'.$key.'" title="'.$type['description'].'" class="'.$key.' infobulle"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
 					endforeach;
 				?>
 				<div class="clear"></div>
@@ -37,7 +37,7 @@ if(isset($_['story']))
 			<ul class="toolbar">
 				<?php 
 					foreach(Effect::types() as $key=>$type):
-						echo '<li data-type="'.$key.'" class="'.$key.'"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
+						echo '<li data-type="'.$key.'"  title="'.$type['description'].'"  class="'.$key.' infobulle"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
 					endforeach;
 				?>
 				<div class="clear"></div>

@@ -163,3 +163,28 @@ li.dragged{
 	opacity:1;
 }
 
+
+.story_loader{
+	width:15px;
+	cursor:pointer;
+	transition:all 0.2s ease-in-out;
+}
+.story_loader i:before{
+	content:'\f0a6';
+}
+
+.story_loader.loading i:before{
+	content:'\f021';
+}
+
+.story_loader span{
+	display:none;
+	font-family: Open Sans;
+}
+.story_loader.loading span{
+	display:inline-block;
+}
+
+.story_loader.loading{
+	width:120px;
+}
