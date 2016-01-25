@@ -18,11 +18,14 @@ IPADDRESS=$(hostname -I)
 HOSTNAME=$(cat /etc/hostname)
 
 doInstall=0
+#Installer le serveur web (se met à 0 si un autre serveur web est installé)
 doInstallWebServer=1
 isRoot=0
 GlobalError=0
 confirmErase=0
 copyYana=1
+resizeSD=1
+
 
 ################
 # Messages GUI
@@ -31,25 +34,21 @@ copyYana=1
 # Afin quel soit facilement modifiable
 
 installMessage="\
-Parce qu'il vous aime bien, ce script va installer YANA et paramétrer votre Raspberry Pi \n\n\
-Voilà les étapes :
-
-* Vérifier que la carte SD est redimensionner
-* Renommer votre Raspberry Pi
-
-* Vérifier que vous êtes connecté à internet 
-* Mettre le terminal en français
-* Mettre à jour votre Raspberry Pi
-* Régler automatiquement votre fuseau horaire
-* Installer wiringPi (pour gérer les GPIO)
-
-* Installer le serveur web
-* Copier Yana Server
-* Créer le premier utilisateur
-* Paramétrer les permissions du serveur web
-* Installer le socket pour le client Yana
-
-Alors toujours d'accord ?
+Etapes:
+---------------------------
+* Renommer le Raspberry Pi
+* Redimensionner la carte SD
+* Mis à jour
+* Terminal en français
+------------------------------------
+* Configuration du fuseau horaire
+* Installation wiringPi (pour gérer les GPIO)
+-------------------------------------------
+* Copie de Yana Server
+* Installation du serveur web
+* Création de l'utilisateur
+* Permissions du serveur web
+* Installation du socket / cron
 "
 
 checkMessage="\
@@ -78,6 +77,12 @@ restoreMessage="\
 Vous pouvez revenir à un état précédent de yana depuis une clé USB \n\n\
 Ceci effacera /var/www/yana-server et le replacera par celui \n\
 dans le dossier sur la clé USB /yana
+"
+
+resizeSDCardMessage="\
+Voulez vous redimensionner la carte SD de votre Raspberry Pi ?
+
+Ceci sera fait au prochain redémarrage.
 "
 
 # Message d'erreurs
@@ -240,8 +245,15 @@ checkMenu(){
 		checkPermissions
 		checkBinariesMenu
 		installYanaSocket
+		addCron
 	else
 		setupMenu
+	fi
+}
+
+resizeSDCardMenu(){
+	if(whiptail --title "Carte SD" --yesno "$resizeSDCardMessage" --yes-button "Oui" --no-button "Non" 0 0) then
+		resizeSDCard
 	fi
 }
 
@@ -454,6 +466,12 @@ updateRaspberryPi(){
 	if [[ $globalError -ne 0 ]];then
 		aptgetErrorMenu
 	fi
+
+	#On installe aussi le client git
+	debconf-apt-progress -- apt-get install -q -y git-core
+	if [[ $globalError -ne 0 ]];then
+		aptgetErrorMenu
+	fi
 }
 
 #Change les locales de l'anglais au français de manière non interactive
@@ -520,7 +538,7 @@ checkWebServer(){
 #Installation du serveur web et de SQLite
 installWebServer(){
 	echo -e "$OK -----> Installation du serveur web $NORMAL"
-	debconf-apt-progress -- apt-get install -q -y lighttpd git-core sqlite3 php5-sqlite php5-common php5-cgi
+	debconf-apt-progress -- apt-get install -q -y lighttpd git-core sqlite3 php5-sqlite php5-common php5-cgi php5-cli
 	if [[ $globalError -ne 0 ]];then
 		aptgetErrorMenu
 	fi
@@ -613,6 +631,7 @@ cloneYana(){
 }
 
 # Mis à jour forcé de Yana
+# Cela n'affectera pas la base de données 
 forceYanaUpdate(){
 yanaLogo
 echo -e "$OK -----> Mise à jour de Yana Server $NORMAL"
@@ -627,6 +646,9 @@ pullStatus=$?
 if [[ $fetchStatus -eq 0 ]] && [[ $resetStatus -eq 0 ]] && [[ $pullStatus -eq 0 ]];then
 	
 	echo -e "$INFO -----> Dernier statut - $lastcomment $NORMAL"
+	# On revérifie les permissions
+	checkPermissions
+	setupPermissionsBinaries
 else
 	echo -e "$ERR -----> La mise à jour a échoué $NORMAL"
 	echo $pullLog
@@ -773,6 +795,20 @@ else
 fi
 
 }
+	
+checkCron(){
+	checkCronYana=$(crontab -l|grep 'http://localhost/action.php?action=crontab')
+}
+
+addCron(){
+	echo -e "$OK -----> Installation du cron scénario $NORMAL"
+
+	if [[ -z $checkCronYana ]];then
+		crontab -l | { cat; echo '*/1 * * * * wget "http://localhost/action.php?action=crontab" -O /dev/null 2>&1'; } | crontab -
+	else
+			echo -e "$WARN -----> Installation du cron scénario (déjà effectué) $NORMAL"	
+	fi
+}
 
 #Afin de sécuriser Yana une fois l'installation fini, on supprime install.php
 #Et on change le mot de passe de l'utilisateur par défaut (pi)
@@ -787,7 +823,7 @@ securityCheck(){
 # Pour redimensionner la carte sd, j'utilise raspi-config en mode unattended
 resizeSDCard(){
 	echo -e "$OK -----> Vérification du redimensionnement de la carte SD $NORMAL"
-	raspi-config --expand-rootfs > /dev/null 2>&1
+	raspi-config --expand-rootfs > /tmp/resizeSDCardError.log 2>&1
 }
 
 endInstall(){
@@ -930,6 +966,9 @@ restoreUSB(){
 				echo -e "$WARN -----> Supression de yana-server $NORMAL"
 
 				echo -e "$OK -----> Restauration de la sauvegarde $NORMAL"
+				if [ ! -d /var/www/yana-server ];then
+					mkdir -R /var/www/yana-server
+				fi
 				cp -R /media/backupUSB/yana /var/www/yana-server/ 
 				copyState=$?
 
@@ -949,6 +988,7 @@ restoreUSB(){
 				#Si l'état de la clé n'est pas correcte
 				if [ $umountState -eq 0 ];then
 					echo -e "$OK -----> Vous pouvez retirer votre clé en toute sécurité $NORMAL"
+					echo -e "$INFO Pour réouvrir la clé USB tapez : $ERR mount $USBDrive /media/backupUSB $NORMAL"
 				else
 					echo -e "$ERR -----> La clé n'a pas été correctement démonté $NORMAL "
 					echo -e "$INFO Vous pouvez la démonter manuellement en tapant $OK umount /media/backupUSB $NORMAL"
@@ -1010,7 +1050,11 @@ if [[ $isRoot -eq 1 ]];then
 	
 	if [[ $# -eq 1 ]];then
 		scriptToExecute=$1
-		executeScript
+		
+		if [[ scriptToExecute -eq "noresize" ]];then
+			resizeSDCard=0
+		fi
+
 	else
 
 
@@ -1020,8 +1064,10 @@ if [[ $isRoot -eq 1 ]];then
 		# Si Installer est appuyé
 		if [[ $doInstall -eq 1 ]];then
 
-			# Redimensionnement de la carte SD
-			resizeSDCard
+
+			if [ $resizeSD -eq 1 ];then	
+				resizeSDCardMenu # Redimensionnement de la carte SD
+			fi
 
 			# Renommer le Raspberry Pi
 			renameMenu
@@ -1031,8 +1077,11 @@ if [[ $isRoot -eq 1 ]];then
 			if [[ $internet -eq 1 ]];then
 
 				setLocaleToFrench # Mettre le terminal en français
-				updateRaspberryPi # Mettre à jour le Raspberry Pi (apt-get update/upgrade)			
+				updateRaspberryPi # Mettre à jour le Raspberry Pi (apt-get update/upgrade)
 				configureTimeZone # Configurer le fuseau horaire automatiquement (tzupdate)
+
+				# Clone le repo ldleman/yana
+				cloneYana
 
 				# Installe le serveur web
 				checkWebServer
@@ -1040,10 +1089,7 @@ if [[ $isRoot -eq 1 ]];then
 				 	installWebServer
 				 	setupWebServer
 				fi
-
-				# Clone le repo ldleman/yana
-				cloneYana
-			
+		
 				# Vérifie les permissions des fichiers et des binaires
 				checkPermissions
 			
@@ -1056,10 +1102,9 @@ if [[ $isRoot -eq 1 ]];then
 				# Affiche un message avec l'étape sur le web
 				endInstall
 				securityCheck
-				checkPermissions
 				checkBinariesMenu
 				installYanaSocket
-
+				addCron
 				echo -e "$OK Installation TERMINE!!! Il est conseillé de $ERR redémarrer $OK votre raspberry pi $NORMAL"
 				echo -e "$INFO sudo reboot $NORMAL"
 			fi
