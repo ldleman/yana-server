@@ -12,7 +12,7 @@ Compter 6 broches
 5V - 5V - GND - TX - RX - 1 
 Si le récepteur n'est pas branché correctement, vous serez averti \n\
 
-Appuyez sur n'importe quel bouton de votre télécomande pour afficher le code
+Appuyez sur n'importe quel bouton de votre télécommande pour afficher le code
 
 "
 
