@@ -966,9 +966,6 @@ restoreUSB(){
 				echo -e "$WARN -----> Supression de yana-server $NORMAL"
 
 				echo -e "$OK -----> Restauration de la sauvegarde $NORMAL"
-				if [ ! -d /var/www/yana-server ];then
-					mkdir -R /var/www/yana-server
-				fi
 				cp -R /media/backupUSB/yana /var/www/yana-server/ 
 				copyState=$?
 
