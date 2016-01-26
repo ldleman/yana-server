@@ -183,8 +183,8 @@ function ipcam_plugin_setting_page(){
 				    <input type="hidden" id="id" value="<?php echo $selected->id; ?>">
 				    <input type="text" id="labelCamera" value="<?php echo $selected->label; ?>" placeholder="Sonde du salon"/>
 			
-				    <label for="ipCamera">IP</label>
-				    <input type="text" value="<?php echo $selected->ip; ?>" id="ipCamera" placeholder="192.168.11.27:87" />
+				    <label for="ipCamera">IP/Adresse du stream</label>
+				    <input type="text" value="<?php echo $selected->ip; ?>" id="ipCamera" placeholder="ex : 192.168.11.27:87/videostream.cgi" />
 				    
 					<label for="loginCamera">Login</label>
 				    <input type="text" value="<?php echo $selected->login; ?>" id="loginCamera" placeholder="" />

@@ -362,10 +362,10 @@ abstract class SocketServer {
 		$this->master = @socket_create(AF_INET, SOCK_STREAM, 0) or die($this->log('Could not create socket'));
 
 		// to prevent: address already in use
-		socket_set_option($this->master, SOL_SOCKET, SO_REUSEADDR, 1) or die($this->log('Could not set up SO_REUSEADDR'));
-		
+		//socket_set_option($this->master, SOL_SOCKET, SO_REUSEADDR, 1) or die($this->log('Could not set up SO_REUSEADDR',true));
+
 		// bind socket to port
-		@socket_bind($this->master, $this->address, $this->port) or die($this->log('Could not bind to socket'));
+		@socket_bind($this->master, $this->address, $this->port) or die($this->log('Could not bind to socket',true));
 		
 		// start listening for connections
 		socket_listen($this->master) or die($this->log('Could not set up socket listener'));

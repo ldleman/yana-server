@@ -21,7 +21,7 @@ class Camera extends SQLiteEntity{
 		'location'=>'string'
 	);
 
-	function __construct($tag){
+	function __construct($tag='rw'){
 		parent::__construct($tag);
 	}
 

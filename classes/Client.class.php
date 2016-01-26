@@ -10,6 +10,9 @@ class Client {
         $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $response = '';
         if ($this->socket !== false) {
+            if (!socket_set_option($this->socket, SOL_SOCKET, SO_REUSEADDR, 1)) 
+                throw new Exception(utf8_encode(socket_strerror(socket_last_error($this->socket))));
+                
             $result = @socket_connect( $this->socket, '127.0.0.1', 9999);
             if(!$result){
                 $this->socket = null;
