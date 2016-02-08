@@ -9,6 +9,9 @@
 		<a class="btn" href="index.php?module=story&action=edit">Ajouter un scenario</a>
 		
 		<h2>Scénarios existants</h2>
+		<form action="action.php?action=plugin_story_import" method="POST" enctype="multipart/form-data">
+		Importer un scénario <input type="file" onchange="$(this).parent().submit()" name="import">
+		</form>
 	    <table class="table table-striped table-bordered table-hover">
 	    <thead>
 	    <tr>
@@ -23,6 +26,7 @@
 						<td class="story_loader" class="pointer" title="Executer manuellement le scénario" onclick="story_launch('.$story->id.',this);"><i class="fa"> <span>Chargement...</span></td>
 						<td style="width:15px;" class="pointer" title="Voir le dernier log executé" onclick="story_log(\''.$story->id.'\')"><i class="fa fa-align-justify"></i></td>
 						<td style="width:15px;" class="pointer" title="Activer/Désactiver" onclick="story_change_state(\''.$story->id.'\',this)"><i class="fa '.($story->state?'fa-check-square-o':'fa-square-o').'"></i></td>
+						<td style="width:15px;" class="pointer" title="Exporter" onclick="window.location=\'action.php?action=plugin_story_export&id='.$story->id.'\'"><i class="fa fa-external-link"></i></td>
 						<td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td>
 					</tr>';
 				echo '<tr style="display:none" data-log="'.$story->id.'"><td colspan="3"><pre>'.$story->log.'</pre></td></tr>';
