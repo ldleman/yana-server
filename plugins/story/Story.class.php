@@ -99,7 +99,7 @@ class Story extends SQLiteEntity{
 			}
 		}
 
-			
+		$conf->put('last_sentence','','var');
 	}
 	
 	
