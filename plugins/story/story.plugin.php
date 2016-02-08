@@ -64,6 +64,69 @@ function story_plugin_action(){
 			);
 	break;
 	
+	
+	case 'plugin_story_import':
+	
+		$story = new Story();
+		$cause = new Cause();
+		$effect = new Effect();
+		
+		$datas = json_decode(file_get_contents($_FILES['import']['tmp_name']),true);
+
+		if(!$datas) exit('Mauvais format de données');
+		
+		$story = $story->fromArray($datas['story']);
+		unset($story->id);
+		var_dump($story);
+		$story->save();
+		
+		foreach($datas['causes'] as $data):
+			$newcause = $cause->fromArray($data);
+			unset($newcause->id);
+			$newcause->story = $story->id;
+			$newcause->save();
+		endforeach;
+		
+		foreach($datas['effects'] as $data):
+			$neweffect = $effect->fromArray($data);
+			unset($neweffect->id);
+			$neweffect->story = $story->id;
+			$neweffect->save();
+		endforeach;
+		header('location: index.php?module=story');
+		
+	break;
+	case 'plugin_story_export':
+	
+		$story = new Story();
+		$cause = new Cause();
+		$effect = new Effect();
+		
+		$story = $story->getById($_['id']);
+		$effects = $effect->loadAll(array('story'=>$story->id),'sort');
+		$causes = $cause->loadAll(array('story'=>$story->id),'sort');
+		
+		$json = array();
+		$json['story'] = $story->toArray();
+		
+		foreach($causes as $cause):
+			$json['causes'][] = $cause->toArray();
+		endforeach;
+		
+		foreach($effects as $effect):
+			$json['effects'][] = $effect->toArray();
+		endforeach;
+		
+		header('Content-Description: File Transfer');
+	    header('Content-Type: application/json');
+	    header('Content-Disposition: attachment; filename=scenario-'.$story->id.'-'.date('d-m-Y').'.json');
+	    header('Content-Transfer-Encoding: binary');
+	    header('Expires: 0');
+	   	header('Cache-Control: must-revalidate');
+	    header('Pragma: public');
+		echo json_encode($json);
+	break;
+	
 	case 'plugin_story_get_causes_effects':
 		Action::write(
 				function($_,&$response){
