@@ -29,38 +29,35 @@ class Story extends SQLiteEntity{
 		require_once(dirname(__FILE__).'/Cause.class.php');
 		
 		global $conf;
+		
+		
+		self::out('Vérification des scénarios');
+			
 		$causeManager = new Cause();
-		/*$stories = array();
-	
-		switch($trigger->type){
-			case 'time':
-				
-			break;
-			case 'talk':
-				$cause = new Cause();
-				$cause = $causeManager->getById($trigger->value);
-				$stories[]  = $cause->story;
-			break;
-		}
+
+		$storyCauses = $causeManager->loadAll(array());
+			
+		self::out('Vérification des '.count($storyCauses).'	causes');
 		
 		
-		foreach($stories as $story){
-		*/	
-		$storyCauses = $causeManager->loadAll(array(/*'story'=>$story*/));
-			
-			
 		$sentence = $conf->get('last_sentence','var');
 		list($i,$h,$d,$m,$y) = explode('-',date('i-H-d-m-Y'));
 		$validCauses = array();
 		
-		
+		self::out('Dernière phrase énoncée : "'.$sentence.'"');
+		self::out('Date actuelle '.$d.'/'.$m.'/'.$y.' '.$h.':'.$i);
 		
 		foreach($storyCauses as $storyCause){
+			self::out("Vérification cause ID : $storyCause->id type : $storyCause->type");
 			$values = $storyCause->getValues();
 			switch ($storyCause->type){
 				case 'listen':
-					if($values->value == $sentence)
+					if($values->value == $sentence){
 						$validCauses[$storyCause->story][] = $storyCause;
+						self::out("Phrase correspondante, ajout $storyCause->id aux causes valides");
+					}else{
+						self::out("Phrase non correspondante");
+					}
 				break;
 				case 'time':
 						;
@@ -73,26 +70,36 @@ class Story extends SQLiteEntity{
 							($m == $values->month || $values->month == '*') && 
 							($y == $values->year || $values->year == '*')
 							)){
-							
+								self::out("Date correspondante, ajout $storyCause->id aux causes valides");
 								$validCauses[$storyCause->story][] = $storyCause;
+							}else{
+								self::out("Date non correspondante");
 							}
 				break;
 				case 'readvar':
-						if ($conf->get($storyCause->target,'var') == $storyCause->value) 
+						if ($conf->get($storyCause->target,'var') == $storyCause->value) {
 							$validCauses[$storyCause->story][] = $storyCause;
+							self::out("Variable correspondante, ajout $storyCause->id aux causes valides");
+						}else{
+							self::out("Variable non correspondante");
+						}
 				break;
 			}
 		}
 	
-		foreach($validCauses as $story=>$causes){
+		self::out("Vérification de la somme des causes pour chaques scénario (".count($validCauses)." valides)");
 		
-			if(count($causes) == $causeManager->rowCount(array('story'=>$story)))
+		foreach($validCauses as $story=>$causes){
+			self::out("Scénario ID : $story, ".count($causes)." causes valides.");
+			if(count($causes) == $causeManager->rowCount(array('story'=>$story))){
+				self::out("Execution des effets du Scénario ID : $story");
 				self::execute($story);
-			
-			
+			}else{
+				self::out("Non execution des effets du Scénario ID : $story, nombre de causes insuffisantes");
+			}
 		}
 
-			
+		$conf->put('last_sentence','','var');
 	}
 	
 	
@@ -189,6 +196,14 @@ class Story extends SQLiteEntity{
 			$story->log = $log;
 			$story->save();
 	}
+	
+	public static function out($msg){
+		global $_;
+		if(!isset($_['mode']) || $_['mode'] != 'verbose') return;
+		
+		echo '<pre>'.date('d/m/Y H:i:s').' | '.$msg.PHP_EOL;
+	}
+	
 }
 
 ?>

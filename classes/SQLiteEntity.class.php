@@ -56,6 +56,8 @@ class SQLiteEntity extends SQLite3
 	}
 	
 
+	
+	
 	public function closeDatabase(){
 		$this->close();
 	}
@@ -84,6 +86,32 @@ class SQLiteEntity extends SQLite3
 		return $return;
 	}
 
+	/**
+	* Transforme l'objet en tableau attribut -> valeur
+	* @author Valentin CARRUESCO
+	* @return retourne un array attribut -> valeur correspondant à l'objet
+	*/
+	public function toArray(){
+		$array = array();
+		foreach($this->object_fields as $field=>$type)
+			$array[$field] = $this->$field;
+		return $array;
+	}
+	
+	/**
+	* Transforme le tableau fournis en objet, le nommage attribut -> valeur doit être respecté
+	* @author Valentin CARRUESCO
+	* @param <Array> tableau contenant les clé/valeur de l'objet
+	* @return retourne un objet attribut -> valeur correspondant à l'array fournis
+	*/
+	public function fromArray($array){
+		$object = new $this->CLASS_NAME();
+		foreach($this->object_fields as $field=>$type)
+			$object->$field = $array[$field];
+			
+		return $object;
+	}
+	
 	/**
 	* Methode de creation de l'entité
 	* @author Valentin CARRUESCO
@@ -264,16 +292,15 @@ class SQLiteEntity extends SQLite3
 			if($limit!=null) $query .='LIMIT '.$limit.' ';
 			$query .=';';
 			  
-			//echo '<hr>'.__METHOD__.' : Requete --> '.$query.'<br>';
 			$execQuery = $this->query($query);
 
 			if(!$execQuery) 
 				echo $this->lastErrorMsg();
 			while($queryReturn = $execQuery->fetchArray() ){
-				$object = eval(' return new '.$this->CLASS_NAME.'();');
-				foreach($this->object_fields as $field=>$type){
-					if(isset($queryReturn[$field])) eval('$object->'.$field .'= html_entity_decode(\''. addslashes($queryReturn[$field]).'\');');
-				}
+				$object = new $this->CLASS_NAME();
+				foreach($this->object_fields as $field=>$type)
+					if(isset($queryReturn[$field])) $object->$field= html_entity_decode( addslashes($queryReturn[$field]));
+				
 				$objects[] = $object;
 				unset($object);
 			}
