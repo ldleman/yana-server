@@ -562,7 +562,7 @@ server.modules = (
 #       "mod_rewrite",
 )
 
-server.document-root        = "/var/www/yana-server/"
+server.document-root        = "/var/www/"
 server.upload-dirs          = ( "/var/cache/lighttpd/uploads" )
 server.errorlog             = "/var/log/lighttpd/error.log"
 server.pid-file             = "/var/run/lighttpd.pid"
