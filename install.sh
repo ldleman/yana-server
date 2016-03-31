@@ -562,7 +562,7 @@ server.modules = (
 #       "mod_rewrite",
 )
 
-server.document-root        = "/var/www/yana-server/"
+server.document-root        = "/var/www/"
 server.upload-dirs          = ( "/var/cache/lighttpd/uploads" )
 server.errorlog             = "/var/log/lighttpd/error.log"
 server.pid-file             = "/var/run/lighttpd.pid"
@@ -791,7 +791,7 @@ EOF
 	fi
 
 else
-	echo -e "$ERR Aller sur $INFO http:///$HOSTNAME.local $ERR pour finalisez l'installation avant d'installer le socket $NORMAL"
+	echo -e "$ERR Aller sur $INFO http:///$HOSTNAME.local/yana-server $ERR pour finalisez l'installation avant d'installer le socket $NORMAL"
 fi
 
 }
@@ -828,7 +828,7 @@ resizeSDCard(){
 
 endInstall(){
 	HOSTNAME=$(cat /etc/hostname)
-	echo -e "$OK -----> Finissez l'installation en allant sur votre $WARNING navigateur $OK à $INFO http://$HOSTNAME.local $NORMAL"
+	echo -e "$OK -----> Finissez l'installation en allant sur votre $WARNING navigateur $OK à $INFO http://$HOSTNAME.local/yana-server $NORMAL"
 	echo -ne "$WARN ATTENTE DE L'UTILISATEUR $NORMAL"
 	databaseCreated=0
 	while [[ databaseCreated -eq 0 ]]
