@@ -15,6 +15,25 @@ function dashboard_plugin_actions(){
 
 	global $myUser,$_,$conf;
 	switch($_['action']){
+		
+		
+		case 'dash_helloworld_load':
+			header('Content-type: application/json');
+			$response['title'] = 'Hello world ! '.date('H:i:s');
+			$response['content'] = '
+						<div style="width: 100%">
+							Hello fuck\'in world ! '.date('H:i:s').' :D
+						</div>';
+			echo json_encode($response);
+			exit(0);
+		break;
+		case 'dash_helloworld_load':
+			
+		break;
+		case 'dash_helloworld_load':
+			
+		break;
+		
 		case 'GET_WIDGETS':
 			header('Content-type: application/json');
 
@@ -26,8 +45,8 @@ function dashboard_plugin_actions(){
 			$dashManager->change(array('default'=>'1'),array('id'=>$_['dashboard'],'user'=>$myUser->getId()));
 
 			$widgetManager = new Widget();
-			$model = array();
-			Plugin::callHook("widgets",array(&$model));
+			$models = array();
+			Plugin::callHook("widgets",array(&$models));
 
 
 			$widgets = $widgetManager->loadAll(array('dashboard'=>$_['dashboard']),'cell');
@@ -36,17 +55,19 @@ function dashboard_plugin_actions(){
 
 
 			foreach($widgets as $widget){
-				if(!is_active_model($widget->model,$model)) continue;
+				$model = get_model($models,$widget->model);
+				if(!$model) continue;
 				$data[] = array('data'=>$widget->data,
 								'column'=>$widget->column,
 								'id'=>$widget->id,
 								'cell'=>$widget->cell,
 								'minified'=>$widget->minified,
-								'model'=>$widget->model
+								'model'=>$widget->model,
+								'js'=>$model['js']
 								);
 			}
 
-			echo json_encode(array('model'=>$model,'data'=>$data));
+			echo json_encode(array('model'=>$models,'data'=>$data));
 		break;
 		case 'ADD_WIDGET':
 
@@ -220,23 +241,39 @@ function dashboard_plugin_preference_page(){
 }
 
 
-function is_active_model($model,$models){
-
-	foreach($models as $m){
-		
-		
-		if($m['uid'] == $model) return true;
-	}
+function get_model($models,$uid){
+	foreach($models as $model)
+		if($model['uid'] == $uid) return $model;
 	return false;
 }
+
+
+
+
+function dash_plugin_menu(&$widgets){
+		$widgets[] = array(
+			'uid'      => 'dash_hello_world',
+		    'icon'     => 'fa fa-coffee',
+		    'label'    => 'Hello world',
+		    'background' => '#F372F9', 
+		    'color' => '#fffffff',
+			'js' => array('plugins/dashboard/js/helloworld.js'),
+		    'onLoad'   => 'action.php?action=dash_helloworld_load',
+		    'onMove'   => 'action.php?action=dash_helloworld_move',
+		    'onDelete' => 'action.php?action=dash_helloworld_delete',
+			'refresh' => 2
+		);
+}
+
+
 
 Plugin::addJs('/js/jquery.dashboard.js',true);
 Plugin::addJs('/js/main.js',true);
 Plugin::addCss('/css/jquery.dashboard.css',true);
 
+Plugin::addHook("widgets", "dash_plugin_menu");
 Plugin::addHook("home", "dashboard_plugin_home");
 Plugin::addHook("action_post_case", "dashboard_plugin_actions");
-
 Plugin::addHook("preference_menu", "dashboard_plugin_preference_menu"); 
 Plugin::addHook("preference_content", "dashboard_plugin_preference_page"); 
 

@@ -7,8 +7,35 @@
 
 $(document).ready(function(){
 	var view = $('#dashboard_switch').val();
+	
 	plugin_dashboard_load_view(view);
+	
 });
+
+function addJs(jss){
+	for(var key in jss){
+		if($('script[src="'+jss[key]+'"]').length==0)
+			$('body').append('<script type="text/javascript" src="'+jss[key]+'"></script>');		
+	}
+}
+
+function widgetLoad(widget,model){
+	
+	addJs(widget.js);
+	
+	if(model.onLoad!=null){
+								$.ajax({
+									url : model.onLoad,
+									data : {id:widget.id},
+									method : 'POST',
+									success : function(response2){
+										bloc = $('#dashboard_bloc_'+widget.id);
+										$.dashboard.setBlocData(bloc,response2);
+									}
+		});
+	}
+	
+}
 
 function plugin_dashboard_load_view(view){
 	if($.trim(view) =='') return;
@@ -23,32 +50,26 @@ function plugin_dashboard_load_view(view){
 				models: response.model ,
 				data: response.data ,
 				onCreate : function(widget,bloc,column,cell){
-
+					
 					$.ajax({
 						dataType: "json",
 						url: 'action.php?action=ADD_WIDGET',
 						data : {view : $('#dashboard_switch').val(),model : widget['uid'],data:widget['data'] , column:column,cell:cell},
 						method : 'POST',
 						success : function(response){
-
 							$.dashboard.setBlocData(bloc,response);
-							if(widget.onLoad!=null){
-								$.ajax({
-									url : widget.onLoad,
-									data : {id:widget.id},
-									method : 'POST',
-									success : function(response2){
-										$.dashboard.setBlocData(bloc,response2);
-									}
-								});
-							}
+							widgetLoad(widget,response.model);
 						}
 					});
 
 					
 				},
 				onLoad : function(model,widget){
-					
+					if(model.refresh>0){
+						setInterval(function(){widgetLoad(widget,model);},(model.refresh*1000));
+					}else{
+						widgetLoad(widget,model);
+					}
 				},
 				onDelete : function(widget,bloc){
 					
