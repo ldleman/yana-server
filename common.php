@@ -8,6 +8,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 //Calage de la date
 date_default_timezone_set('Europe/Paris'); 
 
+define('__ROOT__',realpath(dirname(__FILE__)));
+
 //Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
 //car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
 if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
@@ -21,43 +23,43 @@ $error = '';
 
 
 
-define('__ROOT__',realpath(dirname(__FILE__)));
-
-require_once(__ROOT__ .'/constant.php');
-
-$versions = json_decode(file_get_contents(__ROOT__.'/db.json'),true);
 
 
+require_once(__ROOT__ .DIRECTORY_SEPARATOR.'constant.php');
 
-if(!file_exists(DB_NAME) || (file_exists(DB_NAME) && filesize(DB_NAME)==0)){
+$versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
+
+
+
+if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) || (file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) && filesize(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME)==0)){
 	file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
-	header('location:install.php');
+	header('location:'.__ROOT__.DIRECTORY_SEPARATOR.'install.php');
 }else{
-	if(file_exists('install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
+	if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
 }
 
-if(file_exists('db.json')){
-	if(!file_exists(__ROOT__.'/dbversion')) file_put_contents(__ROOT__.'/dbversion', '0');
-	$current = file_get_contents(__ROOT__.'/dbversion');
-	$versions = json_decode(file_get_contents(__ROOT__.'/db.json'),true);
+if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'db.json')){
+	if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.'dbversion')) file_put_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion', '0');
+	$current = file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion');
+	$versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
 	if($current<$versions[0]['version']){
 		Functions::alterBase($versions,$current);
-		file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
+		file_put_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion',$versions[0]['version']);
 	}
 }
 
-require_once(__ROOT__.'/RainTPL.php');
+require_once(__ROOT__.DIRECTORY_SEPARATOR.'RainTPL.php');
 
 $error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
 $message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
 
 function __autoload($class_name){
-    include 'classes/'.$class_name . '.class.php';
+    require_once(__ROOT__.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.$class_name . '.class.php');
 }
 
 
-if(file_exists(__ROOT__.'/.tool.php')){
-	require_once(__ROOT__.'/.tool.php');
+if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php')){
+	require_once(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php');
 	
 	switch($tool->type){
 	case 'reset_password':
@@ -66,7 +68,7 @@ if(file_exists(__ROOT__.'/.tool.php')){
 			$usr = $userManager->load(array('login'=>$tool->login));
 			$usr->setPassword($tool->password);
 			$usr->save();
-			unlink(dirname(__FILE__).'/.tool.php');
+			unlink(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php');
 		}
 	break;
 	}
@@ -111,7 +113,7 @@ $tpl = new RainTPL();
 //Definition des dossiers de template
 raintpl::configure("base_url", null );
 raintpl::configure("tpl_dir", './templates/'.$conf->get('DEFAULT_THEME').'/' );
-raintpl::configure("cache_dir", "./cache/tmp/" );
+raintpl::configure("cache_dir", './cache/tmp/' );
 $view = '';
 
 $rank = new Rank();

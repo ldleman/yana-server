@@ -131,6 +131,7 @@ class Story extends SQLiteEntity{
 				switch ($effect->type) {
 					case 'command':
 						if($data->target=='server'){
+							
 							$log .= "\tcommande server lancée : ".$data->value.PHP_EOL;
 							$return = System::commandSilent($data->value);
 							$conf->put('cmd_result',$return,'var');	

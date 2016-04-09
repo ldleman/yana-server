@@ -7,9 +7,7 @@
 
 $(document).ready(function(){
 	var view = $('#dashboard_switch').val();
-	
 	plugin_dashboard_load_view(view);
-	
 });
 
 function plugin_dashboard_load_view(view){

@@ -91,7 +91,7 @@ class Effect extends SQLiteEntity{
 	}
 	
 	function getValues(){
-		return json_decode($this->values);
+		return json_decode(stripslashes($this->values));
 	}
 }
 
