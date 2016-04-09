@@ -48,7 +48,7 @@
 				
 
 				
-
+				if(o.widget!=null)bloc.attr('data-uid',o.widget.model);
 				bloc.data('widget',{column: column,cell:cell});
 
 				//on place le bloc

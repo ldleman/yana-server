@@ -1,2 +1,0 @@
-
-alert('this is javascript');
