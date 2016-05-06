@@ -126,6 +126,7 @@ function wirerelay_plugin_action(){
 
 					$widget = new Widget();
 					$widget = $widget->getById($_['id']);
+					if(!is_object($widget)) return;
 					$data = $widget->data();
 
 
