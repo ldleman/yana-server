@@ -429,7 +429,7 @@ function wireRelay_plugin_setting_page(){
 				    	<td><?php echo $wireRelay->name; ?></td>
 					    <td><?php echo $wireRelay->description; ?></td>
 					    <td><?php echo $wireRelay->pin; ?></td>
-					    <td><?php echo $room->getName(); ?></td>
+					    <td><?php echo (is_object($room)?$room->getName():'Pièce supprimée'); ?></td>
 					    <td><?php echo $wireRelay->pulse; ?></td>
 					    <td>
 					    	<a class="btn" href="setting.php?section=wireRelay&id=<?php echo $wireRelay->id; ?>"><i class="fa fa-pencil"></i></a>
