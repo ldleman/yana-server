@@ -31,6 +31,7 @@ class Camera extends SQLiteEntity{
 	public static function brands(){
 		return array(
 		"Scricam" => 'http://{{login}}:{{password}}@{{ip}}/videostream.cgi',
+		"Foscam fi8908" => 'http://{{ip}}/videostream.cgi?user={{login}}&pwd={{password}}&resolution=32&rate=0',
 		"Autre" => 'http://{{login}}:{{password}}@{{ip}}');
 	}
 	
