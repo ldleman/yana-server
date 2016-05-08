@@ -11,16 +11,11 @@
 
 include('Room.class.php');
 
-function room_plugin_menu(&$menuItems){
-	global $_;
-	$menuItems[] = array('sort'=>1,'content'=>'<a href="index.php?module=room"><i class="fa fa-codepen"></i> Pièces</a>');
-}
-
 
 function room_plugin_page($_){
 	if(isset($_['module']) && $_['module']=='room'){
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		//if (!isset($_['id']) && count($rooms)>0)  $_['id'] = $rooms[0]->getId();
 		$currentRoom  = new Room();
 		?>
@@ -77,7 +72,7 @@ function room_plugin_setting_page(){
 	if(isset($_['section']) && $_['section']=='room' ){
 		if($myUser!=false){
 			$roomManager = new Room();
-			$rooms = $roomManager->populate();
+			$rooms = $roomManager->loadAll(array('state'=>'0'));
 
 	//Gestion des modifications
 			if (isset($_['id'])){
@@ -179,7 +174,9 @@ function room_plugin_setting_page(){
 			case 'room_delete_room':
 			if($myUser->can('room','d')){
 				$roomManager = new Room();
-				$roomManager->delete(array('id'=>$_['id']));
+				$roomManager->getById($_['id']);
+				$roomManager->state=-1;
+				$roomManager->save();
 				header('location:setting.php?section=room');
 			}
 			else
@@ -199,7 +196,7 @@ function room_plugin_setting_page(){
 		Plugin::addHook("setting_bloc", "room_plugin_setting_page"); 
 		Plugin::addHook("action_post_case", "room_action_room"); 
 
-	  //Plugin::addHook("menubar_pre_home", "room_plugin_menu");  
+
 		Plugin::addHook("home", "room_plugin_page");  
 
 

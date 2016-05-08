@@ -317,7 +317,7 @@ function wireRelay_plugin_setting_page(){
 		$wireRelayManager = new WireRelay();
 		$wireRelays = $wireRelayManager->populate();
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		$selected =  new WireRelay();
 		$selected->pulse = 0;
 		$selected->icon = 'fa fa-flash';

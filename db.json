@@ -1,4 +1,10 @@
 [
+    {
+        "version": 4,
+        "sql": [
+            "ALTER TABLE yana_plugin_room ADD COLUMN state INT DEFAULT '0';"
+        ]
+    },
 	{
         "version": 3,
         "sql": [

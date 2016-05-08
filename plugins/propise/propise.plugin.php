@@ -318,7 +318,7 @@ function propise_plugin_setting_page(){
 		$sensorManager = new Sensor();
 		$sensors = $sensorManager->populate();
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		$selected =  new Sensor();
 
 		//Si on est en mode modification

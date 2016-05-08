@@ -169,7 +169,7 @@ function ipcam_plugin_setting_page(){
 		$cameraManager = new Camera();
 		$cameras = $cameraManager->populate();
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		$selected =  new Camera();
 		$selected->pattern = 'http://{{login}}:{{password}}@{{ip}}/videostream.cgi';
 		//Si on est en mode modification
