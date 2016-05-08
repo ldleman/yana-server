@@ -30,3 +30,7 @@ function plugin_ipcam_delete(id,element){
 	);
 
 }
+
+function plugin_ipcam_brand(element){
+	$('#patternCamera').val($(element).val());
+}
