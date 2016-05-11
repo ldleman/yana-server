@@ -13,6 +13,11 @@
 	define('AVATAR_FOLDER','cache/avatar');
 	/* Chemin http vers yana */
 	define('YANA_URL','http://127.0.0.1:80/yana-server');
+	/* Port du serveur socket */
+	define('SOCKET_PORT',9999);
+	/* Nombre maxium de clients sur le serveur socket */
+	define('SOCKET_MAX_CLIENTS',20);
+
 	/* 
 	* <!> Laisser à vide sauf si vous souhaitez vous auto-logguer avec un compte sans mot de passe 
 	*     Ceci peut être utile pour les yana-server accessible uniquement depuis votre réseau interne
