@@ -8,7 +8,7 @@
 
 class Room extends SQLiteEntity{
 
-	protected $id,$name,$description,$state;
+	public $id,$name,$description,$state;
 	protected $TABLE_NAME = 'plugin_room';
 	protected $CLASS_NAME = 'Room';
 	protected $object_fields = 

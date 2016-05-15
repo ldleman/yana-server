@@ -340,6 +340,7 @@ class SQLiteEntity extends SQLite3
 	* @return <Entity> $Entity ou false si aucun objet n'est trouvé en base
 	*/
 	public function getById($id,$operation='=',$debug='false'){
+		
 		return $this->load(array('id'=>$id),$operation,$debug);
 	}
 

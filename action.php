@@ -362,6 +362,11 @@ else
 		}
 	break;
 
+	case 'GPIO_HAS_CHANGED':
+		Gpio::emit($pin,$state);
+	break;
+
+
 	// Gestion des interfaces de seconde génération
 	case 'ADD_CLIENT':
 		Action::write(function($_,&$response){

@@ -5,8 +5,12 @@
 	define('PROGRAM_AUTHOR','Valentin CARRUESCO');
 	/* Préfixe de la base de données */ 
 	define('MYSQL_PREFIX','yana_');
+	/* Remplace MYSQL_PREFIX qui est deprecated */
+	define('ENTITY_PREFIX', MYSQL_PREFIX);
 	/* Chemin vers la base SQLITE */
 	define('DB_NAME','db/.database.db');
+	/* Chaine de connexion sql */
+	define('BASE_CONNECTION_STRING','sqlite:'.DB_NAME);
 	/* Chemin vers le fichier de logs */
 	define('LOG_FILE','log/.log.txt');
 	/* Chemin vers le cache des avatars */
