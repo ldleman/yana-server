@@ -35,7 +35,7 @@ class Story extends SQLiteEntity{
 		
 		
 
-		$causeManager = new Cause();
+		$causeManager = new Cause('r');
 
 		$storyCauses = $causeManager->loadAll(array());
 			
@@ -135,7 +135,7 @@ class Story extends SQLiteEntity{
 			$story = $story->getById($storyId);
 			
 			require_once(dirname(__FILE__).'/Effect.class.php');
-			$effectManager = new Effect();
+			$effectManager = new Effect('r');
 			
 			$effects = $effectManager->loadAll(array('story'=>$story->id),'sort');
 			$log = '====== Execution '.date('d/m/Y H:i').'======'.PHP_EOL;

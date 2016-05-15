@@ -1,9 +1,12 @@
 /*
 
-Compile: g++ -g -o nerve nerve.cpp -lwiringPi
+Compile: 
+g++ -g -o nerve nerve.cpp -lwiringPi
 
 Run:
-sudo ./nerve /var/www/yana-server/action.php GPIO_HAS_CHANGED
+cd /var/www/yana-server
+sudo chmod +x ./nerve
+sudo ./nerve /var/www/yana-server/action.php
 
 */
  
@@ -22,8 +25,6 @@ sudo ./nerve /var/www/yana-server/action.php GPIO_HAS_CHANGED
 std::string phppath;
 
 
-
-
 std::string longToString(long mylong){
   std::string mystring;
   std::stringstream mystream;
@@ -33,13 +34,14 @@ std::string longToString(long mylong){
 
 void gpio_change(int pin){
   long state = digitalRead(pin);
-  printf( "GPIO %d CHANGED TO %d\n", pin,state);
+   printf( "GPIO %d CHANGED TO %d\n", pin,state);
    std::string command;
    std::string path = "php ";
    path.append(phppath);
-   command = path+" ";
+   command = path+" GPIO_HAS_CHANGED";
    command.append(" "+longToString(pin));
    command.append(" "+longToString(state));
+   printf( "LAUNCH %s\n", command.c_str());
    system(command.c_str());
 }
 

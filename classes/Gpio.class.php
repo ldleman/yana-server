@@ -44,20 +44,23 @@ class Gpio{
 	}
 
 	public static function emit($gpio, $state){
+		
 		if(isset($GLOBALS['gpio'][$gpio])) {
 		    foreach($GLOBALS['gpio'][$gpio] as $functionName) {  
 		        call_user_func_array($functionName, array($gpio,$state));  
 		    }  
 		} 
 		if(isset($GLOBALS['gpio']['all'])) {
+	
 		    foreach($GLOBALS['gpio']['all'] as $functionName) {  
 		        call_user_func_array($functionName, array($gpio,$state));  
 		    }  
 		} 
 	}
 
-	public static function listen($gpio){
-		$GLOBALS['hooks'][$gpio][] = $functionName;  
+	public static function listen($gpio,$functionName){
+
+		$GLOBALS['gpio'][$gpio][] = $functionName;  
 	}
 }
 ?>

@@ -40,6 +40,7 @@ function plugin_story_check(){
 
 
 function story_gpio_change($pin,$state){
+	
 	require_once('Story.class.php');
 	Story::check(array('type'=>'gpio','pin'=>$pin,'state'=>$state));
 }
