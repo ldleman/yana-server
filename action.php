@@ -363,6 +363,7 @@ else
 	break;
 
 	case 'GPIO_HAS_CHANGED':
+		list($program,$action,$pin,$state) = $_SERVER['argv'];
 		Gpio::emit($pin,$state);
 	break;
 
