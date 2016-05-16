@@ -67,9 +67,9 @@ class Story extends SQLiteEntity{
 						self::out("Phrase non correspondante");
 					}
 				break;
-				case 'gpio':
+				case 'pin':
 					if(!isset($event['type']) || $event['type'] !='gpio') continue;
-					if($values->gpio == $event['pin'] && $values->value == $event['state']){
+					if($values->pin == $event['pin'] && $values->value == $event['state']){
 						$validCauses[$storyCause->story][] = $storyCause;
 						self::out("Pin et etat correspondant, ajout $storyCause->id aux causes valides");
 					}else{
@@ -218,7 +218,7 @@ class Story extends SQLiteEntity{
 	public static function out($msg){
 		global $_;
 		if(!isset($_['mode']) || $_['mode'] != 'verbose') return;
-		
+		Functions::log($msg);
 		echo '<pre>'.date('d/m/Y H:i:s').' | '.$msg.PHP_EOL;
 	}
 	
