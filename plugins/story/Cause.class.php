@@ -40,12 +40,12 @@ class Cause extends SQLiteEntity{
 					'template' => '<select data-field="operator" class="operator"><option>=</option><!--<option>!=</option>--></select> <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="Ma phrase.." value="{value}">',
 					'description' => 'Déclenche le scénario en fonction de la phrase prononcée'
 					),
-			'gpio' => array(
+			/*'gpio' => array(
 					'icon' => 'fa-dot-circle-o',
 					'label' => 'GPIO',
 					'template' => 'numéro <input type="text" data-field="gpio" placeholder="1,2,3,4..." value="{gpio}"> en état <select data-value="{value}" data-field="value"><option value="1">Actif</option><option value="0">Inactif</option></select>',
 					'description' => 'Déclenche le scénario en fonction de l\'état du GPIO sélectionné en état actif (1) ou inactif(0)'
-					),
+					),*/
 			/*'captor' => array(
 					'icon' => 'fa-tachometer',
 					'label' => 'Capteur',
