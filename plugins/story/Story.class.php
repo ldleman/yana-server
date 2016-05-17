@@ -25,26 +25,33 @@ class Story extends SQLiteEntity{
 		parent::__construct();
 	}
 	
-	public static function check(){
+	public static function check($event=array()){
 		require_once(dirname(__FILE__).'/Cause.class.php');
 		
 		global $conf;
 		
 		
 		self::out('Vérification des scénarios');
-			
-		$causeManager = new Cause();
+		
+		
+
+		$causeManager = new Cause('r');
 
 		$storyCauses = $causeManager->loadAll(array());
 			
 		self::out('Vérification des '.count($storyCauses).'	causes');
 		
 		
-		$sentence = $conf->get('last_sentence','var');
+		//$sentence = $conf->get('last_sentence','var');
 		list($i,$h,$d,$m,$y) = explode('-',date('i-H-d-m-Y'));
 		$validCauses = array();
 		
-		self::out('Dernière phrase énoncée : "'.$sentence.'"');
+
+		if(isset($event['type']))
+			self::out('Argument d entrée :'.$event['type']);
+		
+
+		//self::out('Dernière phrase énoncée : "'.$sentence.'"');
 		self::out('Date actuelle '.$d.'/'.$m.'/'.$y.' '.$h.':'.$i);
 		
 		foreach($storyCauses as $storyCause){
@@ -52,15 +59,25 @@ class Story extends SQLiteEntity{
 			$values = $storyCause->getValues();
 			switch ($storyCause->type){
 				case 'listen':
-					if($values->value == $sentence){
+					if(!isset($event['type']) || $event['type'] !='sentence') continue;
+					if($values->value == $event['sentence']){
 						$validCauses[$storyCause->story][] = $storyCause;
 						self::out("Phrase correspondante, ajout $storyCause->id aux causes valides");
 					}else{
 						self::out("Phrase non correspondante");
 					}
 				break;
+				case 'pin':
+					if(!isset($event['type']) || $event['type'] !='gpio') continue;
+					if($values->pin == $event['pin'] && $values->value == $event['state']){
+						$validCauses[$storyCause->story][] = $storyCause;
+						self::out("Pin et etat correspondant, ajout $storyCause->id aux causes valides");
+					}else{
+						self::out("Pin non correspondant");
+					}
+				break;
 				case 'time':
-						;
+						
 						
 						if ($storyCause->value != $i.'-'.$h.'-'.$d.'-'.$m.'-'.$y) $validate = false;
 						if ((
@@ -99,7 +116,7 @@ class Story extends SQLiteEntity{
 			}
 		}
 
-		$conf->put('last_sentence','','var');
+		//$conf->put('last_sentence','','var');
 	}
 	
 	
@@ -118,7 +135,7 @@ class Story extends SQLiteEntity{
 			$story = $story->getById($storyId);
 			
 			require_once(dirname(__FILE__).'/Effect.class.php');
-			$effectManager = new Effect();
+			$effectManager = new Effect('r');
 			
 			$effects = $effectManager->loadAll(array('story'=>$story->id),'sort');
 			$log = '====== Execution '.date('d/m/Y H:i').'======'.PHP_EOL;
@@ -201,7 +218,7 @@ class Story extends SQLiteEntity{
 	public static function out($msg){
 		global $_;
 		if(!isset($_['mode']) || $_['mode'] != 'verbose') return;
-		
+		Functions::log($msg);
 		echo '<pre>'.date('d/m/Y H:i:s').' | '.$msg.PHP_EOL;
 	}
 	

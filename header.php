@@ -8,5 +8,7 @@ uasort ($menuItems , function($a,$b){return $a['sort']>$b['sort']?1:-1;});
 
 
 $tpl->assign('menuItems',$menuItems);
+
+
 ?>
 

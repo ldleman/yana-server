@@ -32,6 +32,7 @@ function ipcam_action(){
 					$camera = !empty($_['id']) ? $camera->getById($_['id']): new Camera();
 					$camera->label = $_['labelCamera'];
 					$camera->location = $_['locationCamera'];
+					$camera->pattern = $_['patternCamera'];
 					$camera->ip  = $_['ipCamera'];
 					$camera->login  = $_['loginCamera'];
 					$camera->password  = $_['passwordCamera'];
@@ -94,10 +95,20 @@ function ipcam_action(){
 						<style>
 						</style>
 						
-						<!-- HTML -->
-						';
-						///pour ma cam, a la fin de l'ip : videostream.cgi
-						$content .= '<div class="ipcam_widget"><img name="main" id="main" border="0" src="http://'.$camera->login.':'.$camera->password.'@'.$camera->ip.'">';
+						<!-- HTML -->';
+
+						$url = str_replace(array(
+							'{{login}}',
+							'{{password}}',
+							'{{ip}}'
+						),array(
+							$camera->login,
+							$camera->password,
+							$camera->ip
+						),$camera->pattern);
+
+						///pour ma cam, a la fin de l'ip : http://{{login}}:{{password}}@{{ip}}/videostream.cgi
+						$content .= '<div class="ipcam_widget"><img name="main" id="main" border="0" src="'.$url.'">';
 						$content .= '</div>';
 						$content .= '
 						<!-- JS -->
@@ -158,9 +169,9 @@ function ipcam_plugin_setting_page(){
 		$cameraManager = new Camera();
 		$cameras = $cameraManager->populate();
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		$selected =  new Camera();
-
+		$selected->pattern = 'http://{{login}}:{{password}}@{{ip}}/videostream.cgi';
 		//Si on est en mode modification
 		if (isset($_['id']))
 			$selected = $cameraManager->getById($_['id']);
@@ -184,13 +195,26 @@ function ipcam_plugin_setting_page(){
 				    <input type="text" id="labelCamera" value="<?php echo $selected->label; ?>" placeholder="Sonde du salon"/>
 			
 				    <label for="ipCamera">IP/Adresse du stream</label>
-				    <input type="text" value="<?php echo $selected->ip; ?>" id="ipCamera" placeholder="ex : 192.168.11.27:87/videostream.cgi" />
+				    <input type="text" value="<?php echo $selected->ip; ?>" id="ipCamera" placeholder="ex : 192.168.11.27:87" />
 				    
 					<label for="loginCamera">Login</label>
 				    <input type="text" value="<?php echo $selected->login; ?>" id="loginCamera" placeholder="" />
 				    
 				    <label for="passwordCamera">Password</label>
 				    <input type="text" value="<?php echo $selected->password; ?>" id="passwordCamera" placeholder="" />
+				    
+				    <label>Marque de camera</label>
+				    <select onchange="plugin_ipcam_brand(this)">
+				    <?php foreach(Camera::brands() as $brand=>$pattern): ?>
+				    	<option value="<?php echo $pattern; ?>"><?php echo $brand; ?></option>
+				    <?php endforeach;?>
+				    </select>
+
+
+				    <label for="patternCamera">Adresse de visualisation</label>
+				    <small>Adresse complète vers le streaming de votre camera, les balises entre {{}} seront remplacée par les valeurs des champs ci dessus.</small>
+
+				    <input type="text" class="input-xxlarge" value="<?php echo $selected->pattern; ?>" id="patternCamera" placeholder="http://{{login}}:{{password}}@{{ip}}/videostream.cgi" />
 				    
 				    <label for="locationCamera">Pièce de la maison</label>
 				    <select id="locationCamera">

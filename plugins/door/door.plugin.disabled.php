@@ -20,7 +20,7 @@ function door_plugin_setting_page(){
 			$doorManager = new Door();
 			$doors = $doorManager->populate();
 			$roomManager = new Room();
-			$rooms = $roomManager->populate();
+			$rooms = $roomManager->loadAll(array('state'=>'0'));
 	?>
 
 		<div class="span9 userBloc">

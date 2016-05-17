@@ -145,8 +145,10 @@ class System{
 
 		//type B2
 		$pins['b21.0'] = $pins['b+1.0'];
-
+		//A3
 		$pins['a3.0'] = $pins['b21.0'];
+		//Zero
+		$pins['zero1.0'] = $pins['a3.0'];
 
 		return isset($pins[$model])?$pins[$model]:$pins['b1.0'];
 	}
@@ -172,7 +174,8 @@ class System{
 			'a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a01041'),
 			'1a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'1a01041'),
 			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041'),
-			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082')
+			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082'),
+			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'a02082')
 		);
 		if(PHP_OS=='WINNT') $infos['Revision'] = '0002';//for dev mode on windows only
 		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :array('ram'=>'0','version'=>'0','type'=>'unknown','revision'=>$infos['Revision']);

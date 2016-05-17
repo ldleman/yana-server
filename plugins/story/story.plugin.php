@@ -39,6 +39,12 @@ function plugin_story_check(){
 }
 
 
+function story_gpio_change($pin,$state){
+	
+	require_once('Story.class.php');
+	Story::check(array('type'=>'gpio','pin'=>$pin,'state'=>$state));
+}
+
 function story_plugin_action(){
 	global $_,$myUser;
 	switch($_['action']){
@@ -77,7 +83,7 @@ function story_plugin_action(){
 		
 		$story = $story->fromArray($datas['story']);
 		unset($story->id);
-		var_dump($story);
+	
 		$story->save();
 		
 		foreach($datas['causes'] as $data):
@@ -245,7 +251,8 @@ function story_plugin_action(){
 		require_once(dirname(__FILE__).'/Story.class.php');
 		global $conf;
 		$conf->put('last_sentence',urldecode($_['sentence']),'var');
-		plugin_story_check();
+		//plugin_story_check();
+		Story::check(array('type'=>'sentence','sentence'=>urldecode($_['sentence'])));
 	break;
 
 	case 'plugin_story_save_story':
@@ -322,6 +329,7 @@ function story_vocal_command(&$response,$actionUrl){
 Plugin::addCss("/css/main.css"); 
 Plugin::addJs("/js/main.js"); 
 
+Gpio::listen('all','story_gpio_change');
 Plugin::addHook("menubar_pre_home", "story_plugin_menu");  
 Plugin::addHook("home", "story_plugin_page");  
 Plugin::addHook("action_post_case", "story_plugin_action");

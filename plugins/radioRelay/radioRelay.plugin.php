@@ -321,7 +321,7 @@ function radioRelay_plugin_setting_page(){
 		$radioRelayManager = new RadioRelay();
 		$radioRelays = $radioRelayManager->populate();
 		$roomManager = new Room();
-		$rooms = $roomManager->populate();
+		$rooms = $roomManager->loadAll(array('state'=>'0'));
 		$selected =  new RadioRelay();
 		$selected->pulse = 0;
 		$selected->icon = 'fa fa-flash';

@@ -231,13 +231,18 @@ class Functions
 		$manager = new User();
 		foreach($versions as $version){
 			if($version['version'] <= $current) continue;
-
+			set_error_handler('Functions::alterBaseError');
 			foreach($version['sql'] as $command){
 				$sql = str_replace(array('{PREFIX}'), array(MYSQL_PREFIX), $command);
-				Functions::log('Execute alter base query : '.$sql);
+				Functions::log('Execute alter base query: '.$sql);
 				$manager->customQuery($sql);
 			}
+		 	restore_error_handler();
 		}
+	}
+
+	public static function alterBaseError($errno, $errstr, $errfile, $errline){
+		self::log("Erreur update sql :  [$errno] $errstr L$errline dans le fichier $errfile");
 	}
 
 	public static function array_rand($array){

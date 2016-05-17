@@ -286,7 +286,9 @@ class ClientSocket extends SocketServer {
 	private $lastMessage;
 }
 
-	$client = new ClientSocket('0.0.0.0',9999,20);
+	require_once('constant.php');
+	logs("Launch Program");
+	$client = new ClientSocket('0.0.0.0',SOCKET_PORT,SOCKET_MAX_CLIENTS);
 	$client->start();
 
 
@@ -557,4 +559,12 @@ abstract class SocketServer {
 		echo "\n";
 	}
 }
+
+
+
+function logs($message) {
+		echo '[' . date('d/m/Y H:i:s') . '] ' . $message.PHP_EOL;
+
+	}
+
 ?>

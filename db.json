@@ -1,5 +1,17 @@
 [
+    {
+        "version": 4,
+        "sql": [
+            "ALTER TABLE yana_plugin_room ADD COLUMN state INT DEFAULT '0';"
+        ]
+    },
 	{
+        "version": 3,
+        "sql": [
+            "ALTER TABLE yana_plugin_ipcam_camera ADD COLUMN pattern TEXT;"
+        ]
+    },
+    {
         "version": 2,
         "sql": [
             "CREATE TABLE `yana_device` (`id`  INTEGER NOT NULL PRIMARY KEY  NOT NULL,`label`  VARCHAR(255)  NOT NULL,`icon`  VARCHAR(255)  NOT NULL,`display`  longtext  NOT NULL,`state`  TEXT  NOT NULL,`uid`  TEXT  NOT NULL,`values`  longtext  NOT NULL,`location`  TEXT  NOT NULL,`plugin`  VARCHAR(255)  NOT NULL,`actions`  longtext  NOT NULL,`type`  TEXT  NOT NULL);"

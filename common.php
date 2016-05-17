@@ -30,10 +30,9 @@ require_once(__ROOT__ .DIRECTORY_SEPARATOR.'constant.php');
 $versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
 
 
-
 if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) || (file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) && filesize(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME)==0)){
 	file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
-	header('location:'.__ROOT__.DIRECTORY_SEPARATOR.'install.php');
+	header('location:'.'install.php');
 }else{
 	if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
 }
@@ -146,20 +145,23 @@ function common_listen($command,$text,$confidence,$user){
 				$client=new Client();
 				$client->connect();
 
-				foreach($result['responses'] as $resp){
-					
-					switch($resp['type']){
-						case 'talk':
-							$client->talk($resp['sentence']);					
-						break;
-						case 'sound':
-							$client->sound($resp['file']);					
-						break;
-						case 'command':
-							$client->execute($resp['program']);					
-						break;
+				if(is_array($result['responses'])){
+					foreach($result['responses'] as $resp){
+						
+						switch($resp['type']){
+							case 'talk':
+								$client->talk($resp['sentence']);					
+							break;
+							case 'sound':
+								$client->sound($resp['file']);					
+							break;
+							case 'command':
+								$client->execute($resp['program']);					
+							break;
+						}
 					}
 				}
+
 				$client->disconnect();
 			}
 		}

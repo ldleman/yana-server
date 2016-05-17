@@ -8,6 +8,7 @@
 	  	<li {if="isset($_['section']) && $_['section']=='user'"}class="active"{/if}><a href="setting.php?section=user"><i class="fa fa-angle-right"></i> Utilisateurs</a></li>
 	  	<li {if="isset($_['section']) && $_['section']=='access'"}class="active"{/if}><a href="setting.php?section=access"><i class="fa fa-angle-right"></i> Accès</a></li>
 	    {function="Plugin::callHook("setting_menu", array())"}
+	    <li {if="isset($_['section']) && $_['section']=='debug'"}class="active"{/if}><a href="setting.php?section=debug"><i class="fa fa-angle-right"></i> Debug</a></li>
 	  </ul>
 	</div>
 
@@ -223,6 +224,25 @@
 	    </table>
 		</div>
 	{/if}
+
+
+	<!-- SECTION DEBUG --> 
+	{if="@$_['section']=='debug'"}
+
+				<div class="span9 accessBloc">
+
+				
+
+				<h1>Débug vocal</h1>
+				<p>Test de débugages vocaux, si le client est bien connecté, yana à du monologuer</p>  
+
+				
+
+	{/if}
+
+
+
+
 
 	{function="Plugin::callHook("setting_bloc", array())"}
 	</div>

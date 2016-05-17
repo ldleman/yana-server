@@ -41,7 +41,8 @@ function profil_plugin_actions(){
 			    <ul class="user-infos">
 			    	<li><h1 onclick="window.location=\'setting.php?section=profil\';"><i class="fa fa-pencil"></i>'.$myUser->getFullName().'</h1></li>
 			    	<li><a href="mailto:'.$myUser->getMail().'">'.$myUser->getMail().'</a></li>
-			    	<li><div class="tokenbox" title="'.$myUser->getToken().'">Token : <br/><input type="text" onclick="$(this).select();" value="'.$myUser->getToken().'"></div></li>
+			    	<li><div class="tokenbox" title="'.$myUser->getToken().'">Token : <br/><input type="text" onclick="$(this).select(); document.getElementById(\'Qrtoken\').style.display = \'block\'" value="'.$myUser->getToken().'"></div></li>
+			    	<li><div class="tokenbox" id="Qrtoken" style="display:none;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data='.$myUser->getToken().'" alt="Qrcode for token"/></div></li>
 			    </ul>
 				<a href="#yanaWindowsModal" role="button" data-toggle="modal"  class="btn btn-primary"><i class="fa fa-download-alt  fa fa-white"></i> Installer YANA Windows</a></div>
 
