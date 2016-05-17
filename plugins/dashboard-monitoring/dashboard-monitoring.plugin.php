@@ -11,6 +11,9 @@
 
 
 function dash_monitoring_plugin_menu(&$widgets){
+
+		
+
 		$widgets[] = array(
 		    'uid'      => 'dash_monitoring_ram',
 		    'icon'     => 'fa fa-bar-chart-o',
@@ -193,8 +196,10 @@ function dash_monitoring_plugin_actions(){
 					if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
 					if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
 					
+					$protocol = 'http'.(isset($_SERVER['HTTPS'])?"s":"");
+
 					list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
-					$actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+					$actionUrl = $protocol.'://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
 					$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
 					
 					Plugin::callHook("vocal_command", array(&$response,$actionUrl));

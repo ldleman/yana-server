@@ -150,6 +150,52 @@ class System{
 		//Zero
 		$pins['zero1.0'] = $pins['a3.0'];
 
+		 // Banana PI M1
+		$pins['M11.0'] = array(
+			array(
+				new Gpio('3.3V','Alimentation',-1,-1,1),
+				new Gpio('SDA0','I2C',8,0,3),
+				new Gpio('SCL0','I2C',9,1,5),
+				new Gpio('GPIO 7','',7,4,7),
+				new Gpio('0V','Masse (GND)',-1,-1,9),
+				new Gpio('GPIO 0','',0,17,11),
+				new Gpio('GPIO 2','',2,21,13),
+				new Gpio('GPIO 3','',3,22,15),
+				new Gpio('3.3V','Alimentation',-1,-1,17),
+				new Gpio('MOSI','SPI',12,10,19),
+				new Gpio('MISO','SPI',13,9,21),
+				new Gpio('SCLK','SPI',14,11,23),
+				new Gpio('0V','Masse (GND)',-1,-1,25),
+	            new Gpio('',' ',-1,-1,-1),
+	            new Gpio('5V','Alimentation',-1,-1,1),
+	            new Gpio('GPIO 8','',17,28,3),
+	            new Gpio('GPIO 10','',19,30,5),
+	            new Gpio('0V','Masse (GND)',-1,-1,7),
+            ),
+            array(
+				new Gpio('5V','Alimentation',-1,-1,2),
+				new Gpio('5V','Alimentation',-1,-1,4),
+				new Gpio('0V','Masse (GND)',-1,-1,6),
+				new Gpio('TxD','UART (Transmission)',14,14,8),
+				new Gpio('RxD','UART (Réception)',15,15,10),
+				new Gpio('GPIO 1','',1,18,12),
+				new Gpio('0V','Masse (GND)',-1,-1,14),
+				new Gpio('GPIO 4','',4,23,16),
+				new Gpio('GPIO 5','',5,24,18),
+				new Gpio('0V','Masse (GND)',-1,-1,20),
+				new Gpio('GPIO 6','',6,25,22),
+				new Gpio('CE 0','SPI',10,8,24),
+				new Gpio('CE 1','SPI',11,7,26),
+				new Gpio('',' ',-1,-1,-1),
+				new Gpio('3.3V','Alimentation',-1,-1,2),
+				new Gpio('Gpio 9 Tx','UART (Transmission)',18,29,4),
+				new Gpio('Gpio 11 Rx','UART (Réception)',20,31,6),
+				new Gpio('0V','Masse (GND)',-1,-1,8),
+            )
+        );
+
+
+
 		return isset($pins[$model])?$pins[$model]:$pins['b1.0'];
 	}
 	
@@ -175,7 +221,8 @@ class System{
 			'1a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'1a01041'),
 			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041'),
 			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082'),
-			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'a02082')
+			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'a02082'),
+			'0000' => array('ram'=>'1024','version'=>'1.0','type'=>'M1','revision'=>'0000')
 		);
 		if(PHP_OS=='WINNT') $infos['Revision'] = '0002';//for dev mode on windows only
 		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :array('ram'=>'0','version'=>'0','type'=>'unknown','revision'=>$infos['Revision']);
