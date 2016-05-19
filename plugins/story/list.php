@@ -41,7 +41,7 @@
 		</div>
 		
 		<?php 
-			$nerve = dirname(dirname(__DIR__)).'\nerve';
+			$nerve = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'nerve';
 			if(!file_exists($nerve)):
 		?>
 		<div class="alert alert-error">
