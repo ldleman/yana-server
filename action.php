@@ -328,7 +328,7 @@ else
 				$tempZipFolder = $tempZipName.'_';
 				$zip->extractTo($tempZipFolder);
 				$zip->close();
-				echo '<br/>Plugin extrait <span class="label label-success">OK</span>';
+				echo '<br/>Plugin extrait '.$tempZipFolder.' <span class="label label-success">OK</span>';
 				$pluginName = glob($tempZipFolder.'/*.plugin*.php');
 				if(count($pluginName)==0)throw new Exception("Plugin invalide, fichier principal manquant");
 					$pluginName = str_replace(array($tempZipFolder.'/','.enabled','.disabled','.plugin','.php'),'',$pluginName[0]);
@@ -349,6 +349,8 @@ else
 					 unlink($tempZipName);
 			
 		}catch(Exception $e){
+			if($tempZipFolder!=null && file_exists($tempZipFolder)) Functions::rmFullDir($tempZipFolder);
+			if($tempZipName!=null && file_exists($tempZipName))  unlink($tempZipName);
 			echo '<br/>'.$e->getMessage().' <span class="label label-error">Erreur</span>';
 		}
 	break;
