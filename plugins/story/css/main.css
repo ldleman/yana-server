@@ -16,13 +16,13 @@ h1,h2,h3,h4{
     cursor: move;
 	font-size:20px;
     float: left;
-    margin-left: 1px;
-    padding: 10px;
-	transition:opacity 0.2s ease-in-out;
-	opacity:0.5;
+    margin-left: 10px;
+    padding: 5px;
+	transition:background-color 0.2s ease-in-out;
 }
 .toolbar li:hover{
-	opacity:1;
+	background: #3984DE none repeat scroll 0 0;
+	color:#ffffff;
 }
 
 li.dragged{

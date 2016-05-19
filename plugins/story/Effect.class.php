@@ -69,8 +69,34 @@ class Effect extends SQLiteEntity{
 					'template' => '<input style="max-width:50%;width:50%;" data-field="value" value="{value}" type="text">',
 					'description' => 'Execute l\'adresse spécifiée à partir du serveur'
 					),
+			'emotion' => array(
+					'icon' => 'fa-smile-o',
+					'label' => 'Emotion',
+					'template' => '',
+					'description' => 'Active une émotion sur le(s) client(s) visuel (face)'
+					),
+			'sound' => array(
+					'icon' => 'fa-music',
+					'label' => 'Son',
+					'template' => '= <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="c:\my.sound.mp3" value="{value}">',
+					'description' => 'Active un son sur le(s) client(s) a partir du chemin du fichier en local sur le client'
+					),
+			'image' => array(
+					'icon' => 'fa-file-image-o',
+					'label' => 'Image',
+					'template' => '= <input type="text" style="max-width:50%;width:50%;" data-field="value" placeholder="http://my/img.png" value="{value}">',
+					'description' => 'Affiche une image sur le(s) client(s) visuel (face) a partir d\'une url'
+					),
 		);
-		
+	
+	$types['emotion']['template'] ='= <select data-value="{value}" data-field="value">';
+	//@TODO placer les emotions dans Personnality class
+	foreach(array('angry','happy','worry','shy') as $emotion):
+	$types['emotion']['template'] .='<option value="'.$emotion.'">'.$emotion.'</option>';
+	endforeach;
+	$types['emotion']['template'] .='= </select>';
+	
+	
 	$types['story']['template'] = '<select data-value="{value}"  data-field="value" class="story">';
 		require_once('Story.class.php');
 		$stories = new Story();

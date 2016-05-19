@@ -55,6 +55,7 @@ function story_plugin_action(){
 					$templates = array_merge(Cause::types(),Effect::types());
 					$template = $templates[$_['type']];
 					
+					$_['data']['value'] = stripslashes($_['data']['value']);
 					
 					preg_match_all("/(\{)(.*?)(\})/", $template['template'], $matches, PREG_SET_ORDER);
 					foreach($matches as $match){

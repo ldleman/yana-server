@@ -25,6 +25,22 @@ class Story extends SQLiteEntity{
 		parent::__construct();
 	}
 	
+	public static function keywords(){
+		global $myUser;
+		return array(
+		'{DATE}'=>date('d-m-Y'),
+		'{YEAR}'=>date('Y'),
+		'{MONTH}'=>date('m'),
+		'{DAY}'=>date('d'),
+		'{HOUR}'=>date('H'),
+		'{MINUT}'=>date('i'),
+		'{USER.LOGIN}'=>$myUser->getLogin(),
+		'{USER.ID}'=>$myUser->getId(),
+		'{USER.MAIL}'=>$myUser->getMail(),
+		'{YANA.URL}'=>YANA_URL,
+		);
+	}
+	
 	public static function check($event=array()){
 		require_once(dirname(__FILE__).'/Cause.class.php');
 		
@@ -94,7 +110,8 @@ class Story extends SQLiteEntity{
 							}
 				break;
 				case 'readvar':
-						if ($conf->get($storyCause->target,'var') == $storyCause->value) {
+						
+						if ($conf->get($values->var,'var') == $values->value) {
 							$validCauses[$storyCause->story][] = $storyCause;
 							self::out("Variable correspondante, ajout $storyCause->id aux causes valides");
 						}else{
@@ -122,10 +139,17 @@ class Story extends SQLiteEntity{
 	
 	public static function parse($value){
 		global $conf;
+		
+		$keywords = self::keywords();
+		$value = str_replace(array_keys($keywords),array_values($keywords),$value);
+		
+		
 		preg_match_all("/(\{)(.*?)(\})/", $value, $matches, PREG_SET_ORDER);
 		foreach($matches as $match){
 			$value = str_replace($match[0],$conf->get($match[2],'var'),$value);
 		}
+		
+		
 		return $value;
 	}
 	public static function execute($storyId){
@@ -149,11 +173,11 @@ class Story extends SQLiteEntity{
 					case 'command':
 						if($data->target=='server'){
 							
-							$log .= "\tcommande server lancée : ".$data->value.PHP_EOL;
-							$return = System::commandSilent($data->value);
+							$log .= "\tcommande server lancée : ".self::parse($data->value).PHP_EOL;
+							$return = System::commandSilent(self::parse($data->value));
 							$conf->put('cmd_result',$return,'var');	
 						}else{
-							$log .= "\tcommande client lancée : ".$data->value.PHP_EOL;
+							$log .= "\tcommande client lancée : ".self::parse($data->value).PHP_EOL;
 							$cli = new Client();
 							$cli->connect();
 							$cli->execute(self::parse($data->value));
@@ -195,6 +219,27 @@ class Story extends SQLiteEntity{
 						$cli = new Client();
 						$cli->connect();
 						$cli->talk(self::parse($data->value));
+						$cli->disconnect();
+					break;
+					case 'emotion':
+						$log .= "\tEmotion : ".self::parse($data->value).PHP_EOL;
+						$cli = new Client();
+						$cli->connect();
+						$cli->emotion(self::parse($data->value));
+						$cli->disconnect();
+					break;
+					case 'sound':
+						$log .= "\tSon client : ".self::parse($data->value).PHP_EOL;
+						$cli = new Client();
+						$cli->connect();
+						$cli->sound(self::parse($data->value));
+						$cli->disconnect();
+					break;
+					case 'image':
+						$log .= "\tImage client : ".self::parse($data->value).PHP_EOL;
+						$cli = new Client();
+						$cli->connect();
+						$cli->image(self::parse($data->value));
 						$cli->disconnect();
 					break;
 					case 'story':

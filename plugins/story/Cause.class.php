@@ -46,16 +46,18 @@ class Cause extends SQLiteEntity{
 					'template' => 'numéro <select data-value="{pin}" data-field="pin"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select> en état <select data-value="{value}" data-field="value"><option value="1">Actif</option><option value="0">Inactif</option></select>',
 					'description' => 'Déclenche le scénario en fonction de l\'état du GPIO sélectionné en état actif (1) ou inactif(0)'
 					),
+			'readvar' => array(
+					'icon' => 'fa-dollar',
+					'label' => 'Variable',
+					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value="{var}"> <select data-field="operator" class="operator"><option value="=">=</option></select> <input type="text" data-field="value" placeholder="Ma valeur" value="{value}">',
+					'description' => 'Déclenche le scénario si la variable déclarée existe et correpond à l\'égalité décrite, le test sur les variable est effectué toutes les minutes.'
+					)
 			/*'captor' => array(
 					'icon' => 'fa-tachometer',
 					'label' => 'Capteur',
 					'template' => '<select  class="plugin_selector"></select> Capteur <select data-field="captor" class="captor_selector"></select> Champ <select data-field="field" class="captor_field_selector"></select> <select data-field="operator" class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <input data-field="value" type="text" placeholder="valeur" value="{value}">'
 					),
-			'readvar' => array(
-					'icon' => 'fa-dollar',
-					'label' => 'Variable',
-					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value="{var}"> <select data-field="operator" class="operator"><option value="=">=</option><option value="!=">!=</option><option value="<"><</option><option value=">">></option></select> <input type="text" data-field="value" placeholder="Ma valeur" value="{value}">'
-					),*/
+			,*/
 		);
 		
 			$types['time']['template'] = '<select class="operator"><option>=</option><!--<option>!=</option>--></select> 

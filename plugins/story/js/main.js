@@ -125,12 +125,14 @@ function switchCauseEffect(mode){
 
 //Add line to board
 function addLine(options){
+	
 	options.data = options.data == null ? {value:'',target:'',operator:'',union:''} : options.data ;
 
 	$.action({
 		action : 'plugin_story_get_type_template',
 		data : options.data,
-		type : options.type
+		type : options.type,
+		async:false
 	},function(r){
 			
 			if(options.place==null){
