@@ -63,9 +63,9 @@ function story_plugin_action(){
 					}
 					
 					$response['html'] = 
-					'<li class="line" data-type="'.$_['type'].'">
+					'<div data-element="line" class="line" data-type="'.$_['type'].'">
 						<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
-					</li>';
+					</div>';
 				},
 				array()
 			);

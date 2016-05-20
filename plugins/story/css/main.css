@@ -55,9 +55,21 @@ li.dragged{
 
 .workspace li{
 	padding:0px;
+	width:100%;
+	cursor:move;
+	
+}
+.workspace  .line{
 	background: #f1f3fb none repeat scroll 0 0;
     color: #111111;
+	
+	overflow: hidden;
 }
+
+.workspace li.ui-draggable-dragging .place,.workspace li.ui-draggable-dragging .union{
+    display:none;
+}
+
 .workspace li  strong{
 	display: inline-block;
     font-size: 25px;
@@ -76,7 +88,7 @@ li.dragged{
 	padding:9px;
 }
 
-.workspace li.place{
+.workspace div.place{
 	background: #ffffff none repeat scroll 0 0;
     border: 2px dotted #cecece;
     color: #cecece;
@@ -85,28 +97,38 @@ li.dragged{
     padding: 10px;
     text-align: center;
 }
-.workspace li.place.dragover{
+.workspace div.place.dragover{
 	color: #4E96E3;
 	border-color: #4E96E3;
 }
-.workspace .union{
+
+#story .union{
  text-align:center;
- font-size:30px;
  border:0px;
- width:100px;
- color:#cecece;
- font-weight:bold;
+ float:left;
  margin:0px auto;
- background-color:#fff;
-}
-.workspace .union select{
-	color:#cecece;
+ color:#cecece;
+ margin-top:10px;
 	background-color:#fff;
 	padding:0px;
 	font-weight:bold;
 	font-size:19px;
-	width:50px;
+	width:65px;
 }
+
+#story .firstunion{
+	text-align:center;
+	font-size:30px;
+	border:0px;
+	color:#cecece;
+	font-weight:bold;
+	margin:0px auto;
+	background-color:#fff;
+	text-align:center;
+	width:100%;
+	margin-top:10px;
+}
+
 #causePanel,#effectPanel{
 	width:100%;
 }

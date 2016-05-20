@@ -21,14 +21,14 @@ if(isset($_['story']))
 			<ul class="toolbar">
 				<?php 
 					foreach(Cause::types() as $key=>$type):
-						echo '<li data-type="'.$key.'" title="'.$type['description'].'" class="'.$key.' infobulle"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
+						echo '<li data-type="'.$key.'" title="'.$type['description'].'" class="'.$key.' infobulle typeButton"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
 					endforeach;
 				?>
 				<div class="clear"></div>
 			</ul>
-			<ul class="workspace">
-				<li class="union">SI</li>
-				<li id="place-0" class="place"></li>
+			<div class="firstunion">SI</div>
+			<ul class="workspace workspace-cause">
+				
 			</ul>
 		</div>
 		
@@ -37,14 +37,14 @@ if(isset($_['story']))
 			<ul class="toolbar">
 				<?php 
 					foreach(Effect::types() as $key=>$type):
-						echo '<li data-type="'.$key.'"  title="'.$type['description'].'"  class="'.$key.' infobulle"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
+						echo '<li data-type="'.$key.'"  title="'.$type['description'].'"  class="'.$key.' infobulle typeButton"><i class="fa '.$type['icon'].'"></i> '.$type['label'].'</li>';
 					endforeach;
 				?>
 				<div class="clear"></div>
 			</ul>
-			<ul class="workspace">
-				<li class="union">ALORS</li>
-				<li id="place-effect-0" class="place"></li>
+			<div class="firstunion">ALORS</div>
+			<ul class="workspace workspace-effect">
+				
 			</ul>
 			
 		</div>

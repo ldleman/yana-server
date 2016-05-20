@@ -1,62 +1,16 @@
 <?php
-	$story = new Story();
-	$stories = $story->populate();
+	$nerve = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'nerve';
 ?>
 
 	<div class="span12">
-
-		<h1>Gestion des scénarios</h1>
-		<form action="action.php?action=plugin_story_import" method="POST" enctype="multipart/form-data">
-		<a class="btn" href="index.php?module=story&action=edit">Ajouter un scenario</a> OU Importer un scénario <input type="file" class="btn" onchange="$(this).parent().submit()" name="import">
-		</form>
-		
-		<h2>Scénarios existants</h2>
-		
-	    <table class="table table-striped table-bordered table-hover">
-	    <thead>
-	    <tr>
-	    <th colspan="2">Titre</th>
-	    </tr>
-		
-	    </thead>
-		<?php 
-			foreach($stories as $story){
-				echo '<tr data-id="'.$story->id.'">
-						<td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td>
-						<td class="story_loader" class="pointer" title="Executer manuellement le scénario" onclick="story_launch('.$story->id.',this);"><i class="fa"> <span>Chargement...</span></td>
-						<td style="width:15px;" class="pointer" title="Voir le dernier log executé" onclick="story_log(\''.$story->id.'\')"><i class="fa fa-align-justify"></i></td>
-						<td style="width:15px;" class="pointer" title="Activer/Désactiver" onclick="story_change_state(\''.$story->id.'\',this)"><i class="fa '.($story->state?'fa-check-square-o':'fa-square-o').'"></i></td>
-						<td style="width:15px;" class="pointer" title="Exporter" onclick="window.location=\'action.php?action=plugin_story_export&id='.$story->id.'\'"><i class="fa fa-external-link"></i></td>
-						<td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td>
-					</tr>';
-				echo '<tr style="display:none" data-log="'.$story->id.'"><td colspan="3"><pre>'.$story->log.'</pre></td></tr>';
-			}
-		?>
-	    </table>
-		
-		<div class="alert">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>Important!</strong> Consultez <a href="#doc.install">la rubrique installation</a> avant de créer des scénarios, certaines manipulations sont obligatoires
-			pour le bon fonctionnement du plugin.
-		</div>
-		
-		<?php 
-			$nerve = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'nerve';
-			if(!file_exists($nerve)):
-		?>
-		<div class="alert alert-error">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<strong>Attention!</strong> Le fichier <?php echo $nerve; ?> doit être présent et lancé pour que les causes types 'gpio' fonctionnent.
-		</div>
-		<?php endif; ?>
-		
-		<hr/>
+	
+		<?php if(isset($_['page']) && $_['page']=='doc'): ?>
 		<h1>Documentation</h1>
 		<h3 id="doc.install">Installation</h3>
 		Pour profiter pleinement de ce plugin, vous devez ajouter (si ce n'est pas déja fait) une tâche planifiée sur le raspberry PI.<br/>Pour cela tapez : 
 		<br/><code>sudo crontab -e</code> 
 		<br/>Puis ajoutez la ligne <br/><code>*/1 * * * * wget http://localhost/yana-server/action.php?action=crontab -O /dev/null 2>&1</code><br/>
-		<br/>Puis ajoutez la ligne <br/><code>@reboot <?php echo $nerve; ?> /var/www/yana-server/action.php -O /dev/null 2>&1</code><br/>Puis sauvegardez (ctrl+x puis O puis Entrée)<br/>
+		<br/>Puis ajoutez la ligne <br/><code>@reboot <?php echo $nerve; ?> <?php echo __ROOT__.DIRECTORY_SEPARATOR.'action.php'; ?> -O /dev/null 2>&1</code><br/>Puis sauvegardez (ctrl+x puis O puis Entrée)<br/>
 		<br/>Executez la commande<br/><code>sudo chmod +x <?php echo $nerve; ?></code>
 		<br/><br/>
 		
@@ -79,4 +33,62 @@
 		<li><code><?php echo $key; ?></code> : <?php echo $value; ?></li>
 		<?php endforeach; ?>
 		</ul>
+		<?php else: 
+		$story = new Story();
+		$stories = $story->populate();
+		
+		?>
+			<h1>Gestion des scénarios</h1>
+			<form action="action.php?action=plugin_story_import" method="POST" enctype="multipart/form-data">
+			<a class="btn" href="index.php?module=story&action=edit">Ajouter un scenario</a> OU Importer un scénario <input type="file" class="btn" onchange="$(this).parent().submit()" name="import">
+			</form>
+			
+			<h2>Scénarios existants</h2>
+			
+			<table class="table table-striped table-bordered table-hover">
+			<thead>
+			<tr>
+			<th colspan="2">Titre</th>
+			</tr>
+			
+			</thead>
+			<?php 
+				foreach($stories as $story){
+					echo '<tr data-id="'.$story->id.'">
+							<td><a style="display:block;" href="index.php?module=story&action=edit&story='.$story->id.'">'.$story->label.'</a></td>
+							<td class="story_loader" class="pointer" title="Executer manuellement le scénario" onclick="story_launch('.$story->id.',this);"><i class="fa"> <span>Chargement...</span></td>
+							<td style="width:15px;" class="pointer" title="Voir le dernier log executé" onclick="story_log(\''.$story->id.'\')"><i class="fa fa-align-justify"></i></td>
+							<td style="width:15px;" class="pointer" title="Activer/Désactiver" onclick="story_change_state(\''.$story->id.'\',this)"><i class="fa '.($story->state?'fa-check-square-o':'fa-square-o').'"></i></td>
+							<td style="width:15px;" class="pointer" title="Exporter" onclick="window.location=\'action.php?action=plugin_story_export&id='.$story->id.'\'"><i class="fa fa-external-link"></i></td>
+							<td style="width:15px;" class="pointer" onclick="story_delete(\''.$story->id.'\',this)"><i class="fa fa-times"></i></td>
+						</tr>';
+					echo '<tr style="display:none" data-log="'.$story->id.'"><td colspan="3"><pre>'.$story->log.'</pre></td></tr>';
+				}
+			?>
+			</table>
+			
+			<div class="alert alert-notice">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Important!</strong> Consultez <a href="index.php?module=story&page=doc#doc.install">la rubrique installation</a> avant de créer des scénarios, certaines manipulations sont obligatoires
+				pour le bon fonctionnement du plugin.
+			</div>
+			
+			<div class="alert alert-info">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Documentation</strong> Un soucis? une question ? Voir la <a href="index.php?module=story&page=doc">documentation</a>
+			</div>
+			
+			<?php 
+				
+				if(!file_exists($nerve)):
+			?>
+			<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Attention!</strong> Le fichier <?php echo $nerve; ?> doit être présent et lancé pour que les causes types 'gpio' fonctionnent.
+			</div>
+			<?php endif; ?>
+		
+		<?php endif; ?>
+		<hr/>
+		
 	</div>

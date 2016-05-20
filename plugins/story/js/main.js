@@ -6,13 +6,22 @@ $(document).ready(function(){
 });
 
 function initDragAndDrop(){
-	$( ".toolbar li" ).draggable({
+		$( ".toolbar li" ).draggable({
 			helper: "clone"
+		});
+		$( ".workspace li" ).draggable({
+			helper: "clone",
+			cursorAt: { top: 15 }
 		});
 		$( ".place" ).droppable({
 			hoverClass :  "dragover" ,
 			drop: function( event, ui ) {
-				addLine({type:$(ui.draggable[0]).data('type'),place:$(this),panel:mode}); 
+				var element = $(ui.draggable[0]);
+				if(element.hasClass('typeButton')){
+					addLine({type:element.attr('data-type'),place:$(this),panel:mode});
+				}else{
+					moveLine({line:element,place:$(this),panel:mode});
+				}
 			}
 		});
 }
@@ -123,6 +132,12 @@ function switchCauseEffect(mode){
 	}
 }
 
+function moveLine(options){
+	var line = options.line;
+	var number = $('.workspace li').index(line);
+	options.place.parent().before(line.detach());
+}
+
 //Add line to board
 function addLine(options){
 	
@@ -134,25 +149,23 @@ function addLine(options){
 		type : options.type,
 		async:false
 	},function(r){
+	
+			var line = '<li>';
+			line += '<div data-element="place" class="place"></div>';
+			line +='<div data-element="union" class="union">ET</div>';
+			line += r.html;
+			line += '</li>';
+			
 			
 			if(options.place==null){
-				if(options.panel=='CAUSE') options.place = $('#causePanel .place').last();
-				if(options.panel=='EFFECT') options.place = $('#effectPanel .place').last();
+				
+				$('.workspace-'+(options.panel=='CAUSE'?'cause':'effect')).append(line);
+			}else{
+				//Append line
+				
+				$(options.place).parent().before(line);
+				
 			}
-			var line = '';
-			if($(options.place).attr('id')!='place-0' && $(options.place).attr('id')!='place-effect-0'){
-				line +='<li class="union"><select><option '+(options.data.union=='ET'?' selected="selected" ':'')+' >ET</option>';
-
-				//if(options.panel=='CAUSE') line +='<option '+(options.data.union=='OU'?' selected="selected" ':'')+'>OU</option>';
-				line +='</select></li>';
-			}
-			
-			
-			
-			line += r.html;
-			line += '<li class="place"></li>';
-			//Append line
-			$(options.place).after(line);
 			
 			//Fill select by database values
 			$('.workspace select[data-value]').each(function(i,elem){
@@ -178,12 +191,9 @@ function addLine(options){
 
 //Delete story line
 function deleteLine(elem){
-	if(confirm('Sûr?')){
-		var line = $(elem).parent().parent();
-		if(line.prev().attr('id')!='place-0' && line.prev().attr('id')!='place-effect-0')line.prev().remove();
-		line.next().remove();
-		line.remove();
-	}
+	if(!confirm('Sûr?')) return;
+	var line = $(elem).closest('li');
+	line.remove();
 }
 
 //Save story
@@ -196,8 +206,8 @@ function saveStory(){
 	
 	//CAUSES
 	lastunion ='';
-	$('.story div#causePanel ul.workspace li').each(function(i,elem){
-		switch($(elem).attr('class')){
+	$('.story div#causePanel ul.workspace li div').each(function(i,elem){
+		switch($(elem).attr('data-element')){
 			case 'line':
 				var line = { type  : $(elem).data('type') }
 				$('input,select',elem).each(function(i,input){
@@ -215,9 +225,11 @@ function saveStory(){
 	
 	//EFFECTS
 	lastunion ='';
-	$('.story div#effectPanel ul.workspace li').each(function(i,elem){
-		switch($(elem).attr('class')){
+	$('.story div#effectPanel ul.workspace li div').each(function(i,elem){
+		
+		switch($(elem).attr('data-element')){
 			case 'line':
+				
 				var line = { type  : $(elem).data('type') }
 				$('input,select',elem).each(function(i,input){
 					line[$(input).data('field')] = $(input).val();
@@ -232,6 +244,7 @@ function saveStory(){
 		}
 	});
 
+	
 	if(story.effects.length == 0 || story.causes.length == 0){
 		alert('Pour valider le scénario, vous devez remplir au moins une cause et au moins un effet');
 		return;
