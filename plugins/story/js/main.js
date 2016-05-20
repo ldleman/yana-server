@@ -37,7 +37,7 @@ function init(){
 			addLine({type:'time',panel:'CAUSE'});
 
 		if(r.results['effects'].length==0)
-			addLine({type:'time',panel:'EFFECT'});
+			addLine({type:'talk',panel:'EFFECT'});
 
 		for(var key in r.results['causes'])
 			addLine(r.results['causes'][key]);
