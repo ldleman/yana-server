@@ -274,6 +274,25 @@ class Functions
 	} 
 
 
+	public static function htmlAlert($type,$message){
+		switch ($type) {
+			case 'error':
+				echo '<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Erreur!</strong> ';
+			break;
+			case 'info':
+				echo '<div class="alert alert-notice"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Info</strong> ';
+			break;
+			case 'success':
+				echo '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Yeah!</strong> ';
+			break;
+			default:
+				echo '<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Erreur!</strong> ';
+			break;
+		}
+		
+		echo $message.'</div>';
+	}
+
 
 }
 ?>

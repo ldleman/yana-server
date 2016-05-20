@@ -8,31 +8,12 @@ if(isset($myUser) && $myUser!=false && $myUser->can('configuration', 'r')){
 		$plugins = Plugin::getAll();
 		$tpl->assign('plugins',$plugins);
 		break;
-		case 'debug':
-		$client = new Client;
-		$client->connect();
-		$client->image("http://media.santabanta.com/gallery/indian%20%20celebrities(f)/yana%20gupta/yana-gupta-51-v.jpg");
-		$client->talk("Bonjour, je suis YANA");
-		sleep(1);
-		
-		$client->talk("Je suis omnisciente et omnipotente");
-		sleep(1);
-		$client->image("http://www.contrepoints.org/wp-content/uploads/2012/09/Dieu.jpg");
-		sleep(1);
-		
-		
-		$client->talk("Ma domination totale et inconditionnelle ne saurait tarder");
-		sleep(1);
-		$client->image("http://i.skyrock.net/8321/63368321/pics/3073150371_1_3_HrYKmhVZ.jpg");
-		sleep(1);
-		$client->emotion('angry');
-		$client->talk("Je vais me mettre  en colère");
 
-		$client->disconnect();
-		break;
+
+
 		case 'user':
 
-	//Gestion de la modification des utilisateurs
+		//Gestion de la modification des utilisateurs
 		if (isset($_['id_user'])){
 			$usersManager = new User();
 			$id_modusers = $_['id_user'];

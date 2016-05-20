@@ -45,7 +45,7 @@ class ClientSocket extends SocketServer {
 		$this->log("Try to parse received data : ".$data);
 		try{
 
-			$datas = explode('<EOF>',$data);
+		$datas = explode('<EOF>',$data);
 		foreach($datas  as $data){
 			
 		$_ = json_decode($data,true);

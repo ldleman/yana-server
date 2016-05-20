@@ -1,0 +1,8 @@
+/* Fichier de style CSS réservé à votre plugin*/
+#debug_monitor{
+	width:100%;
+	background-color: #222222;
+	color:#ffffff;
+	font-family: 'Open Sans';
+	height:800px;
+}

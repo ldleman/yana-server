@@ -19,6 +19,7 @@ class Client {
                 throw new Exception('Erreur connexion au serveur socket depuis yana-server, le serveur est il allumé ? '.utf8_encode(socket_strerror(socket_last_error())));
             }
         }
+
     }
 
     public   function  disconnect(){ 
@@ -28,32 +29,44 @@ class Client {
         $this->socket = null;
     }
 
-	public  function send($msg){ 
+	public  function send($msg,$receive = false){ 
         if($this->socket==null) return;
             $in = json_encode($msg);
             $in .= '<EOF>';
-            socket_write( $this->socket, $in, strlen($in));
-            $int = '';
+            socket_write($this->socket, $in, strlen($in));
+           
+            if(!$receive) return $in;
+            $in = '';
+            $start = time();
+            $go = false;
+            socket_set_option($this->socket,SOL_SOCKET, SO_RCVTIMEO, array("sec"=>1, "usec"=>0));
+           
+            while (!$go) {
+               $in .= @socket_read($this->socket, 2048);
+               if((time()-$start) > 1) $go = true;
+            }
+            return $in;
+
     }
 
 
     public function talk($parameter){
         //echo 'Execution envois de parole vers un client : '.$parameter;
-        $this->send(array("action"=>"TALK","parameter"=>$parameter));
+        return $this->send(array("action"=>"TALK","parameter"=>$parameter));
     }
     
 	public function sound($parameter){
-		$this->send(array("action"=>"SOUND","parameter"=>$parameter));
+		return $this->send(array("action"=>"SOUND","parameter"=>$parameter));
 	}
 	
 	public function execute($parameter){
-		$this->send(array("action"=>"EXECUTE","parameter"=>$parameter));
+		return $this->send(array("action"=>"EXECUTE","parameter"=>$parameter));
 	}
     public function emotion($emotion){
-        $this->send(array("action"=>"EMOTION","parameter"=>$emotion));
+        return $this->send(array("action"=>"EMOTION","parameter"=>$emotion));
     }
     public function image($image){
-        $this->send(array("action"=>"IMAGE","parameter"=>$image));
+        return $this->send(array("action"=>"IMAGE","parameter"=>$image));
     }
 
 
