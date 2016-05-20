@@ -20,12 +20,14 @@
             }
         }
 
-        $.action =  function(data,success,error) {
+         $.action =  function(data,success,error) {
+			
 			$.ajax({
 				dataType : 'json',
 				method : 'POST',
 				url : 'action.php',
 				data : data,
+				async:(data.async!=null?data.async:true),
 				success: function(response){
 					if(response.errors == null ) response.errors.push('Erreur indefinie, merci de contacter un administrateur');
 					if(response.errors.length ==0 ){
