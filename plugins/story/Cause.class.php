@@ -59,7 +59,12 @@ class Cause extends SQLiteEntity{
 					),
 			,*/
 		);
+
+
+			$types['listen']['template'] .= 'Confidence <input type="number" step="0.01" min="0.10"  max="0.99" value="{confidence}"  data-field="confidence"/>';
 		
+			
+
 			$types['time']['template'] = '<select class="operator"><option>=</option><!--<option>!=</option>--></select> 
 					<select data-value="{minut}" data-field="minut">
 					<option value="*">Toutes les minutes</option>';

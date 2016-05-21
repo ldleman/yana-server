@@ -1,5 +1,5 @@
 
-var mode = 'CAUSE';
+var mode = 'cause';
 
 $(document).ready(function(){
 	init();
@@ -34,10 +34,10 @@ function init(){
 	},function(r){
 		
 		if(r.results['causes'].length==0)
-			addLine({type:'time',panel:'CAUSE'});
+			addLine({type:'time',panel:'cause'});
 
 		if(r.results['effects'].length==0)
-			addLine({type:'talk',panel:'EFFECT'});
+			addLine({type:'talk',panel:'effect'});
 
 		for(var key in r.results['causes'])
 			addLine(r.results['causes'][key]);
@@ -112,6 +112,9 @@ function story_log(id){
 
 //Delete story
 function story_delete(id,element){
+
+
+
 	if(!confirm('Etes vous sûr de vouloir supprimer cette ligne ?')) return;
 	$.action({
 		action:'plugin_story_delete_story',id:id},
@@ -125,15 +128,17 @@ function story_delete(id,element){
 function switchCauseEffect(mode){
 	$('#causePanelButton,#effectPanelButton').removeClass('active');
 	$('#effectPanel,#causePanel').hide();
-	
+
+	$('#story').attr('data-mode',mode);
 	switch(mode){
-		case 'CAUSE':
+		case 'cause':
 			$('#causePanel').fadeIn(200);
 			$('#causePanelButton').addClass('active');
 		break;
-		case 'EFFECT':
+		case 'effect':
 			$('#effectPanel').fadeIn(200);
 			$('#effectPanelButton').addClass('active');
+
 		break;
 	}
 }
@@ -164,13 +169,9 @@ function addLine(options){
 			
 			
 			if(options.place==null){
-				
-				$('.workspace-'+(options.panel=='CAUSE'?'cause':'effect')).append(line);
+				$('.workspace-'+(options.panel=='cause'?'cause':'effect')).append(line);
 			}else{
-				//Append line
-				
 				$(options.place).parent().before(line);
-				
 			}
 			
 			//Fill select by database values
@@ -197,6 +198,13 @@ function addLine(options){
 
 //Delete story line
 function deleteLine(elem){
+
+
+	if($('.workspace-'+$('#story').attr('data-mode')+' li').length == 1){
+		alert('Vous ne pouvez pas supprimer la dernière ligne');
+		return;
+	}
+
 	if(!confirm('Sûr?')) return;
 	var line = $(elem).closest('li');
 	line.remove();
@@ -205,12 +213,12 @@ function deleteLine(elem){
 //Save story
 function saveStory(){
 	story = {};
-	if($('#story').data('id')!='')story.id = $('#story').data('id');
+	if($('#story').attr('data-id')!='')story.id = $('#story').attr('data-id');
 	story.label = $('.story h1 input').val();
 	story.causes = [];
 	story.effects = [];
 	
-	//CAUSES
+	//causes
 	lastunion ='';
 	$('.story div#causePanel ul.workspace li div').each(function(i,elem){
 		switch($(elem).attr('data-element')){
@@ -229,7 +237,7 @@ function saveStory(){
 		}
 	});
 	
-	//EFFECTS
+	//effectS
 	lastunion ='';
 	$('.story div#effectPanel ul.workspace li div').each(function(i,elem){
 		
@@ -267,6 +275,7 @@ function saveStory(){
 			story:story
 		},
 		function(response){
+			$('#story').attr('data-id',response.id);
 			alert('Scénario enregistré :)');
 		}
 	);

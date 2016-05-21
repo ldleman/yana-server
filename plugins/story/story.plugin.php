@@ -147,7 +147,7 @@ function story_plugin_action(){
 						$data = $caus->getValues();
 						$response['results']['causes'][]= array(
 						'type' => $caus->type,
-						'panel'=>"CAUSE",
+						'panel'=>"cause",
 						'data'=> $data
 						);
 					}
@@ -156,7 +156,7 @@ function story_plugin_action(){
 						$data = $eff->getValues();
 						$response['results']['effects'][]=array( 
 						'type' => $eff->type,
-						'panel'=>"EFFECT",
+						'panel'=>"effect",
 						'data'=> $data
 						);
 					}
@@ -273,6 +273,7 @@ function story_plugin_action(){
 			$story->date = time();
 			$story->state = 1;
 			$story->save();
+			$response['id'] = $story->id;
 			
 			$i = 0;
 			
@@ -320,9 +321,10 @@ function story_vocal_command(&$response,$actionUrl){
 	foreach($vocals as $vocal){
 		$data = json_decode($vocal->values);
 		
+		$data->confidence = $data->confidence==0 ? '0.81' : $data->confidence;
 		$response['commands'][] = array(
 		'command'=>$conf->get('VOCAL_ENTITY_NAME').' '.$data->value,
-		'url'=>$actionUrl.'?action=plugin_story_check&type=talk&sentence='.urlencode($data->value),'confidence'=>('0.90'+$conf->get('VOCAL_SENSITIVITY'))
+		'url'=>$actionUrl.'?action=plugin_story_check&type=talk&sentence='.urlencode($data->value),'confidence'=>($data->confidence+$conf->get('VOCAL_SENSITIVITY'))
 		);
 	}
 }

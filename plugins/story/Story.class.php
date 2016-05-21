@@ -154,7 +154,8 @@ class Story extends SQLiteEntity{
 	}
 	public static function execute($storyId){
 			global $conf;
-			
+			$cli = new Client();
+			$cli->connect();
 			$story = new self();
 			$story = $story->getById($storyId);
 			
@@ -178,18 +179,17 @@ class Story extends SQLiteEntity{
 							$conf->put('cmd_result',$return,'var');	
 						}else{
 							$log .= "\tcommande client lancée : ".self::parse($data->value).PHP_EOL;
-							$cli = new Client();
-							$cli->connect();
+						
+							
 							$cli->execute(self::parse($data->value));
-							$cli->disconnect();
+							
 						}
 					break;
 					case 'image':
 							$log .= "\tImage affichée : ".self::parse($data->value).PHP_EOL;
-							$cli = new Client();
-							$cli->connect();
+							
 							$cli->image(self::parse($data->value));
-							$cli->disconnect();
+							
 					break;
 					case 'var':
 						$log .= "\tVariable ".$data->var.' définie à : "'.self::parse($data->value).'"'.PHP_EOL;
@@ -216,31 +216,28 @@ class Story extends SQLiteEntity{
 					break;
 					case 'talk':
 						$log .= "\tParole : ".self::parse($data->value).PHP_EOL;
-						$cli = new Client();
-						$cli->connect();
+						
+						
 						$cli->talk(self::parse($data->value));
-						$cli->disconnect();
+						
 					break;
 					case 'emotion':
 						$log .= "\tEmotion : ".self::parse($data->value).PHP_EOL;
-						$cli = new Client();
-						$cli->connect();
+						
 						$cli->emotion(self::parse($data->value));
-						$cli->disconnect();
+						
 					break;
 					case 'sound':
 						$log .= "\tSon client : ".self::parse($data->value).PHP_EOL;
-						$cli = new Client();
-						$cli->connect();
+						
 						$cli->sound(self::parse($data->value));
-						$cli->disconnect();
+						
 					break;
 					case 'image':
 						$log .= "\tImage client : ".self::parse($data->value).PHP_EOL;
-						$cli = new Client();
-						$cli->connect();
+						
 						$cli->image(self::parse($data->value));
-						$cli->disconnect();
+						
 					break;
 					case 'story':
 						if(!is_numeric($data->value)) throw new Exception('ID scénario non numerique, lancement scénario annulé');
@@ -255,7 +252,7 @@ class Story extends SQLiteEntity{
 					$log .= "\tERREUR : ".$e->getMessage().PHP_EOL;
 				}
 			}
-			
+			$cli->disconnect();
 			$story->log = $log;
 			$story->save();
 	}
