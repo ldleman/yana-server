@@ -25,6 +25,7 @@ function api_plugin_api(&$_,&$response){
 					$response['user'] = $myUser->toArray();
 					unset($response['user']['password']);
 				break;
+				
 				default:
 					throw new Exception('Méthode :'.$_['method'].' non définie');
 				break;
