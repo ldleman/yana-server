@@ -220,11 +220,12 @@ class System{
 			'a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a01041'),
 			'1a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'1a01041'),
 			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041'),
+			'2a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'2a01041'),
 			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082'),
 			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'a02082'),
 			'0000' => array('ram'=>'1024','version'=>'1.0','type'=>'M1','revision'=>'0000')
 		);
-		if(PHP_OS=='WINNT') $infos['Revision'] = '0002';//for dev mode on windows only
+		if(PHP_OS=='WINNT') $infos['Revision'] = 'a01041';//for dev mode on windows only
 		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :array('ram'=>'0','version'=>'0','type'=>'unknown','revision'=>$infos['Revision']);
 	}
 
