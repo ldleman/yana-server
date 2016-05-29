@@ -6,8 +6,8 @@ date_default_timezone_set('Europe/Paris');
 unset($myUser);
 error_reporting(E_ALL);
 ini_set('display_errors','On');
-define('__ROOT__',realpath(dirname(__FILE__)));
-require_once(dirname(__FILE__).'/constant.php');
+
+require_once(__DIR__.'/constant.php');
 
 function __autoload($class_name) {
     include 'classes/'.$class_name . '.class.php';
@@ -50,18 +50,21 @@ function __autoload($class_name) {
         </div>
       </div>
     </div>
-
+<div id="body" class="container">
 <?php
 
-//On récupère le chemin de yana
-  $path_yana =  substr($_SERVER['SCRIPT_FILENAME'],0,-11);
+//On récupère le chemin http de yana
+$path_yana =  substr($_SERVER['SCRIPT_FILENAME'],0,-11);
 
 if(isset($_POST['install'])){
  
- 
-    if(isset($_POST['password']) && trim($_POST['password'])!='' && isset($_POST['login']) && trim($_POST['login'])!='' ) {
+    try{
+    if(!isset($_POST['password']) || trim($_POST['password'])=='' || !isset($_POST['login']) || trim($_POST['login'])=='' ) 
+      throw new Exception("L'identifiant et le mot de passe ne peuvent être vide");
+    
 	  //Supression de l'ancienne base si elle existe
-	  if(file_exists(DB_NAME)) unlink(DB_NAME);
+	  if(file_exists(DB_NAME) && filesize(DB_NAME)>0) throw new Exception("La base ".DB_NAME." existe déjà, pour recommencer l'installation, merci de supprimer le fichier DB_NAME puis de revenir sur cette page");
+    
       //Instanciation des managers d'entités
       $user = new User();
       $configuration = new Configuration();
@@ -74,8 +77,8 @@ if(isset($_POST['install'])){
       $personnality = new Personality();
 
       if(isset($_POST['url'])){
-      $const = file_get_contents("constant.php");
-      file_put_contents('constant.php', (preg_replace("/(define\(\'YANA_URL\'\,\')(.*)('\)\;)/", "$1".$_POST['url']."$3", $const)));
+        $const = file_get_contents("constant.php");
+        file_put_contents('constant.php', (preg_replace("/(define\(\'YANA_URL\'\,\')(.*)('\)\;)/", "$1".$_POST['url']."$3", $const)));
       }
 
 
@@ -124,7 +127,7 @@ if(isset($_POST['install'])){
       	$r->save();
       }
     	
-      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Emmet Brown','Geo trouvetou','Luke Skywalker','Mac Gyver','Marty McFly');
+      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Emmet Brown','Geo trouvetou','Luke Skywalker','Mac Gyver','Marty McFly','The Doctor');
       $im = $personalities[rand(0,count($personalities)-1)];
       list($fn,$n) = explode(' ',$im);
       //Creation du premier compte et assignation en admin
@@ -141,32 +144,44 @@ if(isset($_POST['install'])){
       global $myUser;
       $myUser = $user;
 
-	  Plugin::enabled('radioRelay-radioRelay');
-      Plugin::enabled('wireRelay-wireRelay');
-      Plugin::enabled('vocal_infos-vocalinfo');
-	  Plugin::enabled('speechcommands-speechcommands');
-      Plugin::enabled('eventManager-eventmanager');
-      Plugin::enabled('profile-profile');
-	  Plugin::enabled('room-room');
-     Plugin::enabled('story-story');
-      Plugin::enabled('dashboard-dashboard');
-      Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
-  }else{
-    ?>
-        <div id="body" class="container">
-        <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Echec de l'Installation : </strong> L'identifiant et le mot de passe ne peuvent être vides <a class="brand" href="install.php">Réessayer</a>.
-      </div>
-<?php exit(); } ?>
-	 <div id="body" class="container">
+      foreach(array('radioRelay','wireRelay','vocal_infos','speechcommands','profile','room','story','dashboard','dashboard-monitoring') as $plugin):
+        Plugin::enabled($plugin.'-'.$plugin);
+      endforeach;
+	
+      $notices = array();
+      if(function_exists('file_get_contents')){
+        $notices = @file_get_contents('http://idleman.fr/yana/notice.php?code=justavoidspamrequest');
+  	    if($notices!==false){
+          $notices = json_decode($notices,true);
+        }
+        if(!is_array($notices)) $notices = array();
+      }
+
+?>
+	
     <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Installation terminée: </strong> L'installation est terminée, vous devez supprimer le fichier <code>yana-server/install.php</code> par mesure de sécurité, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
-  </div>
-<?php }else{ 
+    </div>
+
+
+    <?php foreach($notices as $notice): ?>
+      <div class="alert alert-<?php  echo $notice['type']; ?>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong><?php  echo $notice['title']; ?>: </strong> <?php  echo $notice['content']; ?>.
+      </div
+    <?php endforeach; ?>
+
+<?php }catch(Exception $e){ ?>
+  <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Echec de l'Installation : </strong> <?php echo $e->getMessage(); ?> <a class="brand" href="install.php">Réessayer</a>.
+      </div>
+<?php
+}
+}else{ 
 ?>
-      <div id="body" class="container">
+      
 	  
 	  <?php 
 	  

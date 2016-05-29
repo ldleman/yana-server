@@ -8,14 +8,14 @@ error_reporting(E_ALL & ~E_NOTICE);
 //Calage de la date
 date_default_timezone_set('Europe/Paris'); 
 
-define('__ROOT__',realpath(dirname(__FILE__)));
-define('SLASH',DIRECTORY_SEPARATOR);
 
 //Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
 //car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
 if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
 
 mb_internal_encoding('UTF-8');
+
+require_once(__DIR__ .DIRECTORY_SEPARATOR.'constant.php');
 
 global $myUser,$conf,$_;
 //Récuperation et sécurisation de toutes les variables POST et GET
@@ -25,8 +25,6 @@ $error = '';
 
 
 
-
-require_once(__ROOT__ .DIRECTORY_SEPARATOR.'constant.php');
 
 $versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
 

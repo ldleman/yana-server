@@ -147,7 +147,7 @@ function dashboard_plugin_home(){
 			Dashboard::initForUser($myUser->getId());
 			$dashes = $dashManager->loadAll(array('user'=>$myUser->getId()),'label');
 		}
-		//var_dump($dashes);
+
 		echo '<div style="margin:0;text-align:center;"><select id="dashboard_switch" onchange="plugin_dashboard_load_view($(this).val());"><option value="">-</option>';
 		foreach($dashes as $dash){
 			echo '<option '.($dash->default=='1'?'selected="selected"':'').' value="'.$dash->id.'">'.$dash->label.'</option>';

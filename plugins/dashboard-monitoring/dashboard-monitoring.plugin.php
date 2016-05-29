@@ -388,68 +388,7 @@ function dash_monitoring_plugin_actions(){
 	
 }
 
-/*
 
-<html>
-<body>
-<style>
-.driver_content{
-	padding:5px;
-}
-.driver_content .driver_image,.driver_content .driver_view{
-	display:inline-block;
-	vertical-align:top;
-}
-.driver_content .driver_image{
-	width:35%;
-}
-.driver_content .driver_view{
-	width:60%;
-}
-.driver_content .driver_properties{
-	margin:10px 0 0 0;
-	padding:0;
-	list-style-type:none;
-	width:100%;
-	max-height:100px;
-	overflow:auto;
-}
-.driver_content .driver_properties li{
-	border-bottom:1px solid #222222;
-	padding:3px;
-}
-
-.driver_content .driver_properties li .driver_property_label,.driver_content .driver_properties li .driver_property_value{
-	display:inline-block;
-	vertical-align:top;
-}
-.driver_content .driver_properties li .driver_property_label{
-	width: 35%;
-}
-.driver_content .driver_properties li .driver_property_value{
-	min-width: 60%;
-}
-</style>
-
-<div class="driver_content">
-	<div class="driver_image">
-		<i class="fa fa-sun">image</i>
-	</div>
-	<div class="driver_view">
-		19°
-	</div>
-	<label class="driver_properties_title">Propriétés</label>
-	<ul class="driver_properties">
-		<li>
-			<div class="driver_property_label">Label</div><div class="driver_property_value">Valeur html</div>
-		</li>
-	</ul>
-</div>
-
-
-</body>
-</html>
-*/
 Plugin::addCss('/css/style.css',true);
 Plugin::addJs('/js/main.js',true);
 Plugin::addHook("widgets", "dash_monitoring_plugin_menu");
