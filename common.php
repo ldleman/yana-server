@@ -9,6 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 date_default_timezone_set('Europe/Paris'); 
 
 define('__ROOT__',realpath(dirname(__FILE__)));
+define('SLASH',DIRECTORY_SEPARATOR);
 
 //Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
 //car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
