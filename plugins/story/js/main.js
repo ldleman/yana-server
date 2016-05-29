@@ -146,7 +146,16 @@ function switchCauseEffect(mode){
 function moveLine(options){
 	var line = options.line;
 	var number = $('.workspace li').index(line);
-	options.place.parent().before(line.detach());
+
+
+	if(options.place.attr('data-position')=='before'){
+		options.place.parent().before(line.detach());
+	}else{
+		options.place.parent().after(line.detach());
+	}
+
+
+	
 }
 
 //Add line to board
@@ -162,16 +171,20 @@ function addLine(options){
 	},function(r){
 	
 			var line = '<li>';
-			line += '<div data-element="place" class="place"></div>';
+			line += '<div data-element="place" data-position="before" class="place"></div>';
 			line +='<div data-element="union" class="union">ET</div>';
 			line += r.html;
-			line += '</li>';
+			line += '<div data-element="place" data-position="after" class="place"></div></li>';
 			
 			
 			if(options.place==null){
 				$('.workspace-'+(options.panel=='cause'?'cause':'effect')).append(line);
 			}else{
-				$(options.place).parent().before(line);
+				if(options.place.attr('data-position')=='before'){
+					$(options.place).parent().before(line);
+				}else{
+					$(options.place).parent().after(line);
+				}
 			}
 			
 			//Fill select by database values
