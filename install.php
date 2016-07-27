@@ -1,4 +1,7 @@
 <?php
+/*
+*/
+
 session_start();
 date_default_timezone_set('Europe/Paris'); 
 //TODO cron auto install
@@ -149,11 +152,17 @@ if(isset($_POST['install'])){
       endforeach;
 	
       $notices = array();
-      if(function_exists('file_get_contents')){
-        $notices = @file_get_contents('http://idleman.fr/yana/notice.php?code=justavoidspamrequest');
-  	    if($notices!==false){
-          $notices = json_decode($notices,true);
-        }
+      if(function_exists('curl_init')){
+        $url="http://idleman.fr/yana/notice.php?code=justavoidspamrequest";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        $html = curl_exec($ch);
+        curl_close($ch);
+  	    if($html!==false)
+          $notices = json_decode($html,true);
+        
         if(!is_array($notices)) $notices = array();
       }
 
