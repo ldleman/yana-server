@@ -26,7 +26,12 @@ class Story extends SQLiteEntity{
 	}
 	
 	public static function keywords(){
-		global $myUser;
+		global $myUser,$conf;
+		
+		$sunrise_time = $conf->get('YANA_LATITUDE') !=''? date_sunrise(time(), SUNFUNCS_RET_TIMESTAMP, $conf->get('YANA_LATITUDE'),$conf->get('YANA_LONGITUDE'), 90, 1):0;
+		$sunset_time = $conf->get('YANA_LATITUDE') !='' ? date_sunset(time(), SUNFUNCS_RET_TIMESTAMP, $conf->get('YANA_LATITUDE'),$conf->get('YANA_LONGITUDE'), 90, 1):0;
+		
+		
 		return array(
 		'{DATE}'=>date('d-m-Y'),
 		'{YEAR}'=>date('Y'),
@@ -34,10 +39,16 @@ class Story extends SQLiteEntity{
 		'{DAY}'=>date('d'),
 		'{HOUR}'=>date('H'),
 		'{MINUT}'=>date('i'),
+		'{TIME}'=>time(),
 		'{USER.LOGIN}'=>$myUser->getLogin(),
 		'{USER.ID}'=>$myUser->getId(),
 		'{USER.MAIL}'=>$myUser->getMail(),
 		'{YANA.URL}'=>YANA_URL,
+		'{SUNRISE.TIMESTAMP}'=>$sunrise_time,
+		'{SUNRISE.TIME}'=>date('H:i',$sunrise_time),
+		'{SUNSET.TIMESTAMP}'=>$sunset_time,
+		'{SUNSET.TIME}'=>date('H:i',$sunset_time),
+		
 		);
 	}
 	
@@ -49,8 +60,6 @@ class Story extends SQLiteEntity{
 		
 		self::out('Vérification des scénarios');
 		
-		
-
 		$causeManager = new Cause('r');
 
 		$storyCauses = $causeManager->loadAll(array());
