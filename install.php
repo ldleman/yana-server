@@ -103,9 +103,11 @@ if(isset($_POST['install'])){
       $configuration->put('COOKIE_LIFETIME','7');
       $configuration->put('VOCAL_ENTITY_NAME','YANA');
       $configuration->put('PROGRAM_VERSION','3.0.6');
-	    $configuration->put('HOME_PAGE','index.php');
-	    $configuration->put('VOCAL_SENSITIVITY','0.0');
-
+	  $configuration->put('HOME_PAGE','index.php');
+	  $configuration->put('VOCAL_SENSITIVITY','0.0');
+      $configuration->put('YANA_LATITUDE','24.8235817');
+	  $configuration->put('YANA_LONGITUDE','-75.5070352');
+	  
       //Création du rang admin
 		  $rank = new Rank();
     	$rank->setLabel('admin');
