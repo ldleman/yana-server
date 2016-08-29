@@ -43,7 +43,7 @@ class Story extends SQLiteEntity{
 	
 	public static function check($event=array()){
 		require_once(dirname(__FILE__).'/Cause.class.php');
-		
+	
 		global $conf;
 		
 		
@@ -110,8 +110,8 @@ class Story extends SQLiteEntity{
 							}
 				break;
 				case 'readvar':
-						
-						if ($conf->get($values->var,'var') == $values->value) {
+						self::out($values->var.' ('.self::parse($values->var).') égale à '.$values->value.' ?');
+						if (self::parse($values->var) == $values->value) {
 							$validCauses[$storyCause->story][] = $storyCause;
 							self::out("Variable correspondante, ajout $storyCause->id aux causes valides");
 						}else{
@@ -154,16 +154,20 @@ class Story extends SQLiteEntity{
 	}
 	public static function execute($storyId){
 			global $conf;
-			$cli = new Client();
-			$cli->connect();
 			$story = new self();
 			$story = $story->getById($storyId);
+			$log = '====== Execution '.date('d/m/Y H:i').'======'.PHP_EOL;
+			try{
+			
+			$cli = new Client();
+			$cli->connect();
+			
 			
 			require_once(dirname(__FILE__).'/Effect.class.php');
 			$effectManager = new Effect('r');
 			
 			$effects = $effectManager->loadAll(array('story'=>$story->id),'sort');
-			$log = '====== Execution '.date('d/m/Y H:i').'======'.PHP_EOL;
+			
 			$log .= count($effects).' effets à executer'.PHP_EOL;
 			foreach($effects as $effect){
 				$data = $effect->getValues();
@@ -253,12 +257,18 @@ class Story extends SQLiteEntity{
 				}
 			}
 			$cli->disconnect();
+			
+			}catch(Exception $e){
+				self::out('ERREUR : '.$e->getMessage());
+				$log .= 'ERREUR : '.$e->getMessage().PHP_EOL;
+			}
 			$story->log = $log;
 			$story->save();
 	}
 	
 	public static function out($msg){
 		global $_;
+		
 		if(!isset($_['mode']) || $_['mode'] != 'verbose') return;
 		Functions::log($msg);
 		echo '<pre>'.date('d/m/Y H:i:s').' | '.$msg.PHP_EOL;
