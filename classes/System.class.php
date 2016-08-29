@@ -222,7 +222,8 @@ class System{
 			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041'),
 			'2a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'2a01041'),
 			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082'),
-			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'a02082'),
+			'a22082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a22082'), 
+			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'900092'),
 			'0000' => array('ram'=>'1024','version'=>'1.0','type'=>'M1','revision'=>'0000')
 		);
 		if(PHP_OS=='WINNT') $infos['Revision'] = 'a01041';//for dev mode on windows only
