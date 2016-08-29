@@ -6,6 +6,7 @@ ini_set('display_errors','1');
 
 error_reporting(E_ALL & ~E_NOTICE);
 //Calage de la date
+setlocale( LC_ALL , "fr_FR" );
 date_default_timezone_set('Europe/Paris'); 
 
 
