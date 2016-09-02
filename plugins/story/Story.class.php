@@ -120,8 +120,8 @@ class Story extends SQLiteEntity{
 							}
 				break;
 				case 'readvar':
-						self::out($values->var.' ('.self::parse($values->var).') égale à '.$values->value.' ?');
-						if (self::parse($values->var) == $values->value) {
+						self::out($values->var.' ('.self::parse($values->var).') égale à '.self::parse($values->value).' ?');
+						if (self::parse($values->var) == self::parse($values->value)) {
 							$validCauses[$storyCause->story][] = $storyCause;
 							self::out("Variable correspondante, ajout $storyCause->id aux causes valides");
 						}else{
