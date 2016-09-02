@@ -45,10 +45,11 @@ class Story extends SQLiteEntity{
 		'{USER.MAIL}'=>$myUser->getMail(),
 		'{YANA.URL}'=>YANA_URL,
 		'{SUNRISE.TIMESTAMP}'=>$sunrise_time,
-		'{SUNRISE.TIME}'=>date('H:i',$sunrise_time),
+		'{SUNRISE.HOUR}'=>date('H',$sunrise_time),
+		'{SUNRISE.MINUT}'=>date('i',$sunrise_time),
 		'{SUNSET.TIMESTAMP}'=>$sunset_time,
-		'{SUNSET.TIME}'=>date('H:i',$sunset_time),
-		
+		'{SUNSET.HOUR}'=>date('H',$sunset_time),
+		'{SUNSET.MINUT}'=>date('i',$sunset_time)
 		);
 	}
 	

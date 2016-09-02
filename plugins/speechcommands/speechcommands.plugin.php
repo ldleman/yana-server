@@ -85,8 +85,23 @@ function speechcommands_action(){
 							Gpio::write($pin,$value,true);
 						break;
 						case 'server_command':
-							System::commandSilent(html_entity_decode($command->parameter));
-							echo '{}';
+							$result = System::commandSilent(html_entity_decode($command->parameter));
+							$response =  array(
+												'responses'=>array(
+																	array('type'=>'talk',
+																		  'sentence'=>utf8_encode($result)
+																	)
+												)
+											);
+
+
+
+					
+							$json = json_encode($response);
+
+					
+							echo ($json=='[]'?'{}':$json);
+						
 						break;	
 						case 'client_command':
 							$response = array(

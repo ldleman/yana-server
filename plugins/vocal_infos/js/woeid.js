@@ -23,7 +23,7 @@ if (data["query"]["results"] != null)
 {
 alert("Informations récupérés!");
 
-var place = data["query"]["results"]["place"][0];
+var place = data["query"]["results"]["place"];
 woeid = place["woeid"];
 town = place["name"];
 
