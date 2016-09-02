@@ -9,7 +9,7 @@ date_default_timezone_set('Europe/Paris');
 unset($myUser);
 error_reporting(E_ALL);
 ini_set('display_errors','On');
-
+if(!file_exists(__DIR__.'/constant.php')) copy(__DIR__.'/constant.sample.php', __DIR__.'/constant.php');
 require_once(__DIR__.'/constant.php');
 
 function __autoload($class_name) {

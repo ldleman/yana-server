@@ -6,3 +6,4 @@ database.db
 /log/.log.txt
 /dbversion
 /cache/avatar/*.jpg
+/constant.php
