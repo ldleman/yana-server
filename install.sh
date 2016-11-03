@@ -432,8 +432,7 @@ getAptError(){
 	rm -f /tmp/aptError.log
 
 	#On lance apt-get update en dry-run et on sauve le log dans /tmp/aptError.log
-	# modif idle: -s semble ne pas être reconnus sur raspian jessi, du coup ça plante je l'ai enlevé sans trop savoir ce que ça implique :D ! apt-get update -s -q -y > /tmp/aptError.log 2>&1
-	apt-get update  -q -y > /tmp/aptError.log 2>&1
+	apt-get update -s -q -y > /tmp/aptError.log 2>&1
 	aptError=$(cat /tmp/aptError.log)
 }
 
