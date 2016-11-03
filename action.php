@@ -223,9 +223,9 @@ else
 		Plugin::callHook("cron", array());
 	break;
 	
-	default:
-		Plugin::callHook("action_post_case", array());
-	break;
+	
+		
+	
 
 
 	case 'GET_SPEECH_COMMAND':

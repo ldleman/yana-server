@@ -4,11 +4,19 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'com
 
 $response = array();
 try{
-	if(!$myUser && isset($_['token'])){
-	$userManager = new User();
-	$myUser = $userManager->load(array('token'=>$_['token']));
-	if(isset($myUser) && $myUser!=false)
-		$myUser->loadRight();
+	if(!$myUser){
+		if(isset($_['token'])){
+			$userManager = new User();
+			$myUser = $userManager->load(array('token'=>$_['token']));
+			if(isset($myUser) && $myUser!=false)
+				$myUser->loadRight();
+		}
+		if(isset($_['login'])){
+			$userManager = new User();
+			$myUser = $userManager->load(array('login'=>$_['login'],'password'=>$_['password']));
+			if(!$myUser) throw new Exception('Mauvais identifiant ou mot de passe');
+			$myUser->loadRight();
+		}
 	}
 	$myUser = (!$myUser?new User():$myUser);
 	Plugin::callHook("api", array(&$_,&$response));

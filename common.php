@@ -6,15 +6,18 @@ ini_set('display_errors','1');
 
 error_reporting(E_ALL & ~E_NOTICE);
 //Calage de la date
+setlocale( LC_ALL , "fr_FR" );
 date_default_timezone_set('Europe/Paris'); 
 
-define('__ROOT__',realpath(dirname(__FILE__)));
 
 //Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
 //car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
 if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
 
 mb_internal_encoding('UTF-8');
+
+if(!file_exists(__DIR__ .DIRECTORY_SEPARATOR.'constant.php')) header('location:install.php');
+require_once(__DIR__ .DIRECTORY_SEPARATOR.'constant.php');
 
 global $myUser,$conf,$_;
 //Récuperation et sécurisation de toutes les variables POST et GET
@@ -25,14 +28,12 @@ $error = '';
 
 
 
-require_once(__ROOT__ .DIRECTORY_SEPARATOR.'constant.php');
-
 $versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
 
 
 if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) || (file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) && filesize(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME)==0)){
 	file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
-	header('location:'.'install.php');
+	header('location:install.php');
 }else{
 	if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
 }

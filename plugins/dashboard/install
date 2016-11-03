@@ -14,7 +14,7 @@ $dashboard = Dashboard::initForUser($myUser->getId());
 		$table->create();
 
 		$table->name = 'Lumiere salon';
-		$table->description = 'Lumière d\'exemple';
+		$table->description = 'Lumière du salon nord ouest';
 		$table->pin = 0;
 		$table->room = 1;
 		$table->pulse = 0;
@@ -27,7 +27,7 @@ $dashboard = Dashboard::initForUser($myUser->getId());
 
 		$table = new WireRelay();
 		$table->name = 'Prise TV';
-		$table->description = 'Prise d\'exemple';
+		$table->description = 'Prise murale TV';
 		$table->pin = 2;
 		$table->room = 1;
 		$table->pulse = 50;
@@ -40,7 +40,7 @@ $dashboard = Dashboard::initForUser($myUser->getId());
 
 		$table = new WireRelay();
 		$table->name = 'Stores salon';
-		$table->description = 'Stores d\'exemple';
+		$table->description = 'Stores baie vitrée ouest';
 		$table->pin = 1;
 		$table->room = 1;
 		$table->pulse = 120;

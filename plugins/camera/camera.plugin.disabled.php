@@ -30,13 +30,9 @@ function camera_plugin_page($_){
 	<div class="span12">
 	
 		<div class="span5">
-          <h5>Photo PI</h5>
-		 <button class="btn" onclick="window.location='action.php?action=camera_refresh'">Prendre une photo</button><br/>
-		 <img class="img-polaroid img-rounded" id="cameraPI" src="plugins/camera/view.jpg<?php echo '?'.time(); ?>" ><br/>
-		  
-        <!--<video controls="controls" width="200" height="200" autoplay="autoplay" >
-      			<source src="stream.m3u8" type="application/x-mpegURL" />
-    		</video>-->
+			<h5>Photo PI</h5>
+			<button class="btn" onclick="camera_refresh();">Prendre une photo</button><br/>
+			<img class="img-polaroid img-rounded" id="cameraPI" src="action.php?action=camera_get_stream" ><br/>
         </div>
         <div class="span6">
         <p>
@@ -58,7 +54,7 @@ function camera_plugin_page($_){
 		  	</code><br/>
 		  	Et enfin<br/>
 		  	<code>
-		  		sudo chown -R www-data:www-data /var/www/yana-server/plugins/camera
+		  		sudo chown -R www-data:www-data <?php echo __DIR__ ?>
 		  	</code><br/>
 		  		Redémarrez et c'est ok :)
 		  	
@@ -79,9 +75,17 @@ function camera_action_camera(){
     
 	switch($_['action']){
 		case 'camera_refresh':
-			$absolute_path = getcwd()."/plugins/camera/";
-			system('raspistill -hf -w 400 -h 400  -o '.$absolute_path.'view.jpg');
-			header('location:index.php?module=camera');
+			system('raspistill -hf -w 400 -h 400  -o '.__DIR__.SLASH.'stream'.SLASH.'stream.jpg');
+		break;
+
+		case 'camera_get_stream':
+			global $myUser;
+			if($myUser->getId()==0) throw new Exception("Permissions insuffisantes");
+			header("Content-Type: image/jpeg");
+			ob_end_clean();
+			$file = __DIR__.SLASH.'stream'.SLASH.'stream.jpg';
+			if(!file_exists($file)) $file = __DIR__.SLASH.'stream'.SLASH.'default.jpg';
+			echo file_get_contents($file);
 		break;
 	}
 }

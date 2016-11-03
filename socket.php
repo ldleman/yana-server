@@ -1,6 +1,6 @@
 <?php
 require_once(realpath(dirname(__FILE__)).'/common.php');
-date_default_timezone_set('Europe/Paris');
+
 
 class ClientSocket extends SocketServer {
 	public $connected = array();
@@ -106,7 +106,7 @@ class ClientSocket extends SocketServer {
 				$response = array();
 			
 				foreach($this->connected as $id=>$cli){
-					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.$cli->user->getLogin().'"}}');
+					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.($cli->user!=null && is_object($cli->user)?$cli->user->getLogin():'Anonyme').'"}}');
 				}
 				
 				
@@ -175,7 +175,7 @@ class ClientSocket extends SocketServer {
 		foreach($clients as $client){
 			if($client->id == $new_client->id) continue;
 			$socket = $this->connected[$client->id]->socket;
-			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.$new_client->user->getLogin().'"}}';
+			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.($new_client->user!=null && is_object($new_client->user)?$new_client->user->getLogin():'Anonyme').'"}}';
 			$this->log("send ".$packet." to ".$client->name);
 			$this->send($socket,$packet);
 		}
