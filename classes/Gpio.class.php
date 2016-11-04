@@ -59,7 +59,6 @@ class Gpio{
 	}
 
 	public static function listen($gpio,$functionName){
-
 		$GLOBALS['gpio'][$gpio][] = $functionName;  
 	}
 }

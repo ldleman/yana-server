@@ -73,8 +73,8 @@
 
 		<div class="span9 accessBloc">
 		{function="Plugin::callHook("access_pre_display", array(&$accesss))"}
-		<h1>Rangs</h1>
-		<p>Gestion des rangs du programme</p>  
+		<h1>Droits : {$rank->getLabel()}</h1>
+		<p>Gestion des droits du rang <code>{$rank->getLabel()}</code></p>  
 
 
 
@@ -100,7 +100,7 @@
 		    <td><input type="checkbox" onclick="setRankAccess({$rank->getId()},{$value->getId()},'u',this)" {if="@$rights[$value->getId()]['u']"}checked="checked"{/if} /></td>
 		    <td><input type="checkbox" onclick="setRankAccess({$rank->getId()},{$value->getId()},'d',this)" {if="@$rights[$value->getId()]['d']"}checked="checked"{/if} /></td>
 		    <td>
-		    	<a class="btn btn-danger" href="action.php?action=access_delete_right&id={$value->getId()}"><i class="fa fa-times icon-white"></i></a>
+		    	<a class="btn btn-danger" title="supprimer les droits du rang pour cette section" href="action.php?action=access_delete_right&amp;id={$value->getId()}&amp;rank={$rank->getId()}"><i class="fa fa-times icon-white"></i></a>
 		    </td>
 	    </tr>
 	    {/loop}

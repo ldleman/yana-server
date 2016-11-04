@@ -467,6 +467,7 @@ updateRaspberryPi(){
 		aptgetErrorMenu
 	fi
 
+	echo -e "$OK -----> Installation du client git $NORMAL"
 	#On installe aussi le client git
 	debconf-apt-progress -- apt-get install -q -y git-core
 	if [[ $globalError -ne 0 ]];then

@@ -171,8 +171,9 @@ else
 	if(!$myUser->can('configuration','d')) exit('ERREUR: Permissions insuffisantes.');
 	case 'access_delete_right':
 	$rankManager = new Right();
+	 
 	$rankManager->delete(array('id'=>$_['id']));
-	Functions::goback("setting","right","&id=".$_['rankRight']);
+	Functions::goback("setting","right","&id=".$_['rank']);
 	break;
 
 	case 'logout':

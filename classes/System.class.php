@@ -252,7 +252,7 @@ class System{
 						continue;
 					}
 					if($pin->wiringPiNumber<0) continue;
-					$gpios[$pin->wiringPiNumber] = exec("/usr/local/bin/gpio read ".$pin->wiringPiNumber, $out);				
+					$gpios[$pin->wiringPiNumber] = exec(GPIO::GPIO_DEFAULT_PATH." read ".$pin->wiringPiNumber, $out);				
 				}
 		}
 		return $gpios;

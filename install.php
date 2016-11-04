@@ -66,7 +66,7 @@ if(isset($_POST['install'])){
       throw new Exception("L'identifiant et le mot de passe ne peuvent être vide");
     
 	  //Supression de l'ancienne base si elle existe
-	  if(file_exists(DB_NAME) && filesize(DB_NAME)>0) throw new Exception("La base ".DB_NAME." existe déjà, pour recommencer l'installation, merci de supprimer le fichier DB_NAME puis de revenir sur cette page");
+	  if(file_exists(DB_NAME) && filesize(DB_NAME)>0) throw new Exception("La base ".DB_NAME." existe déjà, pour recommencer l'installation, merci de supprimer le fichier ".DB_NAME." puis de revenir sur cette page");
     
       //Instanciation des managers d'entités
       $user = new User();
@@ -202,9 +202,19 @@ if(isset($_POST['install'])){
 		if(!is_writable($path_yana)) $tests['error'][] = "Le dossier <b>".$path_yana."</b> n'est pas accessible en écriture. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo chown -R www-data:www-data ".$path_yana."</code> ";
 		if(!class_exists('SQLite3')) $tests['error'][] = "Le pré-requis SQLITE3 n'est pas installé. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo apt-get install sqlite3 php5-sqlite</code> ";
 		
+
+
 		$out = exec('whereis gpio',$out);
-		if($out == '') $tests['warning'][] = "La librairie Wiring pi ne semble pas installé sur le rpi, merci de vérifier l'existence du binaire GPIO sur la machine.";
-		
+		if($out == ''){ 
+      $tests['warning'][] = "La librairie Wiring pi ne semble pas installé sur le rpi, merci de vérifier l'existence du binaire GPIO sur la machine.";
+		}else{
+      if($out != GPIO::GPIO_DEFAULT_PATH) $tests['warning'][] = "Le chemin de l'executable de wiring pi est à modifier dans classes/Gpio.class.php, remplacer <code>".GPIO::GPIO_DEFAULT_PATH."</code> par <code>".$out."</code>.";
+    
+    }
+
+    
+    
+
 		if(function_exists('posix_getpwuid')){
 			
 			$permissions = array('root:www-data'=>'plugins/relay/radioEmission');
