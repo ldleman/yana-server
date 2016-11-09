@@ -431,8 +431,9 @@ checkInternet(){
 getAptError(){
 	rm -f /tmp/aptError.log
 
-	#On lance apt-get update en dry-run et on sauve le log dans /tmp/aptError.log
-	apt-get update -s -q -y > /tmp/aptError.log 2>&1
+	#On lance apt-get install en dry-run (simulation) afin de recuperer l'erreur
+	#et on sauve le log dans /tmp/aptError.log
+	apt-get --dry-run install > /tmp/aptError.log 2>&1
 	aptError=$(cat /tmp/aptError.log)
 }
 
