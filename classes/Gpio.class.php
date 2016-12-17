@@ -8,7 +8,7 @@
 
 class Gpio{
 
-	const GPIO_DEFAULT_PATH = '/usr/local/bin/gpio';
+	const GPIO_DEFAULT_PATH = '/usr/bin/gpio';
 	
 	public $name,$role,$wiringPiNumber,$bcmNumber,$physicalNumber;
 	
