@@ -6,6 +6,8 @@
 	
 */
 	require_once(dirname(__FILE__).'/Modele.class.php');
-	$table = new modele();
-	$table->create();
+	//Création de la table modèle
+	Modele::create();
+	//Création du nom de la zone de droit (section) pour le plugin modèle
+	Section::add('modele_section');
 ?>

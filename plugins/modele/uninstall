@@ -4,6 +4,10 @@
 	Vous pouvez donc l'utiliser pour supprimer des tables SQLite, des dossiers, ou executer une action
 	qui ne doit se lancer qu'à la désinstallation ex :
 */
-$table = new modele();
-$table->drop();
+
+//Supression de la table modèle
+Modele::drop();
+//Supression de la zone de droits (section) du plugin modèle
+Section::remove('modele_section');
+
 ?>
