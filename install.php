@@ -209,7 +209,7 @@ if(isset($_POST['install'])){
       $tests['warning'][] = "La librairie Wiring pi ne semble pas installé sur le rpi, merci de vérifier l'existence du binaire GPIO sur la machine.";
 		}else{
       require_once(__DIR__.'/classes/Gpio.class.php');
-      if($out != GPIO::GPIO_DEFAULT_PATH) $tests['warning'][] = "Le chemin de l'executable de wiring pi est à modifier dans classes/Gpio.class.php, remplacer <code>".GPIO::GPIO_DEFAULT_PATH."</code> par <code>".$out."</code>.";
+      if($out != GPIO::GPIO_DEFAULT_PATH) $tests['warning'][] = "Le chemin de l'executable de wiring pi est à modifier dans classes/Gpio.class.php, remplacer <code>".GPIO::GPIO_DEFAULT_PATH."</code> par <code>".trim(str_replace('gpio: ','',$out))."</code>.";
     
     }
 
