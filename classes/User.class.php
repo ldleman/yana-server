@@ -64,7 +64,9 @@ class User extends SQLiteEntity{
 				$this->rights[$section->getLabel()]['u'] = ($right->getUpdate()=='1'?true:false);
 				$this->rights[$section->getLabel()]['d'] = ($right->getDelete()=='1'?true:false);
 			}else{
-				$rightManager->delete(array('section'=>$right->getSection()));
+				//Supression suite à des problèmes de perte de section quand la base plante
+				//TODO - A modifier en evitant cette action sur les erreurs SQL type database locked
+				//$rightManager->delete(array('section'=>$right->getSection()));
 			}
 		}
 	}
