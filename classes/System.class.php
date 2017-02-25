@@ -217,6 +217,8 @@ class System{
 			'000d' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000d'),
 			'000e' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000e'),
 			'000f' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000f'),
+			'000f' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'000f'),
+			'900032' => array('ram'=>'512','version'=>'2.0','type'=>'b','revision'=>'900032'),
 			'a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a01041'),
 			'1a01041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'1a01041'),
 			'a21041' => array('ram'=>'1024','version'=>'1.0','type'=>'b2','revision'=>'a21041'),
