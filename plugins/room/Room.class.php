@@ -3,7 +3,7 @@
 /*
  @nom: Room
  @auteur: Idleman (idleman@idleman.fr)
- @description:  Classe de gestion des peices
+ @description:  Classe de gestion des pieces
  */
 
 class Room extends SQLiteEntity{
@@ -20,6 +20,7 @@ class Room extends SQLiteEntity{
 	);
 
 	function __construct(){
+		$this->state = 0;
 		parent::__construct();
 	}
 
