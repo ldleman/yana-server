@@ -1,11 +1,11 @@
 <?php
 /*
-@name Propise : PROtotype de PIeuvre SEnsitive 
+@name Sonde ( modèle Poolp )
 @author Valentin CARRUESCO <idleman@idleman.fr>
 @link http://blog.idleman.fr
 @licence CC by nc sa
 @version 1.0.0
-@description Permet la récuperations d'informations de temperatures, humidités, lumière, mouvement et sons dans une pièce a travers une sonde ethernet maison (propise)
+@description Permet la récuperations d'informations de temperatures, humidités, lumière, mouvement et sons dans une pièce a travers la sonde yana "poolp"
 */
 
 
@@ -33,7 +33,6 @@ function propise_diagnostic($text,$confidence,$parameters,$myUser){
 	.", température : ".$data->temperature
 	.", Luminosité : ".$data->temperature
 	."%, mouvement : ".$data->mouvment
-	//."%, bruit : ".$data->sound
 	);
 	$cli->disconnect();
 }
@@ -134,6 +133,20 @@ function propise_action(){
 			echo '1';
 		break;
 		
+		case 'propise_select_widget_menu':
+		require_once(__DIR__.'/../dashboard/Widget.class.php');
+			Action::write(
+				function($_,&$response){
+				$widget = new Widget();
+				$widget = $widget->getById($_['id']);
+				$data = $widget->data();
+				
+				$data['menu'] = $_['menu'];
+				$widget->data($data);
+				$widget->save();
+			});
+		break;
+		
 		case 'propise_load_widget':
 
 			require_once(__DIR__.'/../dashboard/Widget.class.php');
@@ -142,6 +155,7 @@ function propise_action(){
 
 					$widget = new Widget();
 					$widget = $widget->getById($_['id']);
+					
 					$parameters = $widget->data();
 
 					if(empty($parameters['sensor'])){
@@ -156,7 +170,7 @@ function propise_action(){
 						$sensor = Sensor::getById($parameters['sensor']);
 						$datas = Data::loadAll(array('sensor'=>$sensor->id),'time DESC',1);
 	
-						$response['title'] = $sensor->label.' ('.$sensor->uid.')';
+						$response['title'] = $sensor->label.' ('.$sensor->uid.') ';
 
 						$content = '
 						<!-- CSS -->
@@ -201,18 +215,22 @@ function propise_action(){
 							.propise_view li{
 								font-family: "Open Sans Light",sans-serif;
 								text-align:center;
-								padding:15px;
+								padding:30px 15px 15px 15px;
 								list-style-type:none;
 								float:left;
+								height: 100px;
 								width:50%;
 								box-sizing:border-box;
 								font-weight:300;
-								font-size:50px;
+								font-size:40px;
+								
 							}
 							
 							.propise_view.propise_detail_view li{
 								font-size:60px;
 								width:100%;
+								height:140px;
+								font-size:50px;
 								padding:40px 0 40px 0;
 								float:none;
 							}
@@ -259,11 +277,11 @@ function propise_action(){
 						<!-- HTML -->
 						';
 						
-						$content .= '<div class="propise_widget" data-id="'.$sensor->id.'">
+						$content .= '<div class="propise_widget" data-view="'.$parameters['menu'].'" data-id="'.$sensor->id.'">
 						<div class="propise_view">
 							
 								<ul>
-									<li data-type="light"><i class="fa fa-sun-o"></i> <span ></span>%</li>
+									<li data-type="light"><i class="fa fa-sun-o fa-spin-low"></i> <span ></span>%</li>
 									<li data-type="temperature"><i class="fa fa-fire"></i> <span ></span>°</li>
 									<li data-type="humidity"><i class="fa fa-tint"></i> <span ></span>%</li>
 									<li data-type="mouvment"><i class="fa fa-eye"></i> <span ></span></li>
@@ -275,12 +293,12 @@ function propise_action(){
 						$content .= '</div>';
 						
 						$content .= '<ul class="propise_menu">';
-							$content .= '<li class="propise_global" onclick="propise_menu(this,true)" data-view="global"><i class="fa fa-columns"></i></li>';
+							$content .= '<li class="propise_global" onclick="propise_menu(this)" data-view=""><i class="fa fa-columns"></i></li>';
 							$content .= '<li onclick="propise_menu(this)" data-view="light"><i class="fa fa-sun-o"></i></li>';
 							$content .= '<li onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
 							$content .= '<li onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
 							$content .= '<li onclick="propise_menu(this)" data-view="mouvment"><i class="fa fa-eye"></i></li>';
-							$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
+							$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
 						$content .= '</ul>';
 						
 						$content .= '</div>';
@@ -293,7 +311,14 @@ function propise_action(){
 							});
 							
 							function propise_refresh_data(){
-								$(".propise_widget").each(function(i,element){
+								$(".propise_widget[data-id='.$sensor->id.']").each(function(i,element){
+										var view = $(element).attr("data-view");
+										
+										if(view != $(element).attr("data-selected")){
+											propise_show($(element),view);
+											console.log("ee");
+										}
+										
 										$.action({
 											action:"propise_get_data",
 											id:$(element).attr("data-id")
@@ -311,17 +336,34 @@ function propise_action(){
 							function propise_menu(element,global){
 								var line = $(element);
 								var container = line.closest(".propise_widget");
-								$(".propise_view",container).addClass("propise_detail_view")
-								if(global){
+								var view = $(element).attr("data-view");
+								var widget = $(element).closest(\'.dashboard_bloc\').attr(\'data-id\');
+								
+								$(container).attr("data-view",view);
+								$.action({
+									action:"propise_select_widget_menu",
+									id:widget,
+									menu: view
+								});
+
+								propise_show(container,view);
+							};
+							
+							function propise_show(container,view){
+								
+								$(container).attr("data-selected",view);
+								
+								if(view==\'\'){
 									$(".propise_view ul li",container).fadeIn();
 									$(".propise_view",container).removeClass("propise_detail_view")
 									return;
 								}
 								
+								$(".propise_view",container).addClass("propise_detail_view")
 								$(".propise_view ul li",container).hide();
-								$(".propise_view").css("background-color",$(element).css("border-top-color"));
-								$(".propise_view ul li[data-type=\'"+$(element).data("view")+"\']",container).fadeIn();
-							};
+								$(".propise_view").css("background-color",$(".propise_view ul li[data-view=\'"+view+"\']",container).css("border-top-color"));
+								$(".propise_view ul li[data-type=\'"+view+"\']",container).fadeIn();
+							}
 							
 						</script>
 						';
@@ -394,7 +436,7 @@ function propise_plugin_setting_page(){
 
 		<div class="span9 userBloc">
 
-			<h1>Propise</h1>
+			<h1>Sondes Poolp</h1>
 			<p>Gestion des multi-sondes</p>  
 
 			<fieldset>
@@ -477,7 +519,7 @@ function propise_plugin_setting_page(){
 
 function propise_plugin_setting_menu(){
 	global $_;
-	echo '<li '.(isset($_['section']) && $_['section']=='propise'?'class="active"':'').'><a href="setting.php?section=propise"><i class="fa fa-angle-right"></i> Propise (Sondes)</a></li>';
+	echo '<li '.(isset($_['section']) && $_['section']=='propise'?'class="active"':'').'><a href="setting.php?section=propise"><i class="fa fa-angle-right"></i> Sondes (Poolp)</a></li>';
 }
 
 
@@ -485,24 +527,16 @@ function propise_plugin_page($_){
 	if(!isset($_['module']) || $_['module']!='propise') return;
 	require_once('Sensor.class.php');
 	require_once('Data.class.php');
-	$sensor = new Sensor();
-	$data = new Data();
-	$sensor = $sensor->getById($_['sensor']);
 	
-
-
-	$datas = $data->customQuery('SELECT * FROM '.MYSQL_PREFIX.'plugin_propise_data WHERE sensor='.$sensor->id.' ORDER BY `time` DESC LIMIT 30',true);
-
+	$sensor = Sensor::getById($_['id']);
+	$datas = Data::loadAll(array('sensor'=>$sensor->id),'time',30);
 	$tab = array('hours'=>array(),'temperature'=>array(),'humidity'=>array(),'light'=>array());
-	
-
-	while($row = $datas->fetchArray() ){
-		if(date('i',$row['time']) == "") continue;
-
-		array_unshift($tab['hours'] , date('i',$row['time']));
-		array_unshift($tab['temperature'] ,$row['temperature']);
-		array_unshift($tab['humidity'] ,$row['humidity']);
-		array_unshift($tab['light'] ,$row['light']);
+	foreach($datas as $data){
+		if(date('i',$data->time) == "") continue;
+		array_unshift($tab['hours'] , date('i',$data->time));
+		array_unshift($tab['temperature'] ,$data->temperature);
+		array_unshift($tab['humidity'] ,$data->humidity);
+		array_unshift($tab['light'] ,$data->light);
 	}
 
 
@@ -524,7 +558,7 @@ function propise_plugin_widget(&$widgets){
 		$widgets[] = array(
 		    'uid'      => 'dash_propise',
 		    'icon'     => 'fa fa-tint',
-		    'label'    => 'Propise',
+		    'label'    => 'Sonde Poolp',
 		    'background' => '#ffffff', 
 		    'color' => '#222222',
 		    'onLoad'   => 'action.php?action=propise_load_widget',
