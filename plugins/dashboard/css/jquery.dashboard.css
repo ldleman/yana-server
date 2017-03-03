@@ -78,7 +78,7 @@
 	background:#006AFF;
 	color:#ffffff;
 	cursor: move;
-	border-radius: 3px 3px 0px 0px;
+	/*border-radius: 3px 3px 0px 0px;*/
 
 }
 .dashboard_bloc_head ul{
@@ -113,9 +113,13 @@
 }
 
 .dashboard_bloc_content{
-	border:1px solid #CBCBCB;
+	/*border:1px solid #CBCBCB;*/
+	padding:0;
 	background-color: #ffffff;
 }	
+
+
+
 .dashboard_loading{
 	color:#cecece;
 	font-size: 20px;

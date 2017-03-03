@@ -98,6 +98,8 @@
 				if(data.background!=null)       bloc.find('.dashboard_bloc_head').css('background-color',data.background);
 				if(data.color!=null)            bloc.find('.dashboard_bloc_head').css('color',data.color);
         		if(data.icon!=null)             bloc.find('.dashboard_bloc_head label i').removeAttr('class').addClass(data.icon);
+        		            
+				
         		if(data.minified!=null){
         			if(data.minified==0){
         				bloc.addClass('dashboard_bloc_minified');

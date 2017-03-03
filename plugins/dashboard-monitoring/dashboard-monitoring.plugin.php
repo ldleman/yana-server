@@ -18,6 +18,7 @@ function dash_monitoring_plugin_menu(&$widgets){
 		    'label'    => 'Horloge',
 		    'background' => '#394264', 
 		    'color' => '#fffffff',
+		    'unique' => true,
 		    'onLoad'   => 'action.php?action=dash_monitoring_plugin_load&bloc=clock',
 		    'onMove'   => 'action.php?action=dash_monitoring_plugin_move&bloc=clock',
 		    'onDelete' => 'action.php?action=dash_monitoring_plugin_delete&bloc=clock',
@@ -192,6 +193,7 @@ function dash_monitoring_plugin_actions(){
 						<style>
 							.clockContainer{
 								background-color:#394264;
+								font-family:\'Open Sans Light\';
 								width:100%;
 								height:100%;
 								box-sizing:border-box;
@@ -221,12 +223,15 @@ function dash_monitoring_plugin_actions(){
 								color:#ffffff!important;
 							}
 							.progressbar-text .dayName,.progressbar-text .dayDate{
-								font-size:18px;
+								font-size:20px;
 								color:#cecece;
+								margin: 10px 0;
+								
 							}
 							.progressbar-text .dayName{
 								font-weight:bold;
 								color:#ffffff;
+								margin-top: 20px ;
 							}
 						</style>
 						<div class="clockContainer">
@@ -237,12 +242,14 @@ function dash_monitoring_plugin_actions(){
 
 							var circle;
 							$(document).ready(function(){
+								
+								
 								 circle = new ProgressBar.Circle(\'#clock\', {
 									color: \'#50C8FB\',
 									duration: 3000,
 									easing: \'easeInOut\',
 									text: {
-										style : { fontFamily : \'"Lato","Calibri", Arial, sans-serif\', fontSize : \'42px\'},
+										style : { fontSize : \'38px\'},
 										value : \'00:00:00\'
 									}
 									
@@ -252,6 +259,8 @@ function dash_monitoring_plugin_actions(){
 								setInterval(function(){
 									refresh_clock();
 								},1000);
+								
+								
 							});
 							
 							function refresh_clock(){
@@ -262,8 +271,9 @@ function dash_monitoring_plugin_actions(){
 								var year = d.getFullYear() ; 
 								var month = ("00" + (d.getMonth()+1)).slice(-2) ; 
 								var day = ("00" + d.getDate()).slice(-2) ; 
-								
-								circle.setText(hour+\':\'+minut+\':\'+second+\'<div class="dayName">Lundi</div><div class="dayDate">\'+day+\'/\'+month+\'/\'+year+\'</div>\');
+								var days = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+								var dayName = days[d.getDay()-1];
+								circle.setText(hour+\':\'+minut+\':\'+second+\'<div class="dayName">\'+dayName+\'</div><div class="dayDate">\'+day+\'/\'+month+\'/\'+year+\'</div>\');
 								circle.set(second/60);
 							}
 							
