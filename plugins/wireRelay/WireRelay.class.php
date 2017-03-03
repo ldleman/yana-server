@@ -8,7 +8,7 @@
 //La classe WireRelay hérite de SQLiteEntity qui lui ajoute des méthode de gestion de sa table en bdd (save,delete...)
 class WireRelay extends SQLiteEntity{
 
-	public $name,$description,$pin,$room,$pulse,$id,$offcommand,$oncommand,$icon; //Pour rajouter des champs il faut ajouter les variables ici...
+	public $name,$description,$pin,$room,$pulse,$id,$offcommand,$oncommand,$icon,$reverse; //Pour rajouter des champs il faut ajouter les variables ici...
 	protected $TABLE_NAME = 'plugin_wirerelay'; 	//Pensez à mettre le nom de la table sql liée a cette classe
 	protected $CLASS_NAME = 'wirerelay'; //Nom de la classe courante
 	protected $object_fields = 
@@ -20,6 +20,7 @@ class WireRelay extends SQLiteEntity{
 		'pin'=>'int',
 		'room'=>'int',
 		'icon'=>'string',
+		'reverse'=>'int',
 		'pulse'=>'int',
 		'id'=>'key'
 	);
