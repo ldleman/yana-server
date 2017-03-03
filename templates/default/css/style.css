@@ -212,7 +212,10 @@ ul.yana-list li:before{
 }
 
 
-
+.fa-spin-low {
+    -webkit-animation: fa-spin 20s infinite linear;
+    animation: fa-spin 20s infinite linear;
+}
 
 .flatBloc li:before {
   content : '';

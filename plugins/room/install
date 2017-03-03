@@ -16,13 +16,22 @@ $r1->setUpdate('1');
 $r1->setRank('1');
 $r1->save();
 
-$room->setName('Cuisine');
-$room->setDescription('L\'endroit où l\'on dégomme les cookies');
-$room->save();
+$rooms = array(
+	"Salon" => "Parfait pour prendre l'apéro...",
+	"Cuisine" => "L'endroit où on dégomme les cookies",
+	"WC" => "On vas pas vous faire un dessin...",
+	"Chambre" => "Pour dormir (entre autre...)",
+	"Garage" => "Le fourre tout bordelique et indispensable"
+);
 
-$room = new Room();
-$room->setName('Salon');
-$room->setDescription('Parfait pour prendre l\'apéro...');
-$room->save();
+foreach($rooms as $name=>$description):
+	$room = new Room();
+	$room->name = $name;
+	$room->description = $description;
+	$room->save();
+endforeach;
+
+
+
 
 ?>

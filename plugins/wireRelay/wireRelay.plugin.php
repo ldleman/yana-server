@@ -51,6 +51,7 @@ function wirerelay_plugin_action(){
 					$wireRelay->pulse = $_['pulseWireRelay'];
 					$wireRelay->oncommand = $_['onWireRelay'];
 					$wireRelay->offcommand = $_['offWireRelay'];
+					$wireRelay->reverse = $_['reverseWireRelay'];
 					$wireRelay->icon = $_['iconWireRelay'];
 					$wireRelay->save();
 					
@@ -291,6 +292,9 @@ function wirerelay_plugin_change_state($engine,$state){
 	$wireRelay = new WireRelay();
 	$wireRelay = $wireRelay->getById($engine);
 	Gpio::mode($wireRelay->pin,'out');
+	//Permet l'inversion des commandes en cas de relais inversé
+	$state = $state - $wireRelay->reverse;
+	
 	if($wireRelay->pulse==0){
 		Gpio::write($wireRelay->pin,$state);
 	}else{
@@ -400,6 +404,10 @@ function wireRelay_plugin_setting_page(){
 				   <label for="pinWireRelay">Mode impulsion (micro secondes)</label>
 				   <input type="number" value="<?php echo $selected->pulse; ?>" id="pulseWireRelay" placeholder="0" />
 				   <small>laisser à zéro pour désactiver le mode impulsion</small>
+				   
+				   <label for="reverseWireRelay">Inversion de l'état</label>
+				   <input type="checkbox" <?php echo $selected->reverse?'checked="checked"':''; ?> id="reverseWireRelay"  />
+				   <small>Cocher si votre relais fonctionne dans le mauvais sens</small>
 				</div>
 
 	  			<div class="clear"></div>

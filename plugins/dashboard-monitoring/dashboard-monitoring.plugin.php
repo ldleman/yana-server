@@ -12,7 +12,17 @@
 
 function dash_monitoring_plugin_menu(&$widgets){
 
-		
+		$widgets[] = array(
+		    'uid'      => 'dash_monitoring_clock',
+		    'icon'     => 'fa fa-calendar-o',
+		    'label'    => 'Horloge',
+		    'background' => '#394264', 
+		    'color' => '#fffffff',
+		    'unique' => true,
+		    'onLoad'   => 'action.php?action=dash_monitoring_plugin_load&bloc=clock',
+		    'onMove'   => 'action.php?action=dash_monitoring_plugin_move&bloc=clock',
+		    'onDelete' => 'action.php?action=dash_monitoring_plugin_delete&bloc=clock',
+		);
 
 		$widgets[] = array(
 		    'uid'      => 'dash_monitoring_ram',
@@ -170,6 +180,102 @@ function dash_monitoring_plugin_actions(){
 								segmentShowStroke:false,
 								data : ['.$hdds['percentage'].','.(100-$hdds['percentage']).']
 							});
+							
+						</script>';
+				break;
+				case 'clock':
+					$response['title'] = 'Horloge';
+
+					
+					$response['content'] = '
+					
+					
+						<style>
+							.clockContainer{
+								background-color:#394264;
+								font-family:\'Open Sans Light\';
+								width:100%;
+								height:100%;
+								box-sizing:border-box;
+								text-align:center;
+								padding:20px;
+							}
+							.clock {	
+								height: 200px;
+								width: 200px;
+								margin:auto;
+								position:relative;
+								background-color:#394264;
+							}
+
+							.progress > svg {
+								height: 100%;
+								display: block;
+							}
+							
+							.progressbar-text{
+								position:absolute;
+								left:0px;
+								top:60px;
+								width:100%;
+								text-align:center;
+								font-weight:200;
+								color:#ffffff!important;
+							}
+							.progressbar-text .dayName,.progressbar-text .dayDate{
+								font-size:20px;
+								color:#cecece;
+								margin: 10px 0;
+								
+							}
+							.progressbar-text .dayName{
+								font-weight:bold;
+								color:#ffffff;
+								margin-top: 20px ;
+							}
+						</style>
+						<div class="clockContainer">
+						 <div class="clock" id="clock"></div>
+						 </div>
+
+						<script>
+
+							var circle;
+							$(document).ready(function(){
+								
+								
+								 circle = new ProgressBar.Circle(\'#clock\', {
+									color: \'#50C8FB\',
+									duration: 3000,
+									easing: \'easeInOut\',
+									text: {
+										style : { fontSize : \'38px\'},
+										value : \'00:00:00\'
+									}
+									
+								});
+								
+								refresh_clock();
+								setInterval(function(){
+									refresh_clock();
+								},1000);
+								
+								
+							});
+							
+							function refresh_clock(){
+								var d = new Date();
+								var hour = d.getHours(); 
+								var minut = ("00" + d.getMinutes()).slice(-2) ; 
+								var second = ("00" + d.getSeconds()).slice(-2) ; 
+								var year = d.getFullYear() ; 
+								var month = ("00" + (d.getMonth()+1)).slice(-2) ; 
+								var day = ("00" + d.getDate()).slice(-2) ; 
+								var days = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+								var dayName = days[d.getDay()-1];
+								circle.setText(hour+\':\'+minut+\':\'+second+\'<div class="dayName">\'+dayName+\'</div><div class="dayDate">\'+day+\'/\'+month+\'/\'+year+\'</div>\');
+								circle.set(second/60);
+							}
 							
 						</script>';
 				break;
