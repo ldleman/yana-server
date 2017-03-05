@@ -1,8 +1,0 @@
-/* Fichier de style CSS réservé à votre plugin*/
-.radioRelayLight{
-	font-size: 30px;
-}
-
-.radioRelayLight.radioRelayLight-active{
-	color:yellow;
-}

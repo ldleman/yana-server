@@ -1,7 +1,0 @@
-{include="header"}
-
-<div class="row">{if="!isset($_['module']) || $_['module']=='home'"}{function="Plugin::callHook("dashboard_pre", array($_))"}{/if}{function="Plugin::callHook("home", array($_))"}{if="!isset($_['module']) || $_['module']=='home'"}{function="Plugin::callHook("dashboard_post", array($_))"}{/if}</div>
-
-
-{include="footer"}
-   

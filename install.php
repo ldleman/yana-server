@@ -1,316 +1,205 @@
 <?php
-/*
-*/
-
-session_start();
-date_default_timezone_set('Europe/Paris'); 
-//TODO cron auto install
-// echo "*/1 * * * * root wget http://127.0.0.1/yana-server/action.php?action=crontab -O /dev/null 2>&1" > /etc/cron.d/yana-server
-unset($myUser);
-error_reporting(E_ALL);
-ini_set('display_errors','On');
-if(!file_exists(__DIR__.'/constant.php')) copy(__DIR__.'/constant.sample.php', __DIR__.'/constant.php');
-require_once(__DIR__.'/constant.php');
-
-function __autoload($class_name) {
-    include 'classes/'.$class_name . '.class.php';
-}
-?>
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>Installation</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-
-    <!-- Le styles -->
-    <link href="templates/default/css/bootstrap.min.css" rel="stylesheet">
-    <link href="templates/default/css/jquery-ui-1.10.3.custom.css" rel="stylesheet">
-    <link href="templates/default/css/style.css" rel="stylesheet">
-
-    <link href="templates/default/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="ico/favicon.png">
-  </head>
-
-  <body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top" id="header">
-      
-      <div class="navbar-inner">
-
-        <div class="container">
-
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          </button>
-          <a class="brand" href="index.php"><?php echo PROGRAM_NAME; ?></a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-<div id="body" class="container">
-<?php
-
-//On récupère le chemin http de yana
-$path_yana =  substr($_SERVER['SCRIPT_FILENAME'],0,-11);
-
-if(isset($_POST['install'])){
- 
-    try{
-    if(!isset($_POST['password']) || trim($_POST['password'])=='' || !isset($_POST['login']) || trim($_POST['login'])=='' ) 
-      throw new Exception("L'identifiant et le mot de passe ne peuvent être vide");
-    
-	  //Supression de l'ancienne base si elle existe
-	  if(file_exists(DB_NAME) && filesize(DB_NAME)>0) throw new Exception("La base ".DB_NAME." existe déjà, pour recommencer l'installation, merci de supprimer le fichier ".DB_NAME." puis de revenir sur cette page");
-    
-      //Instanciation des managers d'entités
-      $user = new User();
-      $configuration = new Configuration();
-      $right = new Right();
-      $rank = new Rank();
-      $section = new Section();
-      $event = new Event();
-      $client = new Client();
-	    $device = new Device();
-      $personnality = new Personality();
-
-      if(isset($_POST['url'])){
-        $const = file_get_contents("constant.php");
-        file_put_contents('constant.php', (preg_replace("/(define\(\'YANA_URL\'\,\')(.*)('\)\;)/", "$1".$_POST['url']."$3", $const)));
-      }
-
-
-      //Création des tables SQL
-      $configuration->create();
-      $user->create();
-      $right->create();
-      $rank->create();
-      $section->create();
-      $event->create();
-  
-	    $device->create();
-      $personnality->create();
-      $personnality->birth();
-
-      $configuration->put('UPDATE_URL','http://update.idleman.fr/yana?callback=?');
-      $configuration->put('DEFAULT_THEME','default');
-      $configuration->put('COOKIE_NAME','yana');
-      $configuration->put('COOKIE_LIFETIME','7');
-      $configuration->put('VOCAL_ENTITY_NAME','YANA');
-      $configuration->put('PROGRAM_VERSION','3.0.6');
-	  $configuration->put('HOME_PAGE','index.php');
-	  $configuration->put('VOCAL_SENSITIVITY','0.0');
-      $configuration->put('YANA_LATITUDE','24.8235817');
-	  $configuration->put('YANA_LONGITUDE','-75.5070352');
-	  
-      //Création du rang admin
-		  $rank = new Rank();
-    	$rank->setLabel('admin');
-    	$rank->save();
-
-      //Déclaration des sections du programme
-      $sections = array('event','vocal','user','plugin','configuration','admin');
-
-      //Création des sections déclarées et attribution de tous les droits sur toutes ces sections pour l'admin
-      foreach($sections as $sectionName){
-        $s = New Section();
-        $s->setLabel($sectionName);
-        $s->save();  
-
-      	$r = New Right();
-      	$r->setSection($s->getId());
-      	$r->setRead('1');
-      	$r->setDelete('1');
-      	$r->setCreate('1');
-      	$r->setUpdate('1');
-      	$r->setRank($rank->getId());
-      	$r->save();
-      }
-    	
-      $personalities = array('John Travolta','Jeff Buckley','Tom Cruise','John Lennon','Emmet Brown','Geo trouvetou','Luke Skywalker','Mac Gyver','Marty McFly','The Doctor');
-      $im = $personalities[rand(0,count($personalities)-1)];
-      list($fn,$n) = explode(' ',$im);
-      //Creation du premier compte et assignation en admin
-    	$user->setMail($_POST['email']);
-    	$user->setPassword($_POST['password']);
-    	$user->setLogin($_POST['login']);
-      $user->setFirstName($fn);
-      $user->setName($n);
-    	$user->setToken(sha1(time().rand(0,1000)));
-    	$user->setState(1);
-    	$user->setRank($rank->getId());
-    	$user->save();
-
-      global $myUser;
-      $myUser = $user;
-
-      foreach(array('radioRelay','wireRelay','vocal_infos','speechcommands','profile','room','story','dashboard','dashboard-monitoring') as $plugin):
-        Plugin::enabled($plugin.'-'.$plugin);
-      endforeach;
 	
-      $notices = array();
-      if(function_exists('curl_init')){
-        $url="http://idleman.fr/yana/notice.php?code=justavoidspamrequest";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-        $html = curl_exec($ch);
-        curl_close($ch);
-  	    if($html!==false)
-          $notices = json_decode($html,true);
-        
-        if(!is_array($notices)) $notices = array();
-      }
-
-?>
+try {
 	
-    <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Installation terminée: </strong> L'installation est terminée, vous devez supprimer le fichier <code>yana-server/install.php</code> par mesure de sécurité, puis revenir sur <a class="brand" href="index.php">l'accueil</a>.
-    </div>
+	mb_internal_encoding('UTF-8');
+	require_once(__DIR__.'/function.php');
+	$_ = array_map('secure_user_vars', array_merge($_POST, $_GET));
+	require_once('class/Plugin.class.php');
+	$entityFolder = __DIR__.'/class/';
+	
 
-
-    <?php foreach($notices as $notice): ?>
-      <div class="alert alert-<?php  echo $notice['type']; ?>">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <strong><?php  echo $notice['title']; ?>: </strong> <?php  echo $notice['content']; ?>.
-      </div
-    <?php endforeach; ?>
-
-<?php }catch(Exception $e){ ?>
-  <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Echec de l'Installation : </strong> <?php echo $e->getMessage(); ?> <a class="brand" href="install.php">Réessayer</a>.
-      </div>
-<?php
-}
-}else{ 
 ?>
-      
-	  
-	  <?php 
-	  
-	  /*tests*/
-		$tests = array();
-		
-		if(!is_writable($path_yana)) $tests['error'][] = "Le dossier <b>".$path_yana."</b> n'est pas accessible en écriture. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo chown -R www-data:www-data ".$path_yana."</code> ";
-		if(!class_exists('SQLite3')) $tests['error'][] = "Le pré-requis SQLITE3 n'est pas installé. <br/>Pour résoudre ce problème, merci de taper la commande suivante dans le shell <code>sudo apt-get install sqlite3 php5-sqlite</code> ";
-		
-
-
-		$out = exec('whereis gpio',$out);
-		if($out == ''){ 
-      $tests['warning'][] = "La librairie Wiring pi ne semble pas installé sur le rpi, merci de vérifier l'existence du binaire GPIO sur la machine.";
-		}else{
-      require_once(__DIR__.'/classes/Gpio.class.php');
-      $out = trim(str_replace('gpio: ','',$out));
-      if($out != GPIO::GPIO_DEFAULT_PATH) $tests['warning'][] = "Le chemin de l'executable de wiring pi est à modifier dans classes/Gpio.class.php, remplacer <code>".GPIO::GPIO_DEFAULT_PATH."</code> par <code>".$out."</code>.";
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Installation</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  	  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
+  	  <link rel="stylesheet" href="css/bootflat.min.css">
+      <link rel="stylesheet" href="css/font-awesome.min.css">
+      <link rel="stylesheet" href="css/main.css">
+	  <?php echo Plugin::callCss("css"); ?>
+    </head>
+    <body>
+        <div id="wrap">
     
-    }
+		<!-- menu -->
+		<nav role="navigation" class="navbar navbar-inverse">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <button data-target="#menuBar" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <i class="fa fa-bars"></i>
+                      </button>
+                      <a href="index.php" class="navbar-brand">Installation</a>
+                    </div>
 
-    
-    
-
-		if(function_exists('posix_getpwuid')){
-			
-			$permissions = array('root:www-data'=>'plugins/relay/radioEmission');
-			foreach($permissions as $key=>$file){
-				if(file_exists($file)){
-					list($o,$g) = explode(':',$key);
-					$owner = posix_getpwuid(fileowner($file));
-					$group = posix_getgrgid(filegroup($file));
-				  if($owner['name']!=$o || $group['name'] !=$g) $tests['warning'][] = 'Le fichier <strong>'.$path_yana.$file.'</strong> devrait avoir <i>'.$o.'</i> comme proprietaire et <i>'.$g.'</i> comme groupe, <strong>'.$path_yana.$file.'</strong> pourrait ne pas fonctionner comme attendu, pour résoudre le problème, tapez la commande <code>sudo chown root:www-data '.$path_yana.$file.' && sudo chmod +s '.$path_yana.$file.'</code>';
-        }
-			}
-		}else{
-			$tests['warning'][] = 'Impossible de vérifier les droits sur les fichiers sensibles, librairie posix manquante';
-		}
-		
-		foreach($tests as $type=>$messages){
-			foreach($messages as $message){
-			echo 
-			'<div class="alert alert-'.$type.'">
-				<strong>'.$type.': </strong> '.$message.' 
-			 </div>';
-			}
-		}
-		
-		if(!isset($tests['error'])){
+					<div id="menuBar" class="collapse navbar-collapse">
+                    </div><!-- /.navbar-collapse -->
+					
+					
+					
+                  </div><!-- /.container-fluid -->
+                </nav>
+		<!-- menu -->
 		
 
-    if(strpos($_SERVER['HTTP_HOST'], ':') !==false){
-      list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
-    }else{
-      $host = $_SERVER['HTTP_HOST'];
-      $port = 80;
-    }
-    $actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
-    $actionUrl = str_replace("/install.php", "", $actionUrl );
+		
+		<!-- body -->
+		<div class="container-fluid">
+		
+		
+		<!-- messages -->
+		<div id="message" class="alert alert-{{type.class}} {{#closable}}alert-dismissable{{/closable}} noDisplay">
+            <strong>{{type.label}}</strong> <span>{{label}}</span>
+        </div>
+<?php
+	
+	
+	$entities = array();
+	
+	foreach(glob(__DIR__.'/database/*.class.php') as $classFile):
+		require_once($classFile);
+		$className = str_replace('.class.php','',basename($classFile));
+		$entities[$className] = $className::label.' - '.$className::description;
+	endforeach;
+	
+	//check prerequisite
+	if(file_exists(__DIR__.'/constant.php')) throw new Exception('Le script est déja installé, pour recommencer l\'installation, supprimez le fichier constant.php');
+	if(!is_writable (__DIR__)) throw new Exception('Le dossier '.__DIR__.' doit être accessible en ecriture, merci de taper la commande linux <br/><code>sudo chown -R www-data:www-data '.__ROOT__.'</code><br/> ou de régler le dossier en écriture via votre client ftp');
+	if(!file_exists(__DIR__.'/file')) mkdir(__DIR__.'/file',0755,true);
+	if(!file_exists(__DIR__.'/file/avatar')) mkdir(__DIR__.'/file/avatar',0755,true);
+	
+	//if(!extension_loaded('gd') || !function_exists('gd_info'))  throw new Exception('L\'extension php GD2  est requise, veuillez installer GD2 (sous linux : <code>sudo apt-get install php5-gd && service apache2 restart</code>)');
+	//if(!in_array('sqlite',PDO::getAvailableDrivers())) throw new Exception('Le driver SQLITE est requis, veuillez installer sqlite3 (sous linux : <code>sudo apt-get install php5-sqlite && service apache2 restart</code>)');
+	
+	
+	
+	if(isset($_['install'])){
+	
+
+	$constantStream = file_get_contents(__DIR__.'/constant.sample.php');
+	
+
+	$constantStream = str_replace(
+	array("{{BASE_SGBD}}","{{BASE_HOST}}","{{BASE_NAME}}","{{BASE_LOGIN}}","{{BASE_PASSWORD}}"),
+	array($_['entity'],$_['host'],$_['database'],$_['login'],$_['password']),$constantStream);
+
+	file_put_contents(__DIR__.'/constant.php',$constantStream);
+	
+	require_once(__DIR__.'/constant.php');
+	require_once(__ROOT__.'class'.SLASH.'Entity.class.php');
+
+	//install entities
+	Entity::install(__ROOT__.'class');
+
+	foreach(array(
+		'Salon'=>"",
+		'Cuisine'=>"L'endroit ou on dégomme les coockies",
+		'Chambre'=>"Le coins pour dormir (entre autre...)",
+		'WC'=>"Oui..bon...voilà quoi.",
+		'Bureau'=>"Le coin ou ça bosse dur !",
+		'Garage'=>"L'espace qui sert a tout stocker sauf une voiture"
+		) as $label=>$description){
+		$room = new Room();
+		$room->label = $label;
+		$room->description = $description;
+		$room->save();
+	}
+
+	//create admin rank
+    $rank = new Rank();
+    $rank->label = 'Administrateur';
+    $rank->description = 'That\'s a fucking god dude !';
+    $rank->save();
+
+	//create default user
+    $admin = new User();
+    $admin->login = 'admin';
+    $admin->password = User::password_encrypt('admin');
+    $admin->firstname = 'John';
+    $admin->name = 'DOE'; 
+    $admin->superadmin = true; 
+    $admin->rank = $rank->id;
+    $admin->save();
+
+    $sections = array();
+    Plugin::callHook('section',array(&$sections));
+    foreach($sections as $section=>$description): 
+    	$right = new Right();
+    	$right->rank = $rank->id;
+    	$right->section = $section;
+    	$right->read = true;
+    	$right->edit = true;
+    	$right->delete = true;
+    	$right->configure = true;
+    	$right->save();
+    endforeach;
+	
+    ?>
+
+	<div class="alert alert-success alert-dismissable">
+		<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+		<strong>Succès!</strong> La base est bien installée, l'utilisateur par défaut est <code>admin:admin</code>, pensez à changer le mot de passe rapidemment. 
+	</div>
+	<a class="btn btn-primary" href="index.php">Revenir à l'index</a>
+	<?php 
+
+	}else{
+	?>
+	<div class="row">
+	<form class="col-md-3" action="install.php" method="POST">
+		<h3>Installation</h3>
+		<p>Merci de bien vouloir remplir les champs çi dessous</p>
+		<label for="entity">Base de donnée</label>
+		<select class="form-control" name="entity">
+		<?php foreach($entities as $class=>$label): ?>
+		<option value="<?php echo $class ?>"><?php echo $label; ?></option>
+		<?php endforeach; ?>
+		</select><br/>
+		<label for="host">Host de la base</label><br/>
+		<small>Laisser vide si pas de host</small><br/>
+		<input type="text" class="form-control" name="host" id="host"/><br/>
+		<label for="database">Nom de la base</label><br/>
+		<input type="text" class="form-control" name="database" id="database"/><br/>
+		<label for="login">Identifiant de la base</label><br/>
+		<small>Laisser vide si pas d'identifiant</small><br/>
+		<input type="text" class="form-control" name="login" id="login"/><br/>
+		<label for="password"">Mot de passe de la base</label><br/>
+		<small>Laisser vide si pas de mot de passe</small><br/>
+		<input type="text" class="form-control" name="password" id="password"/><br/>
+		<input type="submit" class="btn btn-primary" value="Installer" name="install"><br/><br/>
+	</form>
+	</div>
+	<?php
+	}
+} catch (Exception $e) { 
+
+	unlink(__DIR__.'/constant.php');
+	?>
+<div class="alert alert-danger">
+	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+	 <strong>Oops!</strong> <?php echo $e->getMessage().' - '.$e->getFile().' L'.$e->getLine().'<hr/><pre>'.$e->getTraceAsString().'</pre>';
+    ?> 
+</div>
+<?php 
+} ?>
+
+</div>
+</div>
+		<!-- body -->
  
-	  ?>
-	  
-          <div class="alert alert-info">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>Installation: </strong> Vous devez remplir le formulaire ci dessous pour installer l'application.
-        </div>
-
-        <form class="form-horizontal" action="install.php" method="POST">
-          
-        <div class="control-group">
-          <label class="control-label" for="inputLogin">Login</label>
-          <div class="controls">
-            <input type="text" name="login" id="inputLogin" placeholder="Login">
-          </div>
-        </div>
-        <div class="control-group">
-          <label class="control-label" for="inputPassword">Password</label>
-          <div class="controls">
-            <input type="password" name="password" name="inputPassword" placeholder="Password">
-          </div>
-        </div>
-		<div class="control-group">
-          <label class="control-label" for="inputEmail">Email</label>
-          <div class="controls">
-            <input type="text" name="email" id="inputEmail" placeholder="Email">
-          </div>
-        </div>
-
-        <div class="control-group">
-          <label class="control-label" for="inputUrl">Adresse de yana</label>
-          <div class="controls">
-
-            <input type="text" name="url" id="inputUrl" placeholder="http://" value="<?php echo $actionUrl; ?>">
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="controls">
-            <button type="submit" name="install" class="btn">Installer</button>
-          </div>
-        </div>
-      </form>
-	<?php }} ?>
-  
-
- <div class="navbar navbar-inverse navbar-fixed-bottom" id="footer">CC by nc sa <?php echo PROGRAM_NAME ?>
-
- </div>
- </div> <!-- /container -->
-
-
-
-    <!-- Le javascript
-    ================================================== -->
-    <script src="templates/default/js/jquery.min.js"></script>
-    <script src="templates/default/js/bootstrap.min.js"></script>
-    <script src="templates/default/js/jquery.ui.custom.min.js"></script>
-    <script src="templates/default/js/jquery.yana.js"></script>
-	<script src="templates/default/js/script.js"></script>
-  </body>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+        <script src="js/vendor/bootflat.min.js"></script>
+        <script src="js/vendor/mustache.min.js"></script>
+		<script src="js/plugins.js"></script>
+        <script src="js/vendor/jquery-ui.min.js"></script>
+        <script src="js/main.js"></script>
+		<div class="footer"></div>
+    </body>
 </html>

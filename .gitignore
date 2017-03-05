@@ -1,9 +1,1 @@
-database.db
-*.rtpl.php
-/plugins/plugins.states.json
-/templates/save-default
-/db/.database.db
-/log/.log.txt
-/dbversion
-/cache/avatar/*.jpg
-/constant.php
+/old

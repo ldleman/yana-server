@@ -1,189 +1,111 @@
-<?php
-session_name('yana-server'); 
-session_start();
-$start=microtime(true);
-ini_set('display_errors','1');
-
-error_reporting(E_ALL & ~E_NOTICE);
-//Calage de la date
-setlocale( LC_ALL , "fr_FR" );
-date_default_timezone_set('Europe/Paris'); 
-
-
-//Idleman : Active les notice uniquement pour ma config reseau (pour le débug), pour les user il faut la désactiver
-//car les notices peuvent gener les reponses json, pour les dev ajoutez votre config dans une même if en dessous.
-if($_SERVER["HTTP_HOST"]=='192.168.0.14' && $_SERVER['REMOTE_ADDR']=='192.168.0.69') error_reporting(E_ALL); 
-
-mb_internal_encoding('UTF-8');
-
-if(!file_exists(__DIR__ .DIRECTORY_SEPARATOR.'constant.php')) header('location:install.php');
-require_once(__DIR__ .DIRECTORY_SEPARATOR.'constant.php');
-
-global $myUser,$conf,$_;
-//Récuperation et sécurisation de toutes les variables POST et GET
-$_ = array_map('Functions::secure',array_merge($_POST,$_GET));
-$error = '';
-
-
-
-
-
-$versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
-
-
-if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) || (file_exists(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME) && filesize(__ROOT__.DIRECTORY_SEPARATOR.DB_NAME)==0)){
-	file_put_contents(__ROOT__.'/dbversion',$versions[0]['version']);
-	header('location:install.php');
-}else{
-	if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'install.php')) $error .= ($error!=''?'<br/>':'').'<strong>Attention: </strong> Par mesure de sécurité, pensez à supprimer le fichier install.php';
-}
-
-if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'db.json')){
-	if(!file_exists(__ROOT__.DIRECTORY_SEPARATOR.'dbversion')) file_put_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion', '0');
-	$current = file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion');
-	$versions = json_decode(file_get_contents(__ROOT__.DIRECTORY_SEPARATOR.'db.json'),true);
-	if($current<$versions[0]['version']){
-		Functions::alterBase($versions,$current);
-		file_put_contents(__ROOT__.DIRECTORY_SEPARATOR.'dbversion',$versions[0]['version']);
-	}
-}
-
-require_once(__ROOT__.DIRECTORY_SEPARATOR.'RainTPL.php');
-
-$error = (isset($_['error']) && $_['error']!=''?'<strong>Erreur: </strong> '.str_replace('|','<br/><strong>Erreur: </strong> ',(urldecode($_['error']))):false);
-$message = (isset($_['notice']) && $_['notice']!=''?'<strong>Message: </strong> '.str_replace('|','<br/><strong>Message: </strong> ',(urldecode($_['notice']))):false);
-
-function __autoload($class_name){
-    require_once(__ROOT__.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.$class_name . '.class.php');
-}
-
-
-if(file_exists(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php')){
-	require_once(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php');
+<?php 
+    session_start('core-session');
+    mb_internal_encoding('UTF-8');
+    
+	if(!file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'constant.php'))
+		header('location:install.php');
 	
-	switch($tool->type){
-	case 'reset_password':
-		if($tool->login != null && $tool->password != null){
-			$userManager = new User();
-			$usr = $userManager->load(array('login'=>$tool->login));
-			$usr->setPassword($tool->password);
-			$usr->save();
-			unlink(__ROOT__.DIRECTORY_SEPARATOR.'.tool.php');
-		}
-	break;
-	}
-}
-
-
-
-$myUser = false;
-$conf = new Configuration();
-$conf->getAll();
-//Inclusion des plugins  
-Plugin::includeAll($conf->get("DEFAULT_THEME"));
-
-
-$userManager = new User();
-
-if(isset($_SESSION['currentUser'])){
-	$myUser =unserialize($_SESSION['currentUser']);
-}else{
-	if(AUTO_LOGIN!=''){
-		$myUser = $userManager->exist(AUTO_LOGIN,'',true);
-		$_SESSION['currentUser'] = serialize($myUser);
-	}
-}
-if(!$myUser && isset($_COOKIE[$conf->get('COOKIE_NAME')])){
-	$users = User::getAllUsers();
-	foreach ($users as $user) {
-		if($user->getCookie() == $_COOKIE[$conf->get('COOKIE_NAME')]) 
-			{
-				$myUser = $user;
-				$myUser->loadRight();
-			}
-	}
-}
-
-
-
-//Instanciation du template
-$tpl = new RainTPL();
-
-
-//Definition des dossiers de template
-raintpl::configure("base_url", null );
-raintpl::configure("tpl_dir", './templates/'.$conf->get('DEFAULT_THEME').'/' );
-raintpl::configure("cache_dir", './cache/tmp/' );
-$view = '';
-
-$rank = new Rank();
-if($myUser!=false && $myUser->getRank()!=false){
-	$rank = $rank->getById($myUser->getRank());
-}
-
-
-function common_listen($command,$text,$confidence,$user){
-	echo "\n".'diction de la commande : '.$command;
 	
-	$response = array();
-	Plugin::callHook("vocal_command", array(&$response,YANA_URL.'/action.php'));
-	$commands = array();
-	echo "\n".'Test de comparaison avec '.count($response['commands']).' commandes';
-	foreach($response['commands'] as $cmd){
-		if($command != $cmd['command']) continue;
-		if(!isset($cmd['parameters'])) $cmd['parameters'] = array();
-		if(isset($cmd['callback'])){
-			//Catch des commandes pour les plugins en format client v2
-			echo "\n".'Commande trouvée, execution de la fonction plugin '.$cmd['callback'];
-			call_user_func($cmd['callback'],$text,$confidence,$cmd['parameters'],$user);
-		}else{
-			//Catch des commandes pour les plugins en format  client v1
-			echo "\n".'Commande ancien format trouvée, execution de l\'url '.$cmd['url'].'&token='.$user->getToken();
-			$result = file_get_contents($cmd['url'].'&token='.$user->getToken());
-			$result = json_decode($result,true);
+    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'constant.php');
+    require_once(__ROOT__.'function.php');
+    date_default_timezone_set(TIME_ZONE);
 
-			if(is_array($result)){
-				$client=new Client();
-				$client->connect();
+    set_error_handler('errorToException');
+	set_exception_handler ('unhandledException');
+    spl_autoload_register('app_autoloader');
+    
+	global $myUser,$conf,$_,$success;
+	$_ = array_map('secure_user_vars', array_merge($_POST, $_GET));
+	
+	$page = basename($_SERVER['PHP_SELF']);
+	
 
-				if(is_array($result['responses'])){
-					foreach($result['responses'] as $resp){
-						
-						switch($resp['type']){
-							case 'talk':
-								$client->talk($resp['sentence']);					
-							break;
-							case 'sound':
-								$client->sound($resp['file']);					
-							break;
-							case 'command':
-								$client->execute($resp['program']);					
-							break;
-						}
-					}
-				}
+	$myUser = isset($_SESSION['currentUser']) ? unserialize($_SESSION['currentUser']) : new User();
+	$conf = new Configuration();
+	$conf->getAll();
 
-				$client->disconnect();
-			}
-		}
-	}
+	
+	//MENUS
+	Plugin::addHook("menu_setting", function(&$settingMenu){
+		global $myUser;
 
-}
+		if($myUser->can('plugin','configure'))
+		$settingMenu[]= array(
+			'sort' =>0,
+			'url' => 'setting.php?section=plugin',
+			'icon' => 'angle-right',
+			'label' => 'Plugins'
+		);
+
+	
+		if($myUser->can('user','configure'))
+		$settingMenu[]= array(
+			'sort' =>1,
+			'url' => 'setting.php?section=user',
+			'icon' => 'angle-right',
+			'label' => 'Utilisateurs'
+		);
+	
+		if($myUser->can('room','configure'))
+		$settingMenu[]= array(
+			'sort' =>1,
+			'url' => 'setting.php?section=room',
+			'icon' => 'angle-right',
+			'label' => 'Pièces'
+		);
+
+		if($myUser->can('rank','configure'))
+		$settingMenu[]= array(
+			'sort' =>2,
+			'url' => 'setting.php?section=rank',
+			'icon' => 'angle-right',
+			'label' => 'Rangs & Accès'
+		);
+	});
+
+	Plugin::addHook("menu_main", function(&$mainMenu){
+		$mainMenu[]= array(
+		'sort' =>0,
+		'icon' => 'home',
+		'label' => 'Accueil',
+		'url' => 'index.php'
+		);
+		$settingMenu = array();
+		Plugin::callHook("menu_setting", array(&$settingMenu));
+		$mainMenu[]= array(
+			'sort' =>100,
+			'icon' => 'cog',
+			'label' => 'Réglages',
+			'url' => 'setting.php',
+			'items' => $settingMenu
+		);
+	});
+
+	Plugin::addHook("menu_user", function(&$userMenu){
+		$userMenu[]= array(
+			'sort' =>0,
+			'label' => 'Modifier',
+			'url' => 'account.php'
+		);
+	});
+	
+	Plugin::addHook("content_setting", function(){
+		global $_;
+		if(in_array($_['section'],array('plugin','rank','right','user','room')) && file_exists('setting.'.$_['section'].'.php'))
+		require_once('setting.'.$_['section'].'.php');
+	});
 
 
-Plugin::addHook("listen", "common_listen");
+	Plugin::addHook("section",function(&$sections){
+		$sections['user'] = 'Gestion des utilisateurs';
+		$sections['plugin'] = 'Gestion des plugins';
+		$sections['rank'] = 'Gestion des rangs et droits';
+	});
 
 
+	Plugin::addHook("page",function(){
+		require_once(__ROOT__.'dashboard.php');
+	});
 
-
-
-
-$tpl->assign('myUser',$myUser);
-$tpl->assign('userManager',$userManager);
-$tpl->assign('configurationManager',$conf);
-$tpl->assign('error',$error);
-$tpl->assign('notice',$message);
-$tpl->assign('_',$_);
-$tpl->assign('action','');
-$tpl->assign('rank',$rank);
+	Plugin::includeAll();
 ?>

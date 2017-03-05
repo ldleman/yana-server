@@ -10,11 +10,11 @@ define('PLUGIN_PATH','plugin'.SLASH);
 
 define('AVATAR_PATH',FILE_PATH.'avatar'.SLASH);
 
-define('BASE_SGBD','{{BASE_SGBD}}');
-define('BASE_HOST','{{BASE_HOST}}');
-define('BASE_NAME','{{BASE_NAME}}');
-define('BASE_LOGIN','{{BASE_LOGIN}}');
-define('BASE_PASSWORD','{{BASE_PASSWORD}}');
+define('BASE_SGBD','Mysql');
+define('BASE_HOST','127.0.0.1');
+define('BASE_NAME','yana');
+define('BASE_LOGIN','yana');
+define('BASE_PASSWORD','yana');
 
 /* Port du serveur socket */
 define('SOCKET_PORT',9999);

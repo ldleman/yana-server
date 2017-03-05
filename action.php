@@ -1,397 +1,337 @@
 <?php
-if (isset($_GET['action']) && $_GET['action'] == 'KNOCK_KNOCK_YANA') exit('1');
+
+require_once __DIR__.DIRECTORY_SEPARATOR."common.php";
 
 
-if(!ini_get('safe_mode')) @set_time_limit(0);
-
-require_once(dirname(__FILE__).'/common.php');
-
-
-if(php_sapi_name() == 'cli'){
-	$_['action'] = $_SERVER['argv'][1];	
-}
-
-$response = array();
-
-Plugin::callHook("action_pre_case", array(&$_,$myUser));
-
-
-
-if(!$myUser && isset($_['token'])){
-	$userManager = new User();
-	$myUser = $userManager->load(array('token'=>$_['token']));
-	if(isset($myUser) && $myUser!=false)
-		$myUser->loadRight();
-}
-$myUser = (!$myUser?new User():$myUser);
+if(!isset($_['action'])) throw new Exception('Action inexistante');
 
 //Execution du code en fonction de l'action
 switch ($_['action']){
-
+	
+	
 	case 'login':
-	global $conf;
-	$user = $userManager->exist($_['login'],$_['password']);
-	$error = '?init=1';
-	if($user==false){
-		$error .= '&error='.urlencode('le compte spécifié est inexistant');
-	}else{
-		$_SESSION['currentUser'] = serialize($user);
-	
-
-	if(isset($_['rememberMe'])){	
-		$expire_time = time() + $conf->get('COOKIE_LIFETIME')*86400; //Jour en secondes
+		global $myUser;
+		try{
+			
+			$myUser = User::check($_['login'],$_['password']);
+			var_dump($myUser);
+			if(!$myUser->connected()) throw new Exception('Utilisateur inexistant');
+			$myUser->loadRights();
 		
-		//On crée un cookie dans la bd uniquement si aucun autre cookie n'existe sinon
-		//On rend inutilisable le cookie utilisé par un autre navigateur
-		//On ne veut que cela soit le cas uniquement si on clique sur déconnexion (et que l'on a demandé Se souvenir de moi)
-		$actual_cookie = $user->getCookie();
-		if ($actual_cookie == "")
-		{
-		$cookie_token = sha1(time().rand(0,1000));
-		$user->setCookie($cookie_token);
-		$user->save();
+			$_SESSION['currentUser'] = serialize($myUser);
+			
+		}catch(Exception $e){
+			exit($e->getMessage());
+			header('location: index.php?error='.urlencode($e->getMessage()));
 		}
-		else
-		{
-			$cookie_token = $actual_cookie;
-		}	
-		Functions::makeCookie($conf->get('COOKIE_NAME'),$cookie_token,$expire_time);
-	}
-	}
+		header('location: index.php?error=');
+	break;
 	
-	header('location: ./index.php'.$error);	
-	break;
-
-	case 'GET_TOKEN':
-		$user = $userManager->load(array('login'=>$_['login'],'password'=>sha1(md5($_['password']))));
-		$response['token'] = $user->getToken();
-		echo json_encode($response);
-	break;
-
-	
-	
-	case 'user_add_user':
-	$right_toverify = isset($_['id']) ? 'u' : 'c';
-	if($myUser->can('user',$right_toverify)){
-	$user = new User();
-	//Si modification on charge la ligne au lieu de la créer
-	if ($right_toverify == "u"){$user = $user->load(array("id"=>$_['id']));}
-	$user->setMail($_['mailUser']);
-	$user->setName($_['nameUser']);
-	$user->setFirstName($_['firstNameUser']);
-	$user->setPassword($_['passwordUser']);
-	$user->setLogin($_['loginUser']);
-	$user->setRank($_['rankUser']);
-	$user->setState(1);
-	$user->setToken(sha1(time().rand(0,1000)));
-	$user->save();
-	Functions::goback("setting","user");
-}
-else
-{
-	Functions::goback("setting","user","&error=Vous n'avez pas le droit de faire ça!");
-}
-	break;
-
-	case 'delete_user':
-	if(!$myUser->can('user','d')) exit('ERREUR: Permissions insuffisantes.');
-	$userManager = new User();
-	$NbUsers = $userManager->rowCount();
-
-	if(isset($_['id']) && $NbUsers > 1){
-		$userManager->delete(array('id'=>$_['id']));
-		Functions::goback("setting","user");
-	}
-	else
-	{
-		Functions::goback("setting","user","&error=Impossible de supprimer le dernier utilisateur.");
-	}
-	break;
-
-
-	case 'access_delete_rank':
-	if(!$myUser->can('configuration','d')) exit('ERREUR: Permissions insuffisantes.');
-	$rankManager = new Rank();
-	
-	$Nbrank = $rankManager->rowCount();
-
-	if(isset($_['id']) && $Nbrank > 1){
-		$rankManager->delete(array('id'=>$_['id']));
-		Functions::goback("setting","access");
-		header('location:setting.php?section=access');
-	}
-	else
-	{
-		Functions::goback("setting","access","&error=Impossible de supprimer le dernier rang.");
-	}
-	break;
-
-	case 'access_add_rank':
-	$right_toverify = isset($_['id']) ? 'u' : 'c';
-	if(!$myUser->can('configuration',$right_toverify)) exit('ERREUR: Permissions insuffisantes.');
-	$rank = new Rank();
-	if ($right_toverify == "u"){$rank = $rank->load(array("id"=>$_['id']));}
-	$rank->setLabel($_['labelRank']);
-	$rank->setDescription($_['descriptionRank']);
-	$rank->save();
-	Functions::goback("setting","access");
-	break;
-
-	case 'set_rank_access':
-	if(!$myUser->can('configuration','c')) exit('ERREUR: Permissions insuffisantes.');
-	$right = new Right();
-
-	$right = $right->load(array('section'=>$_['section'],'rank'=>$_['rank']));
-
-	$right = (!$right?new Right():$right);
-
-	$right->setSection($_['section']);
-
-	$_['state'] = ($_['state']==1?true:false);
-
-	switch($_['access']){
-		case 'c':
-		$right->setCreate($_['state']);
-		break;
-		case 'r':
-		$right->setRead($_['state']);
-		break;
-		case 'u':
-		$right->setUpdate($_['state']);
-		break;
-		case 'd':
-		$right->setDelete($_['state']);
-		break;
-	}
-	$right->setRank($_['rank']);
-	$right->save();
-
-	break;
-
-	if(!$myUser->can('configuration','d')) exit('ERREUR: Permissions insuffisantes.');
-	case 'access_delete_right':
-	$rankManager = new Right();
-	 
-	$rankManager->delete(array('id'=>$_['id']));
-	Functions::goback("setting","right","&id=".$_['rank']);
-	break;
-
 	case 'logout':
-	global $conf;
-	
-	//Détruire le cookie uniquement s'il existe sur cette ordinateur
-	//Afin de le garder dans la BD pour les autres ordinateurs/navigateurs
-	if(isset($_COOKIE[$conf->get('COOKIE_NAME')])){
-	$user = new User();
-	$user = $userManager->load(array("id"=>$myUser->getId()));
-	$user->setCookie("");
-	$user->save();
-	Functions::destroyCookie($conf->get('COOKIE_NAME'));
-	}
-
-	$_SESSION = array();
-	session_unset();
-	session_destroy();
-	
-
-
-	Functions::goback(" ./index");
-	break;
-
-	case 'save_sentence':
-		global $conf;
-		$conf->put('last_sentence',$_['sentence']);
-	break;
-
-	case 'ENABLE_DASHBOARD':
-		Plugin::enabled('dashboard-dashboard');
-		Plugin::enabled('dashboard-monitoring-dashboard-monitoring');
+		unset($_SESSION['currentUser']);
+		session_destroy();
 		header('location: index.php');
 	break;
 
-	case 'changePluginState':
-	if($myUser==false) exit('Vous devez vous connecter pour cette action.');
-	if(!$myUser->can('plugin','u')) exit('ERREUR: Permissions insuffisantes.');
-	if($_['state']=='0'){
-		Plugin::enabled($_['plugin']);
-	}else{
-		Plugin::disabled($_['plugin']);
-	}
-	Functions::goback("setting","plugin","&block=".$_['block']);
-	break;
+	//WIDGET
+	case 'search_widget':
 
-	case 'crontab':
-		Plugin::callHook("cron", array());
-	break;
-	
-	
-		
-	
-
-
-	case 'GET_SPEECH_COMMAND':
-	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
-	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
-	
-	list($host,$port) = explode(':',$_SERVER['HTTP_HOST']);
-	$actionUrl = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
-	$actionUrl = substr($actionUrl,0,strpos($actionUrl , '?'));
-	
-	Plugin::callHook("vocal_command", array(&$response,$actionUrl));
-
-	$json = json_encode($response);
-	echo ($json=='[]'?'{}':$json);
-	break;
-
-	case 'GET_EVENT':
-	if($myUser->getId()=='') exit('{"error":"invalid or missing token"}');
-	if(!$myUser->can('vocal','r')) exit('{"error":"insufficient permissions for this account"}');
-	$response = array('responses'=>array());
-	Plugin::callHook("get_event", array(&$response));
-
-	$checker = (isset($_['checker'])?$_['checker']:'client');
-
-	$eventManager = new Event();
-	$events = $eventManager->loadAll(array(),'id');
-	
-
-	$time = date('i-H-d-m-Y');
-	list($minut,$hour,$day,$month,$year) = explode('-',$time);
-
-	foreach ($events as $event) {
-
-		if(in_array($checker,$event->getRecipients()) && $event->getState()=='1'){
-			if( 
-			($event->getMinut() == '*' || in_array($minut,explode(',',$event->getMinut())) ) &&
-			($event->getHour() == '*' || in_array($hour,explode(',',$event->getHour())) ) &&
-			($event->getDay()== '*' || in_array($day,explode(',',$event->getDay())) ) &&
-			($event->getMonth() == '*' || in_array($month,explode(',',$event->getMonth())) ) &&
-			($event->getYear() == '*' || in_array($year,explode(',',$event->getYear())) ) 
-			){
-				
-				if($event->getRepeat()!=$time){
-					if(in_array($checker, $event->getRecipients())){
-						$event->setRepeat($time);
-						$response['responses'][]= $event->getContent();
-
-						//Le serveur ne peux qu'executer des commandes programme
-						if($checker=='server'){
-							$content = $event->getContent();
-							switch($content['type']){
-								case 'command':
-									exec(htmlspecialchars_decode($content['program']));
-								break;
-						
-								case 'gpio':
-									foreach(explode(',',$content['gpios']) as $info){
-										list($gpio,$state) = explode(':',$info);
-										exec('gpio mode '.$gpio.' out');
-										exec('gpio write '.$gpio.' '.$state);
-
-									}
-								break;
-								
-							}
-						}
-
-						$event->save();
-					}
-				}
-			}
-		}
-
-
-
-
-	}
-	
-		
-
-	$json = json_encode($response);
-	echo ($json=='[]'?'{}':$json);
-	break;
-
-
-
-	case 'installPlugin':
-		try{
-			if($myUser==false) throw new Exception('Vous devez vous connecter pour cette action.');
-
-			$tempZipName = 'plugins/'.md5(microtime());
-			echo '<br/>Téléchargement du plugin...';
-			file_put_contents($tempZipName,file_get_contents(urldecode($_['zip'])));
-			if(!file_exists($tempZipName)) throw new Exception("Echec du téléchargement");
-			echo '<br/>Plugin téléchargé <span class="label label-success">OK</span>';
-			echo '<br/>Extraction du plugin...';
-			$zip = new ZipArchive;
-			$res = $zip->open($tempZipName);
-			if ($res !== TRUE)  throw new Exception("Echec de l\'extraction");
-				$tempZipFolder = $tempZipName.'_';
-				$zip->extractTo($tempZipFolder);
-				$zip->close();
-				echo '<br/>Plugin extrait '.$tempZipFolder.' <span class="label label-success">OK</span>';
-				$pluginName = glob($tempZipFolder.'/*.plugin*.php');
-				if(count($pluginName)==0)throw new Exception("Plugin invalide, fichier principal manquant");
-					$pluginName = str_replace(array($tempZipFolder.'/','.enabled','.disabled','.plugin','.php'),'',$pluginName[0]);
-					if(file_exists('plugins/'.$pluginName)){
-						echo '<br/>Plugin déjà installé, il sera écrasé par la derniere version <span class="label label-info">OK</span>';
-						Functions::rmFullDir('plugins/'.$pluginName);
-					}
-
-					echo '<br/>Renommage...';
-			
-					if(rename($tempZipFolder,'plugins/'.$pluginName)){
-						echo '<br/>Plugin installé, <span class="label label-info">pensez à l\'activer</span>';
-					}else{
-						Functions::rmFullDir($tempZipFolder);
-						echo '<br/>Impossible de renommer le plugin <span class="label label-error">Erreur</span>';
-					}
-
-					 unlink($tempZipName);
-			
-		}catch(Exception $e){
-			if($tempZipFolder!=null && file_exists($tempZipFolder)) Functions::rmFullDir($tempZipFolder);
-			if($tempZipName!=null && file_exists($tempZipName))  unlink($tempZipName);
-			echo '<br/>'.$e->getMessage().' <span class="label label-error">Erreur</span>';
-		}
-	break;
-
-	case 'CHANGE_GPIO_STATE':
-		if($myUser==false) {
-			exit('Vous devez vous connecter pour cette action.');
-		}
-		else {
-			Gpio::write($_["pin"],$_["state"],true);
-		}
-	break;
-
-	case 'GPIO_HAS_CHANGED':
-		
-		list($program,$action,$pin,$state) = $_SERVER['argv'];
-		Gpio::emit($pin,$state);
-	break;
-
-
-	// Gestion des interfaces de seconde génération
-	case 'ADD_CLIENT':
 		Action::write(function($_,&$response){
-			global $myUser,$conf,$client;
-			if(!isset($_SERVER['argv'][2])) throw new Exception("Type client invalide");
-			
-			
-			file_put_contents('filename', $_SERVER['argv'][2]);
-			
-			
+			global $myUser;
+			if(!$myUser->can('widget','read')) throw new Exception("Permissions insuffisantes");
+			$response['rows'][] = 
+				array(
+				'id' => 1,
+				'title' => 'hello',
+				'icon' => 'fa-caret-right',
+				'background' => '#50597b',
+				'width' => 4,
+				'position' => 1,
+				'refresh' => 0,
+				'load' => 'test.php?action=load',
+				'move' => 'test.php?action=move',
+				'delete' => 'test.php?action=delete',
+				'options' => [],
+				'content' => 'Hello world',
+				'js' => ['js/main.js'],
+				'css' => ['css/main.css']
+				);
+			$response['rows'][] = 
+				array(
+				'id' => 1,
+				'title' => 'hello 2',
+				'icon' => 'fa-caret-right',
+				'background' => '#0AA4EB',
+				'width' => 6,
+				'position' => 1,
+				'refresh' => 0,
+				'load' => 'test.php?action=load',
+				'move' => 'test.php?action=move',
+				'delete' => 'test.php?action=delete',
+				'options' => [],
+				'content' => 'Hello world',
+				'js' => ['js/main.js'],
+				'css' => ['css/main.css']
+				);
+		});
 
 
-			
+	break;
+
+	//ROOM
+	case 'search_room':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('room','read')) throw new Exception("Permissions insuffisantes");
+			foreach(Room::loadAll()as $room){
+				$response['rows'][] = $room;
+			}
+				
+		});
+	break;
+	
+	case 'save_room':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('room','edit')) throw new Exception("Permissions insuffisantes");
+			$room = isset($_['id']) ? Room::getById($_['id']) : new Room();
+			if(!isset($_['label']) || empty($_['label'])) throw new Exception("Nom obligatoire");
+			$room->label = $_['label'];
+			$room->description = $_['description'];
+			$room->save();
+		});
+	break;
+	
+	case 'edit_room':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('room','edit')) throw new Exception("Permissions insuffisantes");
+			$room = Room::getById($_['id']);
+			$response = $room;
 		});
 	break;
 
+	case 'delete_room':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('room','delete')) throw new Exception("Permissions insuffisantes");
+			Room::deleteById($_['id']);
+		});
+	break;
 
+	// PLUGINS
+	case 'search_plugin':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('plugin','read')) throw new Exception("Permissions insuffisantes");
+			foreach(Plugin::getAll() as $plugin){
+				$plugin->folder = array('name'=>$plugin->folder,'path'=>$plugin->path());
+				$response['rows'][] = $plugin;
+			}
+				
+		});
+	break;
+	
+	case 'change_plugin_state':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('plugin','configure')) throw new Exception("Permissions insuffisantes");
+			
+			$plugin = Plugin::getById($_['plugin']);
+			
+			if($_['state']){
+				$states = Plugin::states();
+				$missingRequire = array();
+				foreach($plugin->require as $require=>$version):
+					$req = Plugin::getById($require);
+					if($req == null || $req==false || !$req->state || $req->version!=$version)
+						$missingRequire[]= $require.' - '.$version;
+				endforeach;
+				if(count($missingRequire)!=0) throw new Exception("Plugins pré-requis non installés : ".implode(',',$missingRequire));
+			}
+			
+			Plugin::state($_['plugin'],$_['state']);
+		});
+	break;
+	
+	
+ 	//USER
+	case 'search_user':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('user','read')) throw new Exception("Permissions insuffisantes");
+			foreach(User::getAll()as $user){
+				$user->avatar = $user->getAvatar();
+				$user->rank = $user->rank_object;
+				$response['rows'][] = $user;
+			}
+				
+		});
+	break;
+	
+	case 'save_user':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('user','edit') && ($_['account']=="false" || $myUser->login!=$_['login']) ) throw new Exception("Permissions insuffisantes");
 
+			if($_['password']!=$_['password2']) throw new Exception("Mot de passe et confimration non similaires");
+			$user = isset($_['id']) ? User::getById($_['id']) : new User();
+
+			if($user->id==0){
+				if(!isset($_['login']) || empty($_['login'])) throw new Exception("Identifiant obligatoire");
+				if(!isset($_['rank']) || empty($_['rank'])) throw new Exception("Rang obligatoire");
+			}
+
+			if(!empty(trim($_['password']))) $user->password = sha1(md5($_['password']));
+			$user->name = $_['password'];
+			$user->firstname = $_['password'];
+			$user->mail = $_['mail'];
+
+			file_put_contents(__ROOT__.AVATAR_PATH.$_['login'].'.jpg',getGravatar($_['mail'],150));
+
+			if($_['account']!="true"){ 
+				$user->rank = $_['rank'];
+				$user->login = $_['login'];
+			}
+
+			$user->save();
+		});
+	break;
+	
+	case 'edit_user':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('user','edit')) throw new Exception("Permissions insuffisantes");
+			$user = User::getById($_['id']);
+			$user->password='';
+			$response = $user;
+		});
+	break;
+
+	case 'delete_user':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('user','delete')) throw new Exception("Permissions insuffisantes");
+			$user = User::getById($_['id']);
+			if($user->superadmin) throw new Exception("Vous ne pouvez pas supprimer le compte super admin");
+			User::deleteById($_['id']);
+		});
+	break;
+
+	//RIGHT
+	case 'save_right':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('rank','edit')) throw new Exception("Permissions insuffisantes");
+			if(!isset($_['section']) || empty($_['section'])) throw new Exception("Droit non spécifié");
+			if(!isset($_['rank']) || empty($_['rank'])) throw new Exception("Rang non spécifié");
+			if(!isset($_['right']) || empty($_['right'])) throw new Exception("Droit non spécifié");
+			
+			$item = Right::load(array('rank'=>$_['rank'],'section'=>$_['section']));
+			$item = !$item ? new Right(): $item ;
+			$item->rank = $_['rank'];
+			$item->section = $_['section'];
+			$item->{$_['right']} = $_['state']=='true';
+			$item->save();
+			
+			$myUser->loadRights();
+			$_SESSION['currentUser'] = serialize($myUser);
+			
+		});
+	break;
+	
+
+	//RANGS
+	case 'search_rank':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('rank','read')) throw new Exception("Permissions insuffisantes");
+			foreach(Rank::loadAll()as $user){
+				$response['rows'][] = $user;
+			}
+		});
+	break;
+	
+	case 'save_rank':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('rank','edit')) throw new Exception("Permissions insuffisantes");
+			if(!isset($_['label']) || empty($_['label'])) throw new Exception("Libellé obligatoire");
+			$item = isset($_['id']) ? Rank::getById($_['id']) : new Rank();
+			$item->label = $_['label'];
+			$item->description = $_['description'];
+			$item->save();
+		});
+	break;
+	
+	case 'edit_rank':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('rank','edit')) throw new Exception("Permissions insuffisantes");
+			$response = Rank::getById($_['id']);
+		});
+	break;
+
+	case 'delete_rank':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('rank','delete')) throw new Exception("Permissions insuffisantes");
+			Rank::deleteById($_['id']);
+		});
+	break;
+	
+	/*LIST*/
+	
+	case 'fill_list_table':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!is_numeric($_['id'])) throw new Exception("List ID non spécifié");
+			$dic = new Dictionnary();
+			$dic = $dic->getById($_['id']);
+			$response['dictionnary']  = $dic->toArray();
+			foreach (Dictionnary::childs( $dic->slug) as $child) {
+				$child->label = stripcslashes(html_entity_decode($child->label, ENT_QUOTES));
+				$response['rows'][] = $child;
+			}
+		});
+	break;
+	case 'save_list_table':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!isset($_['id']) && !isset($_['list'])) throw new Exception("List/ITEM ID non spécifié");
+			if(empty($_['label'])) throw new Exception("Valeur vide");
+			
+			$dic = new Dictionnary();
+			$dic = isset($_['id']) && !empty($_['id'])? $dic->getById($_['id']) : new Dictionnary();
+			if(isset($_['list']))$dic->parent = $_['list'];
+			$dic->label = $_['label'];
+			$dic->save();
+		});
+	break;
+
+	case 'edit_list_table':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!is_numeric($_['id'])) throw new Exception("List ID non spécifié");
+			$dic = new Dictionnary();
+			$dic = $dic->getById($_['id']);
+			$dic->label = str_replace("&#039;","'",$dic->label);
+			$response['item'] = $dic->toArray();
+		});
+	break;
+
+	case 'delete_list_table':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!is_numeric($_['id'])) throw new Exception("List ID non spécifié");
+			$dic = new Dictionnary();
+			$dic->delete(array('id'=>$_['id']));
+
+		});
+	break;
+	
 	default:
-		Plugin::callHook("action_post_case", array());
+		Plugin::callHook('action');
 	break;
 }
 

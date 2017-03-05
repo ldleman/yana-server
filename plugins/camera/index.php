@@ -1,1 +1,0 @@
-<?php /*silent is golden*/ ?>
