@@ -56,12 +56,10 @@ function propise_action(){
 					
 
 					if(empty($_['labelSensor'])) throw new Exception("Le nom est obligatoire");
-					if(empty($_['uidSensor']))  throw new Exception("L'UID est obligatoire");
 
 					$sensor = !empty($_['id']) ? Sensor::getById($_['id']): new Sensor();
 					$sensor->label = $_['labelSensor'];
 					$sensor->location = $_['locationSensor'];
-					$sensor->uid = $_['uidSensor'];
 					$sensor->save();
 					
 					//Reference device for other plugins
@@ -104,9 +102,9 @@ function propise_action(){
 				require_once('Data.class.php');
 				$datas = Data::loadAll(array('sensor'=>$_['id']),'time DESC');
 				$response['light'] = propise_convert_light($datas[0]->light);
-				$response['humidity'] = 54;
-				$response['temperature'] = 19;
-				$response['mouvment'] = 1;
+				$response['humidity'] = $datas[0]->humidity;
+				$response['temperature'] = $datas[0]->temperature;
+				$response['mouvment'] = $datas[0]->mouvment;
 			},
 			array('propise'=>'r') );
 		break;
@@ -170,7 +168,7 @@ function propise_action(){
 						$sensor = Sensor::getById($parameters['sensor']);
 						$datas = Data::loadAll(array('sensor'=>$sensor->id),'time DESC',1);
 	
-						$response['title'] = $sensor->label.' ('.$sensor->uid.') ';
+						$response['title'] = $sensor->label;
 
 						$content = '
 						<!-- CSS -->
@@ -318,7 +316,9 @@ function propise_action(){
 											propise_show($(element),view);
 											console.log("ee");
 										}
+
 										
+
 										$.action({
 											action:"propise_get_data",
 											id:$(element).attr("data-id")
@@ -328,7 +328,11 @@ function propise_action(){
 												if( key.length ==0 ) continue;
 												$("span",type).html(r[key]);
 											}
+
+											var mouvment = $("[data-type=\'mouvment\']");
+											$("i",mouvment).attr("class","fa fa-eye"+($("span",mouvment).text()==1?"":"-slash"));
 										
+											
 										});
 									});
 							}
@@ -448,9 +452,9 @@ function propise_plugin_setting_page(){
 				    <input type="hidden" id="id" value="<?php echo $selected->id; ?>">
 				    <input type="text" id="labelSensor" value="<?php echo $selected->label; ?>" placeholder="Sonde du salon"/>
 			
-				    <label for="uidSensor">UID</label>
+				   <!--  <label for="uidSensor">UID</label>
 				    <input type="text" value="<?php echo $selected->uid; ?>" id="uidSensor" placeholder="sonde-1,sonde-2..." />
-				    
+				     -->
 
 				    <label for="locationSensor">Pièce de la maison</label>
 				    <select id="locationSensor">

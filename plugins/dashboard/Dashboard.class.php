@@ -51,6 +51,7 @@ class Dashboard extends SQLiteEntity{
 		$widgets = array(
 			'dash_profil'=>array('cell'=>0,'column'=>0),
 			'dash_monitoring_ram'=>array('cell'=>0,'column'=>1),
+			'dash_monitoring_clock'=>array('cell'=>1,'column'=>1),
 			'dash_monitoring_system'=>array('cell'=>1,'column'=>1),
 			'dash_monitoring_network'=>array('cell'=>2,'column'=>1),
 			'dash_monitoring_services'=>array('cell'=>3,'column'=>1),

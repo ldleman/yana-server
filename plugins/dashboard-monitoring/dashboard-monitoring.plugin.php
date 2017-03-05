@@ -271,8 +271,9 @@ function dash_monitoring_plugin_actions(){
 								var year = d.getFullYear() ; 
 								var month = ("00" + (d.getMonth()+1)).slice(-2) ; 
 								var day = ("00" + d.getDate()).slice(-2) ; 
-								var days = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
-								var dayName = days[d.getDay()-1];
+								var days = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+						
+								var dayName = days[d.getDay()];
 								circle.setText(hour+\':\'+minut+\':\'+second+\'<div class="dayName">\'+dayName+\'</div><div class="dayDate">\'+day+\'/\'+month+\'/\'+year+\'</div>\');
 								circle.set(second/60);
 							}
