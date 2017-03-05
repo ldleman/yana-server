@@ -210,6 +210,10 @@ function propise_action(){
 								padding:0;
 								margin:0;
 							}
+
+							.propise_view li i{
+								font-size:40px;
+							}
 							.propise_view li{
 								font-family: "Open Sans Light",sans-serif;
 								text-align:center;
@@ -220,7 +224,7 @@ function propise_action(){
 								width:50%;
 								box-sizing:border-box;
 								font-weight:300;
-								font-size:40px;
+								font-size:30px;
 								
 							}
 							
@@ -305,7 +309,7 @@ function propise_action(){
 						<script type="text/javascript">
 							$("document").ready(function(){
 								propise_refresh_data();
-								setInterval(propise_refresh_data,2000);
+								setInterval(propise_refresh_data,5000);
 							});
 							
 							function propise_refresh_data(){
