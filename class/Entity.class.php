@@ -211,6 +211,7 @@ class Entity
 			foreach ($this->fields as $field => $type) {
                 if ($type == 'key') continue;
 				$data[':'.$i] = $this->{$field};
+                if($type=='bool') $data[':'.$i] = $data[':'.$i] ? 1:0;
                 $fields[$field] = ':'.$i;
 				$i++;
             }
@@ -230,6 +231,7 @@ class Entity
 			foreach ($this->fields as $field => $type) {
                 if ($type == 'key') continue;
 				$data[':'.$i] = $this->{$field};
+                if($type=='bool') $data[':'.$i] = $data[':'.$i] ? 1:0;
                 $fields[$field] = ':'.$i;
 				$i++;
             }
@@ -288,7 +290,7 @@ class Entity
 				'fields' => $fields,
 				'filters' => $filters,
 		));
-		var_dump($query,$data);
+	
         $instance->customExecute($query, $data);
 
     }
@@ -537,10 +539,11 @@ class Entity
         $stm = $this->pdo->prepare($query);
         try {
             $stm->execute($data);
+            //var_dump($query.' - '.json_encode($data, JSON_PRETTY_PRINT));
         } catch (Exception $e) {
             self::$lastError = $this->pdo->errorInfo();
 			
-            throw new Exception($e->getMessage().' - '.$e->getLine().' : '.$query);
+            throw new Exception($e->getMessage().' - '.$e->getLine().' : '.$query.' - '.json_encode($data, JSON_PRETTY_PRINT));
         }
     }
 

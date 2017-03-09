@@ -1,7 +1,7 @@
 var circle;
 
 function widget_clock_init(){
-	console.log('ee');
+	
 	circle = new ProgressBar.Circle('#clock', {
 		color: '#50C8FB',
 		duration: 3000,

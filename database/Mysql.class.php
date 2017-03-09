@@ -20,7 +20,7 @@ class Mysql
 		$types['longstring'] = 'TEXT CHARACTER SET utf8 COLLATE utf8_general_ci';
 		$types['key'] = 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY';
 		$types['object'] = $types['int'] = 'INT(11)';
-		$types['boolean'] = 'INT(1)';
+		$types['boolean'] = 'tinyint(1) NOT NULL DEFAULT \'0\'';
 		$types['blob'] = ' BLOB';
 		$types['default'] = 'TEXT CHARACTER SET utf8 COLLATE utf8_general_ci';
 		return $types;

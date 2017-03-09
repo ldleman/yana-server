@@ -2,7 +2,7 @@
 		//handle target
 		var target = false;
 		
-		$(document).ready(function(){
+		function init_dashboard(){
 
 			$.action({
 				action : 'search_widget',
@@ -26,12 +26,13 @@
 				},3000);
 			});
 
-		});
+		}
 			
 		//Chargement du contenu php du widget
 		function loadWidget(widget){
 
 			$.getJSON(widget.load,$.extend(widget,{content:''}),function(r){
+				console.log(r);
 				updateWidget(r);
 				var data = $.extend($('.widget[data-id="'+widget.id+'"]').data('data'), r.widget);
 				var init = 'widget_'+widget.model+'_init';
@@ -67,7 +68,7 @@
 				}
 			}
 
-			data.options.push({label : '',icon : 'fa-times', function : 'delete_widget(this);'});
+			
 			renderWidget(widget,data);
 		}
 		
@@ -109,7 +110,9 @@
 				var option = data.options[k];
 				options+='<li onclick="'+option.function+'"><i class="fa '+option.icon+'"></i> '+option.label+'</li>';
 			}
-				
+	
+			options+='<li onclick="delete_widget(this);"><i class="fa fa-times"></i></li>';
+
 			widget.find('.widget_options').html(options);
 				
 			widget.data('data',data);

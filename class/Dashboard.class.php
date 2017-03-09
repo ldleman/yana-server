@@ -16,7 +16,7 @@ class Dashboard extends Entity{
 		'user'=>'id',
 		'label'=>'longstring',
 		'icon'=>'string',
-		'default' => 'int'
+		'default' => 'bool'
 	);
 
 	function __construct(){

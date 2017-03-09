@@ -18,7 +18,7 @@ function monitoring_plugin_action(){
 	global $_,$conf;
 	switch($_['action']){
 		case 'monitoring_widget_clock_load':
-			$widget = Widget::getById($_['id']);
+			$widget = Widget::current();
 			$widget->title = 'Horloge';
 			$widget->content = '<div class="clockContainer">
 			<div class="clock" id="clock"></div>

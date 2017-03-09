@@ -29,7 +29,7 @@ $(document).ready(function(){
 
 // INIT - INDEX
 function init_index(){
-	
+	init_dashboard();
 }
 
 

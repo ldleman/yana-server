@@ -15,7 +15,7 @@ class Widget extends Entity{
 		'id'=>'key',
 		'model'=>'longstring',
 		'position'=>'int',
-		'minified' => 'int',
+		'minified' => 'bool',
 		'dashboard' => 'int'
 	);
 
@@ -28,6 +28,12 @@ class Widget extends Entity{
 
 	}
 
+	public static function current(){
+		global $_;
+		$widget = new Widget();
+		$widget->fromArray($_);
+		return $widget;
+	}
 
 }
 
