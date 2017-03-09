@@ -34,45 +34,41 @@ switch ($_['action']){
 	break;
 
 	//WIDGET
+	
+	case 'refresh_widget':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('widget','read')) throw new Exception("Permissions insuffisantes");
+			$widgets = array();
+			Plugin::callHook('widget_refresh',array(&$widgets));
+			$response['rows'] = $widgets;
+		});
+	break;
+	
 	case 'search_widget':
 
 		Action::write(function($_,&$response){
 			global $myUser;
 			if(!$myUser->can('widget','read')) throw new Exception("Permissions insuffisantes");
-			$response['rows'][] = 
-				array(
-				'id' => 1,
-				'title' => 'hello',
-				'icon' => 'fa-caret-right',
-				'background' => '#50597b',
-				'width' => 4,
-				'position' => 1,
-				'refresh' => 0,
-				'load' => 'test.php?action=load',
-				'move' => 'test.php?action=move',
-				'delete' => 'test.php?action=delete',
-				'options' => [],
-				'content' => 'Hello world',
-				'js' => ['js/main.js'],
-				'css' => ['css/main.css']
-				);
-			$response['rows'][] = 
-				array(
-				'id' => 1,
-				'title' => 'hello 2',
-				'icon' => 'fa-caret-right',
-				'background' => '#0AA4EB',
-				'width' => 6,
-				'position' => 1,
-				'refresh' => 0,
-				'load' => 'test.php?action=load',
-				'move' => 'test.php?action=move',
-				'delete' => 'test.php?action=delete',
-				'options' => [],
-				'content' => 'Hello world',
-				'js' => ['js/main.js'],
-				'css' => ['css/main.css']
-				);
+			
+			$models = array();
+			Plugin::callHook('widget',array(&$models));
+			foreach($models as $model):
+				$models[$model->model] = $model;
+			endforeach;
+			
+			$widgets = Widget::loadAll(array('dashboard'=>$_['dashboard']));
+			
+			foreach($widgets as $widget):
+				if(!isset($models[$widget->model])) continue;
+
+				$model = $models[$widget->model];
+				$model->id = $widget->id;
+				$model->position = $widget->position;
+				$model->minified = $widget->minified;
+				$model->dashboard = $widget->dashboard;
+				$response['rows'][] = $model;
+			endforeach;
 		});
 
 

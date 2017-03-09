@@ -1,7 +1,14 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-4">
+		
+		<div class="col-md-12 form-inline">
+			<ul id="view">
+			<?php foreach(Dashboard::loadAll() as $dashboard): ?>
+				<li <?php echo $dashboard->default?'data-selected="1"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
+			<?php endforeach; ?>
+			</ul>
 			<div class="btn" onclick="add_widget();"><i class="fa fa-check"></i> Ajouter un widget</div>
+		
 		</div>
 	</div>
 

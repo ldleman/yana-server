@@ -19,7 +19,7 @@ class Mysql
 		$types['string'] = $types['timestamp'] = $types['date'] = 'VARCHAR(225) CHARACTER SET utf8 COLLATE utf8_general_ci';
 		$types['longstring'] = 'TEXT CHARACTER SET utf8 COLLATE utf8_general_ci';
 		$types['key'] = 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY';
-		$types['object'] = $types['integer'] = 'INT(11)';
+		$types['object'] = $types['int'] = 'INT(11)';
 		$types['boolean'] = 'INT(1)';
 		$types['blob'] = ' BLOB';
 		$types['default'] = 'TEXT CHARACTER SET utf8 COLLATE utf8_general_ci';
@@ -43,11 +43,11 @@ class Mysql
 		return $sql;
 	}
 	public static function insert(){
-		$sql = 'INSERT INTO  {{table}} ({{?fields}} {{:fields}}{{key}} {{;}} , {{/;}} {{/:fields}} {{/?fields}})VALUES({{?fields}} {{:fields}}{{value}} {{;}} , {{/;}} {{/:fields}} {{/?fields}})';
+		$sql = 'INSERT INTO  {{table}} ({{?fields}} {{:fields}}`{{key}}` {{;}} , {{/;}} {{/:fields}} {{/?fields}})VALUES({{?fields}} {{:fields}}{{value}} {{;}} , {{/;}} {{/:fields}} {{/?fields}})';
 		return $sql;
 	}
 	public static function create(){
-		$sql = 'CREATE TABLE IF NOT EXISTS `{{table}}` ({{?fields}} {{:fields}}`{{key}}` {{value}}{{;}} , {{/;}} {{/:fields}} {{/?fields}})';
+		$sql = 'CREATE TABLE IF NOT EXISTS `{{table}}` ({{?fields}} {{:fields}}`{{key}}` {{value}}{{;}} , {{/;}} {{/:fields}} {{/?fields}}) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 		return $sql;
 	}
 	public static function drop(){

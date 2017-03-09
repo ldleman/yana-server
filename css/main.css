@@ -41,7 +41,8 @@ body > #wrap {
 			.widget_header{
 				background-color: #50597b;
 				padding: 5px;
-				border-radius: 3px 3px 0 0;
+				border-radius: 0;
+				box-sizing: border-box;
 				color: #ffffff;
 				cursor: move;
 				transition:background 0.2s linear;
@@ -66,10 +67,11 @@ body > #wrap {
 			.widget_content{
 				background-color: #ffffff;
 				border: 1px solid #cbcbcb;
+				border-top:0;
 				overflow:auto;
 				max-width:100%;
 				max-height:400px;
-				padding: 5px;
+				padding: 0px;
 			}
 			
 		

@@ -141,12 +141,27 @@
 						if(error!=null) error(response);
 					}
 				},
-				error : function(){
-					$.message('error','Erreur indefinie, merci de contacter un administrateur');
+				error : function(response){
+					
+					if(response.status == 200 && $.localhost() ){
+						$('body').append('<div class="debugFrame" style="box-shadow:0px 0px 3px rgba(0,0,0,0.8);z-index:10000;padding:5px;position:absolute;left:0;top:0;width:40%;min-height:100%;border-right:5px solid #DDDDDD;background:#DDEBF9"><h4>Action debug <i onclick="$(this).parent().parent().remove()" class="fa fa-times pointer"></i></h4>'+response.responseText+'</div>');
+					}else{
+						if(error!=null){ 
+							error(response); 
+						}else{
+							$.message('error','Erreur indefinie, merci de contacter un administrateur');
+						}
+					}
+	
+
+
 				}
 			});
 	}
 	
+	$.localhost = function(){
+    		return (document.location.hostname=='127.0.0.1' || document.location.hostname=='localhost');
+    	}
 	
 	
 	$.hashData = function(name){

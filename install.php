@@ -140,6 +140,21 @@ try {
     	$right->save();
     endforeach;
 	
+    //Create default dashboard
+    $dashboard = new Dashboard();
+    $dashboard->user = $admin->id;
+    $dashboard->label = 'Général';
+    $dashboard->default = true;
+    $dashboard->save();
+    
+    //Create clock widget
+    $widget = new Widget();
+    $widget->model = 'clock';
+    $widget->position = 1;
+    $widget->minified = false;
+    $widget->dashboard = $dashboard->id;
+    $widget->save();
+
     ?>
 
 	<div class="alert alert-success alert-dismissable">

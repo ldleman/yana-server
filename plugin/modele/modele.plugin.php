@@ -14,15 +14,6 @@ function test_plugin_menu(&$menuItems){
 
 
 
-//cette fonction comprends toutes les actions du plugin qui ne nécessitent pas de vue html
-function test_plugin_action(){
-	global $_,$conf;
-	switch($_['action']){
-		case 'test_plugin_action_1':
-			
-		break;
-	}
-}
 
 
 //Cette fonction va generer une page quand on clique sur Modele dans menu
@@ -57,8 +48,7 @@ function test_plugin_page(){
 		echo 'DELETE : <hr>';
 		Voiture::deleteById($id);
 		var_dump(Voiture::getById($id));
-		echo 'POPULATE : <hr>';
-		var_dump(Voiture::populate());
+
 		echo 'CHANGE : <hr>';
 		var_dump(Voiture::change(array('marque'=>'patate'),array('id'=>14)));
 		
@@ -90,6 +80,42 @@ function test_plugin_section(&$sections){
 	$sections['modele'] = 'Gestion du plugin Modèle';
 }
 
+
+//cette fonction comprends toutes les actions du plugin qui ne nécessitent pas de vue html
+function test_plugin_action(){
+	global $_,$conf;
+	switch($_['action']){
+		case 'test_widget_load':
+			$widget = Widget::getById($_['id']);
+			$widget->title = 'Au commencement, il y avait yana';
+			echo json_encode($widget);
+		break;
+	}
+}
+
+
+
+function test_plugin_widget_refresh(&$widgets){
+	$widget = Widget::getById(1);
+	$widget->title = 'Hello widget !';
+	$widget->icon = 'fa-user';
+	$widget->content = 'Dernier rafraichissement : '.date('d/m/Y H:i:s');
+	$widgets[] = $widget ;
+}
+
+function test_plugin_widget(&$widgets){
+	$modelWidget = new Widget();
+	$modelWidget->model = 'test';
+	$modelWidget->title = 'hello test';
+	$modelWidget->icon = 'fa-caret-right';
+	$modelWidget->background = '#50597b';
+	$modelWidget->load = 'action.php?action=test_widget_load';
+	$modelWidget->delete = 'action.php?action=test_widget_delete';
+	$modelWidget->js = [__DIR__.'/main.js'];
+	$modelWidget->css = [__DIR__.'/main.css'];
+	$widgets[] = $modelWidget;
+}
+
 Plugin::addCss("/main.css"); 
 Plugin::addJs("/main.js"); 
 
@@ -99,5 +125,7 @@ Plugin::addHook("section", "test_plugin_section");
 Plugin::addHook("menu_main", "test_plugin_menu"); 
 Plugin::addHook("page", "test_plugin_page");  
 Plugin::addHook("action", "test_plugin_action");    
+Plugin::addHook("widget", "test_plugin_widget");    
+Plugin::addHook("widget_refresh", "test_plugin_widget_refresh"); 
 
 ?>

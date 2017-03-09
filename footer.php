@@ -8,6 +8,8 @@
         <script src="js/vendor/mustache.min.js"></script>
 		<script src="js/plugins.js"></script>
         <script src="js/vendor/jquery-ui.min.js"></script>
+        <script src="js/vendor/chart.min.js"></script>
+        <script src="js/vendor/progressbar.js"></script>
         <script src="js/dashboard.js"></script>
         <script src="js/main.js"></script>
 		<?php echo Plugin::callJs(); ?>

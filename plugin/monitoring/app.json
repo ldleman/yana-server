@@ -1,0 +1,9 @@
+{
+	"id": "fr.idleman.monitoring",
+	"name": "Monitoring",
+	"version": "1.0",
+	"url": "http://blog.idleman.fr",
+	"licence": {"name": "MIT","url" : "http://choosealicense.com/licenses/mit/"},
+	"description": "Ajout plusieurs widget de monitoring du système et autres utilistaires (horloge etc...)",
+	"require" : {}
+}

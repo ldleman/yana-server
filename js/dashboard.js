@@ -6,53 +6,36 @@
 
 			$.action({
 				action : 'search_widget',
-				view : 1
+				dashboard : $('#view li[data-selected]').attr('data-id')
 			},function(r){
 				for(var i in r.rows){
 					var widget = r.rows[i];
 					addWidget(widget);
 					loadWidget(widget);
 				}
+				setInterval(function(){
+					$.action({
+						action : 'refresh_widget',
+						dashboard : $('#view li[data-selected]').attr('data-id')
+					},function(r){
+						for(var i in r.rows){
+							var widget = r.rows[i];
+							updateWidget(widget);
+						}
+					});
+				},3000);
 			});
 
-			
-			/*
-			var widget2 = JSON.parse(JSON.stringify(widget));
-			widget2.id=2;
-			widget2.title='other';
-			widget2.background='#222222';
-			widget2.load=null;
-			
-			var widget3 = JSON.parse(JSON.stringify(widget));
-			widget3.id=3;
-			widget3.title='other 3';
-			widget3.width=6;
-			widget3.background='#0AA4EB';
-			widget3.load=null;
-			
-			var widget4 = JSON.parse(JSON.stringify(widget));
-			widget4.id=4;
-			widget4.title='other 4';
-			widget4.background='#95B800';
-			widget4.load=null;
-			
-			var widgets = [];
-			widgets.push(widget);
-			widgets.push(widget2);
-			widgets.push(widget3);
-			widgets.push(widget4);*/
-			
-			
-	
 		});
 			
 		//Chargement du contenu php du widget
 		function loadWidget(widget){
+
 			$.getJSON(widget.load,$.extend(widget,{content:''}),function(r){
-				updateWidget(widget.id,r.widget);
+				updateWidget(r);
 				var data = $.extend($('.widget[data-id="'+widget.id+'"]').data('data'), r.widget);
-				if(data.refresh!=0)
-					setTimeout(function(){loadWidget(widget);},data.refresh);
+				var init = 'widget_'+widget.model+'_init';
+				if(window[init]!=null) window[init]();
 			});
 		}
 		
@@ -84,12 +67,13 @@
 				}
 			}
 
+			data.options.push({label : '',icon : 'fa-times', function : 'delete_widget(this);'});
 			renderWidget(widget,data);
 		}
 		
 		//Modification d'un widget existant
-		function updateWidget(id,data){
-			var widget = $('.widget[data-id="'+id+'"]');
+		function updateWidget(data){
+			var widget = $('.widget[data-id="'+data.id+'"]');
 			var data = $.extend(widget.data('data'), data);
 			renderWidget(widget,data);
 		}
@@ -119,7 +103,8 @@
 			widget.find('.widget_content').html(data.content);
 				
 			var options = '';
-			data.options.push({label : '',icon : 'fa-times', function : 'delete_widget(this);'});
+
+			
 			for(var k in data.options){
 				var option = data.options[k];
 				options+='<li onclick="'+option.function+'"><i class="fa '+option.icon+'"></i> '+option.label+'</li>';
