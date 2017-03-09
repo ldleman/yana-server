@@ -537,26 +537,30 @@ function propise_plugin_page($_){
 	require_once('Data.class.php');
 	
 	$sensor = Sensor::getById($_['id']);
-	$datas = Data::loadAll(array('sensor'=>$sensor->id),'time',30);
+	$datas = Data::staticQuery('SELECT * FROM "yana_plugin_propise_data" WHERE time > strftime(\'%s\', \'now\') - 3600 ORDER BY time',array(),true);
 	$tab = array('hours'=>array(),'temperature'=>array(),'humidity'=>array(),'light'=>array());
 	foreach($datas as $data){
+
 		if(date('i',$data->time) == "") continue;
-		array_unshift($tab['hours'] , date('i',$data->time));
-		array_unshift($tab['temperature'] ,$data->temperature);
-		array_unshift($tab['humidity'] ,$data->humidity);
-		array_unshift($tab['light'] ,$data->light);
+
+		$tab['hours'][date('dmYHi',$data->time)] =  date('H:i',$data->time);
+		$tab['temperature'][date('dmYHi',$data->time)] =$data->temperature;
+		$tab['humidity'][date('dmYHi',$data->time)]=$data->humidity;
+		$tab['light'] [date('dmYHi',$data->time)]=$data->light;
+		$tab['mouvment'] [date('dmYHi',$data->time)]=$data->mouvment;
+
 	}
-
-
 
 
 	?>
 	<h3>Température</h3>
-	<canvas style="width:100%;" id="chart_temperature" data-label="Temperature" data-hours="<?php echo '['.implode(',',$tab['hours']).']'; ?>"  data-data="<?php echo '['.implode(',',$tab['temperature']).']'; ?>"></canvas>
+	<canvas style="width:100%;" id="chart_temperature" data-label="Temperature" data-hours="<?php echo '[\''.implode('\',\'',$tab['hours']).'\']'; ?>"  data-data="<?php echo '['.implode(',',$tab['temperature']).']'; ?>"></canvas>
 	<h3>Humidité</h3>
-	<canvas style="width:100%;"  id="chart_humidity" data-label="Humidité" data-hours="<?php echo '['.implode(',',$tab['hours']).']'; ?>"  data-data="<?php echo '['.implode(',',$tab['humidity']).']'; ?>" ></canvas>
+	<canvas style="width:100%;"  id="chart_humidity" data-label="Humidité" data-hours="<?php echo '[\''.implode('\',\'',$tab['hours']).'\']'; ?>"  data-data="<?php echo '['.implode(',',$tab['humidity']).']'; ?>" ></canvas>
 	<h3>Lumière</h3>
-	<canvas style="width:100%;" id="chart_light" data-label="Lumière" data-hours="<?php echo '['.implode(',',$tab['hours']).']'; ?>" data-data="<?php echo '['.implode(',',$tab['light']).']'; ?>"></canvas>
+	<canvas style="width:100%;" id="chart_light" data-label="Lumière" data-hours="<?php echo '[\''.implode('\',\'',$tab['hours']).'\']'; ?>" data-data="<?php echo '['.implode(',',$tab['light']).']'; ?>"></canvas>
+	<h3>Mouvement</h3>
+	<canvas style="width:100%;" id="chart_mouvment" data-label="Mouvement" data-hours="<?php echo '[\''.implode('\',\'',$tab['hours']).'\']'; ?>" data-data="<?php echo '['.implode(',',$tab['mouvment']).']'; ?>"></canvas>
 
 	<?php
 }

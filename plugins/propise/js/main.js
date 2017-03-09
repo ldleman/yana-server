@@ -6,7 +6,7 @@ Chart.defaults.global.responsive = true;
 
 		var graphic = new Chart($(element)[0].getContext("2d"));
 		var conf = {
-							labels : $(element).data('hours'),
+							labels : eval($(element).data('hours')),
 							datasets:[
 							{
 								label : $(element).data('label'),
