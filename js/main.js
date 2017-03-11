@@ -9,6 +9,8 @@ $(document).ready(function(){
 		var init = 'init_plugin_'+$.urlParam('module');
 		if(window[init]!=null) window[init]($.urlParam());
 	}
+
+
 	
 	//SHOW HTTP ERROR/NOTICE
     if ($.urlParam('error') != null) {
@@ -34,6 +36,7 @@ function init_index(){
 
 
 function init_setting(parameter){
+
 	switch(parameter.section){
 		case 'plugin':
 		search_plugin(function(){
@@ -66,6 +69,12 @@ function init_setting(parameter){
 			$('.rightColumn .toggle').change(function(){
 				$.action({action:'save_right',rank:$('#rank').attr('data-rank'),section:$(this).closest('tr').attr('data-section'),right:$(this).attr('data-right'),state:$('input',this).prop('checked')});
 			});
+		break;
+		default:
+			if(parameter.section!= null){
+				var init = 'init_setting_'+parameter.section;
+				if(window[init]!=null) window[init]($.urlParam());
+			}
 		break;
 	}
 }

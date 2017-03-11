@@ -23,6 +23,59 @@ function propise_plugin_action(){
 			$widget->content = 'popopoh';
 			echo json_encode($widget);
 		break;
+
+		case 'propise_search':
+			Action::write(function($_,&$response){
+				global $myUser;
+				if(!$myUser->can('propise','read')) throw new Exception("Permissions insuffisantes");
+				require_once('Sensor.class.php');
+				foreach(Sensor::loadAll()as $sensor){
+					$sensor->location = Room::getById($sensor->location);
+
+					
+			    	$sensor = $sensor->toArray();
+			   		$sensor['link'] =  ROOT_URL.'/action.php?action=propise_add_data&id='.$sensor['id'].'&light={{LIGHT}}&humidity={{HUMIDITY}}&temperature={{TEMPERATURE}}&mouvment={{MOUVMENT}}';
+					$response['rows'][] = $sensor;
+				}
+					
+			});
+		break;
+		
+		case 'propise_save':
+			Action::write(function($_,&$response){
+				global $myUser;
+				if(!$myUser->can('propise','edit')) throw new Exception("Permissions insuffisantes");
+				require_once('Sensor.class.php');
+				$sensor = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
+				if(!isset($_['label']) || empty($_['label'])) throw new Exception("Nom obligatoire");
+				$sensor->label = $_['label'];
+				$sensor->location = $_['location'];
+				$sensor->save();
+			});
+		break;
+		
+		case 'propise_edit':
+			Action::write(function($_,&$response){
+				global $myUser;
+				if(!$myUser->can('propise','edit')) throw new Exception("Permissions insuffisantes");
+				require_once('Sensor.class.php');
+				$sensor = Sensor::getById($_['id']);
+				$response = $sensor;
+			});
+		break;
+
+		case 'propise_delete':
+			Action::write(function($_,&$response){
+				global $myUser;
+				if(!$myUser->can('propise','delete')) throw new Exception("Permissions insuffisantes");
+				require_once('Sensor.class.php');
+				Sensor::deleteById($_['id']);
+			});
+		break;
+
+
+
+
 	}
 }
 

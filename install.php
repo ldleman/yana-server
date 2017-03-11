@@ -86,8 +86,8 @@ try {
 	
 
 	$constantStream = str_replace(
-	array("{{BASE_SGBD}}","{{BASE_HOST}}","{{BASE_NAME}}","{{BASE_LOGIN}}","{{BASE_PASSWORD}}"),
-	array($_['entity'],$_['host'],$_['database'],$_['login'],$_['password']),$constantStream);
+	array("{{BASE_SGBD}}","{{BASE_HOST}}","{{BASE_NAME}}","{{BASE_LOGIN}}","{{BASE_PASSWORD}}","{{ROOT_URL}}"),
+	array($_['entity'],$_['host'],$_['database'],$_['login'],$_['password'],$_['root']),$constantStream);
 
 	file_put_contents(__DIR__.'/constant.php',$constantStream);
 	
@@ -165,6 +165,8 @@ try {
 	<?php 
 
 	}else{
+		$root = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+    	$root = str_replace("/install.php", "", $actionUrl );
 	?>
 	<div class="row">
 	<form class="col-md-3" action="install.php" method="POST">
@@ -185,7 +187,9 @@ try {
 		<small>Laisser vide si pas d'identifiant</small><br/>
 		<input type="text" class="form-control" name="login" id="login"/><br/>
 		<label for="password"">Mot de passe de la base</label><br/>
-		<small>Laisser vide si pas de mot de passe</small><br/>
+		
+		<label for="root">Adresse web de YANA</label><br/>
+		<input type="text" class="form-control" name="root" id="root" value="<?php echo $root; ?>"/><br/>
 		<input type="text" class="form-control" name="password" id="password"/><br/>
 		<input type="submit" class="btn btn-primary" value="Installer" name="install"><br/><br/>
 	</form>

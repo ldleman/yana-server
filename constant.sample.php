@@ -16,6 +16,9 @@ define('BASE_NAME','{{BASE_NAME}}');
 define('BASE_LOGIN','{{BASE_LOGIN}}');
 define('BASE_PASSWORD','{{BASE_PASSWORD}}');
 
+
+define('ROOT_URL','{{ROOT_URL}}');
+
 /* Port du serveur socket */
 define('SOCKET_PORT',9999);
 /* Nombre maxium de clients sur le serveur socket */

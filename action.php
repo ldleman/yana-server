@@ -14,14 +14,13 @@ switch ($_['action']){
 		try{
 			
 			$myUser = User::check($_['login'],$_['password']);
-			var_dump($myUser);
 			if(!$myUser->connected()) throw new Exception('Utilisateur inexistant');
 			$myUser->loadRights();
 		
 			$_SESSION['currentUser'] = serialize($myUser);
 			
 		}catch(Exception $e){
-			exit($e->getMessage());
+		
 			header('location: index.php?error='.urlencode($e->getMessage()));
 		}
 		header('location: index.php?error=');
