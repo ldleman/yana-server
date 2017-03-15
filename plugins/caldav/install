@@ -1,0 +1,119 @@
+<?php
+
+require_once(__DIR__.'/../../common.php');
+require_once(__DIR__.'/constant.php');
+global $conf;
+
+$endpoint = str_replace('action.php',str_replace(__ROOT__,'',__DIR__).'/calendars.php',$_SERVER['PHP_SELF']);
+$endpoint = str_replace(array('\\','//'),'/',$endpoint);
+
+
+
+
+
+$conf->put('WEBDAV_CALENDAR_URL',$endpoint);
+
+Section::add('calendar');
+
+$pdo = new PDO('sqlite:'.__ROOT__.'/db/.caldav.db');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$pdo->exec("
+
+
+CREATE TABLE calendarobjects (
+    id integer primary key asc,
+    calendardata blob,
+    uri text,
+    calendarid integer,
+    lastmodified integer,
+    etag text,
+    size integer,
+    componenttype text,
+    firstoccurence integer,
+    lastoccurence integer,
+    uid text
+);
+
+CREATE TABLE calendars (
+    id integer primary key asc,
+    principaluri text,
+    displayname text,
+    uri text,
+    synctoken integer,
+    description text,
+    calendarorder integer,
+    calendarcolor text,
+    timezone text,
+    components text,
+    transparent bool
+);
+
+CREATE TABLE calendarchanges (
+    id integer primary key asc,
+    uri text,
+    synctoken integer,
+    calendarid integer,
+    operation integer
+);
+
+CREATE INDEX calendarid_synctoken ON calendarchanges (calendarid, synctoken);
+
+CREATE TABLE calendarsubscriptions (
+    id integer primary key asc,
+    uri text,
+    principaluri text,
+    source text,
+    displayname text,
+    refreshrate text,
+    calendarorder integer,
+    calendarcolor text,
+    striptodos bool,
+    stripalarms bool,
+    stripattachments bool,
+    lastmodified int
+);
+
+CREATE TABLE schedulingobjects (
+    id integer primary key asc,
+    principaluri text,
+    calendardata blob,
+    uri text,
+    lastmodified integer,
+    etag text,
+    size integer
+);
+
+CREATE INDEX principaluri_uri ON calendarsubscriptions (principaluri, uri);
+
+CREATE TABLE principals (
+    id INTEGER PRIMARY KEY ASC,
+    uri TEXT,
+    email TEXT,
+    displayname TEXT,
+    UNIQUE(uri)
+);
+
+CREATE TABLE groupmembers (
+    id INTEGER PRIMARY KEY ASC,
+    principal_id INTEGER,
+    member_id INTEGER,
+    UNIQUE(principal_id, member_id)
+);
+
+CREATE TABLE users (
+	id integer primary key asc,
+	username TEXT,
+	digesta1 TEXT,
+	UNIQUE(username)
+);");
+
+
+$pdo->exec("INSERT INTO users (username,digesta1) VALUES('admin',  '".md5('admin:sabre:admin')."');
+INSERT INTO principals (uri,email,displayname) VALUES ('principals/admin', 'admin@example.org','Administrator');
+INSERT INTO principals (uri,email,displayname) VALUES ('principals/admin/calendar-proxy-read', null, null);
+INSERT INTO principals (uri,email,displayname) VALUES ('principals/admin/calendar-proxy-write', null, null);
+INSERT INTO calendars (principaluri, displayname, uri, synctoken, description, calendarorder, calendarcolor, timezone, components, transparent) VALUES ('principals/admin',	'Calendrier globale',	'global',	1,	NULL,	NULL,	NULL,	NULL,	'VEVENT,VTODO',	'0');");
+
+
+?>

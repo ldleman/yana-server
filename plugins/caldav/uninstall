@@ -1,0 +1,6 @@
+<?php
+
+//Supression de la zone de droits (section) du plugin modèle
+Section::remove('calendar');
+unlink(__ROOT__.'/db/.caldav.db');
+?>
