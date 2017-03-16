@@ -1,6 +1,27 @@
 <?php
 
-//Supression de la zone de droits (section) du plugin modèle
+require_once(__DIR__.'/../../common.php');
+require_once(__DIR__.'/constant.php');
+global $conf;
+
+
+$dbmanager = new Configuration();
+
+//$conf->delete('WEBDAV_CALENDAR_URL',$endpoint);
+
 Section::remove('calendar');
-unlink(__ROOT__.'/db/.caldav.db');
+
+$dbmanager->customExecute("
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_calendarobjects;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_calendars;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_calendarchanges;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_calendarsubscriptions;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_schedulingobjects;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_principals;
+DROP TABLE ".ENTITY_PREFIX."plugin_caldav_groupmembers;
+");
+
+
+
+
 ?>

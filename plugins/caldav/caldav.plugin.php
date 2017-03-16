@@ -15,7 +15,29 @@ function caldav_menu(&$menuItems){
 
 function caldav_home($_){
 	if(!isset($_['module']) || $_['module']!='caldav') return;
-?>
+	global $myUser;
+	
+	try{
+		
+	$dbmanager = new Configuration();
+	$calendarsQuery = $dbmanager->customQuery("SELECT * FROM ".ENTITY_PREFIX."plugin_caldav_calendars WHERE principaluri ='principals/".$myUser->getLogin()."'");
+	$calendars =array();
+	while($calendar = $calendarsQuery->fetchArray()):
+		$calendars[] = $calendar;
+	endwhile;
+	
+	if(count($calendars)==0) throw new Exception('Aucun calendrier créé pour votre compte, veuillez <a href="setting.php?section=caldav">créer un calendrier</a> avant de le consulter.');
+		
+	
+	$_['calendar'] = isset($_['calendar']) ? $_['calendar']: $calendars[0]['uri'];
+	?>
+	<div style="width:300px;margin:20px auto;">
+	Calendrier : <select id="calendarSelect" onchange="window.location='index.php?module=caldav&calendar='+$(this).val();">
+	<?php foreach($calendars as $calendar): ?>
+	<option <?php echo $_['calendar'] ==$calendar['uri'] ?'selected="selected"':'';  ?> value="<?php echo $calendar['uri']; ?>"><?php echo  $calendar['displayname']; ?></option>
+	<?php endforeach; ?>
+	</select>
+	</div>
 	<div id='calendar'></div>
 	
 
@@ -63,7 +85,16 @@ function caldav_home($_){
 	
 	
 <?php
+	}catch(Exception $e){
+		?><div class="row"><div class="span12">
+		<div class="alert alert-error fade in">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+		<?php echo $e->getMessage(); ?></div>
+		</div></div><?php
+	}
 }
+
+
 
 function caldav_action(){
 	global $_,$myUser;
@@ -71,15 +102,20 @@ function caldav_action(){
 		
 		case 'caldav_get_events':
 			Action::write(function($_,&$response){
+				global $myUser;
 				require_once('CalDavClient.class.php');
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
-				$client->login = 'admin';
-				$client->password = 'admin';
-				$client->user = 'admin';
-				$client->calendar = 'global';
 				
-				$events = $client->get_events('global');
+				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
+				file_put_contents(__DIR__.'/sessions/'.$s,'');
+				$client->login = $myUser->getLogin();
+				$client->password = $s;
+				
+				$client->user = $myUser->getLogin();
+				$client->calendar = $_['calendar'];
+				
+				$events = $client->get_events($_['calendar']);
 				$response = array();
 				foreach($events as $event):
 					$response[] = array(
@@ -96,13 +132,18 @@ function caldav_action(){
 		break;
 		case 'caldav_save_event':
 			Action::write(function($_,&$response){
+				global $myUser;
 				require_once('CalDavClient.class.php');
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
-				$client->login = 'admin';
-				$client->password = 'admin';
-				$client->user = 'admin';
-				$client->calendar = 'global';
+				
+				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
+				file_put_contents(__DIR__.'/sessions/'.$s,'');
+				$client->login = $myUser->getLogin();
+				$client->password = $s;
+				
+				$client->user = $myUser->getLogin();
+				$client->calendar = $_['calendar'];
 				
 				list($startDay,$startMonth,$startYear) = explode('/',$_['startDay']);
 				list($endDay,$endMonth,$endYear) = explode('/',$_['endDay']);
@@ -131,18 +172,104 @@ function caldav_action(){
 		break;
 		case 'caldav_delete_event':
 			Action::write(function($_,&$response){
+				global $myUser;
 				require_once('CalDavClient.class.php');
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
-				$client->login = 'admin';
-				$client->password = 'admin';
-				$client->user = 'admin';
-				$client->calendar = 'global';
+				
+				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
+				file_put_contents(__DIR__.'/sessions/'.$s,'');
+				$client->login = $myUser->getLogin();
+				$client->password = $s;
+				
+				$client->user = $myUser->getLogin();
+				$client->calendar = $_['calendar'];
 				foreach($_['events'] as $ics){
 					$ics = $client->delete_event($ics);
 				}
 			});
 		break;
+		case 'caldav_add_calendar':
+			global $myUser;
+			$dbmanager = new Configuration();
+			$slug = Functions::slugify($_['label']);
+			
+			$principalQuery = $dbmanager->customQuery("SELECT * FROM ".ENTITY_PREFIX."plugin_caldav_principals WHERE uri='principalsr/".$myUser->getLogin()."'  LIMIT 1");
+			$principal = $principalQuery->fetchArray();
+			
+			
+			if(!$principal){
+				$query = "
+				INSERT INTO ".ENTITY_PREFIX."plugin_caldav_principals (uri,email,displayname) VALUES ('principals/".$myUser->getLogin()."','". $myUser->getMail()."','".$myUser->getLogin()."');
+				INSERT INTO ".ENTITY_PREFIX."plugin_caldav_principals (uri,email,displayname) VALUES ('principals/".$myUser->getLogin()."/calendar-proxy-read', null, null);
+				INSERT INTO ".ENTITY_PREFIX."plugin_caldav_principals (uri,email,displayname) VALUES ('principals/".$myUser->getLogin()."/calendar-proxy-write', null, null);";
+				$dbmanager->customExecute($query);
+			}
+			
+			
+			$query = "INSERT INTO ".ENTITY_PREFIX."plugin_caldav_calendars (principaluri, displayname, uri, synctoken, description, calendarorder, calendarcolor, timezone, components, transparent) VALUES ('principals/".$myUser->getLogin()."','".	$_['label']."','".	$slug."',	1,	NULL,	NULL,	NULL,	NULL,	'VEVENT,VTODO',	'0');";
+			$dbmanager->customExecute($query);
+			header('location: setting.php?section=caldav');
+		break;
+	}
+}
+
+function caldav_setting_menu(){
+	global $_;
+	echo '<li '.(isset($_['section']) && $_['section']=='propise'?'class="active"':'').'><a href="setting.php?section=caldav"><i class="fa fa-angle-right"></i> Calendriers</a></li>';
+}
+
+
+function caldav_setting_page(){
+	global $_,$myUser,$conf;
+	if(isset($_['section']) && $_['section']=='caldav' ){
+		
+		if(!$myUser) throw new Exception('Vous devez être connecté pour effectuer cette action');
+		$dbmanager = new Configuration();
+		$calendars = $dbmanager->customQuery("SELECT * FROM ".ENTITY_PREFIX."plugin_caldav_calendars WHERE principaluri ='principals/".$myUser->getLogin()."'");
+		
+		?>
+
+		<div class="span9">
+
+			<h1>Calendriers</h1>
+			<p>Gestion des calendriers</p>  
+
+			<form action="action.php" method="POST">
+			<input type="hidden" value="caldav_add_calendar" name="action">
+			<h4>Créer un nouveau calendrier</h4>
+			<label>Nom</label>
+			<input type="text" name="label" id="label">
+			<input type="submit" class="btn" value="Créer">
+			</form>
+			
+			<hr/>
+			<h4>Calendrier créés</h4>
+			<table class="table">
+			<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Adresse du synchronisation</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php while($calendar = $calendars->fetchArray()): 
+			$url = YANA_URL.'/plugins/caldav/calendars.php/calendars/'.str_replace('principals/','',$calendar['principaluri']) .'/'.$calendar['uri'];
+			?>
+			<tr>
+			<td>
+				<?php echo $calendar['displayname']; ?>
+			</td>
+			<td>
+				<a href="<?php echo $url;?>"><?php echo $url ?></a>
+			</td>
+			</tr>
+			<?php endwhile; ?>
+			</tbody>
+			</table>
+		</div>
+
+<?php
 	}
 }
 
@@ -157,6 +284,6 @@ Plugin::addCss('/css/fullcalendar.min.css');
 Plugin::addHook("menubar_pre_home", "caldav_menu");  
 Plugin::addHook("home", "caldav_home");
 Plugin::addHook("action_post_case", "caldav_action");
-//Plugin::addHook("preference_menu", "dashboard_plugin_preference_menu"); 
-//Plugin::addHook("preference_content", "dashboard_plugin_preference_page"); 
+Plugin::addHook("setting_menu", "caldav_setting_menu"); 
+Plugin::addHook("setting_bloc", "caldav_setting_page"); 
 ?>

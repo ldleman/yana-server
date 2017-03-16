@@ -6,15 +6,37 @@ require_once __ROOT__.'/lib/sabre/autoload.php';
 	
 global $conf;
 	
-$pdo = new PDO('sqlite:'.__ROOT__.'/db/.caldav.db');
+$pdo = new PDO('sqlite:'.__ROOT__.'/'.DB_NAME);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Backends
-$authBackend      = new Sabre\DAV\Auth\Backend\PDO($pdo);
-$principalBackend = new Sabre\DAVACL\PrincipalBackend\PDO($pdo);
-$calendarBackend = new Sabre\CalDAV\Backend\PDO($pdo);
+$authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($userName, $password) {
+   
+  // global $myUser;
+   //if($myUser!=false && $myUser->getLogin()!='') return true;
+   
+   $myUser = User::exist($userName, $password,false,false);
+   
+   if(file_exists(__DIR__.'/sessions/'.$password)){
+	   unlink(__DIR__.'/sessions/'.$password);
+	   return true;
+   }
+   
+   return $myUser!=false;
+});
 
-$authBackend->setRealm('sabre');
+$principalBackend = new Sabre\DAVACL\PrincipalBackend\PDO($pdo);
+$principalBackend->tableName = ENTITY_PREFIX.'plugin_caldav_principals';
+$principalBackend->groupMembersTableName = ENTITY_PREFIX.'plugin_caldav_groupmembers';
+
+$calendarBackend = new Sabre\CalDAV\Backend\PDO($pdo);
+$calendarBackend->calendarTableName = ENTITY_PREFIX.'plugin_caldav_calendars';
+$calendarBackend->calendarObjectTableName = ENTITY_PREFIX.'plugin_caldav_calendarobjects';
+$calendarBackend->calendarChangesTableName = ENTITY_PREFIX.'plugin_caldav_calendarchanges';
+$calendarBackend->schedulingObjectTableName = ENTITY_PREFIX.'plugin_caldav_schedulingobjects';
+$calendarBackend->calendarSubscriptionsTableName = ENTITY_PREFIX.'plugin_caldav_calendarsubscriptions';
+
+
 
 // Directory structure
 $tree = [

@@ -10,7 +10,7 @@ $(document).ready(function() {
 				toDelete.push($(element).attr('data-ics'));
 			});
 			
-			$.getJSON('action.php?action=caldav_delete_event',{events:toDelete},function(r){
+			$.getJSON('action.php?action=caldav_delete_event',{events:toDelete,calendar:$('#calendarSelect').val()},function(r){
 				$('.fc-event[data-selected]').each(function(i,element){
 					$('#calendar').fullCalendar( 'removeEvents' ,$(element).attr('data-ics') );
 				});
@@ -35,7 +35,7 @@ $(document).ready(function() {
 			eventLimit: true, // allow "more" link when too many events
 			
 			events: {
-				url: 'action.php?action=caldav_get_events',
+				url: 'action.php?action=caldav_get_events&calendar='+$('#calendarSelect').val(),
 				error: function() {
 					$('#script-warning').show();
 				}
@@ -104,7 +104,8 @@ $(document).ready(function() {
 						startHour : event.start.format("HH"),
 						endHour : parseInt(event.end.format("HH")),
 						startMinut : event.start.format("mm"),
-						endMinut : event.end.format("mm")
+						endMinut : event.end.format("mm"),
+						calendar : $('#calendarSelect').val()
 					},function(r){
 					// if(r.error) revertFunc();
 				});
@@ -131,6 +132,7 @@ $(document).ready(function() {
 	function caldav_save_event(){
 		var event = $('#eventModal').toData();
 		event.ics = $('#eventModal').attr('data-ics');
+		event.calendar = $('#calendarSelect').val();
 		$.getJSON('action.php?action=caldav_save_event',event,function(r){
 			//modification
 			if($('#eventModal').attr('data-ics')!=null){

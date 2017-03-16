@@ -153,7 +153,7 @@ class CaldavClient{
 	}
 	
 	public static function custom_request($url,$digest,$method,$headers,$body){
-
+		$url = $url;
 		if(self::debug){
 			echo '<hr/>';
 			echo '<b>URL :</b> '.$url.'<br>';
@@ -164,12 +164,15 @@ class CaldavClient{
 		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 		curl_setopt($ch, CURLOPT_USERPWD, $digest);
 		curl_setopt($ch, CURLOPT_VERBOSE, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+		//curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());
+		
+		
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 		$response = curl_exec($ch);
