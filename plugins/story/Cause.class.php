@@ -51,19 +51,27 @@ class Cause extends SQLiteEntity{
 					'label' => 'Variable',
 					'template' => '<input type="text" data-field="var" placeholder="Ma variable" value="{var}"> <select data-field="operator" class="operator"><option value="=">=</option></select> <input type="text" data-field="value" placeholder="Ma valeur" value="{value}">',
 					'description' => 'Déclenche le scénario si la variable déclarée existe et correpond à l\'égalité décrite, le test sur les variable est effectué toutes les minutes.'
-					)
-			/*'captor' => array(
+					)/*,
+			'captor' => array(
 					'icon' => 'fa-tachometer',
 					'label' => 'Capteur',
-					'template' => '<select  class="plugin_selector"></select> Capteur <select data-field="captor" class="captor_selector"></select> Champ <select data-field="field" class="captor_field_selector"></select> <select data-field="operator" class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <input data-field="value" type="text" placeholder="valeur" value="{value}">'
-					),
-			,*/
+					'template' => ''
+					),*/
+			
 		);
 
 
 			$types['listen']['template'] .= 'Confidence <input type="number" step="0.01" min="0.10"  max="0.99" value="{confidence}"  data-field="confidence"/>';
 		
-			
+			$types['captor']['template'] .= 'Capteur <select  data-field="captor" class="captor_selector" onchange="story_get_captor_action(this);">';
+			$deviceManager = new Device();
+			$roomManager = new Room();
+			foreach($deviceManager->loadAll(array('type'=>Device::CAPTOR)) as $device){
+				$room = $roomManager->getById($device->location);
+				$types['captor']['template'] .= '<option value="'.$device->id.'"><i class="fa '.$device->icon.'"></i>'.$device->label.' ('.$room->name.')</option>';
+			}
+			$types['captor']['template'] .= '</select> Champ <select data-field="field" class="captor_field_selector"></select> <select data-field="operator" class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <input data-field="value" type="text" placeholder="valeur" value="{value}">';
+		
 
 			$types['time']['template'] = '<select class="operator"><option>=</option><!--<option>!=</option>--></select> 
 					<select data-value="{minut}" data-field="minut">
