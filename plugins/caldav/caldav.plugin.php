@@ -1,6 +1,6 @@
 <?php
 /*
-@name Caldav (Construction)
+@name Caldav
 @author Valentin CARRUESCO <idleman@idleman.fr>
 @link http://blog.idleman.fr
 @licence CC by nc sa
@@ -17,6 +17,9 @@ function caldav_home($_){
 	if(!isset($_['module']) || $_['module']!='caldav') return;
 	global $myUser;
 	
+	
+	
+
 	try{
 		
 	$dbmanager = new Configuration();
@@ -30,8 +33,12 @@ function caldav_home($_){
 		
 	
 	$_['calendar'] = isset($_['calendar']) ? $_['calendar']: $calendars[0]['uri'];
+	
+	$url = YANA_URL.'/plugins/caldav/calendars.php/calendars/'.$myUser->getLogin() .'/'.$_['calendar'];
+			
+	
 	?>
-	<div style="width:300px;margin:20px auto;">
+	<div style="width:300px;margin:20px auto;" >
 	Calendrier : <select id="calendarSelect" onchange="window.location='index.php?module=caldav&calendar='+$(this).val();">
 	<?php foreach($calendars as $calendar): ?>
 	<option <?php echo $_['calendar'] ==$calendar['uri'] ?'selected="selected"':'';  ?> value="<?php echo $calendar['uri']; ?>"><?php echo  $calendar['displayname']; ?></option>
@@ -107,15 +114,16 @@ function caldav_action(){
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
 				
-				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
-				file_put_contents(__DIR__.'/sessions/'.$s,'');
+	
 				$client->login = $myUser->getLogin();
-				$client->password = $s;
+				$client->password = $myUser->getToken();
 				
 				$client->user = $myUser->getLogin();
 				$client->calendar = $_['calendar'];
 				
-				$events = $client->get_events($_['calendar']);
+			
+				
+				$events = $client->get_events($_['calendar'],strtotime($_['start']),strtotime($_['end']));
 				$response = array();
 				foreach($events as $event):
 					$response[] = array(
@@ -137,10 +145,8 @@ function caldav_action(){
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
 				
-				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
-				file_put_contents(__DIR__.'/sessions/'.$s,'');
 				$client->login = $myUser->getLogin();
-				$client->password = $s;
+				$client->password = $myUser->getToken();
 				
 				$client->user = $myUser->getLogin();
 				$client->calendar = $_['calendar'];
@@ -177,10 +183,8 @@ function caldav_action(){
 				$client = new CaldavClient();
 				$client->host = YANA_URL.'/plugins/caldav/calendars.php/calendars';
 				
-				$s = sha1($myUser->getLogin().time().mt_rand(0,1000));
-				file_put_contents(__DIR__.'/sessions/'.$s,'');
 				$client->login = $myUser->getLogin();
-				$client->password = $s;
+				$client->password = $myUser->getToken();
 				
 				$client->user = $myUser->getLogin();
 				$client->calendar = $_['calendar'];

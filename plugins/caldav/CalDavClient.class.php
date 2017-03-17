@@ -59,34 +59,32 @@ class CaldavClient{
 		$headers = array();
 		$headers []= 'Content-Type: text/calendar; charset=utf-8';
 		//if($etag!='') $headers []= 'ETag: "'.$etag.'"';
-		$out = self::parse_xml(
+		$out = 
 			self::custom_request(
 				$this->host.'/'.$this->user.'/'.$this->calendar.'/'.$eventId ,
 				$this->login.":".$this->password,
 				'PUT',
 				$headers,
 				$body
-			)
-		);
+			);
 		if($out!='') throw new Exception($out);
 		return $eventId;
 			
 	}
 	
 	public function delete_event($ics){
-		return self::parse_xml(
+		return 
 			self::custom_request(
 				$this->host.'/'.$this->user.'/'.$this->calendar.'/'.$ics ,
 				$this->login.":".$this->password,
 				'DELETE',
 				array(),
 				''
-			)
-		);
+			);
 			
 	}
 	
-	public function get_events($calendar){
+	public function get_events($calendar,$start=null,$end=null){
 
 			$body = '<c:calendar-query xmlns:d="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav">
 				<d:prop>
@@ -94,12 +92,19 @@ class CaldavClient{
 					<c:calendar-data />
 				</d:prop>
 				<c:filter>
-					<c:comp-filter name="VCALENDAR" />
+					<c:comp-filter name="VCALENDAR">
+					  <c:comp-filter name="VEVENT">';
+				
+					 if($start!=null || $end!=null)
+						$body .= '<c:time-range start="'.($start!=null?date('Ymd\THis',$start).'Z':'').'" end="'.($end!=null?date('Ymd\THis',$end).Z:'').'"/>';
+						
+					  $body .= '</c:comp-filter>
+					</c:comp-filter>
 				</c:filter>
 			</c:calendar-query>';
 
 			
-			$response = self::parse_xml(self::custom_request(
+			$response = self::custom_request(
 			 $this->host.'/'.$this->user.'/'.$calendar,
 			$this->login.":".$this->password,
 			'REPORT',
@@ -108,12 +113,19 @@ class CaldavClient{
 				'Prefer: return-minimal',
 				'Content-Type: application/xml; charset=utf-8'
 			),
-			$body));
+			$body);
 			
 			
 			$events = array();
 		
+			//print_r($response);
+		
 			$xml = simplexml_load_string($response);
+			
+			$errors = $xml->xpath('//d:error');
+			if(count($errors)>0){
+				throw new Exception((string)$errors[0]->xpath('s:message')[0]);
+			}
 			
 			foreach($xml->xpath('//d:multistatus/d:response') as $xmlEvent) {
 				$xmlCalendar =  (string)$xmlEvent->xpath('d:propstat/d:prop/cal:calendar-data')[0];
@@ -139,7 +151,7 @@ class CaldavClient{
 		  </d:prop>
 		</d:propfind>';
 		
-		return self::parse_xml(self::custom_request(
+		return self::custom_request(
 			$this->host.'/'.$this->user.'/'.$calendar.'/' ,
 			$this->login.":".$this->password,
 			'PROPFIND',
@@ -148,7 +160,7 @@ class CaldavClient{
 				'Depth: 0',
 				'Prefer: return-minimal'
 			),
-			$body));
+			$body);
 
 	}
 	
@@ -170,8 +182,8 @@ class CaldavClient{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
 		//curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());
-		
 		
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
@@ -183,10 +195,6 @@ class CaldavClient{
 		return $response;
 	}
 	
-	public static function parse_xml($xml){
-		//TODO
-		return $xml;
-	}
 }
 
 class IcalEvent{

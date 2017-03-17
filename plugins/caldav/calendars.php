@@ -12,15 +12,12 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Backends
 $authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($userName, $password) {
    
-  // global $myUser;
-   //if($myUser!=false && $myUser->getLogin()!='') return true;
-   
-   $myUser = User::exist($userName, $password,false,false);
-   
-   if(file_exists(__DIR__.'/sessions/'.$password)){
-	   unlink(__DIR__.'/sessions/'.$password);
-	   return true;
-   }
+
+	$myUser = User::exist($userName, $password,false,false);
+	if(!$myUser){
+		$userManager = new User();
+		$myUser = $userManager->load(array('token'=>$password));
+	}
    
    return $myUser!=false;
 });
