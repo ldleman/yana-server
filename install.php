@@ -165,8 +165,9 @@ try {
 	<?php 
 
 	}else{
-		$root = 'http://'.$host.':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
-    	$root = str_replace("/install.php", "", $actionUrl );
+		
+		$root = 'http'.((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')|| $_SERVER['SERVER_PORT'] == 443?'s':'').'://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+    	$root = str_replace("/install.php", "", $root );
 	?>
 	<div class="row">
 	<form class="col-md-3" action="install.php" method="POST">
@@ -186,11 +187,11 @@ try {
 		<label for="login">Identifiant de la base</label><br/>
 		<small>Laisser vide si pas d'identifiant</small><br/>
 		<input type="text" class="form-control" name="login" id="login"/><br/>
-		<label for="password"">Mot de passe de la base</label><br/>
-		
+		<label for="password">Mot de passe de la base</label><br/>
+		<input type="text" class="form-control" name="password" id="password"/><br/>
 		<label for="root">Adresse web de YANA</label><br/>
 		<input type="text" class="form-control" name="root" id="root" value="<?php echo $root; ?>"/><br/>
-		<input type="text" class="form-control" name="password" id="password"/><br/>
+		
 		<input type="submit" class="btn btn-primary" value="Installer" name="install"><br/><br/>
 	</form>
 	</div>
