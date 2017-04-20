@@ -144,6 +144,7 @@ try {
     $dashboard = new Dashboard();
     $dashboard->user = $admin->id;
     $dashboard->label = 'Général';
+    $dashboard->icon = 'fa-bars';
     $dashboard->default = true;
     $dashboard->save();
     

@@ -1,14 +1,8 @@
 <?php require_once __DIR__.DIRECTORY_SEPARATOR.'header.php'; ?>
 
-
 	<?php 
 	
-	
-	
 	Plugin::callHook('page'); 
-	
-	
-	
 	
 	?>
 	<!-- Modal -->

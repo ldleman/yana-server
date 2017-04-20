@@ -15,11 +15,32 @@ body > #wrap {
 
 #dashboard{
 				list-style-type:none;
-				margin:0;
+				margin:20px 0 0 0;
 				padding:0;
 			}
 			#dashboard li{
 				float:left;
+			}
+			
+			#dashboardView{
+				background-color: #4d4d4d;
+				list-style-type: none;
+				color: #fafafa;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				position: absolute;
+				left: 0;
+				top: 50px;
+			}
+			#dashboardView li{
+				padding:10px;
+				cursor:pointer;
+				display:inline-block;
+				transition:background 0.2s ease-in-out;
+			}
+			#dashboardView li:hover{
+				background-color:#6b6b6b;
 			}
 				
 			.widget{

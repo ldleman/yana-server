@@ -1,15 +1,43 @@
+<?php global $myUser; ?>
 <div class="container-fluid">
-	<div class="row">
-		
-		<div class="col-md-12 form-inline">
-			<ul id="view">
-			<?php foreach(Dashboard::loadAll() as $dashboard): ?>
-				<li <?php echo $dashboard->default?'data-selected="1" class="active"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
+	<?php if($myUser->connected()): ?>
+	<ul id="dashboardView">
+	<?php foreach(Dashboard::loadAll() as $dashboard): ?>
+		<li <?php echo $dashboard->default?'data-selected="1" class="active"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
+	<?php endforeach; ?>
+		<li class="right"><div data-toggle="modal" data-target="#addWidgetModal" title="Ajouter un widget"><i class="fa fa-plus-square-o"></i></div></li>
+	</ul>
+	<?php endif; ?>
+
+	
+	<!-- Add wiget modal -->
+	<div class="modal fade" id="addWidgetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Ajout d'un widget</h4>
+		  </div>
+		  <div class="modal-body">
+			<label for="widgetList">Sélectionnez le widget</label>
+			<select id="widgetList">
+			<?php $models = array();
+			Plugin::callHook('widget',array(&$models));
+			foreach($models as $model): 
+			
+			
+			
+			?>
+				<option value="<?php echo $model->model; ?>"><?php echo $model->title; ?></option>
 			<?php endforeach; ?>
-			</ul>
-			<div class="btn" onclick="add_widget();"><i class="fa fa-check"></i> Ajouter un widget</div>
-		
+			</select>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			<button type="button" class="btn btn-primary" onclick="addWidget();">Ajouter</button>
+		  </div>
 		</div>
+	  </div>
 	</div>
 
 	<div class="row" id="dashboard">

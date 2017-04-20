@@ -106,7 +106,7 @@ function test_plugin_widget_refresh(&$widgets){
 function test_plugin_widget(&$widgets){
 	$modelWidget = new Widget();
 	$modelWidget->model = 'test';
-	$modelWidget->title = 'hello test';
+	$modelWidget->title = 'Horloge';
 	$modelWidget->icon = 'fa-caret-right';
 	$modelWidget->background = '#50597b';
 	$modelWidget->load = 'action.php?action=test_widget_load';

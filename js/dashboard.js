@@ -6,7 +6,7 @@
 
 			$.action({
 				action : 'search_widget',
-				dashboard : $('#view li[data-selected]').attr('data-id')
+				dashboard : $('#dashboardView li[data-selected]').attr('data-id')
 			},function(r){
 				for(var i in r.rows){
 					var widget = r.rows[i];
@@ -16,7 +16,7 @@
 				setInterval(function(){
 					$.action({
 						action : 'refresh_widget',
-						dashboard : $('#view li[data-selected]').attr('data-id')
+						dashboard : $('#dashboardView li[data-selected]').attr('data-id')
 					},function(r){
 						for(var i in r.rows){
 							var widget = r.rows[i];
