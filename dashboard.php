@@ -2,11 +2,23 @@
 <div class="container-fluid">
 	<?php if($myUser->connected()): ?>
 	<ul id="dashboardView">
-	<?php foreach(Dashboard::loadAll() as $dashboard): ?>
-		<li <?php echo $dashboard->default?'data-selected="1" class="active"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
+	<?php foreach(Dashboard::loadAll(array('user'=>$myUser->id)) as $dashboard): ?>
+		<li <?php echo $dashboard->default?'data-selected="1"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
 	<?php endforeach; ?>
-		<li class="right"><div data-toggle="modal" data-target="#addWidgetModal" title="Ajouter un widget"><i class="fa fa-plus-square-o"></i></div></li>
+		<li class="right"><div data-toggle="modal" data-target="#addWidgetModal" title="Ajouter un widget"><i class="fa fa-plus-square-o"></i> widget</div></li>
 	</ul>
+	<div class="clear"></div>
+	<?php else: ?>
+	<div class="well"><h3><?php echo Personality::response("GREETING"); ?>!</h3>
+	
+	<blockquote>
+	  <p>Merci de vous connecter pour acceder à l'ensemble des fonctionnalités.<br/> Vous pouvez vous connecter à tout moment via
+	  le  formulaire de connexion en haut à droite du programme</p>
+	  <small>Yana</small>
+	</blockquote>
+	
+	</div>
+	
 	<?php endif; ?>
 
 	
@@ -34,7 +46,7 @@
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-			<button type="button" class="btn btn-primary" onclick="addWidget();">Ajouter</button>
+			<button type="button" class="btn btn-primary" onclick="addNewWidget();">Ajouter</button>
 		  </div>
 		</div>
 	  </div>

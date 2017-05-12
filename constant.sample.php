@@ -24,7 +24,7 @@ define('SOCKET_PORT',9999);
 /* Nombre maxium de clients sur le serveur socket */
 define('SOCKET_MAX_CLIENTS',20);
 
-define('PROGRAM_NAME','Core');
+define('PROGRAM_NAME','Yana Server');
 define('SOURCE_VERSION','4.0');
 define('BASE_VERSION','2.0');
 

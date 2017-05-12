@@ -355,7 +355,6 @@ class Entity
 		$sgbd = BASE_SGBD;
 		$sql = $sgbd::select();
 		$sql = Entity::render($sql,$data);
-		
         return $instance->customQuery($sql, $values, true);
     }
 

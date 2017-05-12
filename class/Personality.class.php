@@ -78,6 +78,10 @@ class Personality extends Entity{
 
 
 	public static $sentences = array(
+								'GREETING'=>
+									array(
+										"{[Salut|Bonjour|Héhoh] [l'ami|toi|vous]}"
+									),
 								'ORDER_CONFIRMATION'=>
 									array(
 										'{J\'aime [beaucoup|vraiment|]|J\'adore|Je ne [souhaite|veux] que|Je n\'aspire qu\'a|Je ne [rêve] que de} vous {obéir|faire plaisir}!',

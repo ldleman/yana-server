@@ -9,9 +9,34 @@ body > #wrap {
 	padding-bottom: 60px;
 }
 
+
+a.navbar-brand {
+    padding-left: 40px;
+    background: url('../img/logo.png') no-repeat 5px center !important;
+    font-size: 10px;
+    padding-top: 24px;
+}
 /**
 ** DASHBOARD
 **/
+
+#dashboardForm #icon{
+	font-family:"FontAwesome";
+}
+
+.iconSet{
+	max-height:200px;
+	overflow:auto;
+}
+.iconSet i{
+	cursor:pointer;
+	padding:5px;
+	color:#444444;
+}
+.iconSet i:hover,.iconSet i[data-selected]{
+	color:#ffffff;
+	background-color:#38B1DB;
+}
 
 #dashboard{
 				list-style-type:none;
@@ -32,17 +57,24 @@ body > #wrap {
 				position: absolute;
 				left: 0;
 				top: 50px;
+				border-top: 4px solid #747474;
 			}
 			#dashboardView li{
 				padding:10px;
 				cursor:pointer;
-				display:inline-block;
+				float:left;
 				transition:background 0.2s ease-in-out;
 			}
 			#dashboardView li:hover{
 				background-color:#6b6b6b;
 			}
-				
+			
+			#dashboardView li[data-selected]{
+				background-color:#5A5A5A;
+				text-shadow: 0px 0px 5px rgba(55, 156, 255, 1),0px 0px 15px rgb(55, 220, 255);
+				color:#ffffff;
+			}
+			
 			.widget{
 				transition:width 0.2s linear,height 0.2s linear,opacity 0.2s linear;
 				display: table;
@@ -137,6 +169,12 @@ body > #wrap {
 #loginForm{
 	color:#ffffff;
 }
+#loginForm input[type="text"],#loginForm input[type="password"]{
+	background:#333333;
+	color:#fefefe;
+	padding:2px 5px;
+	border-radius:0;
+}
 
 #userBar img
 {
@@ -202,11 +240,11 @@ body > #wrap {
 }
 
 .right{
-	float:right;
+	float:right!important;
 }
 
 .left{
-	float:left;
+	float:left!important;
 }
 
 .pointer{

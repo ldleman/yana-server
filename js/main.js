@@ -62,6 +62,17 @@ function init_setting(parameter){
 		case 'room':
 			search_room();
 		break;
+		case 'dashboard':
+			$('.iconSet i').click(function(){
+				$('.iconSet i').removeAttr('data-selected');
+				$(this).attr('data-selected','true');
+				$('#icon').val($(this).attr('data-value'));
+			});
+			
+			$('#icon').val($('.iconSet i[data-selected]').attr('data-value'));
+			
+			search_dashboard();
+		break;
 		case 'rank':
 			search_rank();
 		break;
@@ -177,6 +188,52 @@ function delete_room(element){
 	if(!confirm('Êtes vous sûr de vouloir supprimer cet item?')) return;
 	var line = $(element).closest('tr');
 	$.action({action : 'delete_room',id : line.attr('data-id')},function(r){
+		line.remove();
+	});
+}
+
+
+/** DASHBOARD **/
+
+// SEARCH
+function search_dashboard(callback){
+	$('#dashboards').fill({action:'search_dashboard'},function(){
+		if(callback!=null) callback();
+	});
+}
+
+// SAVE
+function save_dashboard(account){
+	var data = $.getForm('#dashboardForm');
+	data.account = account == true;
+	$.action(data,function(r){
+		$.message('info','Page dashboard enregistrée');
+		if(account) return;
+		
+		$('#dashboardForm input').val('');
+		$('#dashboardForm').attr('data-id','');
+		search_dashboard();
+	});
+}
+
+// EDIT
+function edit_dashboard(element){
+	var line = $(element).closest('tr');
+	$.action({action:'edit_dashboard',id:line.attr('data-id')},function(r){
+		$.setForm('#dashboardForm',r);
+		
+		$('.iconSet i').removeAttr('data-selected');
+		$('.iconSet i[data-value="'+r.icon+'"]').attr('data-selected',"");
+				
+		$('#dashboardForm').attr('data-id',r.id);
+	});
+}
+
+// DELETE
+function delete_dashboard(element){
+	if(!confirm('Êtes vous sûr de vouloir supprimer cet item?')) return;
+	var line = $(element).closest('tr');
+	$.action({action : 'delete_dashboard',id : line.attr('data-id')},function(r){
 		line.remove();
 	});
 }

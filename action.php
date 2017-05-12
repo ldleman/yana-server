@@ -34,6 +34,59 @@ switch ($_['action']){
 
 	//WIDGET
 	
+	case 'add_widget':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('widget','add')) throw new Exception("Permissions insuffisantes");
+			$widget = new Widget();
+			$widget->model = $_['widget'];
+			$widget->position = 666;
+			$widget->minified = false;
+			$widget->dashboard = $_['dashboard'];
+			$widget->save();
+			$response['message'] = 'Widget ajouté';
+		});
+	break;
+	
+	case 'move_widgets':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('widget','update')) throw new Exception("Permissions insuffisantes");
+			
+			$dashboard = Dashboard::getById($_['dashboard']);
+			
+			if( $dashboard->user!=$myUser->id) 
+				throw new Exception("Vous ne pouvez modifier que vos propres widgets");
+			
+			$dashboard_widgets = Widget::loadAll( array('dashboard' => $dashboard->id ) );
+
+			foreach($_['positions'] as $move){
+				foreach($dashboard_widgets as $dashboard_widget){
+					if($dashboard_widget->id!=$move['id']) continue;
+					$dashboard_widget->position = $move['position'];
+					$dashboard_widget->save();
+				}
+				
+				
+			}
+			
+		});
+	break;
+
+	case 'delete_widget':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('widget','delete')) throw new Exception("Permissions insuffisantes");
+			$widget = Widget::getById($_['widget']);
+			$dashboard = Dashboard::getById($_['dashboard']);
+			if($widget->dashboard!=$dashboard->id || $dashboard->user!=$myUser->id) 
+				throw new Exception("Vous ne pouvez supprimer que vos propres widgets");
+			
+			$widget->deleteById($widget->id);
+			$response['message'] = 'Widget supprimé';
+		});
+	break;
+	
 	case 'refresh_widget':
 		Action::write(function($_,&$response){
 			global $myUser;
@@ -55,9 +108,9 @@ switch ($_['action']){
 			foreach($models as $model):
 				$models[$model->model] = $model;
 			endforeach;
-			
-			$widgets = Widget::loadAll(array('dashboard'=>$_['dashboard']));
-			
+
+			$widgets = Widget::loadAll(array('dashboard'=>$_['dashboard']),array('position'));
+
 			foreach($widgets as $widget):
 				if(!isset($models[$widget->model])) continue;
 
@@ -114,6 +167,49 @@ switch ($_['action']){
 		});
 	break;
 
+	
+	//DASHBOARD
+	case 'search_dashboard':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('dashboard','read')) throw new Exception("Permissions insuffisantes");
+			foreach(Dashboard::loadAll(array('user'=>$myUser->id)) as $dashboard){
+				$response['rows'][] = $dashboard;
+			}
+				
+		});
+	break;
+	
+	case 'save_dashboard':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('dashboard','edit')) throw new Exception("Permissions insuffisantes");
+			$dashboard = isset($_['id']) && is_numeric($_['id'])  ? Dashboard::getById($_['id']) : new Dashboard();
+			if(!isset($_['label']) || empty($_['label'])) throw new Exception("Nom obligatoire");
+			$dashboard->label = $_['label'];
+			$dashboard->user = $myUser->id;
+			$dashboard->icon = $_['icon'];
+			$dashboard->save();
+		});
+	break;
+	
+	case 'edit_dashboard':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('dashboard','edit')) throw new Exception("Permissions insuffisantes");
+			$dashboard = Dashboard::getById($_['id']);
+			$response = $dashboard;
+		});
+	break;
+
+	case 'delete_dashboard':
+		Action::write(function($_,&$response){
+			global $myUser;
+			if(!$myUser->can('dashboard','delete')) throw new Exception("Permissions insuffisantes");
+			Dashboard::deleteById($_['id']);
+		});
+	break;
+	
 	// PLUGINS
 	case 'search_plugin':
 		Action::write(function($_,&$response){

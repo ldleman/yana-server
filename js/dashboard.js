@@ -1,19 +1,32 @@
 
 		//handle target
 		var target = false;
+		var refreshInterval = null;
 		
 		function init_dashboard(){
 
+			
+			loadDashBoard();
+			$('#dashboardView li:not(:last-child)').click(function(){
+				$('#dashboardView li').removeAttr('data-selected');
+				$(this).attr('data-selected',1);
+				loadDashBoard();
+			});
+		}
+		
+		function loadDashBoard(){
 			$.action({
 				action : 'search_widget',
 				dashboard : $('#dashboardView li[data-selected]').attr('data-id')
 			},function(r){
+				$('#dashboard .widget:visible').remove();
 				for(var i in r.rows){
 					var widget = r.rows[i];
 					addWidget(widget);
 					loadWidget(widget);
 				}
-				setInterval(function(){
+				clearInterval(refreshInterval);
+				refreshInterval = setInterval(function(){
 					$.action({
 						action : 'refresh_widget',
 						dashboard : $('#dashboardView li[data-selected]').attr('data-id')
@@ -30,9 +43,7 @@
 			
 		//Chargement du contenu php du widget
 		function loadWidget(widget){
-
 			$.getJSON(widget.load,$.extend(widget,{content:''}),function(r){
-				console.log(r);
 				updateWidget(r);
 				var data = $.extend($('.widget[data-id="'+widget.id+'"]').data('data'), r.widget);
 				var init = 'widget_'+widget.model+'_init';
@@ -40,7 +51,20 @@
 			});
 		}
 		
-		//Ajout d'un widget
+		//Ajout (manuel par l'user) d'un widget
+		function addNewWidget(){
+			$.action({
+				action : 'add_widget',
+				dashboard : $('#dashboardView li[data-selected]').attr('data-id'),
+				widget : $('#widgetList').val()
+			},function(r){
+				if(r.message) $.message('info',r.message);
+				$('#addWidgetModal').modal('hide');
+				loadDashBoard();
+			});
+		}
+		
+		//Ajout (depuis le code) d'un widget
 		function addWidget(data){
 			var tpl = $('#dashboard .widget:hidden').get(0).outerHTML;
 			var widget = $(tpl);
@@ -85,7 +109,17 @@
 			$('.widget:visible').each(function(i,element){
 				positions.push({id:$(element).attr('data-id'),position:$(element).index()});
 			});
-			console.log('MOVE_WIDGETS',positions);
+			//console.log('MOVE_WIDGETS',positions);
+
+
+			$.action({
+				action : 'move_widgets',
+				dashboard : $('#dashboardView li[data-selected]').attr('data-id'),
+				positions : positions,
+			},function(r){
+				
+			});
+
 		}
 		
 		//Mise à jour des infos d'un élement widget à partir d'un object data
@@ -170,9 +204,18 @@
 			var element = $(element).closest('.widget');
 			var data = element.data('data');
 			
-			element.remove();
-			if(data.delete != null){
-				$.getJSON(data.delete,$.extend(data,{content:''}));
-			}
-			console.log('DELETE_WIDGET',data.id);
+			$.action({
+				action : 'delete_widget',
+				dashboard : $('#dashboardView li[data-selected]').attr('data-id'),
+				widget : data.id,
+			},function(r){
+				element.remove();
+				if(r.message) $.message('info',r.message);
+				if(data.delete != null){
+					$.getJSON(data.delete,$.extend(data,{content:''}));
+				}
+			});
+
+			
+			
 		}

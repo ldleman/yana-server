@@ -42,7 +42,7 @@ uasort ($userMenu , function($a,$b){return $a['sort']>$b['sort']?1:-1;})
                         <span class="sr-only">Toggle navigation</span>
                         <i class="fa fa-bars"></i>
                       </button>
-                      <a href="index.php" class="navbar-brand"><?php echo PROGRAM_NAME; ?></a>
+                      <a href="index.php" class="navbar-brand"><span class="label label-primary">V<?php echo SOURCE_VERSION; ?></span></a>
                     </div>
                  
                     

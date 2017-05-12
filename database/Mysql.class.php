@@ -39,7 +39,7 @@ class Mysql
 		return $sql;
 	}
 	public static function update(){
-		$sql = 'UPDATE {{table}} SET {{?fields}} {{:fields}}{{key}}={{value}} {{;}} , {{/;}} {{/:fields}} {{/?fields}} {{?filters}}WHERE {{:filters}}{{key}}{{operator}}{{value}} {{;}} AND {{/;}} {{/:filters}} {{/?filters}}';
+		$sql = 'UPDATE {{table}} SET {{?fields}} {{:fields}}`{{key}}`={{value}} {{;}} , {{/;}} {{/:fields}} {{/?fields}} {{?filters}}WHERE {{:filters}}{{key}}{{operator}}{{value}} {{;}} AND {{/;}} {{/:filters}} {{/?filters}}';
 		return $sql;
 	}
 	public static function insert(){

@@ -97,9 +97,12 @@ function propise_setting_page(){
 }
 
 function propise_plugin_widget_refresh(&$widgets){
-	$widget = Widget::getById(1);
-	$widget->content = 'Dernier rafraichissement : '.date('d/m/Y H:i:s');
-	$widgets[] = $widget ;
+
+	$plugin_widgets = Widget::loadAll(array('model'=>'propise'));
+	foreach($plugin_widgets as $plugin_widget){
+		$plugin_widget->content = 'Humidité: '.rand(0,100);
+		$widgets[] = $plugin_widget;
+	}
 }
 
 function propise_plugin_widget(&$widgets){
@@ -107,7 +110,7 @@ function propise_plugin_widget(&$widgets){
 	$modelWidget->model = 'propise';
 	$modelWidget->title = 'Sonde';
 	$modelWidget->icon = 'fa-tint';
-	$modelWidget->background = '#ffffff';
+	$modelWidget->background = '#222222';
 	$modelWidget->load = 'action.php?action=propise_widget_load';
 	$modelWidget->delete = 'action.php?action=propise_widget_delete';
 	$modelWidget->js = [__DIR__.'/main.js'];

@@ -29,6 +29,14 @@
 	Plugin::addHook("menu_setting", function(&$settingMenu){
 		global $myUser;
 
+		if($myUser->can('dashboard','configure'))
+		$settingMenu[]= array(
+			'sort' =>2,
+			'url' => 'setting.php?section=dashboard',
+			'icon' => 'angle-right',
+			'label' => 'Dashboard'
+		);
+		
 		if($myUser->can('plugin','configure'))
 		$settingMenu[]= array(
 			'sort' =>0,
@@ -61,6 +69,8 @@
 			'icon' => 'angle-right',
 			'label' => 'Rangs & Accès'
 		);
+		
+		
 	});
 
 	Plugin::addHook("menu_main", function(&$mainMenu){
@@ -91,7 +101,7 @@
 	
 	Plugin::addHook("content_setting", function(){
 		global $_;
-		if(in_array($_['section'],array('plugin','rank','right','user','room')) && file_exists('setting.'.$_['section'].'.php'))
+		if(in_array($_['section'],array('plugin','rank','right','user','room','dashboard')) && file_exists('setting.'.$_['section'].'.php'))
 		require_once('setting.'.$_['section'].'.php');
 	});
 
@@ -100,6 +110,7 @@
 		$sections['user'] = 'Gestion des utilisateurs';
 		$sections['plugin'] = 'Gestion des plugins';
 		$sections['rank'] = 'Gestion des rangs et droits';
+		$sections['dashboard'] = 'Gestion de la dashboard et des widgets';
 	});
 
 

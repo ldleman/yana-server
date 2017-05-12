@@ -322,6 +322,13 @@ $.fn.extend({
 		});
 	},
 	
+	clear: function (){
+        return this.each(function() {
+        	var obj = $(this);
+        	obj.find('input,select,textarea').val();
+    	});
+	},
+
 	fill: function (option,callback){
 		
             return this.each(function() {
