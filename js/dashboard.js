@@ -15,6 +15,7 @@
 		}
 		
 		function loadDashBoard(){
+
 			$.action({
 				action : 'search_widget',
 				dashboard : $('#dashboardView li[data-selected]').attr('data-id')
@@ -31,10 +32,20 @@
 						action : 'refresh_widget',
 						dashboard : $('#dashboardView li[data-selected]').attr('data-id')
 					},function(r){
-						for(var i in r.rows){
-							var widget = r.rows[i];
-							updateWidget(widget);
+
+						for(var id in r.rows){
+							var widget = r.rows[id];
+							
+							if(widget.callback){
+								if(window[widget.callback]!=null) window[widget.callback]($('.widget[data-id="'+id+'"]'),widget.data);
+							}
+							if(widget.widget){
+								widget.widget.id = id;
+								updateWidget(widget.widget);
+							}
 						}
+
+
 					});
 				},3000);
 			});
@@ -98,7 +109,9 @@
 		
 		//Modification d'un widget existant
 		function updateWidget(data){
+
 			var widget = $('.widget[data-id="'+data.id+'"]');
+			
 			var data = $.extend(widget.data('data'), data);
 			renderWidget(widget,data);
 		}

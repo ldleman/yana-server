@@ -20,7 +20,33 @@ function propise_plugin_action(){
 	switch($_['action']){
 		case 'propise_widget_load':
 			$widget = Widget::current();
-			$widget->content = 'popopoh';
+			require_once('Sensor.class.php');
+			$sensor = new Sensor();
+			$parameters = array(
+				'menu' => ''
+			);
+			$content = '<div class="propise_widget" data-view="'.$parameters['menu'].'" data-id="'.$sensor->id.'">';
+			$content .= '<div class="propise_view">
+							<ul>
+								<li data-type="light"><i class="fa fa-sun-o fa-spin-low"></i> <span ></span>%</li>
+								<li data-type="temperature"><i class="fa fa-fire"></i> <span ></span>°</li>
+								<li data-type="humidity"><i class="fa fa-tint"></i> <span ></span>%</li>
+								<li data-type="mouvment"><i class="fa fa-eye"></i> <span ></span></li>
+							</ul>
+							<div class="clear"></div>';
+			$content .= '</div>';
+			
+			$content .= '<ul class="propise_menu">';
+				$content .= '<li class="propise_global" onclick="propise_menu(this)" data-view=""><i class="fa fa-columns"></i></li>';
+				$content .= '<li onclick="propise_menu(this)" data-view="light"><i class="fa fa-sun-o"></i></li>';
+				$content .= '<li onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
+				$content .= '<li onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
+				$content .= '<li onclick="propise_menu(this)" data-view="mouvment"><i class="fa fa-eye"></i></li>';
+				$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
+			$content .= '</ul>';		
+			$content .= '</div>';
+			$widget->content =  $content;
+
 			echo json_encode($widget);
 		break;
 
@@ -96,13 +122,17 @@ function propise_setting_page(){
 	require_once(__DIR__.SLASH.'setting.php');
 }
 
-function propise_plugin_widget_refresh(&$widgets){
-
-	$plugin_widgets = Widget::loadAll(array('model'=>'propise'));
-	foreach($plugin_widgets as $plugin_widget){
-		$plugin_widget->content = 'Humidité: '.rand(0,100);
-		$widgets[] = $plugin_widget;
-	}
+function propise_plugin_widget_refresh(&$response){
+	
+	$response[3]['callback'] = 'propise_refresh';
+	$response[3]['data'] = array(
+		'humidity' => rand(0,100),
+		'temperature' => rand(0,30),
+		'light' => rand(0,100),
+		'mouvment' => rand(0,1)
+	);
+	$response[3]['widget']['title'] = 'Sonde ('.date('H\hi').')';
+	
 }
 
 function propise_plugin_widget(&$widgets){
@@ -110,7 +140,7 @@ function propise_plugin_widget(&$widgets){
 	$modelWidget->model = 'propise';
 	$modelWidget->title = 'Sonde';
 	$modelWidget->icon = 'fa-tint';
-	$modelWidget->background = '#222222';
+	$modelWidget->background = '#50597B';
 	$modelWidget->load = 'action.php?action=propise_widget_load';
 	$modelWidget->delete = 'action.php?action=propise_widget_delete';
 	$modelWidget->js = [__DIR__.'/main.js'];

@@ -1,0 +1,105 @@
+<style>
+							.propise_widget{
+								height:100%;
+							}
+							.propise_menu{
+								margin:0;
+							}
+							.propise_menu li{
+								cursor: pointer;
+								display: inline-block;
+								font-size: 20px;
+								height: 25px;
+								margin-top: 3px;
+								padding: 5px 5px 0 5px;
+								text-align: center;
+								color:#222222;
+								transition: all 0.2s ease-in-out 0s;
+								width: 30px;
+								border-top:4px solid #222222;
+							}
+
+							.propise_menu li:hover{
+								background:#222222;
+								color:#ffffff;
+							}
+							
+							.propise_view{
+								background:#222222;
+								color:#ffffff;
+								margin:0px;
+								padding:0px;
+								width:100%;
+								list-style-type:none;
+								transition:all 0.2s ease-in-out;
+								box-sizing: border-box;
+							}
+							.propise_view ul{
+								padding:0;
+								margin:0;
+							}
+
+							.propise_view li i{
+								font-size:40px;
+							}
+							.propise_view li{
+								font-family: "Open Sans Light",sans-serif;
+								text-align:center;
+								padding:30px 15px 15px 15px;
+								list-style-type:none;
+								float:left;
+								height: 100px;
+								width:50%;
+								box-sizing:border-box;
+								font-weight:300;
+								font-size:30px;
+								
+							}
+							
+							.propise_view.propise_detail_view li{
+								font-size:60px;
+								width:100%;
+								/*height:140px;*/
+								font-size:50px;
+								padding:40px 0 40px 0;
+								float:none;
+							}
+							
+							.propise_menu li[data-view="temperature"]{
+								border-color:#36B3E1;
+							}
+							.propise_menu li[data-view="humidity"]{
+								border-color:#50597B;
+							}
+							.propise_menu li[data-view="light"]{
+								border-color:#EF4D66;
+							}
+							.propise_menu li[data-view="mouvment"]{
+								border-color:#FFBF4C;
+							}
+							.propise_menu li[data-view="stats"]{
+								border-color:#b3e021;
+							}
+							
+							
+							.propise_view li[data-type="temperature"]{
+								background-color:#36B3E1;
+								border-color:#36B3E1;
+							}
+							.propise_view li[data-type="humidity"]{
+								background-color:#50597B;
+								border-color:#50597B;
+							}
+							.propise_view li[data-type="light"]{
+								background-color:#EF4D66;
+								border-color:#EF4D66;
+							}
+							.propise_view li[data-type="mouvment"]{
+								background-color:#FFBF4C;
+								border-color:#FFBF4C;
+							}
+							.propise_view li[data-type="propise_stats"]{
+								background-color:#C1004F;
+								border-color:#C1004F;
+							}
+						</style>

@@ -43,7 +43,7 @@ a.navbar-brand {
 				margin:20px 0 0 0;
 				padding:0;
 			}
-			#dashboard li{
+			#dashboard > li{
 				float:left;
 			}
 			
