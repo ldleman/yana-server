@@ -38,6 +38,13 @@ a.navbar-brand {
 	background-color:#38B1DB;
 }
 
+
+#widgetList{
+	width:100%;
+	display: block;
+	margin-top: 10px;
+}
+
 #dashboard{
 				list-style-type:none;
 				margin:20px 0 0 0;
@@ -369,6 +376,12 @@ display:none;
 **/
 
 @media (max-width: 767px) {
+
+	#dashboardView li{
+		display:block;
+		float:none;
+	}
+
     #loginForm  {
         width:100%;
         display:block;

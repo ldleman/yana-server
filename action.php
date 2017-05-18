@@ -73,6 +73,7 @@ switch ($_['action']){
 		});
 	break;
 
+
 	case 'delete_widget':
 		Action::write(function($_,&$response){
 			global $myUser;

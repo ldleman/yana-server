@@ -31,8 +31,9 @@
 			<h4 class="modal-title" id="myModalLabel">Ajout d'un widget</h4>
 		  </div>
 		  <div class="modal-body">
-			<label for="widgetList">Sélectionnez le widget</label>
-			<select id="widgetList">
+			<label for="widgetList">Sélectionnez le widget que vous souhaitez ajouter</label>
+			<select id="widgetList" size="10">
+				<option calue=""> - </option>
 			<?php $models = array();
 			Plugin::callHook('widget',array(&$models));
 			foreach($models as $model): 
@@ -47,6 +48,28 @@
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 			<button type="button" class="btn btn-primary" onclick="addNewWidget();">Ajouter</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<!-- Configure wiget modal -->
+	<div class="modal fade" id="configureWidgetModal" tabindex="-1" role="dialog" aria-labelledby="configureModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="configureModalLabel">Configuration d'un widget</h4>
+		  </div>
+		  <div class="modal-body">
+			<div class="pluginContent">
+				<!-- Configuration plugin ici -->
+			</div>
+			
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			<button type="button" class="btn btn-primary" onclick="saveWidgetConfiguration();">Ajouter</button>
 		  </div>
 		</div>
 	  </div>

@@ -49,11 +49,12 @@ function propise_menu(element,global){
 	var widget = $(element).closest('.dashboard_bloc').attr('data-id');
 	
 	$(container).attr("data-view",view);
-	$.action({
+	
+	/*$.action({
 		action:"propise_select_widget_menu",
 		id:widget,
 		menu: view
-	});
+	});*/
 
 	propise_show(container,view);
 };

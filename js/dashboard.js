@@ -35,14 +35,18 @@
 
 						for(var id in r.rows){
 							var widget = r.rows[id];
-							
+
+							if(widget.widget){
+								var header = $('.widget[data-id="'+id+'"]').find('.widget_header'); 
+								if(widget.widget.title) header.find('span').text(widget.widget.title);
+								if(widget.widget.icon) header.find('i').attr('class','fa '+widget.widget.icon);
+								if(widget.widget.background) header.css('backgroundColor',widget.widget.background);
+							}
+
 							if(widget.callback){
 								if(window[widget.callback]!=null) window[widget.callback]($('.widget[data-id="'+id+'"]'),widget.data);
 							}
-							if(widget.widget){
-								widget.widget.id = id;
-								updateWidget(widget.widget);
-							}
+							
 						}
 
 
@@ -74,6 +78,28 @@
 				loadDashBoard();
 			});
 		}
+
+		//Configuration d'un widget
+		function configure_widget(element){
+		
+			var element = $(element).closest('.widget');
+			var data = element.data('data');
+			
+			$.getJSON(data.configure,{
+				dashboard : $('#dashboardView li[data-selected]').attr('data-id'),
+				widget : data.id
+			},function(r){
+				$('#configureWidgetModal .pluginContent').html(r.content);
+				$('#configureWidgetModal').modal('show');
+			});
+
+		}
+
+		function saveWidgetConfiguration(){
+			loadDashBoard();
+			$('#configureWidgetModal').modal('hide');
+		}
+		
 		
 		//Ajout (depuis le code) d'un widget
 		function addWidget(data){
@@ -111,7 +137,7 @@
 		function updateWidget(data){
 
 			var widget = $('.widget[data-id="'+data.id+'"]');
-			
+
 			var data = $.extend(widget.data('data'), data);
 			renderWidget(widget,data);
 		}
@@ -142,6 +168,9 @@
 				return (css.match (/(^|\s)col-md-\S+/g) || []).join(' ');
 			});
 			widget.attr('data-id',data.id)
+			.attr('data-load',data.load)
+			.attr('data-configure',data.configure)
+			.attr('data-delete',data.delete)
 			.addClass('col-md-'+data.width)
 			.find('.widget_header')
 			.css('background',data.background)
@@ -157,8 +186,10 @@
 				var option = data.options[k];
 				options+='<li onclick="'+option.function+'"><i class="fa '+option.icon+'"></i> '+option.label+'</li>';
 			}
-	
-			options+='<li onclick="delete_widget(this);"><i class="fa fa-times"></i></li>';
+
+			if(data.configure) options+="<li title='Configurer' onclick='configure_widget(this);'><i class='fa fa-wrench'></i></li>";
+			options+="<li title='Supprimer' onclick='delete_widget(this);'><i class='fa fa-times'></i></li>";
+			
 
 			widget.find('.widget_options').html(options);
 				
