@@ -1,16 +1,15 @@
 $(document).ready(function(){
+	var page = $.page();
+	page == '' ? 'index' : page;
+	var init = 'init_'+page;
 
-	var init = 'init_'+$.page();
 
-	if(window[init]!=null) window[init]($.urlParam());
-	if($.page()=='' ) init_index();
-	
-	if($.urlParam('module')!= null){
+	if($.urlParam('module')==null){
+		if(window[init]!=null) window[init]($.urlParam());
+	}else{
 		var init = 'init_plugin_'+$.urlParam('module');
 		if(window[init]!=null) window[init]($.urlParam());
 	}
-
-
 	
 	//SHOW HTTP ERROR/NOTICE
     if ($.urlParam('error') != null) {
