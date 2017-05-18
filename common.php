@@ -115,7 +115,9 @@
 
 
 	Plugin::addHook("page",function(){
-		require_once(__ROOT__.'dashboard.php');
+		global $_;
+		if(!isset($_['module'])) 
+			require_once(__ROOT__.'dashboard.php');
 	});
 
 	Plugin::includeAll();
