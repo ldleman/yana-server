@@ -120,7 +120,7 @@ class Entity
 
     public static function install($classDirectory)
     {
-        foreach (glob($classDirectory.DIRECTORY_SEPARATOR.'*.class.php') as $file) {
+        foreach (glob($classDirectory.SLASH.'*.class.php') as $file) {
             $infos = explode('.', basename($file));
             $class = array_shift($infos);
             require_once($classDirectory.SLASH.$class.'.class.php');
@@ -135,9 +135,11 @@ class Entity
 	
 	 public static function uninstall($classDirectory)
     {
-        foreach (glob($classDirectory.DIRECTORY_SEPARATOR.'*.class.php') as $file) {
+        foreach (glob($classDirectory.SLASH.'*.class.php') as $file) {
+
             $infos = explode('.', basename($file));
             $class = array_shift($infos);
+            require_once($classDirectory.SLASH.$class.'.class.php');
             if (!class_exists($class) || !method_exists($class, 'create') || $class == get_class()) {
                 continue;
             }

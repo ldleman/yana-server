@@ -73,18 +73,44 @@ function propise_plugin_action(){
 
 		case 'propise_widget_configure':
 			Action::write(function($_,&$response){
-				$response['content']= 'hey !'; 
+				require_once(__DIR__.SLASH.'Sensor.class.php');
+				$response['content'] = '<h4><i class="fa fa-wrench"></i> Configuration capteur</h4>'; 
+				$response['content'] .= 'Sélectionnez le capteur à lier à ce widget :';
+				$response['content'] .= '<select id="sensor">';
+				foreach(Sensor::loadAll() as $sensor){
+					$response['content'] .= '<option value="'.$sensor->id.'">'.$sensor->label.'</option>';
+				}
+				$response['content'] .= '</select>';
+			});
+		break;
+
+		case 'propise_select_widget_menu':
+			Action::write(function($_,&$response){
+				require_once(__DIR__.SLASH.'Sensor.class.php');
+				$widget = Widget::getById($_['id']);
+				$widget->data('menu',$_['menu']);
+				$widget->save();
 			});
 		break;
 
 		case 'propise_widget_load':
 			$widget = Widget::current();
+			$id = $widget->data('sensor');
+
+			if($id==''){
+				$content = '
+				<div class="propise-no-configuration">
+				<h4><i class="fa fa-adjust"></i> Aucun capteur configuré</h4>
+				<p>Cliquez sur la clé à molette pour configurer ce widget</p>
+				</div>';
+				
+			}else{
 			require_once('Sensor.class.php');
-			$sensor = new Sensor();
+			$sensor =  Sensor::getById($id);
 			$parameters = array(
 				'menu' => ''
 			);
-			$content = '<div class="propise_widget" data-view="'.$parameters['menu'].'" data-id="'.$sensor->id.'">';
+			$content = '<div class="propise_widget" data-view="'.$widget->data('menu').'" data-id="'.$sensor->id.'">';
 			$content .= '<div class="propise_view">
 							<ul>
 								<li data-type="light"><i class="fa fa-sun-o fa-spin-low"></i> <span ></span>%</li>
@@ -101,11 +127,13 @@ function propise_plugin_action(){
 				$content .= '<li onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
 				$content .= '<li onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
 				$content .= '<li onclick="propise_menu(this)" data-view="mouvment"><i class="fa fa-eye"></i></li>';
-				$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
+				//$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
 			$content .= '</ul>';		
 			$content .= '</div>';
-			$widget->content =  $content;
 
+			}
+
+			$widget->content =  $content;
 			echo json_encode($widget);
 		break;
 
@@ -114,17 +142,22 @@ function propise_plugin_action(){
 
 
 function propise_plugin_widget_refresh(&$response){
+	require_once(__DIR__.SLASH.'Sensor.class.php');
+	require_once(__DIR__.SLASH.'Data.class.php');
+	$widgets = Widget::loadAll(array('model'=>'propise'));
+	foreach($widgets as $widget){
+		if(!is_numeric($widget->data('sensor'))) continue;
+		$sensor = Sensor::getById($widget->data('sensor'));
+		$data = Data::load(array('sensor'=>$sensor->id));
+		$response[$widget->id]['callback'] = 'propise_refresh';
+		if($data!=false)
+			$response[$widget->id]['data'] = $data->toArray();
+
+		$response[$widget->id]['widget']['title'] = $sensor->label.' ('.date('H\hi:s\s').')';
+		//$response[3]['widget']['icon'] = 'fa-user';
+		//$response[$widget->id]['widget']['background'] = '#'.rand(0,6).rand(0,6).rand(0,6).rand(0,6).rand(0,6).rand(0,6);
+	}
 	
-	$response[3]['callback'] = 'propise_refresh';
-	$response[3]['data'] = array(
-		'humidity' => rand(0,100),
-		'temperature' => rand(0,30),
-		'light' => rand(0,100),
-		'mouvment' => rand(0,1)
-	);
-	$response[3]['widget']['title'] = 'Sonde ('.date('H\hi').')';
-	//$response[3]['widget']['icon'] = 'fa-user';
-	//$response[3]['widget']['background'] = '#222222';
 	
 }
 

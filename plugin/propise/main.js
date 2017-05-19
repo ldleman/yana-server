@@ -3,6 +3,8 @@ function init_setting_propise(){
 	propise_search();
 }
 
+
+
 // SEARCH
 function propise_search(callback){
 	$('#rooms').fill({action:'propise_search'},function(){
@@ -46,15 +48,15 @@ function propise_menu(element,global){
 	var line = $(element);
 	var container = line.closest(".propise_widget");
 	var view = $(element).attr("data-view");
-	var widget = $(element).closest('.dashboard_bloc').attr('data-id');
+	var widget = $(element).closest('.widget').attr('data-id');
 	
 	$(container).attr("data-view",view);
 	
-	/*$.action({
+	$.action({
 		action:"propise_select_widget_menu",
 		id:widget,
 		menu: view
-	});*/
+	});
 
 	propise_show(container,view);
 };
@@ -75,6 +77,13 @@ function propise_show(container,view){
 	$(".propise_view ul li[data-type='"+view+"']",container).fadeIn();
 }
 
+function widget_propise_init(){
+
+	$(".propise_widget").each(function(i,elem){
+		propise_show($(elem),$(elem).attr('data-view'));
+		
+	});
+}
 
 function propise_refresh(widget,data){
 	widget.find('li[data-type="light"] span').text(data.light);

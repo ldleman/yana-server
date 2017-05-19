@@ -29,23 +29,12 @@ function story_plugin_page(){
 
 function story_plugin_install($id){
 	if($id != 'fr.idleman.story') return;
-	require_once(__DIR__.'/Story.class.php');
-	require_once(__DIR__.'/Cause.class.php');
-	require_once(__DIR__.'/Effect.class.php');
-	//Création 
-	Cause::create();
-	Effect::create();
-	Story::create();
+	Entity::install(__DIR__);
 }
 
 function story_plugin_uninstall($id){
 	if($id != 'fr.idleman.story') return;
-	require_once(__DIR__.'/Story.class.php');
-	require_once(__DIR__.'/Cause.class.php');
-	require_once(__DIR__.'/Effect.class.php');
-	Cause::drop();
-	Effect::drop();
-	Story::drop();
+	Entity::uninstall(__DIR__);
 }
 
 function story_plugin_section(&$sections){

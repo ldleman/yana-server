@@ -89,15 +89,23 @@
 				dashboard : $('#dashboardView li[data-selected]').attr('data-id'),
 				widget : data.id
 			},function(r){
-				$('#configureWidgetModal .pluginContent').html(r.content);
+				$('#configureWidgetModal .pluginContent').attr('data-id',data.id).html(r.content);
 				$('#configureWidgetModal').modal('show');
 			});
 
 		}
 
 		function saveWidgetConfiguration(){
-			loadDashBoard();
-			$('#configureWidgetModal').modal('hide');
+			var data = {}
+			data.widget = $('#configureWidgetModal .pluginContent').attr('data-id');
+			data.action = 'configure_widget';
+			data.data = $.getForm($('#configureWidgetModal .pluginContent'));
+
+			$.getJSON('action.php',data,function(r){
+				loadDashBoard();
+				$('#configureWidgetModal').modal('hide');
+			});
+		
 		}
 		
 		

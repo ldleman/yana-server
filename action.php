@@ -47,7 +47,17 @@ switch ($_['action']){
 			$response['message'] = 'Widget ajouté';
 		});
 	break;
-	
+	case 'configure_widget':
+		Action::write(function($_,&$response){
+			global $myUser,$_;
+			if(!$myUser->can('widget','update')) throw new Exception("Permissions insuffisantes");
+			if(!is_numeric($_['widget']))  throw new Exception("ID widget non spécifié");
+			$widget =  Widget::getById($_['widget']);
+			$widget->data($_['data']);
+			$widget->save();
+			$response['message'] = 'Widget configuré';
+		});
+	break;
 	case 'move_widgets':
 		Action::write(function($_,&$response){
 			global $myUser;
