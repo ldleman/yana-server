@@ -39,7 +39,7 @@ class Widget extends Entity{
 			}
 			return true;
 		}
-		if($value==null) return $data[$key];
+		if($value==null) return isset($data[$key])?$data[$key]:'';
 		$data[$key] = $value;
 		$this->data = json_encode($data);
 		return true;

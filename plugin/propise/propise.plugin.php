@@ -96,7 +96,7 @@ function propise_plugin_action(){
 		case 'propise_widget_load':
 			$widget = Widget::current();
 			$id = $widget->data('sensor');
-
+			
 			if($id==''){
 				$content = '
 				<div class="propise-no-configuration">
@@ -105,31 +105,33 @@ function propise_plugin_action(){
 				</div>';
 				
 			}else{
-			require_once('Sensor.class.php');
-			$sensor =  Sensor::getById($id);
-			$parameters = array(
-				'menu' => ''
-			);
-			$content = '<div class="propise_widget" data-view="'.$widget->data('menu').'" data-id="'.$sensor->id.'">';
-			$content .= '<div class="propise_view">
-							<ul>
-								<li data-type="light"><i class="fa fa-sun-o fa-spin-low"></i> <span ></span>%</li>
-								<li data-type="temperature"><i class="fa fa-fire"></i> <span ></span>°</li>
-								<li data-type="humidity"><i class="fa fa-tint"></i> <span ></span>%</li>
-								<li data-type="mouvment"><i class="fa fa-eye"></i> <span ></span></li>
-							</ul>
-							<div class="clear"></div>';
-			$content .= '</div>';
-			
-			$content .= '<ul class="propise_menu">';
-				$content .= '<li class="propise_global" onclick="propise_menu(this)" data-view=""><i class="fa fa-columns"></i></li>';
-				$content .= '<li onclick="propise_menu(this)" data-view="light"><i class="fa fa-sun-o"></i></li>';
-				$content .= '<li onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
-				$content .= '<li onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
-				$content .= '<li onclick="propise_menu(this)" data-view="mouvment"><i class="fa fa-eye"></i></li>';
-				//$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
-			$content .= '</ul>';		
-			$content .= '</div>';
+				require_once('Sensor.class.php');
+				require_once('Data.class.php');
+				$sensor =  Sensor::getById($id);
+				$data = Data::load(array('sensor'=>$sensor->id),'id DESC');
+				$parameters = array(
+					'menu' => ''
+				);
+				$content = '<div class="propise_widget" data-view="'.$widget->data('menu').'" data-id="'.$sensor->id.'">';
+				$content .= '<div class="propise_view">
+								<ul>
+									<li data-type="light"><i class="fa fa-sun-o fa-spin-low"></i> <span >'.$data->light.'</span>%</li>
+									<li data-type="temperature"><i class="fa fa-fire"></i> <span>'.$data->temperature.'</span>°</li>
+									<li data-type="humidity"><i class="fa fa-tint"></i> <span>'.$data->humidity.'</span>%</li>
+									<li data-type="mouvment"><i class="fa fa-eye"></i> <span>'.$data->mouvment.'</span></li>
+								</ul>
+								<div class="clear"></div>';
+				$content .= '</div>';
+				
+				$content .= '<ul class="propise_menu">';
+					$content .= '<li class="propise_global" onclick="propise_menu(this)" data-view=""><i class="fa fa-columns"></i></li>';
+					$content .= '<li onclick="propise_menu(this)" data-view="light"><i class="fa fa-sun-o"></i></li>';
+					$content .= '<li onclick="propise_menu(this)" data-view="temperature"><i class="fa fa-fire"></i></li>';
+					$content .= '<li onclick="propise_menu(this)" data-view="humidity"><i class="fa fa-tint"></i></li>';
+					$content .= '<li onclick="propise_menu(this)" data-view="mouvment"><i class="fa fa-eye"></i></li>';
+					//$content .= '<li onclick="window.open(\'index.php?module=propise&section=stats&id='.$sensor->id.'\')" data-view="stats"><i class="fa fa-line-chart"></i></li>';
+				$content .= '</ul>';		
+				$content .= '</div>';
 
 			}
 
@@ -170,8 +172,8 @@ function propise_plugin_widget(&$widgets){
 	$modelWidget->load = 'action.php?action=propise_widget_load';
 	$modelWidget->configure = 'action.php?action=propise_widget_configure';
 	$modelWidget->delete = 'action.php?action=propise_widget_delete';
-	$modelWidget->js = [__DIR__.'/main.js'];
-	$modelWidget->css = [__DIR__.'/main.css'];
+	$modelWidget->js = [Plugin::url().'/main.js'];
+	$modelWidget->css = [Plugin::url().'/main.css'];
 	$widgets[] = $modelWidget;
 }
 

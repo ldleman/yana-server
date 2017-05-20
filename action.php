@@ -124,12 +124,12 @@ switch ($_['action']){
 
 			foreach($widgets as $widget):
 				if(!isset($models[$widget->model])) continue;
-
-				$model = $models[$widget->model];
+				$model = clone $models[$widget->model];
 				$model->id = $widget->id;
 				$model->position = $widget->position;
 				$model->minified = $widget->minified;
 				$model->dashboard = $widget->dashboard;
+
 				$response['rows'][] = $model;
 			endforeach;
 		});

@@ -125,6 +125,13 @@ class Plugin{
 		 return __ROOT__.PLUGIN_PATH.$this->folder;
 	}
 	
+
+	public static function url(){
+		$bt =  debug_backtrace();
+		return ROOT_URL.SLASH.PLUGIN_PATH.basename(dirname($bt[0]['file']));
+	}
+
+
 	public static function addCss($css) {  
 		$bt =  debug_backtrace();
 		$GLOBALS['hooks']['css_files'][] = str_replace(__ROOT__,'',dirname($bt[0]['file'])).$css;  

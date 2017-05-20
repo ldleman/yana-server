@@ -45,8 +45,8 @@ function monitoring_plugin_widget(&$widgets){
 	$modelWidget->background = '#50597b';
 	$modelWidget->load = 'action.php?action=monitoring_widget_clock_load';
 	$modelWidget->delete = 'action.php?action=monitoring_widget_clock_delete';
-	$modelWidget->js = [__DIR__.'/main.js'];
-	$modelWidget->css = [__DIR__.'/main.css'];
+	$modelWidget->js = [Plugin::url().'/main.js'];
+	$modelWidget->css = [Plugin::url().'/main.css'];
 	$widgets[] = $modelWidget;
 }
 

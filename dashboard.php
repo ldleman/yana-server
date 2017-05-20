@@ -5,7 +5,7 @@
 	<?php foreach(Dashboard::loadAll(array('user'=>$myUser->id)) as $dashboard): ?>
 		<li <?php echo $dashboard->default?'data-selected="1"':''; ?> data-id="<?php echo $dashboard->id; ?>"><i class="fa <?php echo $dashboard->icon; ?>"></i> <?php echo $dashboard->label; ?></li>
 	<?php endforeach; ?>
-		<li class="right"><div data-toggle="modal" data-target="#addWidgetModal" title="Ajouter un widget"><i class="fa fa-plus-square-o"></i> widget</div></li>
+		<li class="right" data-toggle="modal" data-target="#addWidgetModal"><div title="Ajouter un widget"><i class="fa fa-plus-square-o"></i> widget</div></li>
 	</ul>
 	<div class="clear"></div>
 	<?php else: ?>

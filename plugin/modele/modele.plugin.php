@@ -111,8 +111,8 @@ function test_plugin_widget(&$widgets){
 	$modelWidget->background = '#50597b';
 	$modelWidget->load = 'action.php?action=test_widget_load';
 	$modelWidget->delete = 'action.php?action=test_widget_delete';
-	$modelWidget->js = [__DIR__.'/main.js'];
-	$modelWidget->css = [__DIR__.'/main.css'];
+	$modelWidget->js = [Plugin::url().'/main.js'];
+	$modelWidget->css = [Plugin::url().'/main.css'];
 	$widgets[] = $modelWidget;
 }
 
