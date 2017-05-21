@@ -23,6 +23,8 @@ function initDragAndDrop(){
 		});
 }
 
+
+
 function init_plugin_story(){ 
 
 	if($.urlParam('action')!='edit') return;

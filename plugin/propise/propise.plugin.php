@@ -49,6 +49,23 @@ function propise_plugin_action(){
 				$sensor->label = $_['label'];
 				$sensor->location = $_['location'];
 				$sensor->save();
+
+				//Enregistrement en tant que device yana
+				$device = new Device();
+				$device->label = $sensor->label;
+				$device->plugin = 'propise';
+				$device->type = Device::CAPTOR;
+				$device->location = $sensor->location;
+				$device->icon = 'fa-heartbeat';
+				$device->setValue('humidity',0);
+				$device->setValue('temperature',0);
+				$device->setValue('light',0);
+				$device->setValue('mouvment',0);
+				$device->setValue('sound',0);
+				$device->state = 1;
+				$device->uid = $sensor->id;
+				$device->save();
+
 			});
 		break;
 		

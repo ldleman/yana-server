@@ -5,24 +5,26 @@ switch($_['action']){
 	case 'plugin_story_get_type_template':
 	Action::write(
 		function($_,&$response){
+			require_once(__DIR__.SLASH.'Cause.class.php');
+			require_once(__DIR__.SLASH.'Effect.class.php');
 			$templates = array_merge(Cause::types(),Effect::types());
 			$template = $templates[$_['type']];
 			
 			$_['data']['value'] = stripslashes($_['data']['value']);
 			
 			preg_match_all("/(\{)(.*?)(\})/", $template['template'], $matches, PREG_SET_ORDER);
-			foreach($matches as $match)
+
+			foreach($matches as $match){
+				if(isset($_['data'][$match[2]]))
 				$template['template'] = str_replace($match[0],$_['data'][$match[2]],$template['template']);
-			
-			
+			}
 			
 			$response['html'] = 
 			'<div data-element="line" class="line" data-type="'.$_['type'].'">
 			<i class="fa '.$template['icon'].'"></i> <strong>'.$template['label'].'</strong> '.$template['template'].' <div class="delete"><i onclick="deleteLine(this);" class="fa fa-times"></i></div>
 		</div>';
-	},
-	array()
-	);
+	},array());
+
 	break;
 	
 	
@@ -106,10 +108,17 @@ switch($_['action']){
 				require_once(__DIR__.SLASH.'Story.class.php');
 				require_once(__DIR__.SLASH.'Cause.class.php');
 				require_once(__DIR__.SLASH.'Effect.class.php');
+				$response['results'] = 
+				array(
+					'causes' =>  array(),
+					'effects' =>  array()
+				);
 				if($_['id']=='') return;
-		
+			
 				$effects = Effect::loadAll(array('story'=>$_['id']),'sort');
 				$causes = Cause::loadAll(array('story'=>$_['id']),'sort');
+
+
 				$response['results'] = array('causes'=>array(),'effects'=>array());
 				foreach($causes as $caus){
 					$data = $caus->getValues();
@@ -229,6 +238,7 @@ switch($_['action']){
 
 		Action::write(
 			function($_,&$response){
+				require_once(__DIR__.SLASH.'Story.class.php');
 				require_once(__DIR__.SLASH.'Cause.class.php');
 				require_once(__DIR__.SLASH.'Effect.class.php');
 				$causeManager = new Cause();

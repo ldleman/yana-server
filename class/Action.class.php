@@ -41,7 +41,8 @@ class Action
             $f($_, $response);
            
         } catch (Exception $e) {
-            $response['error'] = $e->getMessage();//.' - '.$e->getTraceAsString();
+            $response['error'] = $e->getMessage();
+            $response['trace'] = $e->getTraceAsString();
         }
         echo json_encode($response);
         restore_error_handler();

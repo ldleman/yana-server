@@ -357,6 +357,7 @@ class Entity
 		$sgbd = BASE_SGBD;
 		$sql = $sgbd::select();
 		$sql = Entity::render($sql,$data);
+    
         return $instance->customQuery($sql, $values, true);
     }
 
@@ -423,6 +424,7 @@ class Entity
 			if(isset($data[$key])){
 				$i = 0;
 				$values = $data[$key];
+                
 				foreach($values as $key=>$value){
 					$i++;
 					$last = $i == count($values);

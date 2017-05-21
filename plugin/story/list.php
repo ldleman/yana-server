@@ -61,7 +61,7 @@ $nerve = __ROOT__.'nerve';
 
 	<div class="alert alert-warning">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>Important!</strong> Consultez <a href="index.php?module=story&page=doc#doc.install">la rubrique installation</a> avant de créer des scénarios, certaines manipulations sont obligatoires
+		<strong>Important!</strong> Consultez <a href="index.php?module=story&action=documentation#doc.install">la rubrique installation</a> avant de créer des scénarios, certaines manipulations sont obligatoires
 		pour le bon fonctionnement du plugin.
 	</div>
 

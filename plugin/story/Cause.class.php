@@ -63,13 +63,15 @@ class Cause extends Entity{
 
 			$types['listen']['template'] .= 'Confidence <input type="number" step="0.01" min="0.10"  max="0.99" value="{confidence}"  data-field="confidence"/>';
 		
-			$types['captor']['template'] .= 'Capteur <select  data-field="captor" class="captor_selector" onchange="story_get_captor_action(this);">';
+			$types['captor']['template'] .= 'Capteur <select  data-field="captor" class="captor_selector">';
+			$types['captor']['template'] .= '<option value="">-</option>';
 			$deviceManager = new Device();
 			$roomManager = new Room();
 			foreach($deviceManager->loadAll(array('type'=>Device::CAPTOR)) as $device){
 				$room = $roomManager->getById($device->location);
-				$types['captor']['template'] .= '<option value="'.$device->id.'"><i class="fa '.$device->icon.'"></i>'.$device->label.' ('.$room->name.')</option>';
+				$types['captor']['template'] .= '<option value="'.$device->id.'"><i class="fa '.$device->icon.'"></i>'.$device->label.' ('.$room->label.')</option>';
 			}
+
 			$types['captor']['template'] .= '</select> Champ <select data-field="field" class="captor_field_selector"></select> <select data-field="operator" class="operator"><option>=</option><option>!=</option><option><</option><option>></option></select> <input data-field="value" type="text" placeholder="valeur" value="{value}">';
 		
 
