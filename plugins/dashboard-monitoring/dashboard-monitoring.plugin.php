@@ -331,8 +331,9 @@ function dash_monitoring_plugin_actions(){
 					$response['content'] = '<div style="overflow:auto;max-height:200px;"><ul class="yana-list" style="margin:0px;">';
 					if(file_exists($logs)){
 						$lines = file($logs);
-
-						foreach($lines as $i=>$line){
+						$nb_lines = count($lines)-1; // -1 pour ne pas avoir la ligne avec uniquement la virgule
+						
+						for($i=$nb_lines; $i>0; $i--){
 							$response['content'] .= '<li style="font-size:8px;'.($i%2==0?'background-color:#F4F4F4;':'').'">'.$line.'</li>';
 						}
 					}else{
