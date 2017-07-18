@@ -12,8 +12,16 @@ class Mysql
 	const label = 'MySQL';
 	const connection = 'mysql:host={{BASE_HOST}};dbname={{BASE_NAME}}';
 	const description = 'Base robuste authentifiée necessitant un serveur Mysql (Conseillé)';
-	const fields = 'host,database,login,password';
-	
+
+	public static function fields(){
+		return array(
+			array('id'=>'host','label'=>'Serveur','default'=>'localhost','comment'=>''),
+			array('id'=>'login','label'=>'Identifiant','default'=>'','comment'=>''),
+			array('id'=>'password','label'=>'Mot de passe','default'=>'','comment'=>''),
+			array('id'=>'name','label'=>'Nom de la base','default'=>'','comment'=>'')
+		);
+	}
+
 	public static function types(){
 		$types = array();
 		$types['string'] = $types['timestamp'] = $types['date'] = 'VARCHAR(225) CHARACTER SET utf8 COLLATE utf8_general_ci';

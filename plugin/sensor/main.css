@@ -1,12 +1,12 @@
-.propise_menu{
+.sensor_menu{
 	padding-left: 5px;
 	margin-bottom: 0px;
 }
-.propise_widget{
+.sensor_widget{
 	height:100%;
 }
 
-.propise_menu li{
+.sensor_menu li{
 	cursor: pointer;
 	display: inline-block;
 	font-size: 20px;
@@ -19,12 +19,12 @@
 	border-top:4px solid #222222;
 }
 
-.propise_menu li:hover{
+.sensor_menu li:hover{
 	background:#222222;
 	color:#ffffff;
 }
 
-.propise_view{
+.sensor_view{
 	background:#222222;
 	color:#ffffff;
 	margin:0px;
@@ -34,15 +34,15 @@
 	transition:all 0.2s ease-in-out;
 	box-sizing: border-box;
 }
-.propise_view ul{
+.sensor_view ul{
 	padding:0;
 	margin:0;
 }
 
-.propise_view li i{
+.sensor_view li i{
 	font-size:40px;
 }
-.propise_view li{
+.sensor_view li{
 	font-family: "Open Sans Light",sans-serif;
 	text-align:center;
 	padding:30px 15px 15px 15px;
@@ -55,11 +55,11 @@
 	font-size:30px;
 }
 
-.propise_view.propise_detail_view li i{
+.sensor_view.sensor_detail_view li i{
 	font-size: 90px;
 }
 
-.propise_view.propise_detail_view li{
+.sensor_view.sensor_detail_view li{
 	font-size:60px;
 	width:100%;
 	height: 200px;
@@ -68,45 +68,45 @@
 	float:none;
 }
 
-.propise_menu li[data-view="temperature"]{
+.sensor_menu li[data-view="temperature"]{
 	border-color:#36B3E1;
 }
-.propise_menu li[data-view="humidity"]{
+.sensor_menu li[data-view="humidity"]{
 	border-color:#50597B;
 }
-.propise_menu li[data-view="light"]{
+.sensor_menu li[data-view="light"]{
 	border-color:#EF4D66;
 }
-.propise_menu li[data-view="mouvment"]{
+.sensor_menu li[data-view="mouvment"]{
 	border-color:#FFBF4C;
 }
-.propise_menu li[data-view="stats"]{
+.sensor_menu li[data-view="stats"]{
 	border-color:#b3e021;
 }
 
 
-.propise_view li[data-type="temperature"]{
+.sensor_view li[data-type="temperature"]{
 	background-color:#36B3E1;
 	border-color:#36B3E1;
 }
-.propise_view li[data-type="humidity"]{
+.sensor_view li[data-type="humidity"]{
 	background-color:#50597B;
 	border-color:#50597B;
 }
-.propise_view li[data-type="light"]{
+.sensor_view li[data-type="light"]{
 	background-color:#EF4D66;
 	border-color:#EF4D66;
 }
-.propise_view li[data-type="mouvment"]{
+.sensor_view li[data-type="mouvment"]{
 	background-color:#FFBF4C;
 	border-color:#FFBF4C;
 }
-.propise_view li[data-type="propise_stats"]{
+.sensor_view li[data-type="sensor_stats"]{
 	background-color:#C1004F;
 	border-color:#C1004F;
 }
 
-.propise-no-configuration{
+.sensor-no-configuration{
 	text-align: center;
 	padding:15px;
 }

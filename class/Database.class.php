@@ -1,5 +1,5 @@
 <?php
-require_once('constant.php');
+require_once(dirname(__DIR__).DIRECTORY_SEPARATOR.'constant.php');
 /**
  * PDO Connector for database connexion.
  *
@@ -42,7 +42,7 @@ class Database
     {
         try {
 			$base = BASE_SGBD;
-			require_once('database/'.$base.'.class.php');
+			require_once(__ROOT__.'connector/'.$base.'.class.php');
 			$connectionString = str_replace(
 			array('{{ROOT}}','{{BASE_HOST}}','{{BASE_NAME}}','{{BASE_LOGIN}}','{{BASE_PASSWORD}}'),
 			array(__ROOT__,BASE_HOST,BASE_NAME,BASE_LOGIN,BASE_PASSWORD),

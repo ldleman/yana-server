@@ -16,6 +16,15 @@ function unhandledException($ex){
 	exit('<div id="message" class="alert alert-danger"><strong>Erreur</strong> <span>'.$ex->getMessage().'  -  '.$ex->getFile().' L'.$ex->getLine().'</span></div>');
 }
 
+function ip(){
+	if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];}
+			elseif(isset($_SERVER['HTTP_CLIENT_IP'])){
+				$ip = $_SERVER['HTTP_CLIENT_IP'];}
+				else{ $ip = $_SERVER['REMOTE_ADDR'];}
+				return $ip;
+}
+
 function slugify($text)
 	{ 
 	  // replace non letter or digits by -

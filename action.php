@@ -432,6 +432,10 @@ switch ($_['action']){
 		});
 	break;
 	
+	case 'cron':
+		Plugin::callHook('cron');
+	break;
+
 	default:
 		Plugin::callHook('action');
 	break;

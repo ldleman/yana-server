@@ -14,19 +14,17 @@ $selected = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
 		<div class="col-md-12">
 			<h3>Sondes</h3>
 
-			<div id="propiseForm" class="row" data-action="propise_save">
+			<div id="propiseForm" class="row form-inline" data-action="propise_save">
 				<div class="col-md-12">
 					<label for="label">Nom de la sonde</label>
-					<input id="label" class="form-control" placeholder="Salon,sonde 1..." type="text">
+					<input id="label" class="form-control" placeholder="Salon,sonde 1..." type="text">&nbsp;
 					<label for="location">Pièce de la maison</label>
 		    		<select id="location" class="form-control">
 		    		<?php foreach($rooms as $room): ?>
 		    			<option <?php echo $selected->location == $room->id ? 'selected="selected"':''; ?> value="<?php echo $room->id; ?>"><?php echo $room->label; ?></option>
 		    		<?php endforeach; ?>
-		    </select>
-				</div>
+					</select>&nbsp;
 				
-				<div class="col-md-12"><br/>
 					<div onclick="propise_save();" class="btn btn-info"><i class="fa fa-check"></i> Enregistrer</div>
 				</div>
 			</div>
@@ -48,7 +46,7 @@ $selected = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
 	                    <td>{{label}}</td>
 	                    <td>{{location.label}}</td>
 	                    <td>
-	                    	<a onclick="$(this).next().toggle()" class="btn">Guide Installation</a>
+	                    	<a onclick="$(this).next().toggle()" class="btn"><i class="fa fa-search-plus"></i> Guide Installation</a>
 	                    	<ul style="display:none;">
 				    		<li>Démarrer la sonde en appuyant sur le boutton jusqu'a ce que la lumière s'allume en bleu</li>
 				    		<li>Se connecter au wifi de la sonde <code>PROPISE-XX</code> avec le mot de passe <code>bananeflambee</code></li>

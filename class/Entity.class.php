@@ -225,6 +225,7 @@ class Entity
 					'fields' => $fields,
 					'filters' => array(':id='=>':id'),
 			));
+           
 			
         } else {
 			
@@ -539,13 +540,12 @@ class Entity
     public function customExecute($query, $data = array())
     {
         self::$lastQuery = $query;
-        $stm = $this->pdo->prepare($query);
         try {
+        	$stm = $this->pdo->prepare($query);
             $stm->execute($data);
-            //var_dump($query.' - '.json_encode($data, JSON_PRETTY_PRINT));
         } catch (Exception $e) {
             self::$lastError = $this->pdo->errorInfo();
-			
+            Log::put("[SQL ERROR] - ".$e->getMessage().' - '.$e->getLine().' - '.$query);
             throw new Exception($e->getMessage().' - '.$e->getLine().' : '.$query.' - '.json_encode($data, JSON_PRETTY_PRINT));
         }
     }

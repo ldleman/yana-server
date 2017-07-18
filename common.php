@@ -2,11 +2,11 @@
     session_start('core-session');
     mb_internal_encoding('UTF-8');
     
-	if(!file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'constant.php'))
+	if(!file_exists(__DIR__.DIRECTORY_SEPARATOR.'constant.php'))
 		header('location:install.php');
 	
 	
-    require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'constant.php');
+    require_once(__DIR__.DIRECTORY_SEPARATOR.'constant.php');
     require_once(__ROOT__.'function.php');
     date_default_timezone_set(TIME_ZONE);
 

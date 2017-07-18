@@ -28,14 +28,7 @@ function monitoring_plugin_action(){
 	}
 }
 
-/*
-function monitoring_plugin_widget_refresh(&$widgets){
-	$widget = Widget::getById(1);
-	$widget->title = 'Hello widget !';
-	$widget->icon = 'fa-clock-o';
-	$widget->content = 'Dernier rafraichissement : '.date('d/m/Y H:i:s');
-	$widgets[] = $widget ;
-}*/
+
 
 function monitoring_plugin_widget(&$widgets){
 	$modelWidget = new Widget();
@@ -50,6 +43,12 @@ function monitoring_plugin_widget(&$widgets){
 	$widgets[] = $modelWidget;
 }
 
+function monitoring_cron_action(){
+
+	//if(date('i:s')=='00:00')
+		print_r(Client::talk('Il est '.date('H').'heure.'));
+}
+
 Plugin::addCss("/main.css"); 
 Plugin::addJs("/main.js"); 
 
@@ -57,7 +56,8 @@ Plugin::addHook("install", "monitoring_plugin_install");
 Plugin::addHook("uninstall", "monitoring_plugin_uninstall"); 
 Plugin::addHook("section", "monitoring_plugin_section");  
 Plugin::addHook("action", "monitoring_plugin_action");    
-Plugin::addHook("widget", "monitoring_plugin_widget");    
-//Plugin::addHook("widget_refresh", "monitoring_plugin_widget_refresh"); 
+Plugin::addHook("widget", "monitoring_plugin_widget");
+Plugin::addHook("cron", "monitoring_cron_action");    
+ 
 
 ?>

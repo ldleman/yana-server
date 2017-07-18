@@ -26,11 +26,11 @@ class Log extends Entity
         global $myUser;
         $log = new self();
         $log->label = $label;
-        if (is_object($myUser) && $myUser->getLogin() != '') {
-            $log->user = $myUser->getLogin();
+        if (is_object($myUser) && $myUser->login != '') {
+            $log->user = $myUser->login;
         }
         $log->date = time();
-        $log->ip = getIP();
+        $log->ip = ip();
         $log->save();
     }
 }

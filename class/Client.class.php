@@ -5,7 +5,7 @@ class Client {
 	public $socket;
 
 
-    public   function  connect(){ 
+    public  function  connect(){ 
         
         $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $response = '';
@@ -50,23 +50,43 @@ class Client {
     }
 
 
-    public function talk($parameter){
-        //echo 'Execution envois de parole vers un client : '.$parameter;
-        return $this->send(array("action"=>"TALK","parameter"=>$parameter));
+    public static function talk($parameter){
+        $client = new self();
+        $client->connect();
+        $result =  $client->send(array("action"=>"TALK","parameter"=>$parameter));
+        $client->disconnect();
+        return $result;
     }
     
 	public function sound($parameter){
-		return $this->send(array("action"=>"SOUND","parameter"=>$parameter));
+
+        $client = new self();
+        $client->connect();
+		$result = $client->send(array("action"=>"SOUND","parameter"=>$parameter));
+        $client->disconnect();
+        return $result;
 	}
 	
 	public function execute($parameter){
-		return $this->send(array("action"=>"EXECUTE","parameter"=>$parameter));
+        $client = new self();
+        $client->connect();
+		$result = $client->send(array("action"=>"EXECUTE","parameter"=>$parameter));
+        $client->disconnect();
+        return $result;
 	}
     public function emotion($emotion){
-        return $this->send(array("action"=>"EMOTION","parameter"=>$emotion));
+        $client = new self();
+        $client->connect();
+        $result = $client->send(array("action"=>"EMOTION","parameter"=>$emotion));
+        $client->disconnect();
+        return $result;
     }
     public function image($image){
-        return $this->send(array("action"=>"IMAGE","parameter"=>$image));
+        $client = new self();
+        $client->connect();
+        $result = $client->send(array("action"=>"IMAGE","parameter"=>$image));
+        $client->disconnect();
+        return $result;
     }
 
 

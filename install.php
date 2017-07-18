@@ -62,7 +62,7 @@ try {
 	
 	$entities = array();
 	
-	foreach(glob(__DIR__.'/database/*.class.php') as $classFile):
+	foreach(glob(__DIR__.'/connector/*.class.php') as $classFile):
 		require_once($classFile);
 		$className = str_replace('.class.php','',basename($classFile));
 		$entities[$className] = $className::label.' - '.$className::description;
@@ -84,6 +84,11 @@ try {
 
 	$constantStream = file_get_contents(__DIR__.'/constant.sample.php');
 	
+
+	if(!isset($_['host'])) $_['host'] = '';
+	if(!isset($_['login'])) $_['login'] = '';
+	if(!isset($_['password'])) $_['password'] = '';
+	if(!isset($_['database'])) $_['database'] = '';
 
 	$constantStream = str_replace(
 	array("{{BASE_SGBD}}","{{BASE_HOST}}","{{BASE_NAME}}","{{BASE_LOGIN}}","{{BASE_PASSWORD}}","{{ROOT_URL}}"),
@@ -111,6 +116,13 @@ try {
 		$room->save();
 	}
 
+	//Activation des plugins par défaut
+	foreach(array(
+		"fr.idleman.story",
+		"fr.idleman.monitoring",
+		"fr.idleman.sensor") as $plugin):
+		Plugin::state($plugin,true);
+	endforeach;
 	//create admin rank
     $rank = new Rank();
     $rank->label = 'Administrateur';
@@ -169,31 +181,36 @@ try {
 		
 		$root = 'http'.((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')|| $_SERVER['SERVER_PORT'] == 443?'s':'').'://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
     	$root = str_replace("/install.php", "", $root );
+    	$parts = explode('?',$root);
+    	$root = array_shift($parts);
 	?>
 	<div class="row">
 	<form class="col-md-3" action="install.php" method="POST">
 		<h3>Installation</h3>
 		<p>Merci de bien vouloir remplir les champs çi dessous</p>
 		<label for="entity">Base de donnée</label>
-		<select class="form-control" name="entity">
+		<select class="form-control" name="entity" onchange="window.location='install.php?sgbd='+$(this).val()">
+		<option value="">-</option>
 		<?php foreach($entities as $class=>$label): ?>
-		<option value="<?php echo $class ?>"><?php echo $label; ?></option>
+		<option <?php echo (isset($_['sgbd']) && $_['sgbd']==$class ? 'selected="selected"': '') ?> value="<?php echo $class ?>"><?php echo $label; ?></option>
 		<?php endforeach; ?>
 		</select><br/>
-		<label for="host">Host de la base</label><br/>
-		<small>Laisser vide si pas de host</small><br/>
-		<input type="text" class="form-control" name="host" id="host"/><br/>
-		<label for="database">Nom de la base</label><br/>
-		<input type="text" class="form-control" name="database" id="database"/><br/>
-		<label for="login">Identifiant de la base</label><br/>
-		<small>Laisser vide si pas d'identifiant</small><br/>
-		<input type="text" class="form-control" name="login" id="login"/><br/>
-		<label for="password">Mot de passe de la base</label><br/>
-		<input type="text" class="form-control" name="password" id="password"/><br/>
+
+		<?php if(isset($_['sgbd']) && $_['sgbd']!=''): 
+			require_once(__DIR__.'/connector/'.$_['sgbd'].'.class.php');
+			foreach($_['sgbd']::fields() as $field):
+		?>
+			<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label><br/>
+			<?php if(!isset($field['comment'])): ?><small><?php echo $field['comment']; ?></small><br/><?php endif; ?>
+			<input type="text" class="form-control" value="<?php echo $field['default']; ?>" name="<?php echo $field['id']; ?>" id="<?php echo $field['id']; ?>"/><br/>
+		<?php endforeach;  ?>
+
+
 		<label for="root">Adresse web de YANA</label><br/>
 		<input type="text" class="form-control" name="root" id="root" value="<?php echo $root; ?>"/><br/>
 		
 		<input type="submit" class="btn btn-primary" value="Installer" name="install"><br/><br/>
+		<?php endif; ?>
 	</form>
 	</div>
 	<?php

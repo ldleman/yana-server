@@ -3,7 +3,6 @@ define('SLASH',DIRECTORY_SEPARATOR);
 define('__ROOT__',dirname(__FILE__).SLASH);
 define('TIME_ZONE','Europe/Paris');
 define('ENTITY_PREFIX', '');
-define('DATABASE_PATH',__ROOT__.'database/.db');
 define('LOG_PATH',__ROOT__.'log');
 define('FILE_PATH','file'.SLASH);
 define('PLUGIN_PATH','plugin'.SLASH);

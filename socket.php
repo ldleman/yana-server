@@ -1,5 +1,5 @@
 <?php
-require_once(realpath(dirname(__FILE__)).'/common.php');
+require_once(realpath(__DIR__).'/common.php');
 
 
 class ClientSocket extends SocketServer {
@@ -86,7 +86,7 @@ class ClientSocket extends SocketServer {
 				if(isset($myUser) && $myUser!=false)
 					$myUser->loadRight();
 				$client->user =  (!$myUser?new User():$myUser);
-				$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->getLogin());
+				$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->login);
 			
 				$this->clientConnected($client);
 				
@@ -106,7 +106,7 @@ class ClientSocket extends SocketServer {
 				$response = array();
 			
 				foreach($this->connected as $id=>$cli){
-					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.($cli->user!=null && is_object($cli->user)?$cli->user->getLogin():'Anonyme').'"}}');
+					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.($cli->user!=null && is_object($cli->user)?$cli->user->login:'Anonyme').'"}}');
 				}
 				
 				
@@ -175,7 +175,7 @@ class ClientSocket extends SocketServer {
 		foreach($clients as $client){
 			if($client->id == $new_client->id) continue;
 			$socket = $this->connected[$client->id]->socket;
-			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.($new_client->user!=null && is_object($new_client->user)?$new_client->user->getLogin():'Anonyme').'"}}';
+			$packet = '{"action":"clientConnected","client":{"type":"'.$new_client->type.'","location":"'.$new_client->location.'","user":"'.($new_client->user!=null && is_object($new_client->user)?$new_client->user->login:'Anonyme').'"}}';
 			$this->log("send ".$packet." to ".$client->name);
 			$this->send($socket,$packet);
 		}
