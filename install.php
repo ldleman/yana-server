@@ -133,11 +133,12 @@ try {
     $admin = new User();
     $admin->login = 'admin';
     $admin->password = User::password_encrypt('admin');
-    $admin->firstname = 'John';
-    $admin->name = 'DOE'; 
+    $admin->firstname = 'Chuck';
+    $admin->name = 'NORRIS'; 
     $admin->superadmin = true; 
     $admin->rank = $rank->id;
     $admin->save();
+  
 
     $sections = array();
     Plugin::callHook('section',array(&$sections));
@@ -152,20 +153,38 @@ try {
     	$right->save();
     endforeach;
 	
-    //Create default dashboard
-    $dashboard = new Dashboard();
-    $dashboard->user = $admin->id;
-    $dashboard->label = 'Général';
-    $dashboard->icon = 'fa-bars';
-    $dashboard->default = true;
-    $dashboard->save();
-    
+	$firstDash = false;
+	foreach(array(
+		'Général'=>"fa-bars",
+		'Salon'=>"fa-tv",
+		'Cuisine'=>"fa-spoon",
+		'Monitoring'=>"fa-bar-chart",
+		'Garage'=>"fa-car"
+		) as $label=>$icon){
+	    //Create default dashboard
+	    $dashboard = new Dashboard();
+	    $dashboard->user = $admin->id;
+	    $dashboard->label = $label;
+	    $dashboard->icon = $icon;
+	    $dashboard->default = !$firstDash;
+	    $dashboard->save();
+	    $firstDash = !$firstDash ? $dashboard->id: $firstDash;
+    }
+
     //Create clock widget
     $widget = new Widget();
     $widget->model = 'clock';
+    $widget->position = 2;
+    $widget->minified = false;
+    $widget->dashboard = $firstDash;
+    $widget->save();
+
+    //Create clock widget
+    $widget = new Widget();
+    $widget->model = 'profile';
     $widget->position = 1;
     $widget->minified = false;
-    $widget->dashboard = $dashboard->id;
+    $widget->dashboard = $firstDash;
     $widget->save();
 
     ?>

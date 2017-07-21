@@ -3,6 +3,11 @@ html, body, #wrap {
 	background-color: #ebebeb;
 }
 
+h1, h2, h3, h4 {
+    font-family: 'Open Sans'!important;
+        font-weight: 300!important;
+}
+
 body > #wrap {
 	min-height: 100%;
 	height: auto;
@@ -156,7 +161,30 @@ a.navbar-brand {
 				opacity:0.8;
 				width: 30px;
 			}
-			
+
+			.widgetDescription{
+				margin-left:20px;
+				float:left;
+				 max-width: 400px;
+			}
+			.widgetDescription h1{
+				margin-top: 0;
+			}
+			.widgetColor{
+				display: inline-block;
+				vertical-align: top;
+				box-shadow: 0px 0px 1px rgba(0,0,0,0.3);
+				padding-right: 5px;
+				color:#333333;
+			}
+			.widgetColor small{
+				width:20px;
+				height:20px;
+				border-radius: 4px 0 0 4px;
+				display: inline-block;
+				margin-right: 5px;
+				vertical-align: top;
+			}
 			@media only screen and (max-width: 500px) {
 				.widget_dropper{
 					display: none;
@@ -167,6 +195,7 @@ a.navbar-brand {
 					width:100%;
 				}
 			}
+
 
 /**
 ** PROJECT STYLE
@@ -260,6 +289,13 @@ a.navbar-brand {
 
 .clear{
 	clear:both;
+}
+
+
+.clearFix:after{
+	clear:both;
+	content : '';
+	display: block;
 }
 
 .noDisplay{

@@ -12,6 +12,14 @@
 				$(this).attr('data-selected',1);
 				loadDashBoard();
 			});
+
+			$('#widgetList').change(function(){
+
+				var option = $('#widgetList option:selected').data();
+				option.text = $('#widgetList option:selected').text();
+				$('.widgetDescription').html(
+				"<h1><i class='fa "+option.icon+"'></i> "+option.text+"</h1><p>"+option.description+"</p> Couleur: <div class='widgetColor' ><small style='background-color:"+option.background+"'></small>"+option.background+"</div>");
+			});
 		}
 		
 		function loadDashBoard(){

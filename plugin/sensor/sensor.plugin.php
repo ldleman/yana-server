@@ -209,6 +209,7 @@ function sensor_plugin_widget(&$widgets){
 	$modelWidget->title = 'Sonde';
 	$modelWidget->icon = 'fa-tint';
 	$modelWidget->background = '#50597B';
+	$modelWidget->description = 'Permet l\'affichage des valeurs de vos sondes (température, humidité, mouvement...)';
 	$modelWidget->load = 'action.php?action=sensor_widget_load';
 	$modelWidget->configure = 'action.php?action=sensor_widget_configure';
 	$modelWidget->delete = 'action.php?action=sensor_widget_delete';

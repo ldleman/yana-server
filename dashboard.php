@@ -32,18 +32,22 @@
 		  </div>
 		  <div class="modal-body">
 			<label for="widgetList">Sélectionnez le widget que vous souhaitez ajouter</label>
-			<select id="widgetList" size="10">
-				<option calue=""> - </option>
-			<?php $models = array();
-			Plugin::callHook('widget',array(&$models));
-			foreach($models as $model): 
+			<div class="clearFix">
+				<select id="widgetList" class="left" size="10">
+					<option calue=""> - </option>
+				<?php $models = array();
+				Plugin::callHook('widget',array(&$models));
 			
-			
-			
-			?>
-				<option value="<?php echo $model->model; ?>"><?php echo $model->title; ?></option>
-			<?php endforeach; ?>
-			</select>
+				foreach($models as $model): 
+				
+				?>
+					<option data-description="<?php echo $model->description; ?>" data-background="<?php echo $model->background; ?>" data-icon="<?php echo $model->icon; ?>" value="<?php echo $model->model; ?>"><?php echo $model->title; ?></option>
+				<?php endforeach; ?>
+				</select>
+				<div class="widgetDescription">
+					
+				</div>
+			</div>
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

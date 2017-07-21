@@ -9,7 +9,7 @@
 
 class Widget extends Entity{
 
-	public $id,$minified,$position,$model,$dashboard,$title,$icon,$background,$width,$load,$configure,$move,$delete,$options,$js,$css,$content,$data;
+	public $id,$minified,$position,$model,$dashboard,$title,$icon,$background,$width,$load,$configure,$move,$delete,$options,$js,$css,$content,$data,$description;
 	protected $TABLE_NAME = 'widget';
 	protected $fields = 
 	array(

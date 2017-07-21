@@ -3,7 +3,7 @@ global $myUser;
 if(!$myUser->can('dashboard','configure')) throw new Exception("Permissions insuffisantes");
 ?>
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12"> 
 		<h3>Dashboard</h3>
 
 		<div id="dashboardForm" class="row" data-action="save_dashboard">

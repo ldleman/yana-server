@@ -26,6 +26,11 @@ class User extends Entity
 		'superadmin' => 'int'
     );
 
+    function  __construct(){
+        parent::__construct();
+        $this->token = self::generateToken();
+    }
+
     public static function getAll(){
         $users = self::loadAll();
         Plugin::callHook('user_load',array(&$user));
@@ -80,4 +85,10 @@ class User extends Entity
     {
         return $this->id != 0;
     }
+
+
+    public static function generateToken(){
+       return substr(md5(uniqid(rand(), true)),0,10);
+    }
+
 }
