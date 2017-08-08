@@ -19,7 +19,7 @@ class Log extends Entity
         'user' => 'string',
         'date' => 'string',
         'ip' => 'string',
-    );
+        );
 
     public static function put($label)
     {

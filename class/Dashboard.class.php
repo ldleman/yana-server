@@ -6,22 +6,22 @@
  @description:  Classe de gestion des dashboard de widgets
  */
 
-class Dashboard extends Entity{
+ class Dashboard extends Entity{
 
-	public $id,$user,$label,$icon,$default;
-	protected $TABLE_NAME = 'dashboard';
-	protected $fields = 
-	array(
-		'id'=>'key',
-		'user'=>'id',
-		'label'=>'longstring',
-		'icon'=>'string',
-		'default' => 'bool'
-	);
+ 	public $id,$user,$label,$icon,$default;
+ 	protected $TABLE_NAME = 'dashboard';
+ 	protected $fields = 
+ 	array(
+ 		'id'=>'key',
+ 		'user'=>'id',
+ 		'label'=>'longstring',
+ 		'icon'=>'string',
+ 		'default' => 'bool'
+ 		);
 
-	function __construct(){
-		parent::__construct();
-	}
-}
+ 	function __construct(){
+ 		parent::__construct();
+ 	}
+ }
 
-?>
+ ?>

@@ -10,13 +10,13 @@
 class Configuration extends Entity
 {
     public $id,$key,$value;
-	protected $confTab;
+    protected $confTab;
     protected $fields =
     array(
         'id' => 'key',
         'key' => 'longstring',
         'value' => 'longstring',
-    );
+        );
 
     /**
      * Get all configurations from database OR session if it was yet loaded

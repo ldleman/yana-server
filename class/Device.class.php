@@ -9,25 +9,25 @@
 
 class Device extends Entity{
 
-	 const CAPTOR = 1;
-	 const ACTUATOR = 2;
-	 const BOTH = 3;
-	 public $id,$label,$icon,$display,$state,$values,$location,$plugin,$actions,$type,$uid;
-	 protected $TABLE_NAME = 'device';
-	 protected $fields = 
-	    array(
-		    'id'=>'key',
-		    'label'=>'string',
-            'icon'=>'string',
-			'display'=>'longstring',
-			'state'=>'int',
-			'values'=>'longstring',
-			'location'=>'int',
-			'plugin'=>'string',
-			'actions'=>'longstring',
-			'type'=>'int',
-			'uid'=>'int'
-	    );
+	const CAPTOR = 1;
+	const ACTUATOR = 2;
+	const BOTH = 3;
+	public $id,$label,$icon,$display,$state,$values,$location,$plugin,$actions,$type,$uid;
+	protected $TABLE_NAME = 'device';
+	protected $fields = 
+	array(
+		'id'=>'key',
+		'label'=>'string',
+		'icon'=>'string',
+		'display'=>'longstring',
+		'state'=>'int',
+		'values'=>'longstring',
+		'location'=>'int',
+		'plugin'=>'string',
+		'actions'=>'longstring',
+		'type'=>'int',
+		'uid'=>'int'
+		);
 
 	function __contruct(){
 		$this->setValues(array());

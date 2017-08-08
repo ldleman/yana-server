@@ -26,43 +26,43 @@ if(!$myUser->can('user','configure')) throw new Exception("Permissions insuffisa
 			<div class="col-md-12">
 				<label for="rank">Rang</label>
 				<select id="rank" class="form-control" placeholder="Rang">
-				<?php foreach(Rank::loadAll() as $rank):  ?>
-				<option value="<?php echo $rank->id; ?>"><?php echo $rank->label; ?></option>
-				<?php endforeach; ?>
+					<?php foreach(Rank::loadAll() as $rank):  ?>
+						<option value="<?php echo $rank->id; ?>"><?php echo $rank->label; ?></option>
+					<?php endforeach; ?>
 				</select><br/>
 				<div onclick="save_user();" class="btn btn-info"><i class="fa fa-check"></i> Enregistrer</div>
 			</div>
 		</div>
 		<br/>
 		<div class="panel panel-default">
-              <div class="panel-heading">Utilisateurs existants</div>
-              <table id="users" class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th></th>
-                    <th>Nom</th>
-                    <th>Mail</th>
-                    <th>Identifiant</th>
-                    <th>Rang</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr data-id="{{id}}" class="noDisplay">
-                    <td>{{id}}</td>
-                    <td><img class="avatar" data-src="{{avatar}}"/></td>
-                    <td>{{firstname}} {{name}}</td>
-                    <td>{{mail}}</td>
-                    <td>{{login}}</td>
-                    <td>{{rank.label}} {{#superadmin}}<span class="label label-info">Super Admin</span>{{/superadmin}}</td>
-                    <td>
-                    	<div onclick="edit_user(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
-                    	<div onclick="delete_user(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+			<div class="panel-heading">Utilisateurs existants</div>
+			<table id="users" class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th></th>
+						<th>Nom</th>
+						<th>Mail</th>
+						<th>Identifiant</th>
+						<th>Rang</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-id="{{id}}" class="noDisplay">
+						<td>{{id}}</td>
+						<td><img class="avatar" data-src="{{avatar}}"/></td>
+						<td>{{firstname}} {{name}}</td>
+						<td>{{mail}}</td>
+						<td>{{login}}</td>
+						<td>{{rank.label}} {{#superadmin}}<span class="label label-info">Super Admin</span>{{/superadmin}}</td>
+						<td>
+							<div onclick="edit_user(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
+							<div onclick="delete_user(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
-	
+

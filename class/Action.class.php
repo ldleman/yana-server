@@ -39,7 +39,7 @@ class Action
                 }
             }
             $f($_, $response);
-           
+            
         } catch (Exception $e) {
             $response['error'] = $e->getMessage();
             $response['trace'] = $e->getTraceAsString();

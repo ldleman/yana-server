@@ -1,0 +1,9 @@
+{
+	"id": "fr.idleman.relay",
+	"name": "Prises / Relais",
+	"version": "1.0",
+	"url": "http://blog.idleman.fr",
+	"licence": {"name": "MIT","url" : "http://choosealicense.com/licenses/mit/"},
+	"description": "Gestion des prises filaires/radio et autres relais interrupteur de courant",
+	"require" : {}
+}

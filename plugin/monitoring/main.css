@@ -43,6 +43,7 @@
 
 /* profile widget */
 .profileContainer{
+	padding-bottom: 10px;
 	text-align: center;
 }
 .profileContainer .profileHeader{
@@ -81,7 +82,7 @@
 }
 .profileToken{
 	display: block;
-    margin-bottom: 10px;
+
 }
 
 .profileToken input{

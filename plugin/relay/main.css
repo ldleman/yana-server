@@ -1,0 +1,48 @@
+.relay_widget {
+    background: none repeat scroll 0 0 #50597b;
+    list-style-type: none;
+    margin: 0;
+    cursor:default;
+    width: 100%;
+}
+.relay_widget li {
+    background: none repeat scroll 0 0 #50597b;
+    display: inline-block;
+    margin: 0 1px 0 0;
+    padding: 10px;
+    cursor:default;
+    vertical-align: top;
+}
+.relay_widget li h2 {
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 0 5px;
+    padding: 0;
+    cursor:default;
+}
+.relay_widget li h1 {
+    color: #B6BED9;
+    font-size: 14px;
+    margin: 0 0 10px;
+    padding: 0;
+    cursor:default;
+}
+
+.relay_widget li.relay_case{
+	background-color:  #373f59;
+	cursor:pointer;
+	min-width: 75px;
+}
+.relay_case i{
+	color:#8b95b8;
+	font-size:50px;
+	transition: all 0.2s ease-in-out;
+}
+.relay_widget.active .relay_case i{
+	color:#ffffff;
+	text-shadow: 0 0 10px #ffffff;
+}
+.relay-no-configuration{
+	text-align: center;
+	padding:15px;
+}

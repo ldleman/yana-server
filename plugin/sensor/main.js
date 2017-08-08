@@ -86,6 +86,7 @@ function widget_sensor_init(){
 }
 
 function sensor_refresh(widget,data){
+	if(!data) return;
 	widget.find('li[data-type="light"] span').text(data.light);
 	widget.find('li[data-type="humidity"] span').text(data.humidity);
 	widget.find('li[data-type="temperature"] span').text(data.temperature);

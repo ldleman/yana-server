@@ -23,8 +23,8 @@ class User extends Entity
         'mail' => 'string',
         'rank' => 'int',
         'state' => 'int',
-		'superadmin' => 'int'
-    );
+        'superadmin' => 'int'
+        );
 
     function  __construct(){
         parent::__construct();
@@ -42,53 +42,53 @@ class User extends Entity
     }
 
     public function can($section,$right){
-		if($this->superadmin) return true;
-        return !isset($this->rights[$section][$right]) ? false: $this->rights[$section][$right]==1;
-    }
+      if($this->superadmin) return true;
+      return !isset($this->rights[$section][$right]) ? false: $this->rights[$section][$right]==1;
+  }
 
-    public function loadRights(){
-        $this->rights = array();
-        foreach(Right::loadAll(array('rank'=>$this->rank)) as $right):
-            $this->rights[$right->section] = array('read'=>$right->read,'edit'=>$right->edit,'delete'=>$right->delete,'configure'=>$right->configure);
-        endforeach;
-    }
+  public function loadRights(){
+    $this->rights = array();
+    foreach(Right::loadAll(array('rank'=>$this->rank)) as $right):
+        $this->rights[$right->section] = array('read'=>$right->read,'edit'=>$right->edit,'delete'=>$right->delete,'configure'=>$right->configure);
+    endforeach;
+}
 
-	public function getAvatar(){
-		$avatar = 'img/avatar.png';
-		$files = glob(__ROOT__.AVATAR_PATH.$this->login.'.{jpg,png}',GLOB_BRACE);
+public function getAvatar(){
+  $avatar = 'img/avatar.png';
+  $files = glob(__ROOT__.AVATAR_PATH.$this->login.'.{jpg,png}',GLOB_BRACE);
 
-		if(count($files)>0) $avatar = str_replace(__ROOT__,'',$files[0]);
-		return $avatar;
-	}
-	
-    public static function check($login, $password)
-    {
-        $user = self::load(array('login' => $login, 'password' => self::password_encrypt($password)));
-		
-        return is_object($user) ? $user : new self();
-    }
+  if(count($files)>0) $avatar = str_replace(__ROOT__,'',$files[0]);
+  return $avatar;
+}
 
-
-    public function fullName()
-    {
-        $fullName = ucfirst($this->firstname).' '.strtoupper($this->name);
-
-        return trim($fullName) != '' ? $fullName : $this->login;
-    }
-
-    public static function password_encrypt($password)
-    {
-        return sha1(md5($password));
-    }
-
-    public function connected()
-    {
-        return $this->id != 0;
-    }
+public static function check($login, $password)
+{
+    $user = self::load(array('login' => $login, 'password' => self::password_encrypt($password)));
+    
+    return is_object($user) ? $user : new self();
+}
 
 
-    public static function generateToken(){
-       return substr(md5(uniqid(rand(), true)),0,10);
-    }
+public function fullName()
+{
+    $fullName = ucfirst($this->firstname).' '.strtoupper($this->name);
+
+    return trim($fullName) != '' ? $fullName : $this->login;
+}
+
+public static function password_encrypt($password)
+{
+    return sha1(md5($password));
+}
+
+public function connected()
+{
+    return $this->id != 0;
+}
+
+
+public static function generateToken(){
+ return substr(md5(uniqid(rand(), true)),0,10);
+}
 
 }

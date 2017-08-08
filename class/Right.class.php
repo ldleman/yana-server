@@ -18,7 +18,7 @@ class Right extends Entity
         'edit' => 'bool',
         'delete' => 'bool',
         'configure' => 'bool'
-    );
+        );
 
-   
+    
 }

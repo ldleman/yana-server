@@ -7,18 +7,18 @@ class ClientSocket extends SocketServer {
 	private $received = array();
 	function onDataReceived($socket,$data) {
 		
-			$socketId = (int)$socket;
-			if(!isset($received[$socketId] )) $received[$socketId] = '';
-			$received[$socketId].= $data;
+		$socketId = (int)$socket;
+		if(!isset($received[$socketId] )) $received[$socketId] = '';
+		$received[$socketId].= $data;
+		
+		if(substr($received[$socketId],-5)=='<EOF>'){
 			
-			if(substr($received[$socketId],-5)=='<EOF>'){
-				
-				$received[$socketId] = substr($received[$socketId],0,-5);
-				$this->handleData($this->connected[(int)$socket],$received[$socketId]);
-				$received[$socketId] = '';
-			}
-	
-				
+			$received[$socketId] = substr($received[$socketId],0,-5);
+			$this->handleData($this->connected[(int)$socket],$received[$socketId]);
+			$received[$socketId] = '';
+		}
+		
+		
 	}
 	function onClientConnected($socket) {
 		$this->log('New client connected: ' . $socket);
@@ -45,88 +45,88 @@ class ClientSocket extends SocketServer {
 		$this->log("Try to parse received data : ".$data);
 		try{
 
-		$datas = explode('<EOF>',$data);
-		foreach($datas  as $data){
-			
-		$_ = json_decode($data,true);
+			$datas = explode('<EOF>',$data);
+			foreach($datas  as $data){
+				
+				$_ = json_decode($data,true);
 
-		if(!$_) throw new Exception("Unable to parse data : ".$data);
-		
-
-		if(!isset($_['action'])) $_['action'] = '';
-		$this->log("Parsed action : ".$_['action']);
-
-		switch($_['action']){
-			case 'TALK':
-				$this->talkAnimate();
-				$this->talk($_['parameter']);
-			break;
-			case 'TALK_FINISHED':
-				$this->muteAnimate();
-			break;
-
-			case 'EMOTION':
-				$this->emotion($_['parameter']);
-			break;
-			case 'IMAGE':
-				$this->image($_['parameter']);
-			break;
-			case 'SOUND':
-				$this->sound($_['parameter']);
-			break;
-			case 'EXECUTE':
-				$this->execute($_['parameter']);
-			break;
-			case 'CLIENT_INFOS':
-
-				$client->type = $_['type'];
-				$client->location = $_['location'];
-				$userManager = new User();
-				$myUser = $userManager->load(array('token'=>$_['token']));
-				if(isset($myUser) && $myUser!=false)
-					$myUser->loadRight();
-				$client->user =  (!$myUser?new User():$myUser);
-				$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->login);
-			
-				$this->clientConnected($client);
+				if(!$_) throw new Exception("Unable to parse data : ".$data);
 				
 
-			break;
-			case 'GET_SPEECH_COMMANDS':
-				$response = array();
-				Plugin::callHook("vocal_command", array(&$response,YANA_URL));
-				$commands = array();
-				foreach($response['commands'] as $command){
-					unset($command['url']);
-					$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMAND","command":'.json_encode($command).'}');
-				}
-				$this->send($this->connected[$client->id]->socket,'{"action":"UPDATE_COMMANDS"}');
-			break;
-			case 'GET_CONNECTED_CLIENTS':
-				$response = array();
-			
-				foreach($this->connected as $id=>$cli){
-					$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.($cli->user!=null && is_object($cli->user)?$cli->user->login:'Anonyme').'"}}');
-				}
-				
-				
-			break;
-			case 'CATCH_COMMAND':
-				$response = "";
-				$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
-				Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence'],$client->user));
-			break;
-			case '':
-			default:
+				if(!isset($_['action'])) $_['action'] = '';
+				$this->log("Parsed action : ".$_['action']);
+
+				switch($_['action']){
+					case 'TALK':
+					$this->talkAnimate();
+					$this->talk($_['parameter']);
+					break;
+					case 'TALK_FINISHED':
+					$this->muteAnimate();
+					break;
+
+					case 'EMOTION':
+					$this->emotion($_['parameter']);
+					break;
+					case 'IMAGE':
+					$this->image($_['parameter']);
+					break;
+					case 'SOUND':
+					$this->sound($_['parameter']);
+					break;
+					case 'EXECUTE':
+					$this->execute($_['parameter']);
+					break;
+					case 'CLIENT_INFOS':
+
+					$client->type = $_['type'];
+					$client->location = $_['location'];
+					$userManager = new User();
+					$myUser = $userManager->load(array('token'=>$_['token']));
+					if(isset($myUser) && $myUser!=false)
+						$myUser->loadRight();
+					$client->user =  (!$myUser?new User():$myUser);
+					$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->login);
+					
+					$this->clientConnected($client);
+					
+
+					break;
+					case 'GET_SPEECH_COMMANDS':
+					$response = array();
+					Plugin::callHook("vocal_command", array(&$response,YANA_URL));
+					$commands = array();
+					foreach($response['commands'] as $command){
+						unset($command['url']);
+						$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMAND","command":'.json_encode($command).'}');
+					}
+					$this->send($this->connected[$client->id]->socket,'{"action":"UPDATE_COMMANDS"}');
+					break;
+					case 'GET_CONNECTED_CLIENTS':
+					$response = array();
+					
+					foreach($this->connected as $id=>$cli){
+						$this->send($this->connected[$client->id]->socket,'{"action":"clientConnected","client":{"type":"'.$cli->type.'","location":"'.$cli->location.'","user":"'.($cli->user!=null && is_object($cli->user)?$cli->user->login:'Anonyme').'"}}');
+					}
+					
+					
+					break;
+					case 'CATCH_COMMAND':
+					$response = "";
+					$this->log("Call listen hook (v2.0 plugins) with params ".$_['command']." > ".$_['text']." > ".$_['confidence']);
+					Plugin::callHook('listen',array($_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence'],$client->user));
+					break;
+					case '':
+					default:
 				//$this->talk("Coucou");
 				//$this->sound("C:/poule.wav");
 				//$this->execute("C:\Program Files (x86)\PuTTY\putty.exe");
-				$this->log($client->name.'('.$client->type.') send '.$data);
-			break;
-		}
+					$this->log($client->name.'('.$client->type.') send '.$data);
+					break;
+				}
 
-		$this->updateClient($client);
-		}
+				$this->updateClient($client);
+			}
 		}catch(Exception $e){
 			$this->log("ERROR : ".$e->getMessage());
 		}
@@ -137,7 +137,7 @@ class ClientSocket extends SocketServer {
 
 
 	function updateClient($client){
-	
+		
 		$this->connected[$client->id] = $client;
 	}
 
@@ -145,7 +145,7 @@ class ClientSocket extends SocketServer {
 	
 	public function sound($message,$clients=array()){
 		if(count($clients)==0)
-			 $clients = $this->getByType('speak');
+			$clients = $this->getByType('speak');
 		
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
@@ -156,7 +156,7 @@ class ClientSocket extends SocketServer {
 	public function talk($message,$clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('speak');
+			$clients = $this->getByType('speak');
 		
 		$this->log("TALK : Try to send ".$message." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -169,7 +169,7 @@ class ClientSocket extends SocketServer {
 	public function clientConnected($new_client,$clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		//$this->log("CONNECTED : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -183,7 +183,7 @@ class ClientSocket extends SocketServer {
 	public function clientDisconnected($new_client,$clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		//$this->log("CONNECTED : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -197,7 +197,7 @@ class ClientSocket extends SocketServer {
 	public function emotion($emotion,$clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		$this->log("EMOTION : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -211,7 +211,7 @@ class ClientSocket extends SocketServer {
 	public function image($image,$clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		$this->log("IMAGE : Try to send ".$image." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -225,7 +225,7 @@ class ClientSocket extends SocketServer {
 	public function talkAnimate($clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		$this->log("TALK ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -239,7 +239,7 @@ class ClientSocket extends SocketServer {
 	public function muteAnimate($clients=array()){
 		
 		if(count($clients)==0)
-			 $clients = $this->getByType('face');
+			$clients = $this->getByType('face');
 		
 		$this->log("MUTE ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
 		foreach($clients as $client){
@@ -251,11 +251,11 @@ class ClientSocket extends SocketServer {
 	}
 
 	public function url($message,$clients=array()){
-			echo "Envois de l\'url".$message;
+		echo "Envois de l\'url".$message;
 		if(count($clients)==0)
 			$clients = $this->getByType('speak');
-			if(count($clients)==0) return;
-			foreach($clients as $client){
+		if(count($clients)==0) return;
+		foreach($clients as $client){
 			//$client = $clients[0];
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("url ".'{"action":"url","url":"'.$message.'"} to '.$client->name);
@@ -266,8 +266,8 @@ class ClientSocket extends SocketServer {
 
 	public function execute($message,$clients=array()){
 		if(count($clients)==0)
-			 $clients = $this->getByType('speak');
-	
+			$clients = $this->getByType('speak');
+		
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$this->log("send ".'{"action":"execute","command":"'.$message.'"} to '.$client->name);
@@ -286,13 +286,13 @@ class ClientSocket extends SocketServer {
 	private $lastMessage;
 }
 
-	require_once('constant.php');
-	logs("Launch Program");
-	$client = new ClientSocket('0.0.0.0',SOCKET_PORT,SOCKET_MAX_CLIENTS);
-	$client->start();
+require_once('constant.php');
+logs("Launch Program");
+$client = new ClientSocket('0.0.0.0',SOCKET_PORT,SOCKET_MAX_CLIENTS);
+$client->start();
 
 
-	
+
 
 
 class ClientDevice {
@@ -410,7 +410,7 @@ abstract class SocketServer {
 					} else {
 						$this->log('Impossible to connect new client',true);
 					}
-				
+					
 				// else tell the client that there is not place available and display error message to the log console
 				} else {
 					$socket = socket_accept($this->master);
@@ -440,7 +440,7 @@ abstract class SocketServer {
 						
 						// custom method called
 						$this->onClientDisconnected($client);
-					
+						
 					// else, we received a normal message
 					} else {
 						$input = trim($input);
@@ -563,8 +563,8 @@ abstract class SocketServer {
 
 
 function logs($message) {
-		echo '[' . date('d/m/Y H:i:s') . '] ' . $message.PHP_EOL;
+	echo '[' . date('d/m/Y H:i:s') . '] ' . $message.PHP_EOL;
 
-	}
+}
 
 ?>

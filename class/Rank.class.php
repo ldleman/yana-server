@@ -8,13 +8,13 @@
  */
 class Rank extends Entity
 {
-    public $id,$label,$description;
-    protected $fields =
-    array(
-        'id' => 'key',
-        'label' => 'string',
-        'description' => 'longstring'
-    );
+	public $id,$label,$description;
+	protected $fields =
+	array(
+		'id' => 'key',
+		'label' => 'string',
+		'description' => 'longstring'
+		);
 
-   
+	
 }

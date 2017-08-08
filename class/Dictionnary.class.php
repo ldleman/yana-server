@@ -18,7 +18,7 @@ class Dictionnary extends Entity
         'label' => 'longstring',
         'parent' => 'int',
         'state' => 'int',
-    );
+        );
 
     public function __construct()
     {
@@ -45,27 +45,27 @@ class Dictionnary extends Entity
         $obj = new self();
         $parent = $obj->load(array('slug' => $slug));
         echo '<div class="table_list_'.$slug.'" data-list="'.$parent->id.'">
-					<label for="config_application_table"></label>
-					<table id="" class="table table-striped table-bordered table-hover">
-						<thead>
-						<tr>
-							<th colspan="2">'.$parent->label.'</th>
-						</tr>
-						<tr>
-							<th>Ajouter : <input style="margin:0;width:80%;height:inherit;box-sizing:border-box;padding:5px;" type="text"></th>
-							<th style="width:50px;text-align:center;"><div class="btn btn-mini btn-success"><i class="fa fa-plus"></i></div></th>
-						</tr>
-						</thead>
-						<tbody>
-						
-						<tr style="display:none" data-id="{{id}}">
-							<td>{{label}}</td>
-							<td>
-								<div class="btn btn-mini btnEdit"><i class="fa fa-pencil"></i></div>
-								<div class="btn btn-mini btn-danger"><i class="fa fa-times"></i></div>
-							</td>
-						</tr>
-					</tbody></table>
-				</div>';
-    }
+        <label for="config_application_table"></label>
+        <table id="" class="table table-striped table-bordered table-hover">
+          <thead>
+              <tr>
+                 <th colspan="2">'.$parent->label.'</th>
+             </tr>
+             <tr>
+                 <th>Ajouter : <input style="margin:0;width:80%;height:inherit;box-sizing:border-box;padding:5px;" type="text"></th>
+                 <th style="width:50px;text-align:center;"><div class="btn btn-mini btn-success"><i class="fa fa-plus"></i></div></th>
+             </tr>
+         </thead>
+         <tbody>
+          
+          <tr style="display:none" data-id="{{id}}">
+             <td>{{label}}</td>
+             <td>
+                <div class="btn btn-mini btnEdit"><i class="fa fa-pencil"></i></div>
+                <div class="btn btn-mini btn-danger"><i class="fa fa-times"></i></div>
+            </td>
+        </tr>
+    </tbody></table>
+</div>';
+}
 }

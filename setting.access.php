@@ -18,15 +18,15 @@
 					<li>Pré-requis : <ul>{{#require}}<li>{{id}} - <span class="label label-info">{{version}}</span></li>{{/require}}</ul></li>
 				</ul>
 				<label class="activator">
-				<small>On/Off</small>
-				<label class="toggle">
-				  <input {{#state}}checked=""{{##state}} type="checkbox">
-				  <span class="handle"></span>
-				</label>
+					<small>On/Off</small>
+					<label class="toggle">
+						<input {{#state}}checked=""{{##state}} type="checkbox">
+						<span class="handle"></span>
+					</label>
 				</label>
 				
 			</li>
 		</ul>
 	</div>
 </div>
-	
+

@@ -23,125 +23,125 @@ class System{
 		
 		// rev 1.0 type B
 		$pins['b1.0'] = array(
-							array(
+			array(
 								//name,function,wiringPiNumber,bcmNumber,physicalNumber
-								new Gpio('3.3V','Alimentation',-1,-1,1),
-								new Gpio('SDA0','I2C',8,0,3),
-								new Gpio('SCL0','I2C',9,1,5),
-								new Gpio('GPIO 7','',7,4,7),
-								new Gpio('DNC','Masse (GND)',-1,-1,9),
-								new Gpio('GPIO 0','',0,17,11),
-								new Gpio('GPIO 2','',2,21,13),
-								new Gpio('GPIO 3','',3,22,15),
-								new Gpio('DNC','Masse (GND)',-1,-1,17),
-								new Gpio('MOSI','SPI',12,10,19),
-								new Gpio('MISO','SPI',13,9,21),
-								new Gpio('SCLK','SPI',14,11,23),
-								new Gpio('DNC','',-1,-1,25),
-							),
-							array(
-								new Gpio('5V','Alimentation',-1,-1,2),
-								new Gpio('DNC','Masse (GND)',-1,-1,4),
-								new Gpio('0V','Masse (GND)',-1,-1,6),
-								new Gpio('TxD','UART (Transmission)',14,14,8),
-								new Gpio('RxD','UART (Réception)',15,15,10),
-								new Gpio('GPIO 1','',1,18,12),
-								new Gpio('DNC','Masse (GND)',-1,-1,14),
-								new Gpio('GPIO 4','',4,23,16),
-								new Gpio('GPIO 5','',5,24,18),
-								new Gpio('DNC','Masse (GND)',-1,-1,20),
-								new Gpio('GPIO 6','',6,25,22),
-								new Gpio('CE 0','SPI',10,8,24),
-								new Gpio('CE 1','SPI',11,7,26),
-							)
-						);
+				new Gpio('3.3V','Alimentation',-1,-1,1),
+				new Gpio('SDA0','I2C',8,0,3),
+				new Gpio('SCL0','I2C',9,1,5),
+				new Gpio('GPIO 7','',7,4,7),
+				new Gpio('DNC','Masse (GND)',-1,-1,9),
+				new Gpio('GPIO 0','',0,17,11),
+				new Gpio('GPIO 2','',2,21,13),
+				new Gpio('GPIO 3','',3,22,15),
+				new Gpio('DNC','Masse (GND)',-1,-1,17),
+				new Gpio('MOSI','SPI',12,10,19),
+				new Gpio('MISO','SPI',13,9,21),
+				new Gpio('SCLK','SPI',14,11,23),
+				new Gpio('DNC','',-1,-1,25),
+				),
+			array(
+				new Gpio('5V','Alimentation',-1,-1,2),
+				new Gpio('DNC','Masse (GND)',-1,-1,4),
+				new Gpio('0V','Masse (GND)',-1,-1,6),
+				new Gpio('TxD','UART (Transmission)',14,14,8),
+				new Gpio('RxD','UART (Réception)',15,15,10),
+				new Gpio('GPIO 1','',1,18,12),
+				new Gpio('DNC','Masse (GND)',-1,-1,14),
+				new Gpio('GPIO 4','',4,23,16),
+				new Gpio('GPIO 5','',5,24,18),
+				new Gpio('DNC','Masse (GND)',-1,-1,20),
+				new Gpio('GPIO 6','',6,25,22),
+				new Gpio('CE 0','SPI',10,8,24),
+				new Gpio('CE 1','SPI',11,7,26),
+				)
+			);
 		$pins['a1.0'] = $pins['b1.0'];
 		// rev 2.0 type B
 		$pins['b2.0'] = array(
-							array(
+			array(
 								//name,function,wiringPiNumber,bcmNumber,physicalNumber
-								new Gpio('3.3V','Alimentation',-1,-1,1),
-								new Gpio('SDA0','I2C',8,2,3),
-								new Gpio('SCL0','I2C',9,3,5),
-								new Gpio('GPIO 7','',7,4,7),
-								new Gpio('DNC','Masse (GND)',-1,-1,9),
-								new Gpio('GPIO 0','',0,17,11),
-								new Gpio('GPIO 2','',2,27,13),
-								new Gpio('GPIO 3','',3,22,15),
-								new Gpio('DNC','Masse (GND)',-1,-1,17),
-								new Gpio('MOSI','SPI',12,10,19),
-								new Gpio('MISO','SPI',13,9,21),
-								new Gpio('SCLK','SPI',14,11,23),
-								new Gpio('DNC','',-1,-1,25),
-							),
-							array(
-								new Gpio('5V','Alimentation',-1,-1,2),
-								new Gpio('DNC','Masse (GND)',-1,-1,4),
-								new Gpio('0V','Masse (GND)',-1,-1,6),
-								new Gpio('TxD','UART (Transmission)',14,14,8),
-								new Gpio('RxD','UART (Réception)',15,15,10),
-								new Gpio('GPIO 1','',1,18,12),
-								new Gpio('DNC','Masse (GND)',-1,-1,14),
-								new Gpio('GPIO 4','',4,23,16),
-								new Gpio('GPIO 5','',5,24,18),
-								new Gpio('DNC','Masse (GND)',-1,-1,20),
-								new Gpio('GPIO 6','',6,25,22),
-								new Gpio('CE 0','SPI',10,8,24),
-								new Gpio('CE 1','SPI',11,7,26),
-							)
-						);
+				new Gpio('3.3V','Alimentation',-1,-1,1),
+				new Gpio('SDA0','I2C',8,2,3),
+				new Gpio('SCL0','I2C',9,3,5),
+				new Gpio('GPIO 7','',7,4,7),
+				new Gpio('DNC','Masse (GND)',-1,-1,9),
+				new Gpio('GPIO 0','',0,17,11),
+				new Gpio('GPIO 2','',2,27,13),
+				new Gpio('GPIO 3','',3,22,15),
+				new Gpio('DNC','Masse (GND)',-1,-1,17),
+				new Gpio('MOSI','SPI',12,10,19),
+				new Gpio('MISO','SPI',13,9,21),
+				new Gpio('SCLK','SPI',14,11,23),
+				new Gpio('DNC','',-1,-1,25),
+				),
+			array(
+				new Gpio('5V','Alimentation',-1,-1,2),
+				new Gpio('DNC','Masse (GND)',-1,-1,4),
+				new Gpio('0V','Masse (GND)',-1,-1,6),
+				new Gpio('TxD','UART (Transmission)',14,14,8),
+				new Gpio('RxD','UART (Réception)',15,15,10),
+				new Gpio('GPIO 1','',1,18,12),
+				new Gpio('DNC','Masse (GND)',-1,-1,14),
+				new Gpio('GPIO 4','',4,23,16),
+				new Gpio('GPIO 5','',5,24,18),
+				new Gpio('DNC','Masse (GND)',-1,-1,20),
+				new Gpio('GPIO 6','',6,25,22),
+				new Gpio('CE 0','SPI',10,8,24),
+				new Gpio('CE 1','SPI',11,7,26),
+				)
+			);
 		$pins['a2.0'] = $pins['b2.0'];
 		
 		// type B+
 		// @maditnerd I fix the gpio numbering , some were wrong.
 		$pins['b+1.0'] = array(
-							array(
+			array(
 								//name,function,wiringPiNumber,bcmNumber,physicalNumber
-								new Gpio('3.3V','Alimentation',-1,-1,1),
-								new Gpio('SDA1','I2C',8,2,3),
-								new Gpio('SCL1','I2C',9,3,5),
-								new Gpio('GPIO 7','',7,4,7),
-								new Gpio('DNC','Masse (GND)',-1,-1,9),
-								new Gpio('GPIO 0','',0,17,11),
-								new Gpio('GPIO 2','',2,27,13),
-								new Gpio('GPIO 3','',3,22,15),
-								new Gpio('3.3V','Alimentation',-1,-1,1),
-								new Gpio('MOSI','SPI',12,10,19),
-								new Gpio('MISO','SPI',13,9,21),
-								new Gpio('SCLK','SPI',14,11,23),
-								new Gpio('DNC','Masse (GND)',-1,-1,25),
-								new Gpio('SDA0','I2C',30,0,27),
-								new Gpio('GPIO 21','',21,5,29),
-								new Gpio('GPIO 22','',22,6,31),
-								new Gpio('GPIO 23','',23,13,33),
-								new Gpio('GPIO 24','',24,19,35),
-								new Gpio('GPIO 25','',25,26,37),
-								new Gpio('0V','Masse (GND)',-1,-1,39),
-							),
-							array(
-								new Gpio('5V','Alimentation',-1,-1,2),
-								new Gpio('5V','Alimentation',-1,-1,4),
-								new Gpio('0V','Masse',-1,-1,6),
-								new Gpio('TxD','UART (Transmission)',15,15,8),
-								new Gpio('RxD','UART (Réception)',16,16,10),
-								new Gpio('GPIO 1','',1,18,12),
-								new Gpio('0V','Masse (GND)',-1,-1,14),
-								new Gpio('GPIO 4','',4,23,16),
-								new Gpio('GPIO 5','',5,24,18),
-								new Gpio('0V','Masse (GND)',-1,-1,20),
-								new Gpio('GPIO 6','',6,25,22),
-								new Gpio('CE 0','SPI',10,8,24),
-								new Gpio('CE 1','SPI',11,7,26),
-								new Gpio('SCL 0','I2C ID EEPROM',-1,-1,28),
-								new Gpio('0V','Masse (GND)',-1,-1,30),
-								new Gpio('GPIO 26','PWM0',26,12,32),
-								new Gpio('0V','Masse (GND)',-1,-1,34),
-								new Gpio('GPIO 27','',27,16,36),
-								new Gpio('GPIO 28','',28,20,38),
-								new Gpio('GPIO 29','',29,21,40),
-								
-							)
-						);
+				new Gpio('3.3V','Alimentation',-1,-1,1),
+				new Gpio('SDA1','I2C',8,2,3),
+				new Gpio('SCL1','I2C',9,3,5),
+				new Gpio('GPIO 7','',7,4,7),
+				new Gpio('DNC','Masse (GND)',-1,-1,9),
+				new Gpio('GPIO 0','',0,17,11),
+				new Gpio('GPIO 2','',2,27,13),
+				new Gpio('GPIO 3','',3,22,15),
+				new Gpio('3.3V','Alimentation',-1,-1,1),
+				new Gpio('MOSI','SPI',12,10,19),
+				new Gpio('MISO','SPI',13,9,21),
+				new Gpio('SCLK','SPI',14,11,23),
+				new Gpio('DNC','Masse (GND)',-1,-1,25),
+				new Gpio('SDA0','I2C',30,0,27),
+				new Gpio('GPIO 21','',21,5,29),
+				new Gpio('GPIO 22','',22,6,31),
+				new Gpio('GPIO 23','',23,13,33),
+				new Gpio('GPIO 24','',24,19,35),
+				new Gpio('GPIO 25','',25,26,37),
+				new Gpio('0V','Masse (GND)',-1,-1,39),
+				),
+			array(
+				new Gpio('5V','Alimentation',-1,-1,2),
+				new Gpio('5V','Alimentation',-1,-1,4),
+				new Gpio('0V','Masse',-1,-1,6),
+				new Gpio('TxD','UART (Transmission)',15,15,8),
+				new Gpio('RxD','UART (Réception)',16,16,10),
+				new Gpio('GPIO 1','',1,18,12),
+				new Gpio('0V','Masse (GND)',-1,-1,14),
+				new Gpio('GPIO 4','',4,23,16),
+				new Gpio('GPIO 5','',5,24,18),
+				new Gpio('0V','Masse (GND)',-1,-1,20),
+				new Gpio('GPIO 6','',6,25,22),
+				new Gpio('CE 0','SPI',10,8,24),
+				new Gpio('CE 1','SPI',11,7,26),
+				new Gpio('SCL 0','I2C ID EEPROM',-1,-1,28),
+				new Gpio('0V','Masse (GND)',-1,-1,30),
+				new Gpio('GPIO 26','PWM0',26,12,32),
+				new Gpio('0V','Masse (GND)',-1,-1,34),
+				new Gpio('GPIO 27','',27,16,36),
+				new Gpio('GPIO 28','',28,20,38),
+				new Gpio('GPIO 29','',29,21,40),
+				
+				)
+			);
 
 		//type B2
 		$pins['b21.0'] = $pins['b+1.0'];
@@ -166,13 +166,13 @@ class System{
 				new Gpio('MISO','SPI',13,9,21),
 				new Gpio('SCLK','SPI',14,11,23),
 				new Gpio('0V','Masse (GND)',-1,-1,25),
-	            new Gpio('',' ',-1,-1,-1),
-	            new Gpio('5V','Alimentation',-1,-1,1),
-	            new Gpio('GPIO 8','',17,28,3),
-	            new Gpio('GPIO 10','',19,30,5),
-	            new Gpio('0V','Masse (GND)',-1,-1,7),
-            ),
-            array(
+				new Gpio('',' ',-1,-1,-1),
+				new Gpio('5V','Alimentation',-1,-1,1),
+				new Gpio('GPIO 8','',17,28,3),
+				new Gpio('GPIO 10','',19,30,5),
+				new Gpio('0V','Masse (GND)',-1,-1,7),
+				),
+			array(
 				new Gpio('5V','Alimentation',-1,-1,2),
 				new Gpio('5V','Alimentation',-1,-1,4),
 				new Gpio('0V','Masse (GND)',-1,-1,6),
@@ -191,8 +191,8 @@ class System{
 				new Gpio('Gpio 9 Tx','UART (Transmission)',18,29,4),
 				new Gpio('Gpio 11 Rx','UART (Réception)',20,31,6),
 				new Gpio('0V','Masse (GND)',-1,-1,8),
-            )
-        );
+				)
+			);
 
 
 
@@ -227,7 +227,7 @@ class System{
 			'a22082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a22082'), 
 			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'900092'),
 			'0000' => array('ram'=>'1024','version'=>'1.0','type'=>'M1','revision'=>'0000')
-		);
+			);
 		if(PHP_OS=='WINNT') $infos['Revision'] = 'a01041';//for dev mode on windows only
 		return isset($deductionArray[$infos['Revision']]) ? $deductionArray[$infos['Revision']] :array('ram'=>'0','version'=>'0','type'=>'unknown','revision'=>$infos['Revision']);
 	}
@@ -248,17 +248,17 @@ class System{
 		$pinsRange = self::getPinForModel($model['type'],$model['version']);
 		$gpios = array();
 		foreach($pinsRange as $range){
-				foreach($range as $pin){
-					if(PHP_OS=='WINNT'){
-						$gpios[$pin->wiringPiNumber] = rand(0,1);
-						continue;
-					}
-					if($pin->wiringPiNumber<0) continue;
-					$gpios[$pin->wiringPiNumber] = exec(GPIO::GPIO_DEFAULT_PATH." read ".$pin->wiringPiNumber, $out);				
+			foreach($range as $pin){
+				if(PHP_OS=='WINNT'){
+					$gpios[$pin->wiringPiNumber] = rand(0,1);
+					continue;
 				}
+				if($pin->wiringPiNumber<0) continue;
+				$gpios[$pin->wiringPiNumber] = exec(GPIO::GPIO_DEFAULT_PATH." read ".$pin->wiringPiNumber, $out);				
+			}
 		}
 		return $gpios;
-  }
+	}
 
 
 	

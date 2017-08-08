@@ -9,40 +9,40 @@
 class Personality extends Entity{
 
 
-	 public $id,$key,$value;
-	 protected $TABLE_NAME = 'personnality';
-	 protected $fields = 
-	    array(
-		    'id'=>'key',
-		    'key'=>'string',
-            'value'=>'longstring'
-	    );
+	public $id,$key,$value;
+	protected $TABLE_NAME = 'personnality';
+	protected $fields = 
+	array(
+		'id'=>'key',
+		'key'=>'string',
+		'value'=>'longstring'
+		);
 
 	public static function randomPattern($string)
 	{
-	    if(preg_match_all('/(?<={)[^}]*(?=})/', $string, $matches)) {
-	        $matches = reset($matches);
-	        foreach($matches as $i => $match) {
-	            if(preg_match_all('/(?<=\[)[^\]]*(?=\])/', $match, $sub_matches)) {
-	                $sub_matches = reset($sub_matches);
-	                foreach($sub_matches as $sub_match) {
-	                    $pieces = explode('|', $sub_match);
-	                    $count = count($pieces);
+		if(preg_match_all('/(?<={)[^}]*(?=})/', $string, $matches)) {
+			$matches = reset($matches);
+			foreach($matches as $i => $match) {
+				if(preg_match_all('/(?<=\[)[^\]]*(?=\])/', $match, $sub_matches)) {
+					$sub_matches = reset($sub_matches);
+					foreach($sub_matches as $sub_match) {
+						$pieces = explode('|', $sub_match);
+						$count = count($pieces);
 
-	                    $random_word = $pieces[rand(0, ($count - 1))];
-	                    $matches[$i] = str_replace('[' . $sub_match . ']',     $random_word, $matches[$i]);
-	                }
-	            }
+						$random_word = $pieces[rand(0, ($count - 1))];
+						$matches[$i] = str_replace('[' . $sub_match . ']',     $random_word, $matches[$i]);
+					}
+				}
 
-	            $pieces = explode('|', $matches[$i]);
-	            $count = count($pieces);
+				$pieces = explode('|', $matches[$i]);
+				$count = count($pieces);
 
-	            $random_word = $pieces[rand(0, ($count - 1))];
-	            $string = str_replace('{' . $match . '}', $random_word, $string);
-	        }
-	    }
+				$random_word = $pieces[rand(0, ($count - 1))];
+				$string = str_replace('{' . $match . '}', $random_word, $string);
+			}
+		}
 
-	    return $string;
+		return $string;
 	}
 
 	public function birth(){
@@ -73,36 +73,36 @@ class Personality extends Entity{
 		$attribute = $this->load(array('key'=>$key));
 		if(!$attribute) return '';
 		return $attribute->value; 
-	
+		
 	}
 
 
 	public static $sentences = array(
-								'GREETING'=>
-									array(
-										"{[Salut|Bonjour|Héhoh] [l'ami|toi|vous]}"
-									),
-								'ORDER_CONFIRMATION'=>
-									array(
-										'{J\'aime [beaucoup|vraiment|]|J\'adore|Je ne [souhaite|veux] que|Je n\'aspire qu\'a|Je ne [rêve] que de} vous {obéir|faire plaisir}!',
-										'{Je fais|J\'[execute|accomplis]} {ça|ceçi|cela} {sans [tarder|lambiner]|avec [diligence|empressement]}!',
-										'{A vos ordres|Avec [plaisir|joie]|Certainement|Oui|Bien[ reçu|compris|]|D\'accord|Oké} {chef|maitre|[mon|][ commandant| dieu]|}!'
-									),
-								'WORRY_EMOTION'=>
-									array('Je suis {confuse|désolée|attristée|peinée|affligée}',
-										'{Si il vous plait|Je vous en prie|} {pardonnez|excusez} moi',
-										'Il y a {confusion|un [problème|soucis|qwak]}',
-										'Je ne sais {pas quoi [dire|faire]|plus ou me mettre}'
-									),
-								'ANGRY_EMOTION'=>
-									array('Vas {te faire cuire un oeuf|au diable|jouer les yeux bandé près d\'une autoroute}',
-										'Tu {sent|pue|fouanne} {des [pieds|aisselles]|de l\'anus|du [posterieur|cul]}',
-										'Je {refuse|n\'accepte pas} {de [communiquer|parler|discutter] avec|d\'obeir a} {un [primate|humain|résidu d\'humanité|inférieur|cafard|étron]|une [larve|pale copie d\'être humain|erreur de la nature]}',
-										'{Je préfère|Plutot} {m\'autodétruire|m\'auto formatter|me faire mettre à jour par un stagiaire|me griller les circuits} {que [continuer|poursuivre] [cette discussion|ce dialogue] [inutile|sans queue ni tête|stupide|de sourd|]|qu\'alimenter ce trou noir intellectuel}',
-										'{Ta [mère|soeur|tante|cousine]|Ton [père|oncle|frère|cousine]} suce {des [dains|orignaux|chtroumffe|aliens]} {en [enfer|roumanie|albanie]}',
-										'Tu pousse le bouchon trop loin maurice'
-									)
-								);
+		'GREETING'=>
+		array(
+			"{[Salut|Bonjour|Héhoh] [l'ami|toi|vous]}"
+			),
+		'ORDER_CONFIRMATION'=>
+		array(
+			'{J\'aime [beaucoup|vraiment|]|J\'adore|Je ne [souhaite|veux] que|Je n\'aspire qu\'a|Je ne [rêve] que de} vous {obéir|faire plaisir}!',
+			'{Je fais|J\'[execute|accomplis]} {ça|ceçi|cela} {sans [tarder|lambiner]|avec [diligence|empressement]}!',
+			'{A vos ordres|Avec [plaisir|joie]|Certainement|Oui|Bien[ reçu|compris|]|D\'accord|Oké} {chef|maitre|[mon|][ commandant| dieu]|}!'
+			),
+		'WORRY_EMOTION'=>
+		array('Je suis {confuse|désolée|attristée|peinée|affligée}',
+			'{Si il vous plait|Je vous en prie|} {pardonnez|excusez} moi',
+			'Il y a {confusion|un [problème|soucis|qwak]}',
+			'Je ne sais {pas quoi [dire|faire]|plus ou me mettre}'
+			),
+		'ANGRY_EMOTION'=>
+		array('Vas {te faire cuire un oeuf|au diable|jouer les yeux bandé près d\'une autoroute}',
+			'Tu {sent|pue|fouanne} {des [pieds|aisselles]|de l\'anus|du [posterieur|cul]}',
+			'Je {refuse|n\'accepte pas} {de [communiquer|parler|discutter] avec|d\'obeir a} {un [primate|humain|résidu d\'humanité|inférieur|cafard|étron]|une [larve|pale copie d\'être humain|erreur de la nature]}',
+			'{Je préfère|Plutot} {m\'autodétruire|m\'auto formatter|me faire mettre à jour par un stagiaire|me griller les circuits} {que [continuer|poursuivre] [cette discussion|ce dialogue] [inutile|sans queue ni tête|stupide|de sourd|]|qu\'alimenter ce trou noir intellectuel}',
+			'{Ta [mère|soeur|tante|cousine]|Ton [père|oncle|frère|cousine]} suce {des [dains|orignaux|chtroumffe|aliens]} {en [enfer|roumanie|albanie]}',
+			'Tu pousse le bouchon trop loin maurice'
+			)
+		);
 	public static function response($type){
 		$pattern = static::$sentences[$type];
 		$pattern = $pattern[array_rand($pattern)];

@@ -20,29 +20,29 @@ if(!$myUser->can('room','configure')) throw new Exception("Permissions insuffisa
 		</div>
 		<br/>
 		<div class="panel panel-default">
-              <div class="panel-heading">Pièces existantes</div>
-              <table id="rooms" class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nom</th>
-                    <th>Description</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr data-id="{{id}}" class="noDisplay">
-                    <td>{{id}}</td>
-                    <td>{{label}}</td>
-                    <td>{{description}}</td>
-                    <td>
-                    	<div onclick="edit_room(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
-                    	<div onclick="delete_room(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-	</div>
+      <div class="panel-heading">Pièces existantes</div>
+      <table id="rooms" class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="{{id}}" class="noDisplay">
+            <td>{{id}}</td>
+            <td>{{label}}</td>
+            <td>{{description}}</td>
+            <td>
+             <div onclick="edit_room(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
+             <div onclick="delete_room(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
+           </td>
+         </tr>
+       </tbody>
+     </table>
+   </div>
+ </div>
 </div>
-	
+

@@ -1,7 +1,7 @@
 <?php 
 global $myUser;
 if(!$myUser->can('plugin','configure')) throw new Exception("Permissions insuffisantes");
- ?>
+?>
 <div class="row">
 	<div class="col-md-12">
 		<h3>Plugins</h3>
@@ -21,15 +21,15 @@ if(!$myUser->can('plugin','configure')) throw new Exception("Permissions insuffi
 					<li>Pré-requis : <ul>{{#require}}<li>{{key}} - <span class="label label-info">{{value}}</span></li>{{/require}}</ul></li>
 				</ul>
 				<label class="activator">
-				<small>On/Off</small>
-				<label class="toggle">
-				  <input {{#state}}checked=""{{##state}} type="checkbox">
-				  <span class="handle"></span>
-				</label>
+					<small>On/Off</small>
+					<label class="toggle">
+						<input {{#state}}checked=""{{##state}} type="checkbox">
+						<span class="handle"></span>
+					</label>
 				</label>
 				
 			</li>
 		</ul>
 	</div>
 </div>
-	
+

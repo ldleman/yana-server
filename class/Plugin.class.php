@@ -32,9 +32,9 @@ class Plugin{
 	public static function includeAll(){
 		foreach(self::getAll() as $plugin):
 			if(!$plugin->state) continue;
-			$main = $plugin->path().SLASH.$plugin->folder.'.plugin.php';
-			if(file_exists($main))
-				require_once($main);
+		$main = $plugin->path().SLASH.$plugin->folder.'.plugin.php';
+		if(file_exists($main))
+			require_once($main);
 		endforeach;
 	}
 	
@@ -46,14 +46,14 @@ class Plugin{
 
 		usort($plugins, function($a, $b){
 			if ($a->name == $b->name) 
-	        	$result = 0;
+				$result = 0;
 
-		    if($a->name < $b->name){
-		   		$result = -1;
-		    } else{
-		   		$result = 1;
-		    }
-		    return  $result;
+			if($a->name < $b->name){
+				$result = -1;
+			} else{
+				$result = 1;
+			}
+			return  $result;
 		});
 		return $plugins;
 	}
@@ -87,7 +87,7 @@ class Plugin{
 	
 	public static function state($id,$state){
 		$enabled = self::states();
-	
+		
 		$plugin = self::getById($id);
 		
 		$main = $plugin->path().SLASH.$plugin->folder.'.plugin.php';
@@ -100,11 +100,11 @@ class Plugin{
 			
 			if($key  !== false)
 				unset($enabled[$key]);
-		
+			
 			plugin::callHook('uninstall',array($plugin->id));
 		}else{
 			if(!in_array($plugin->id,$enabled))
-			$enabled[] = $plugin->id;
+				$enabled[] = $plugin->id;
 			plugin::callHook('install',array($plugin->id));
 		}
 		
@@ -122,7 +122,7 @@ class Plugin{
 	}
 	
 	public function path(){
-		 return __ROOT__.PLUGIN_PATH.$this->folder;
+		return __ROOT__.PLUGIN_PATH.$this->folder;
 	}
 	
 
@@ -155,7 +155,7 @@ class Plugin{
 		if(!isset($GLOBALS['hooks']['js_files'])) return '';
 		$stream = '';
 		foreach($GLOBALS['hooks']['js_files'] as $js_file)
-		            $stream .='<script type="text/javascript" src="'.$js_file.'"></script>'."\n";
+			$stream .='<script type="text/javascript" src="'.$js_file.'"></script>'."\n";
 		return $stream;
 	}
 	

@@ -41,17 +41,17 @@ class Database
     public function connect()
     {
         try {
-			$base = BASE_SGBD;
-			require_once(__ROOT__.'connector/'.$base.'.class.php');
-			$connectionString = str_replace(
-			array('{{ROOT}}','{{BASE_HOST}}','{{BASE_NAME}}','{{BASE_LOGIN}}','{{BASE_PASSWORD}}'),
-			array(__ROOT__,BASE_HOST,BASE_NAME,BASE_LOGIN,BASE_PASSWORD),
-			$base::connection);
-            $this->connection = new PDO($connectionString, BASE_LOGIN, BASE_PASSWORD);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (Exception $e) {
-            echo 'Connection à la base impossible : ', $e->getMessage();
-            die();
-        }
+         $base = BASE_SGBD;
+         require_once(__ROOT__.'connector/'.$base.'.class.php');
+         $connectionString = str_replace(
+             array('{{ROOT}}','{{BASE_HOST}}','{{BASE_NAME}}','{{BASE_LOGIN}}','{{BASE_PASSWORD}}'),
+             array(__ROOT__,BASE_HOST,BASE_NAME,BASE_LOGIN,BASE_PASSWORD),
+             $base::connection);
+         $this->connection = new PDO($connectionString, BASE_LOGIN, BASE_PASSWORD);
+         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+     } catch (Exception $e) {
+        echo 'Connection à la base impossible : ', $e->getMessage();
+        die();
     }
+}
 }
