@@ -10,7 +10,7 @@ if(!$myUser->can('dashboard','configure')) throw new Exception("Permissions insu
 			<div class="col-md-12">
 				<label for="label">Nom de la page de dashboard</label>
 				<input id="label" class="form-control" placeholder="Salon,Cuisine..." type="text">
-				<label for="icon">Iconela page de dashboard</label>
+				<label for="icon">Icone de la page de dashboard</label>
 				<input type="hidden" id="icon" class="form-control" >
 				<div class="iconSet">
 					<?php foreach(availableIcon() as $icon=>$code):?>

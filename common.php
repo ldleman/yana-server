@@ -1,5 +1,6 @@
 <?php 
-session_start('core-session');
+session_name ('yana-server');
+session_start();
 mb_internal_encoding('UTF-8');
 
 if(!file_exists(__DIR__.DIRECTORY_SEPARATOR.'constant.php'))
@@ -69,7 +70,13 @@ Plugin::addHook("menu_setting", function(&$settingMenu){
 			'icon' => 'angle-right',
 			'label' => 'Rangs & Accès'
 			);
-	
+	if($myUser->can('log','read'))
+		$settingMenu[]= array(
+			'sort' =>2,
+			'url' => 'setting.php?section=log',
+			'icon' => 'angle-right',
+			'label' => 'Logs'
+			);
 	
 });
 
@@ -101,7 +108,7 @@ Plugin::addHook("menu_user", function(&$userMenu){
 
 Plugin::addHook("content_setting", function(){
 	global $_;
-	if(in_array($_['section'],array('plugin','rank','right','user','room','dashboard')) && file_exists('setting.'.$_['section'].'.php'))
+	if(in_array($_['section'],array('plugin','rank','right','user','room','dashboard','log')) && file_exists('setting.'.$_['section'].'.php'))
 		require_once('setting.'.$_['section'].'.php');
 });
 
@@ -111,6 +118,8 @@ Plugin::addHook("section",function(&$sections){
 	$sections['plugin'] = 'Gestion des plugins';
 	$sections['rank'] = 'Gestion des rangs et droits';
 	$sections['dashboard'] = 'Gestion de la dashboard et des widgets';
+	$sections['room'] = 'Gestion des pièces';
+	$sections['log'] = 'Gestion des logs programme';
 });
 
 

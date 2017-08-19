@@ -47,13 +47,13 @@ class Personality extends Entity{
 
 	public function birth(){
 		$this->put('birthday',strtotime('-'.rand(0,50).' years'));
-		$this->put('favorite_color',Functions::array_rand(array('orange','rouge','bleu','vert','violet','taupe','indigo','bordeaux','jaune','gris','noir','blanc','citron'),1));
-		$this->put('favorite_book',Functions::array_rand(array('Les anales du disque monde de Terry Pratchet','La trilogie des fourmis de Bernard Weber','Fondation d\'Isaac Asimov','Cosmétique de l\'ennemie d\'amélie nothomb','Tout sauf un home d\'Isaac Asimov','Le vieux et son implant de paul bera'),1));
-		$this->put('favorite_food',Functions::array_rand(array('Le magret de canard','Les nuggets maison','Les calzones','les escalopes milanaises'),1));
-		$this->put('favorite_movie',Functions::array_rand(array('Retour vers le futur 1,2 et 3','Fight Club','Vice et versa','Mary poppins'),1));
-		$this->put('favorite_band',Functions::array_rand(array('Nirvana','Noir désir','Zoufris maracas','Les casseurs flowters','Les svinkels','Les frêres brothers','louis chédid','Maxime le forestier','Brassens'),1));
-		$this->put('size',Functions::array_rand(array('Grande','Petite','Moyenne'),1));
-		$this->put('skin',Functions::array_rand(array('Noire','Jaune','Blanche','Métisse'),1));
+		$this->put('favorite_color',arand(array('orange','rouge','bleu','vert','violet','taupe','indigo','bordeaux','jaune','gris','noir','blanc','citron'),1));
+		$this->put('favorite_book',arand(array('Les anales du disque monde de Terry Pratchet','La trilogie des fourmis de Bernard Weber','Fondation d\'Isaac Asimov','Cosmétique de l\'ennemie d\'amélie nothomb','Tout sauf un home d\'Isaac Asimov','Le vieux et son implant de paul bera'),1));
+		$this->put('favorite_food',arand(array('Le magret de canard','Les nuggets maison','Les calzones','les escalopes milanaises'),1));
+		$this->put('favorite_movie',arand(array('Retour vers le futur 1,2 et 3','Fight Club','Vice et versa','Mary poppins'),1));
+		$this->put('favorite_band',arand(array('Nirvana','Noir désir','Zoufris maracas','Les casseurs flowters','Les svinkels','Les frêres brothers','louis chédid','Maxime le forestier','Brassens'),1));
+		$this->put('size',arand(array('Grande','Petite','Moyenne'),1));
+		$this->put('skin',arand(array('Noire','Jaune','Blanche','Métisse'),1));
 		$this->put('fear',rand(0,10));
 		$this->put('anger',rand(0,10));
 		$this->put('sadness',rand(0,10));

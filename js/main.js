@@ -61,6 +61,10 @@ function init_setting(parameter){
 		case 'room':
 			search_room();
 		break;
+		case 'log':
+			search_log();
+			$('#keyword').enter(search_log);
+		break;
 		case 'dashboard':
 			$('.iconSet i').click(function(){
 				$('.iconSet i').removeAttr('data-selected');
@@ -147,6 +151,14 @@ function refresh_list(elem){
 			line.show();
 			table.find('tbody').append(line);
 		}
+	});
+}
+/** LOG **/
+
+// SEARCH
+function search_log(callback){
+	$('#logs').fill({action:'search_log',keyword:$('#keyword').val()},function(){
+		if(callback!=null) callback();
 	});
 }
 

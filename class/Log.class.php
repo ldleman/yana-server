@@ -21,6 +21,12 @@ class Log extends Entity
         'ip' => 'string',
         );
 
+    public function label(){
+        return preg_replace_callback('|^\[([^\]]*)\](.*)|i', function($matches){
+            return '<span class="badge badge-info">'.$matches[1].'</span>'.$matches[2];
+        }, $this->label);
+    }
+
     public static function put($label)
     {
         global $myUser;
@@ -32,5 +38,10 @@ class Log extends Entity
         $log->date = time();
         $log->ip = ip();
         $log->save();
+    }
+
+    public static function clear($delay = 1){
+       $treshold = time() - ($delay * 2592000);
+       self::delete(array('date:<'=>$treshold));
     }
 }

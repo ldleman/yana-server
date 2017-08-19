@@ -22,13 +22,15 @@ function relay_search(callback){
 // SAVE
 function relay_save(account){
 	var data = $.getForm('#relayForm');
-
+	data.meta = $.getForm('#type_form');
+	
 	$.action(data,function(r){
 		$.message('info','Relais enregistrée');
 		relay_search();
 		$('#relayForm input').val('');
+		$('#type_form').html('');
 		$('#relayForm').attr('data-id','');
-		search();
+	
 	});
 }
 
@@ -36,7 +38,14 @@ function relay_save(account){
 function relay_edit(element){
 	var line = $(element).closest('tr');
 	$.action({action:'relay_edit',id:line.attr('data-id')},function(r){
+		$('.iconSet i').removeAttr('data-selected');
 		$.setForm('#relayForm',r);
+
+		
+		relay_change_type($('#type'),function(){
+			$.setForm('#type_form',r.meta);
+		});
+
 		$('.iconSet i[data-value="'+$('#icon').val()+'"]').attr('data-selected','true');
 		$('#relayForm').attr('data-id',r.id);
 	});
@@ -65,6 +74,24 @@ function relay_change_state(element){
 		},
 		function(r){
 			relay.toggleClass("active");
+		}
+	);
+}
+
+//CHANGE TYPE 
+function relay_change_type(element,callback){
+	if($(element).val()==''){
+		$('#type_form').html('');
+		return;
+	}
+	$.action(
+		{
+			action : 'relay_change_type', 
+			type: $(element).val()
+		},
+		function(r){
+			$('#type_form').html(r.html);
+			if(callback) callback();
 		}
 	);
 }

@@ -30,8 +30,11 @@ a.navbar-brand {
 }
 
 .iconSet{
-	max-height:200px;
-	overflow:auto;
+	background: #ffffff none repeat scroll 0 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow: auto;
+    padding: 5px;
 }
 .iconSet i{
 	cursor:pointer;
@@ -90,7 +93,7 @@ a.navbar-brand {
 .widget{
 	transition:width 0.2s linear,height 0.2s linear,opacity 0.2s linear;
 	display: table;
-	padding:13px 0;
+	padding:20px 0;
 }
 
 .widget_window{
@@ -270,6 +273,24 @@ a.navbar-brand {
 /**
 ** TOOLS
 **/
+i.help{
+	background-color: #fcfbfb;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 3px;
+    margin:5px 0;
+}
+i.help:before{
+	content : '\f0eb';
+	font-style: normal;
+	margin: 0 5px 0 3px;
+	padding:0 3px;
+	border-radius: 3px;
+	color:#ffffff;
+	background-color:#F6BB42;
+	font-family: 'FontAwesome';
+}
+
 
 .noLabel{
 	margin-top:24px;
@@ -312,6 +333,13 @@ table  td.option.option-3{
 ** LIBRARIES FIXES
 **/
 
+mark {
+    background-color: #fee155!important;;
+}
+
+hr{
+	border-color: #d9d9d9 currentcolor currentcolor!important;
+}
 
 .btn-mini{
 	padding: 0 5px;

@@ -280,7 +280,7 @@ class Story extends Entity{
 		global $_;
 		
 		if(!isset($_['mode']) || $_['mode'] != 'verbose') return;
-		Functions::log($msg);
+		Log::put($msg);
 		echo '<pre>'.date('d/m/Y H:i:s').' | '.$msg.PHP_EOL;
 	}
 	

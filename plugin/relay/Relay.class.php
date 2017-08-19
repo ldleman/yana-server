@@ -6,9 +6,8 @@
  @description:  Classe de gestion des relais (prises, interrupteurs, coupe circuits ...)
  */
 
-
-abstract class Relay extends Entity{
-	public $id,$location,$label,$type,$description,$icon;
+class Relay extends Entity{
+	public $id,$location,$label,$type,$description,$icon,$meta;
 	protected $TABLE_NAME = 'plugin_relay';
 	protected $fields = 
 	array(
@@ -16,6 +15,7 @@ abstract class Relay extends Entity{
 		'label'=>'string',
 		'type'=>'string',
 		'description'=>'longstring',
+		'meta'=>'longstring',
 		'icon'=>'string',
 		'location'=>'int'
 	);
@@ -27,10 +27,8 @@ abstract class Relay extends Entity{
 	}
 
 	public static function types($key=null){
-		$types = array(
-			'wire' => 'Filaire',
-			'radio' => 'Radio',
-		);
+		$types = array();
+		Plugin::callhook("relay_types", array(&$types));
 		if(isset($key)) return isset($types[$key]) ? $types[$key]: '';
 		return $types;
 	}

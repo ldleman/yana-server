@@ -233,13 +233,15 @@ class System{
 	}
 
 	public static function commandSilent($cmd){
-		Functions::log('Launch system command (without output): '.$cmd);
-		return shell_exec($cmd);
+		
+		$return = shell_exec($cmd);
+		Log::put('Launch system command (without output): '.$cmd.' --> '.$return);
+		return $return;
 	}
 	
 
 	public static function command($cmd){
-		Functions::log('Launch system command : '.$cmd);
+		Log::put('Launch system command : '.$cmd);
 		return system($cmd);
 	}
 	

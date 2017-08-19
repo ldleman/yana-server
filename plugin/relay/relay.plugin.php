@@ -29,6 +29,8 @@ function relay_plugin_install($id){
 
 function relay_plugin_uninstall($id){
 	if($id != 'fr.idleman.relay') return;
+	Device::delete(array('plugin'=>'relay'));
+	Widget::delete(array('model'=>'relay'));
 	Entity::uninstall(__DIR__);
 }
 
@@ -57,6 +59,19 @@ function relay_plugin_widget(&$widgets){
 	$widgets[] = $modelWidget;
 }
 
+
+function relay_add_types(&$types){
+	$types['yana-radio-relay'] = array(
+		'label'=>'Relais radio Yana',
+		'uid'=>'yana-radio-relay',
+		'handler' => __DIR__.SLASH.'RadioRelay.class.php'
+	);
+	$types['yana-wire-relay'] = array(
+		'label'=>'Relais filaire Yana',
+		'uid'=>'yana-wire-relay',
+		'handler' => __DIR__.SLASH.'WireRelay.class.php'
+	);
+}
 
 function relay_setting_menu(&$settingMenu){
 	global $_,$myUser;
@@ -87,5 +102,6 @@ Plugin::addHook("action", "relay_plugin_action");
 Plugin::addHook("widget", "relay_plugin_widget");    
 Plugin::addHook("menu_setting", "relay_setting_menu");
 Plugin::addHook("content_setting", "relay_setting_page");
+Plugin::addHook("relay_types", "relay_add_types");
 
 ?>

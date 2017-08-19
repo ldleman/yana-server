@@ -16,9 +16,10 @@ switch ($_['action']){
 		$myUser = User::check($_['login'],$_['password']);
 		if(!$myUser->connected()) throw new Exception('Utilisateur inexistant');
 		$myUser->loadRights();
-		
 		$_SESSION['currentUser'] = serialize($myUser);
-		
+		//Clear automatique des logs de plus d'un mois
+		Log::clear(1);
+
 	}catch(Exception $e){
 		
 		header('location: index.php?error='.urlencode($e->getMessage()));
@@ -76,8 +77,6 @@ switch ($_['action']){
 				$dashboard_widget->position = $move['position'];
 				$dashboard_widget->save();
 			}
-			
-			
 		}
 		
 	});
@@ -136,6 +135,24 @@ switch ($_['action']){
 
 
 	break;
+
+	//LOG
+	case 'search_log':
+	Action::write(function($_,&$response){
+		global $myUser;
+		if(!$myUser->can('log','read')) throw new Exception("Permissions insuffisantes");
+		foreach(Log::loadAll(array('label:LIKE'=>'%'.$_['keyword'].'%'),array('date DESC')) as $log){
+			$log->date = date('d/m/Y H:i:s',$log->date);
+			if(!empty($_['keyword'])){
+				$log->label = preg_replace_callback('|(.*)('.$_['keyword'].')(.*)|i', function($matches){
+					return $matches[1].'<mark>'.$matches[2].'</mark>'.$matches[3];
+				}, $log->label);
+			}
+			$response['rows'][] = $log;
+		}
+	});
+	break;
+	
 
 	//ROOM
 	case 'search_room':

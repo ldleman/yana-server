@@ -315,7 +315,6 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
     public static function populate($order = null, $limit = null)
     {
         $results = self::loadAll(array(), $order, $limit);
-
         return $results;
     }
 
@@ -336,33 +335,34 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
      */
     public static function loadAll($columns = array(), $order = null, $limit = null, $selColumn = array('*'))
     {
-     
-      $values = array();
-      
-      $i=0;
-      foreach($columns as $key=>$value){
-         $tag = ':'.$i;
-         $columns[$key] = $tag;
-         $values[$tag] = $value;
-         $i++;
-     }
-     
-     $class = get_called_class();
-     
-     $instance = new $class();
-     $data = array(
-        'table' => $instance->tableName(),
-        'selected' => $selColumn,
-        'limit' =>  count($limit) == 0 ? null: $limit,
-        'orderby'  => count($order) == 0 ? null: $order,
-        'filter' =>  count($columns) == 0 ? null: $columns
-        );
-     $sgbd = BASE_SGBD;
-     $sql = $sgbd::select();
-     $sql = Entity::render($sql,$data);
-     
-     return $instance->customQuery($sql, $values, true);
- }
+         
+        $values = array();
+          
+        $i=0;
+        foreach($columns as $key=>$value){
+             $tag = ':'.$i;
+             $columns[$key] = $tag;
+             $values[$tag] = $value;
+             $i++;
+         }
+         
+         $class = get_called_class();
+         
+         $instance = new $class();
+         $data = array(
+            'table' => $instance->tableName(),
+            'selected' => $selColumn,
+            'limit' =>  count($limit) == 0 ? null: $limit,
+            'orderby'  => count($order) == 0 ? null: $order,
+            'filter' =>  count($columns) == 0 ? null: $columns
+            );
+         $sgbd = BASE_SGBD;
+         $sql = $sgbd::select();
+         
+         $sql = Entity::render($sql,$data);
+         
+         return $instance->customQuery($sql, $values, true);
+    }
 
 
  public static function loadAllOnlyColumn($selColumn, $columns, $order = null, $limit = null)
@@ -525,6 +525,18 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
          */
         public static function delete($columns, $limit = array())
         {
+
+        $values = array();
+                  
+        $i=0;
+        foreach($columns as $key=>$value){
+             $tag = ':'.$i;
+             $columns[$key] = $tag;
+             $values[$tag] = $value;
+             $i++;
+         }
+
+            
          $class = get_called_class();
          $instance = new $class();
          $data = array(
@@ -533,9 +545,9 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
             'filter' =>  count($columns) == 0 ? null: $columns
             );
          $sgbd = BASE_SGBD;
+
          $sql = $sgbd::delete();
-         
-         return $instance->customExecute(Entity::render($sql,$data), array());
+         return $instance->customExecute(Entity::render($sql,$data), $values);
          
      }
 
@@ -547,7 +559,7 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
             $stm->execute($data);
         } catch (Exception $e) {
             self::$lastError = $this->pdo->errorInfo();
-            Log::put("[SQL ERROR] - ".$e->getMessage().' - '.$e->getLine().' - '.$query);
+            Log::put("[SQL ERROR] - ".$e->getMessage().' - '.$e->getLine().' - Requete : '.$query.' - Données : '.json_encode($data));
             throw new Exception($e->getMessage().' - '.$e->getLine().' : '.$query.' - '.json_encode($data, JSON_PRETTY_PRINT));
         }
     }
@@ -563,37 +575,37 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
     {
       
         self::$lastQuery = $query;
-        $results = $this->pdo->prepare($query);
-        $results->execute($data);
-
-        if (!$results) {
-            self::$lastError = $this->pdo->errorInfo();
-            
-            return false;
-        } else {
-            if (!$fill) {
-                return $results;
-            }
-
-            $class = get_class($this);
-            $objects = array();
-            $results = $results->fetchAll();
-            self::$lastResult = $results;
-            foreach ($results as $queryReturn) {
-                
-                $object = new $class();
-                foreach ($this->fields as $field => $type) {
-                    if (isset($queryReturn[$field])) {
-                        $object->{$field} = $queryReturn[$field];
-                    }
-                }
-                $objects[] = $object;
-                unset($object);
-            }
-            
-            
-            return $objects == null ? array()  : $objects;
+        try{
+            $results = $this->pdo->prepare($query);
+            $results->execute($data);
+            if (!$results) throw new Exception("");
+        }catch(Exception $e){
+            self::$lastError = $e->getMessage();
+            //echo "[SQL ERROR] - Erreur : ".$e->getMessage().' - Requete : '.$query.' - Données : '.json_encode($data);
+            Log::put("[SQL ERROR] - Erreur : ".$e->getMessage().' - Requete : '.$query.' - Données : '.json_encode($data));
+            throw $e;
         }
+
+        if (!$fill) return $results;
+        
+        $class = get_class($this);
+        $objects = array();
+        $results = $results->fetchAll();
+        self::$lastResult = $results;
+        foreach ($results as $queryReturn) {
+            $object = new $class();
+            foreach ($this->fields as $field => $type) {
+                if (isset($queryReturn[$field])) {
+                    $object->{$field} = $queryReturn[$field];
+                }
+            }
+            $objects[] = $object;
+            unset($object);
+        }
+        
+        
+        return $objects == null ? array()  : $objects;
+        
     }
 
     public function __get($name)

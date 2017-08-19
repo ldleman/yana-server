@@ -25,6 +25,23 @@ function monitoring_plugin_action(){
 			</div>';
 			echo json_encode($widget);
 		break;
+		case 'monitoring_widget_log_load':
+			global $myUser;
+			if(!$myUser->can('log','read')) throw new Exception("Permissions insuffisantes");
+			$widget = Widget::current();
+			$logs = Log::loadAll(array(),array('date DESC'),array(30));
+
+			$widget->title = '30 derniers logs';
+			$widget->content = '<table class="table table-stripped table-hover">';
+				
+			$widget->content .= '<tr><th style="width:90px">Date</th><th>Libellé</th><th>Utilisateur</th></tr>';
+			foreach($logs as $log){
+				$widget->content .= '<tr><td><i class="fa fa-calendar-o"></i> '.date('d-m-y',$log->date).'<i class="fa fa-clock-o"></i> '.date('H:i:s',$log->date).'</td><td>'.$log->label().'</td><td><i class="fa fa-user"></i> '.$log->user.'</td></tr>';
+			}
+			$widget->content .= '</ul>';
+
+			echo json_encode($widget);
+		break;
 		case 'monitoring_widget_profile_load':
 			global $myUser;
 			$widget = Widget::current();
@@ -44,6 +61,8 @@ function monitoring_plugin_action(){
 
 
 function monitoring_plugin_widget(&$widgets){
+	global $myUser;
+
 	$modelWidget = new Widget();
 	$modelWidget->model = 'clock';
 	$modelWidget->title = 'Horloge';
@@ -66,6 +85,21 @@ function monitoring_plugin_widget(&$widgets){
 	$modelWidget->css = [Plugin::url().'/main.css'];
 	$modelWidget->description = "Affiche les informations de profil";
 	$widgets[] = $modelWidget;
+
+
+	$modelWidget = new Widget();
+	$modelWidget->model = 'log';
+	$modelWidget->title = 'Logs';
+	$modelWidget->width = 8;
+	$modelWidget->options[] = array('function'=>'window.location = \'setting.php?section=log\';','icon'=>'fa-eye','label'=>'Voir tous les logs');
+	$modelWidget->icon = 'fa-commenting-o';
+	$modelWidget->background = '#50597b';
+	$modelWidget->load = 'action.php?action=monitoring_widget_log_load';
+	$modelWidget->js = [Plugin::url().'/main.js'];
+	$modelWidget->css = [Plugin::url().'/main.css'];
+	$modelWidget->description = "Affiche les informations des 30 derniers logs";
+	if($myUser->can('log','read')) 
+		$widgets[] = $modelWidget;
 }
 
 function monitoring_cron_action(){

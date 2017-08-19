@@ -23,11 +23,11 @@
  	
  	
  	public static function mode($pin,$mode = 'out'){
- 		return self::system(self::GPIO_DEFAULT_PATH.' mode '.$pin.' '.$mode);
+ 		return System::commandSilent(self::GPIO_DEFAULT_PATH.' mode '.$pin.' '.$mode);
  	}
  	public static function write($pin,$value = 0,$automode = false){
  		if($automode) self::mode($pin,'out');
- 		return self::system(self::GPIO_DEFAULT_PATH.' write '.$pin.' '.$value);
+ 		return System::commandSilent(self::GPIO_DEFAULT_PATH.' write '.$pin.' '.$value);
  	}
  	public static function read($pin,$automode = false){
  		if($automode) self::mode($pin,'in');

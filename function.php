@@ -785,5 +785,9 @@ function availableIcon(){
 		'fa-fonticons'=>'f280');
 }
 
+function arand($array){
+	return $array[array_rand($array)];
+}
+
 
 ?>
