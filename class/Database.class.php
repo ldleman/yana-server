@@ -49,6 +49,7 @@ class Database
              $base::connection);
          $this->connection = new PDO($connectionString, BASE_LOGIN, BASE_PASSWORD);
          $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         $this->connection->exec("set names utf8");
      } catch (Exception $e) {
         echo 'Connection à la base impossible : ', $e->getMessage();
         die();

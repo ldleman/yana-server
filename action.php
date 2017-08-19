@@ -141,7 +141,9 @@ switch ($_['action']){
 	Action::write(function($_,&$response){
 		global $myUser;
 		if(!$myUser->can('log','read')) throw new Exception("Permissions insuffisantes");
+
 		foreach(Log::loadAll(array('label:LIKE'=>'%'.$_['keyword'].'%'),array('date DESC')) as $log){
+
 			$log->date = date('d/m/Y H:i:s',$log->date);
 			if(!empty($_['keyword'])){
 				$log->label = preg_replace_callback('|(.*)('.$_['keyword'].')(.*)|i', function($matches){
@@ -150,7 +152,10 @@ switch ($_['action']){
 			}
 			$response['rows'][] = $log;
 		}
+
+
 	});
+	
 	break;
 	
 

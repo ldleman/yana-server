@@ -25,8 +25,10 @@
 					$relay->location = Room::getById($relay->location);
 			    	$relay->type = Relay::types($relay->type);
 			    	$metaArray = array();
-			    	foreach(json_decode($relay->meta) as $key=>$value){
-			    		$metaArray[] = array('key'=>$key,'value'=>$value);
+			    	if(!empty($relay->meta)){
+				    	foreach(json_decode($relay->meta) as $key=>$value){
+				    		$metaArray[] = array('key'=>$key,'value'=>$value);
+				    	}
 			    	}
 			    	$relay->meta = $metaArray;
 					$response['rows'][] = $relay;

@@ -35,7 +35,7 @@ class Mysql
 	}
 	
 	public static function select(){
-		$sql = 'SELECT {{:selected}}{{value}}{{;}},{{/;}}{{/:selected}} FROM `{{table}}` {{?filter}}WHERE {{:filter}}`{{key}}`{{operator}}{{value}} {{;}} AND {{/;}} {{/:filter}} {{/?filter}} {{?orderby}}ORDER BY {{:orderby}}`{{value}}`{{;}},{{/;}}{{/:orderby}} {{/?orderby}} {{?limit}}LIMIT {{:limit}}{{value}}{{;}},{{/;}}{{/:limit}}{{/?limit}}';
+		$sql = 'SELECT {{:selected}}{{value}}{{;}},{{/;}}{{/:selected}} FROM `{{table}}` {{?filter}} WHERE {{:filter}} `{{key}}` {{operator}} {{value}} {{;}} AND {{/;}} {{/:filter}} {{/?filter}} {{?orderby}}ORDER BY {{:orderby}}{{value}}{{;}},{{/;}}{{/:orderby}} {{/?orderby}} {{?limit}}LIMIT {{:limit}}{{value}}{{;}},{{/;}}{{/:limit}}{{/?limit}}';
 		return $sql;
 	}
 	public static function delete(){

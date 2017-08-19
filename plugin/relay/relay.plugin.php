@@ -9,7 +9,8 @@ function relay_plugin_install($id){
 	$relay =  new WireRelay();
 	$relay->label = 'Interrupteur 1';
 	$relay->icon = 'fa-lightbulb-o';
-	$relay->type = 'wire';
+	$relay->type = 'yana-wire-relay';
+	$relay->meta = '{"pinOn":"1","stateOn":"1","onCommand":"","pinOff":"1","stateOff":"0","offCommand":"","pulse":"0"}';
 	$relay->description = 'Interrupteur exemple';
 	$relay->location = 1;
 	$relay->save();
