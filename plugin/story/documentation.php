@@ -1,5 +1,6 @@
 <?php
 	$nerve = __ROOT__.'nerve';
+
 ?>
 <div class="row">
 	<div class="col-md-12">
@@ -16,7 +17,8 @@
 <h3 id="doc.install">Installation</h3>
 Pour profiter pleinement de ce plugin, vous devez ajouter (si ce n'est pas déja fait) une tâche planifiée sur le raspberry PI.<br/>Pour cela tapez : 
 <br/><code>sudo crontab -e</code> 
-<br/>Puis ajoutez la ligne <br/><code>*/1 * * * * wget http://localhost/yana-server/action.php?action=crontab -O /dev/null 2>&1</code><br/>
+<br/>Puis ajoutez la ligne <br/><code>*/1 * * * * php <?php echo __ROOT__ ?>/action.php crontab -O /dev/null 2>&1</code><br/>
+<br/>Puis ajoutez la ligne <br/><code>>@reboot php <?php echo __ROOT__ ?>/socket.php -O /dev/null 2>&1</code><br/>
 <br/>Puis ajoutez la ligne <br/><code>@reboot <?php echo $nerve; ?> <?php echo __ROOT__.'action.php'; ?> -O /dev/null 2>&1</code><br/>Puis sauvegardez (ctrl+x puis O puis Entrée)<br/>
 <br/>Executez la commande<br/><code>sudo chmod +x <?php echo $nerve; ?></code>
 <br/><br/>

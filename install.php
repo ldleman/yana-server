@@ -191,8 +191,10 @@ try {
 
 			<div class="alert alert-success alert-dismissable">
 				<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-				<strong>Succès!</strong> La base est bien installée, l'utilisateur par défaut est <code>admin:admin</code>, pensez à changer le mot de passe rapidemment. 
+				<strong>Succès!</strong> La base est bien installée, l'utilisateur par défaut est <code>admin:admin</code>, pensez à changer le mot de passe rapidemment. <br>
+				Pensez à executer la commande <code>sudo php <?php echo __DIR__.'/boot.php'; ?></code> sur le raspberry pi pour terminer l'installation des prérequis
 			</div>
+
 			<a class="btn btn-primary" href="index.php">Revenir à l'index</a>
 			<?php 
 

@@ -1,7 +1,9 @@
 <?php
 
+if(!ini_get('safe_mode')) @set_time_limit(0);
 require_once __DIR__.DIRECTORY_SEPARATOR."common.php";
 
+if(php_sapi_name() == 'cli') $_['action'] = $_SERVER['argv'][1];	
 
 if(!isset($_['action'])) throw new Exception('Action inexistante');
 
