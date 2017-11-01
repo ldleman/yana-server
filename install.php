@@ -161,8 +161,8 @@ try {
 					'Monitoring'=>"fa-bar-chart",
 					'Garage'=>"fa-car"
 					) as $label=>$icon){
-	    //Create default dashboard
-					$dashboard = new Dashboard();
+	   		 //Create default dashboard
+				$dashboard = new Dashboard();
 				$dashboard->user = $admin->id;
 				$dashboard->label = $label;
 				$dashboard->icon = $icon;
@@ -171,7 +171,7 @@ try {
 				$firstDash = !$firstDash ? $dashboard->id: $firstDash;
 			}
 
-    //Create clock widget
+    		//Create clock widget
 			$widget = new Widget();
 			$widget->model = 'clock';
 			$widget->position = 2;
@@ -179,7 +179,7 @@ try {
 			$widget->dashboard = $firstDash;
 			$widget->save();
 
-    //Create clock widget
+    		//Create clock widget
 			$widget = new Widget();
 			$widget->model = 'profile';
 			$widget->position = 1;

@@ -8,7 +8,7 @@ if(!file_exists(__DIR__.DIRECTORY_SEPARATOR.'constant.php'))
 
 
 require_once(__DIR__.DIRECTORY_SEPARATOR.'constant.php');
-require_once(__ROOT__.'function.php');
+require_once(__ROOT__.'/function.php');
 date_default_timezone_set(TIME_ZONE);
 
 set_error_handler('errorToException');

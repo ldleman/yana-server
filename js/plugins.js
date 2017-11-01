@@ -137,7 +137,7 @@
 					if(response && !response.error){
 						if(success!=null)success(response);
 					}else{
-						$.message('error','ERREUR : '+"\n"+response.error);
+						$.message('error','ERREUR : '+"\n"+response.error,0);
 						if(error!=null) error(response);
 					}
 				},
