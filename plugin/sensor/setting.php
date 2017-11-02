@@ -25,7 +25,7 @@ $selected = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
 		    		<?php endforeach; ?>
 					</select>&nbsp;
 				
-					<div onclick="propise_save();" class="btn btn-info"><i class="fa fa-check"></i> Enregistrer</div>
+					<div onclick="sensor_save();" class="btn btn-info"><i class="fa fa-check"></i> Enregistrer</div>
 				</div>
 			</div>
 			<br/>
@@ -57,8 +57,8 @@ $selected = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
 					</ul>
 	                    </td>
 	                    <td>
-	                    	<div onclick="propise_edit(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
-	                    	<div onclick="propise_delete(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
+	                    	<div onclick="sensor_edit(this)" class="btn btn-info btn-mini"><i class="fa fa-pencil"></i></div>
+	                    	<div onclick="sensor_delete(this)" class="btn btn-danger btn-mini"><i class="fa fa-times"></i></div>
 	                    </td>
 	                  </tr>
 	                </tbody>
