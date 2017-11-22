@@ -540,7 +540,7 @@ checkWebServer(){
 #Installation du serveur web et de SQLite
 installWebServer(){
 	echo -e "$OK -----> Installation du serveur web $NORMAL"
-	debconf-apt-progress -- apt-get install -q -y lighttpd git-core sqlite3 php7.0-sqlite php7.0-common php7.0-cgi php7.0-cli php-mbstring
+	debconf-apt-progress -- apt-get install -q -y lighttpd git-core sqlite3 php7.0-sqlite php7.0-common php7.0-cgi php7.0-cli php-mbstring php7.0-zip
 	if [[ $globalError -ne 0 ]];then
 		aptgetErrorMenu
 	fi
