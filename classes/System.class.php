@@ -226,6 +226,7 @@ class System{
 			'a02082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a02082'),
 			'a22082' => array('ram'=>'1024','version'=>'3.0','type'=>'a','revision'=>'a22082'), 
 			'900092' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'900092'),
+			'9000c1' => array('ram'=>'512','version'=>'1.0','type'=>'zero','revision'=>'9000c1'),
 			'0000' => array('ram'=>'1024','version'=>'1.0','type'=>'M1','revision'=>'0000')
 		);
 		if(PHP_OS=='WINNT') $infos['Revision'] = 'a01041';//for dev mode on windows only
