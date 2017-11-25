@@ -48,6 +48,19 @@ class Debug{
 					echo 'Déconnexion';
 				});
 
+				$debugs['command'] = (object) array('label'=>"Test de commande",'execute'=>
+				function(){
+					$client = new Client;
+					echo 'Connexion'.PHP_EOL;
+					$client->connect();
+					$command = "ls -l";
+					echo 'Envois de la commande :'.$command.PHP_EOL;
+					echo  $client->execute($command).PHP_EOL;
+					echo 'commande envoyée'.PHP_EOL;
+					$client->disconnect();
+					echo 'Déconnexion';
+				});
+
 				$debugs['others'] = (object) array('label'=>'Test de son, image, execution, emotion','execute'=>
 				function(){
 					$client = new Client;
