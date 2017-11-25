@@ -5,6 +5,26 @@ class Debug{
 	public static function loadAll(){
 		$debugs = array();
 
+
+			$debugs['command'] = (object) array('label'=>'Test de commande serveur','execute'=>
+				function(){
+					
+					echo 'Commande lancée avec l\'utilisateur : '.get_current_user().PHP_EOL;
+		
+					echo 'Test ls -l (non silencieux)'.PHP_EOL;
+					echo System::command('ls -ls');
+
+					echo 'Test ls -l (silencieux)'.PHP_EOL;
+					echo System::commandSilent('ls -ls');
+
+					echo 'Get system infos'.PHP_EOL;
+					print_r(System::getInfos());
+					
+					
+					echo 'Done';
+				});
+
+
 			$debugs['connect'] = (object) array('label'=>'Test de connexion','execute'=>
 				function(){
 					$client = new Client;
