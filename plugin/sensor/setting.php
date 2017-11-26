@@ -14,7 +14,7 @@ $selected = isset($_['id']) ? Sensor::getById($_['id']) : new Sensor();
 		<div class="col-md-12">
 			<h3>Sondes</h3>
 
-			<div id="propiseForm" class="row form-inline" data-action="propise_save">
+			<div id="sensorForm" class="row form-inline" data-action="sensor_save">
 				<div class="col-md-12">
 					<label for="label">Nom de la sonde</label>
 					<input id="label" class="form-control" placeholder="Salon,sonde 1..." type="text">&nbsp;

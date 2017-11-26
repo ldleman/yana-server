@@ -90,6 +90,27 @@ function sensor_plugin_action(){
 
 			});
 		break;
+
+
+		case 'sensor_add_data':
+			require_once(__DIR__.SLASH.'Sensor.class.php');
+			require_once(__DIR__.SLASH.'Data.class.php');
+			
+			$sensor = Sensor::getById($_['id']);
+			if($sensor == null || $sensor->id==0) return;
+			
+			 Data::delete();
+			$data  = new Data();
+			$data->time = time();
+			$data->humidity = $_['humidity'];
+			$data->temperature = $_['temperature'];
+			$data->light = round(($_['light'] * 100) / 1024);
+			$data->mouvment = $_['mouvment'];
+			$data->sensor = $sensor->id;
+			$data->save();
+			
+		
+		break;
 		
 		case 'sensor_edit':
 			Action::write(function($_,&$response){

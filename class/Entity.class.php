@@ -523,7 +523,7 @@ $this->id = (!isset($this->id) || !(is_numeric($this->id)) ? $this->pdo->lastIns
          *
          * @return Aucun retour
          */
-        public static function delete($columns, $limit = array())
+        public static function delete($columns= array(), $limit = array())
         {
 
         $values = array();
