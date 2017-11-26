@@ -31,6 +31,9 @@ Et suivez le formulaire d'installation.
 nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
 configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
 
+Si vous tombez sur l'erreur 'Erreur connexion au serveur socket depuis yana-server, le serveur est il allumé ? Connection refused' c'est que le serveur socket s'est mal lancé, il est necessaire de lancer le serveur avec la commande :
+`php /var/www/yana-server/socket.php`
+
 Installation manuelle
 ============
 
@@ -46,6 +49,9 @@ Et suivez le formulaire d'installation.
 
 nb : A la fin de l'installation, vous pouvez activer ou désactiver les plugins qui vous sont utiles dans la section
 configuration --> plugins, pensez à le faire AVANT de jouer avec Yana windows ou Yana Android sans quoi aucune commande ne sera disponible
+
+Si vous utilisez le client vocal, il est necessaire de lancer le serveur socket avec la commande :
+`php /var/www/yana-server/socket.php`
 
 Sécurité
 ========
