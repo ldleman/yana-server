@@ -113,6 +113,29 @@ Plugin::addHook("content_setting", function(){
 });
 
 
+Plugin::addHook("vocal_command",function(&$commands){
+	$commands['commands'][] = array(
+
+		'command' => "quelle heure est il",
+		'url' => "?action=get_hour",
+		'confidence' => "0.88",
+		'disabled' => false
+	);
+
+	});
+
+
+
+Plugin::addHook('listen',function($command,$text,$confidence,$user){
+
+		$cli = new Client();
+		$cli->connect();
+		$cli->talk('il est '.date('H:i'));
+		$cli->disconnect();
+
+	//$_['command'],trim(str_replace($_['command'],'',$_['text'])),$_['confidence'],$client->user
+});
+
 Plugin::addHook("section",function(&$sections){
 	$sections['user'] = 'Gestion des utilisateurs';
 	$sections['plugin'] = 'Gestion des plugins';

@@ -70,7 +70,7 @@ class Plugin{
 		$plugin = new self();
 		$manifest = json_decode(file_get_contents($file),true);
 		if(!$manifest) return $plugin;
-		if(!isset($manifest['id']) || !isset($manifest['name']) ) continue;
+		if(!isset($manifest['id']) || !isset($manifest['name']) ) return;
 		$plugin->name = $manifest['name'];
 		$plugin->id = $manifest['id'];
 		$plugin->folder = basename(dirname($file));

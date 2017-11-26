@@ -58,7 +58,9 @@ class ClientSocket extends SocketServer {
 
 				switch($_['action']){
 					case 'TALK':
+
 					$this->talkAnimate();
+					
 					$this->talk($_['parameter']);
 					break;
 					case 'TALK_FINISHED':
@@ -93,10 +95,11 @@ class ClientSocket extends SocketServer {
 
 					break;
 					case 'GET_SPEECH_COMMANDS':
-					$response = array();
+					$response = array('commands'=>array());
 					Plugin::callHook("vocal_command", array(&$response,ROOT_URL));
 					$commands = array();
 					foreach($response['commands'] as $command){
+						
 						unset($command['url']);
 						$this->send($this->connected[$client->id]->socket,'{"action":"ADD_COMMAND","command":'.json_encode($command).'}');
 					}
@@ -227,7 +230,7 @@ class ClientSocket extends SocketServer {
 		if(count($clients)==0)
 			$clients = $this->getByType('face');
 		
-		$this->log("TALK ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
+		$this->log("TALK ANIMATION : Try to send talk animation to ".count($clients)." clients");
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$packet = '{"action":"talk"}';
@@ -241,7 +244,7 @@ class ClientSocket extends SocketServer {
 		if(count($clients)==0)
 			$clients = $this->getByType('face');
 		
-		$this->log("MUTE ANIMATION : Try to send ".$emotion." to ".count($clients)." clients");
+		$this->log("MUTE ANIMATION : Try to send mute to ".count($clients)." clients");
 		foreach($clients as $client){
 			$socket = $this->connected[$client->id]->socket;
 			$packet = '{"action":"mute"}';
@@ -426,6 +429,8 @@ abstract class SocketServer {
 			
 			// foreach client that is ready to be read
 			foreach($read as $client) {
+
+				try{
 				
 				// we don't read data from the master socket
 				if ($client != $this->master) {
@@ -458,6 +463,11 @@ abstract class SocketServer {
 							$this->onDataReceived($client,$input);
 						}
 					}
+				}
+
+				}catch(Exception $e){
+					$this->log('Unable to read, client probably disconnected...');
+					$this->disconnect($client);
 				}
 			}
 		}
