@@ -94,7 +94,7 @@ class ClientSocket extends SocketServer {
 					break;
 					case 'GET_SPEECH_COMMANDS':
 					$response = array();
-					Plugin::callHook("vocal_command", array(&$response,YANA_URL));
+					Plugin::callHook("vocal_command", array(&$response,ROOT_URL));
 					$commands = array();
 					foreach($response['commands'] as $command){
 						unset($command['url']);
