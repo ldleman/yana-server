@@ -70,7 +70,7 @@ try {
 				
 	//check prerequisite
 				if(file_exists(__DIR__.'/constant.php')) throw new Exception('Le script est déja installé, pour recommencer l\'installation, supprimez le fichier constant.php');
-				if(!is_writable (__DIR__)) throw new Exception('Le dossier '.__DIR__.' doit être accessible en ecriture, merci de taper la commande linux <br/><code>sudo chown -R www-data:www-data '.__ROOT__.'</code><br/> ou de régler le dossier en écriture via votre client ftp');
+				if(!is_writable (__DIR__)) throw new Exception('Le dossier '.__DIR__.' doit être accessible en ecriture, merci de taper la commande linux <br/><code>sudo chown -R www-data:www-data '.__DIR__.'</code><br/> ou de régler le dossier en écriture via votre client ftp');
 				if(!file_exists(__DIR__.'/file')) mkdir(__DIR__.'/file',0755,true);
 				if(!file_exists(__DIR__.'/file/avatar')) mkdir(__DIR__.'/file/avatar',0755,true);
 				

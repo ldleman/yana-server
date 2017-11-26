@@ -84,7 +84,7 @@ class ClientSocket extends SocketServer {
 					$userManager = new User();
 					$myUser = $userManager->load(array('token'=>$_['token']));
 					if(isset($myUser) && $myUser!=false)
-						$myUser->loadRight();
+						$myUser->loadRights();
 					$client->user =  (!$myUser?new User():$myUser);
 					$this->log('setting infos '.$client->type.' - '.$client->location.' for '.$client->name.' with user:'.$client->user->login);
 					
