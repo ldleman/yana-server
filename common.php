@@ -26,7 +26,7 @@ $conf = new Configuration();
 $conf->getAll();
 
 
-	//MENUS
+//MENUS
 Plugin::addHook("menu_setting", function(&$settingMenu){
 	global $myUser;
 
@@ -123,6 +123,7 @@ Plugin::addHook("vocal_command",function(&$commands){
 	);
 
 	});
+
 
 
 

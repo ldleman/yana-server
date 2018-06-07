@@ -87,6 +87,7 @@ function monitoring_plugin_widget(&$widgets){
 	$widgets[] = $modelWidget;
 
 
+
 	$modelWidget = new Widget();
 	$modelWidget->model = 'log';
 	$modelWidget->title = 'Logs';
@@ -104,8 +105,8 @@ function monitoring_plugin_widget(&$widgets){
 
 function monitoring_cron_action(){
 
-	if(date('i:s')=='00:00')
-		print_r(Client::talk('Il est '.date('H').'heure.'));
+	//if(date('i:s')=='00:00')
+//		print_r(Client::talk('Il est '.date('H').'heure.'));
 }
 
 Plugin::addCss("/main.css"); 
