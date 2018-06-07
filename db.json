@@ -1,9 +1,0 @@
-[
-	{
-        "version": 1,
-        "sql": [
-            "SELECT id FROM user LIMIT 1;"
-        ]
-    }
-
-]

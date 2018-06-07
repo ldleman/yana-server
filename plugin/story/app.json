@@ -1,9 +1,0 @@
-{
-	"id": "fr.idleman.story",
-	"name": "Scénario",
-	"version": "1.5",
-	"url": "http://blog.idleman.fr",
-	"licence": {"name": "MIT","url" : "http://choosealicense.com/licenses/mit/"},
-	"description": "Gestion des scénario automatisé (ex: fermer les stores si le salon est au dessus de 'n' degrés)",
-	"require" : {}
-}

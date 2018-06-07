@@ -1,9 +1,0 @@
-{
-	"id": "fr.idleman.modele",
-	"name": "Modèle",
-	"version": "1.0",
-	"url": "http://blog.idleman.fr",
-	"licence": {"name": "MIT","url" : "http://choosealicense.com/licenses/mit/"},
-	"description": "Modèle de plugin",
-	"require" : {}
-}
